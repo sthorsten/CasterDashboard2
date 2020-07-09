@@ -1,0 +1,24 @@
+image: python:latest
+
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: "caster_dashboard"
+  MYSQL_USER: "caster_dashboard"
+  MYSQL_PASSWORD: "caster_dashboard"
+
+
+cache:
+  paths:
+    - ~/.cache/pip/
+
+
+before_script:
+  - python -V
+  - pip install -r requirements.txt
+
+
+test:
+  script:
+    - python manage.py test
