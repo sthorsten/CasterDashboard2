@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load i18n %}
+
+{% include "base/head.html" with page_title="Register" %}
+
+<body class="hold-transition register-page">
+
+{% include "base/messages.html" %}
+
+<div class="register-box">
+    <div class="register-logo">
+        <a href="/">R6 <b>Caster Dashboard</b></a>
+    </div>
+
+    <div class="card">
+        <div class="card-body register-card-body">
+
+            <div class="text-center">
+                {% trans "You have been registered successfully" %}!<br>
+            </div>
+
+            <hr>
+
+            <div class="text-center">
+                {% trans "Your registration has to be confirmed by an admin before you are able to log in" %}.<br><br>
+                {% trans "Contact ThorsHero on the ThorsHero Discord or via Twitter to get your account activated right away" %}.<br><br>
+                <a href="https://discord.gg/sBc9gR3" target="_blank"><i
+                        class="fab fa-discord"></i> {% trans "Connect to the Discord Server" %}</a><br>
+                <a href="https://twitter.com/ThorsHeroR6" target="_blank"><i
+                        class="fab fa-twitter"></i> {% trans "Contact ThorsHero on Twitter" %}</a>
+            </div>
+
+            <hr>
+
+            <div class="social-auth-links text-center">
+                <a href="/login" class="text-center">{% trans "Go to the login page" %}</a>
+            </div>
+
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+</body>
+</html>

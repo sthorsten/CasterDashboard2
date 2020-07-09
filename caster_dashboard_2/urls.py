@@ -20,9 +20,17 @@ from django.urls import path, include
 from dashboard import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.index),
+    path('login/', views.login_view),
+    path('login/form', views.login_form),
+    path('register/', views.register),
+    path('register/form', views.register_form),
+    path('register/success', views.register_success),
+    path('logout/', views.logout_view),
+
     path('dashboard/', include('dashboard.urls')),
     path('overlays/', include('overlays.urls')),
+
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),

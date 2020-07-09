@@ -3,6 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import *
 
+admin.site.register(Profile)
 admin.site.register(Version)
 admin.site.register(Map)
 admin.site.register(BombSpot)
@@ -16,4 +17,3 @@ admin.site.register(MapBan)
 admin.site.register(MapWins)
 admin.site.register(OperatorBans)
 admin.site.register(Round)
-
