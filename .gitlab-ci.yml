@@ -36,4 +36,4 @@ test:
   variables:
     DATABASE_URL: "mysql://$MYSQL_USER:$MYSQL_PASSWORD@mysql:3306/$MYSQL_DATABASE"
   script:
-    - python manage.py test --settings ci-settings.py
+    - python manage.py test --settings caster_dashboard_2.ci-settings
