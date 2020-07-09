@@ -2,11 +2,14 @@ image: python:latest
 
 
 services:
-  - postgres:latest
+  - mysql:latest
 
 
 variables:
-  POSTGRES_DB: caster_dashboard_2
+  MYSQL_DATABASE: caster_dashboard_2
+  MYSQL_ROOT_PASSWORD: caster_dashboard_2
+  MYSQL_USER: caster_dashboard_2
+  MYSQL_PASSWORD: caster_dashboard_2
 
 
 before_script:
@@ -31,6 +34,6 @@ before_script:
 
 test:
   variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+    DATABASE_URL: "mysql://$MYSQL_USER:$MYSQL_PASSWORD@mysql:5432/$MYSQL_DATABASE"
   script:
-    - python manage.py test --settings gitlab-db-settings.ci
+    - python manage.py test
