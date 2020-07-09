@@ -3,7 +3,6 @@ image: python:latest
 
 stages:
   - run_jobs
-  - test
 
 
 variables:
@@ -23,13 +22,3 @@ gitab_mysql_service:
     - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
 
 
-before_script:
-  - python -V
-  - pip install -r requirements.txt
-
-
-
-Test:
-  stage: test
-  script:
-    - python manage.py test
