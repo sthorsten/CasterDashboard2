@@ -2,7 +2,7 @@ image: python:latest
 
 
 services:
-  - mysql:latest
+  - mysql:5.7
 
 
 variables:
