@@ -1,0 +1,40 @@
+image: python:latest
+
+
+services:
+  - mariadb:latest
+
+
+variables:
+  MYSQL_DATABASE: caster_dashboard_2
+  MYSQL_ROOT_PASSWORD: caster_dashboard_2
+  MYSQL_USER: caster_dashboard_2
+  MYSQL_PASSWORD: caster_dashboard_2
+
+
+before_script:
+  - python -V
+  - pip install -r requirements.txt
+
+# To get Django tests to work you may need to create a settings file using
+# the following DATABASES:
+#
+# DATABASES = {
+#     'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'ci',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'postgres',
+#        'PORT': '5432',
+#    },
+# }
+#
+# and then adding `--settings ci-settings.py` (or similar) to the test command
+
+test:
+  variables:
+    DATABASE_URL: "mysql://$MYSQL_USER:$MYSQL_PASSWORD@mariadb:3306/$MYSQL_DATABASE"
+  script:
+    - python manage.py migrate --settings caster_dashboard_2.ci-settings
+    - python manage.py test --settings caster_dashboard_2.ci-settings
