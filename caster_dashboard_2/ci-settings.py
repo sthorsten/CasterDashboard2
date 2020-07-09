@@ -24,7 +24,7 @@ SECRET_KEY = 'n@_*s5i0zlq3%%+c@e3@$5t__-1b1aqqx9eq9=i3kfj!v9**h='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
 
 # Application definition
 
