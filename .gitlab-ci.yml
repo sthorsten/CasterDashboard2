@@ -1,24 +1,36 @@
 image: python:latest
 
 
-stages:
-  - run_jobs
+services:
+  - postgres:latest
 
 
 variables:
-  MYSQL_DATABASE: caster_dashboard
-  MYSQL_ROOT_PASSWORD: mysql
+  POSTGRES_DB: caster_dashboard_2
 
 
-gitab_mysql_service:
-  stage: run_jobs
-  image: alpine:latest
-  services:
-    - mariadb:latest
+before_script:
+  - python -V
+  - pip install -r requirements.txt
+
+# To get Django tests to work you may need to create a settings file using
+# the following DATABASES:
+#
+# DATABASES = {
+#     'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'ci',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgres',
+#        'HOST': 'postgres',
+#        'PORT': '5432',
+#    },
+# }
+#
+# and then adding `--settings app.settings.ci` (or similar) to the test command
+
+test:
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
   script:
-    - apk --no-cache add mysql-client
-    - mysql --version
-    - sleep 20
-    - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
-
-
+    - python manage.py test --settings gitlab-db-settings.ci
