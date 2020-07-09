@@ -11,11 +11,6 @@ variables:
   MYSQL_ROOT_PASSWORD: mysql
 
 
-before_script:
-  - python -V
-  - pip install -r requirements.txt
-
-
 gitab_mysql_service:
   stage: run_jobs
   image: alpine:latest
@@ -28,7 +23,13 @@ gitab_mysql_service:
     - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
 
 
-Build:
+before_script:
+  - python -V
+  - pip install -r requirements.txt
+
+
+
+Test:
   stage: test
   script:
     - python manage.py test
