@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% block footer %}
+
+    <footer class="main-footer bg-dark">
+        <div class="float-right d-none d-sm-block">
+            <a href="#" class="mr-2">{% trans "Terms & Conditions" %}</a>
+            <a href="#" class="mr-2">{% trans "Privacy" %}</a>
+            <a href="#" class="mr-2">Open Source {% trans "Licenses" %}</a>
+            Version <b>{{ version.name }}</b>
+        </div>
+        Copyright &copy; 2020 Thorsten "ThorsHero" Schmitt - <a
+            href="https://www.thorshero.de" target="_blank">www.thorshero.de</a>
+    </footer>
+
+{% endblock %}

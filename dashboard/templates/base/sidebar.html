@@ -1,0 +1,207 @@
+{% load i18n %}
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+        <span class="brand-text font-weight-light ml-4">R6 Caster Dashboard</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <!-- Home -->
+                <li class="nav-item mt-2">
+                    <a href="/dashboard/home" class="nav-link {% if active_page == "home" %}active{% endif %}">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>
+                            {% trans "Home Page" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Matches -->
+                <li class="nav-header text-uppercase">{% trans "Matches" %}</li>
+
+                <!-- Overview -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-list-ul"></i>
+                        <p>
+                            {% trans "Overview & History" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Create -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-plus"></i>
+                        <p>
+                            {% trans "Create" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Play -->
+                <li class="nav-item has-treeview">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-play-circle"></i>
+                        <p>
+                            {% trans "Play" %}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+
+                        <!-- Match Overview -->
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <p>
+                                    <i class="far fa-circle nav-icon"></i>
+                                    {% trans "Match Overview" %}
+                                </p>
+                            </a>
+                        </li>
+
+                        <!-- Match Overview -->
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <p>
+                                    <i class="far fa-circle nav-icon"></i>
+                                    {% trans "Map Pick & Bans" %}
+                                </p>
+                            </a>
+                        </li>
+
+                        <!-- Match Overview -->
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <p>
+                                    <i class="far fa-circle nav-icon"></i>
+                                    {% trans "Operator Bans" %}
+                                </p>
+                            </a>
+                        </li>
+
+                        <!-- Match Overview -->
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <p>
+                                    <i class="far fa-circle nav-icon"></i>
+                                    {% trans "Rounds" %}
+                                </p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!-- Overlays -->
+                <li class="nav-header text-uppercase">{% trans "Overlays" %}</li>
+
+                <!-- Control Center -->
+                <li class="nav-item">
+                    <a href="/dashboard/overlays/control-center" class="nav-link {% if active_page == "control-center" %}active{% endif %}">
+                        <i class="nav-icon fas fa-desktop"></i>
+                        <p>
+                            {% trans "Control Center" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Customize -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-palette"></i>
+                        <p>
+                            {% trans "Customize" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Data -->
+                <li class="nav-header text-uppercase">{% trans "Data" %}</li>
+
+                <!-- Leagues -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-trophy"></i>
+                        <p>
+                            {% trans "Leagues" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Seasons -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-calendar-alt"></i>
+                        <p>
+                            {% trans "Seasons" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Sponsors -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill-alt"></i>
+                        <p>
+                            {% trans "Sponsors" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Teams -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            {% trans "Teams" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Statistics -->
+                <li class="nav-header text-uppercase">{% trans "Statistics" %}</li>
+
+                <!-- Maps -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-map"></i>
+                        <p>
+                            {% trans "Map Statistics" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- OpBans -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-user-alt-slash"></i>
+                        <p>
+                            {% trans "Operator Ban Statistics" %}
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Rounds -->
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-list-ol"></i>
+                        <p>
+                            {% trans "Round Statistics" %}
+                        </p>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+    </div>
+</aside>
+

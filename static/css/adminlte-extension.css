@@ -1,0 +1,150 @@
+div.title-icon {
+  width: max-content;
+  padding: 1em;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  color: #fff;
+  background: #343a40;
+  border-radius: 8%;
+}
+
+h1.title-text {
+  color: #fff !important;
+  margin-top: 0.5em;
+}
+
+ol.breadcrumb {
+  margin-top: 1em !important;
+}
+
+.card-primary.card-outline-all {
+  border: 3px solid #007bff;
+}
+
+.card-secondary.card-outline-all {
+  border: 3px solid #6c757d;
+}
+
+.card-success.card-outline-all {
+  border: 3px solid #28a745;
+}
+
+.card-info.card-outline-all {
+  border: 3px solid #17a2b8;
+}
+
+.card-warning.card-outline-all {
+  border: 3px solid #ffc107;
+}
+
+.card-danger.card-outline-all {
+  border: 3px solid #dc3545;
+}
+
+.card-light.card-outline-all {
+  border: 3px solid #f8f9fa;
+}
+
+.card-dark.card-outline-all {
+  border: 3px solid #343a40;
+}
+
+.bg-gray-100 {
+  background: #f8f9fa;
+}
+
+.bg-gray-200 {
+  background: #e9ecef;
+}
+
+.bg-gray-300 {
+  background: #dee2e6;
+}
+
+.bg-gray-400 {
+  background: #ced4da;
+}
+
+.bg-gray-500 {
+  background: #adb5bd;
+}
+
+.bg-gray-600 {
+  background: #6c757d;
+}
+
+.bg-gray-700 {
+  background: #495057;
+}
+
+.bg-gray-800 {
+  background: #343a40;
+}
+
+.bg-gray-900 {
+  background: #212529;
+}
+
+.card-title-upper {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.5em;
+}
+
+.badge {
+  text-transform: uppercase;
+}
+
+div.card-divider {
+  border-bottom: 1px solid #fff;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.user-menu-custom-outer .user-menu-link {
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+.user-menu-custom-outer .user-menu-link::after {
+  display: none !important;
+}
+
+.user-menu-custom-inner {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0;
+  padding: 0;
+}
+.user-menu-custom-inner * {
+  height: 32px;
+  width: auto;
+  margin: 4px;
+}
+.user-menu-custom-inner div {
+  display: grid;
+  grid-template-rows: auto auto;
+  margin-left: 8px;
+}
+.user-menu-custom-inner div span {
+  margin: 0;
+  padding: 0;
+}
+.user-menu-custom-inner div .user-name {
+  font-weight: bold;
+  margin-top: -7px;
+}
+.user-menu-custom-inner div .user-email {
+  margin-top: -12px;
+}
+
+@media (max-width: 991.98px) {
+  .user-menu-custom-inner div {
+    display: none;
+  }
+}
+.toast {
+  opacity: 1 !important;
+}
+
+/*# sourceMappingURL=adminlte-extension.css.map */
