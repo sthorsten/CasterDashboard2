@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'caster_dashboard_2',
         'USER': 'caster_dashboard_2',
         'PASSWORD': 'caster_dashboard_2',
-        'HOST': 'mysql',
+        'HOST': 'mariadb',
         'PORT': '3306',
     }
 }
