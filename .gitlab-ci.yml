@@ -4,17 +4,18 @@ services:
   - mysql:latest
 
 variables:
-  MYSQL_ROOT_PASSWORD: "mysql"
-  MYSQL_DATABASE: "caster_dashboard_2"
-  MYSQL_USER: "caster_dashboard_2"
-  MYSQL_PASSWORD: "caster_dashboard_2"
+  MYSQL_DATABASE: "caster_dashboard"
+  MYSQL_ROOT_PASSWORD: mysql
 
+stages:
+  - build
+  - test
 
 before_script:
   - python -V
   - pip install -r requirements.txt
 
-
-test:
+Build:
+  stage: build
   script:
     - python manage.py test
