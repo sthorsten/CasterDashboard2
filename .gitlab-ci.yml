@@ -20,12 +20,12 @@ gitab_mysql_service:
   stage: run_jobs
   image: alpine:latest
   services:
-  - mariadb:latest
- script:
-   - apk --no-cache add mysql-client
-   - mysql --version
-   - sleep 20
-   - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
+    - mariadb:latest
+  script:
+    - apk --no-cache add mysql-client
+    - mysql --version
+    - sleep 20
+    - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
 
 
 Build:
