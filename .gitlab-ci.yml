@@ -1,21 +1,34 @@
 image: python:latest
 
-services:
-  - mariadb:latest
-
-variables:
-  MYSQL_DATABASE: "caster_dashboard"
-  MYSQL_ROOT_PASSWORD: mysql
 
 stages:
-  - build
+  - run_jobs
   - test
+
+
+variables:
+  MYSQL_DATABASE: caster_dashboard
+  MYSQL_ROOT_PASSWORD: mysql
+
 
 before_script:
   - python -V
   - pip install -r requirements.txt
 
+
+gitab_mysql_service:
+  stage: run_jobs
+  image: alpine:latest
+  services:
+  - mariadb:latest
+ script:
+   - apk --no-cache add mysql-client
+   - mysql --version
+   - sleep 20
+   - echo "SHOW tables;"| mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h 127.0.0.1 "${MYSQL_DATABASE}"
+
+
 Build:
-  stage: build
+  stage: test
   script:
     - python manage.py test
