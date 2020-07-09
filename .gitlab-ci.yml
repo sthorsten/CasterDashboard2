@@ -2,7 +2,7 @@ image: python:latest
 
 
 services:
-  - mysql:5.7
+  - mariadb:latest
 
 
 variables:
