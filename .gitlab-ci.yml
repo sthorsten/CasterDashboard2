@@ -4,6 +4,7 @@ services:
   - mysql:latest
 
 variables:
+  MYSQL_ROOT_PASSWORD: "mysql"
   MYSQL_DATABASE: "caster_dashboard"
   MYSQL_USER: "caster_dashboard"
   MYSQL_PASSWORD: "caster_dashboard"
