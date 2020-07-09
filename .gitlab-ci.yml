@@ -1,7 +1,7 @@
 image: python:latest
 
 services:
-  - mysql:latest
+  - mariadb:latest
 
 variables:
   MYSQL_DATABASE: "caster_dashboard"
