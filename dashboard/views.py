@@ -100,7 +100,10 @@ def overlay_control_center(request):
     # Last 10 Matches
     matches = Match.objects.filter(user=request.user).order_by("-id").all()[:10]
     match_overlay_data = MatchOverlayData.objects.filter(user=request.user).first()
-    current_match = Match.objects.filter(id=match_overlay_data.current_match.id).first()
+    if match_overlay_data.current_match:
+        current_match = Match.objects.filter(id=match_overlay_data.current_match.id).first()
+    else:
+        current_match = None
 
     template_data = {
         'overlay_styles': overlay_styles,

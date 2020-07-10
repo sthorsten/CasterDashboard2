@@ -337,7 +337,11 @@
                             {% trans "Current Match ID" %}
                         </div>
                         <div class="col-8 text-right">
-                            <b>{{ current_match.id }}</b>
+                            {% if current_match %}
+                                <b>{{ current_match.id }}</b>
+                            {% else %}
+                                <b>-</b>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -347,12 +351,16 @@
                             {% trans "Match Status" %}
                         </div>
                         <div class="col-8 text-right">
-                            {% if current_match.state == "created" %}
-                                <b>{% trans "Created" %}</b>
-                            {% elif current_match.state == "in_progress" %}
-                                <b>{% trans "In Progress" %}</b>
-                            {% elif current_match.state == "finished" %}
-                                <b>{% trans "Finished" %}</b>
+                            {% if current_match %}
+                                {% if current_match.state == "created" %}
+                                    <b>{% trans "Created" %}</b>
+                                {% elif current_match.state == "in_progress" %}
+                                    <b>{% trans "In Progress" %}</b>
+                                {% elif current_match.state == "finished" %}
+                                    <b>{% trans "Finished" %}</b>
+                                {% endif %}
+                            {% else %}
+                                <b>{% trans "No Match" %}</b>
                             {% endif %}
                         </div>
                     </div>
@@ -363,7 +371,11 @@
                             {% trans "Team Blue" %}
                         </div>
                         <div class="col-8 text-right">
-                            <b>{{ current_match.team_blue }}</b>
+                            {% if current_match %}
+                                <b>{{ current_match.team_blue }}</b>
+                            {% else %}
+                                <b>{% trans "No Match" %}</b>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -373,7 +385,11 @@
                             {% trans "Team Orange" %}
                         </div>
                         <div class="col-8 text-right">
-                            <b>{{ current_match.team_orange }}</b>
+                            {% if current_match %}
+                                <b>{{ current_match.team_orange }}</b>
+                            {% else %}
+                                <b>{% trans "No Match" %}</b>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -383,7 +399,11 @@
                             {% trans "Current Match Score" %}
                         </div>
                         <div class="col-8 text-right">
+                            {% if current_match %}
                             <b>{{ current_match.score_blue }} - {{ current_match.score_orange }}</b>
+                            {% else %}
+                                <b>0 - 0</b>
+                            {% endif %}
                         </div>
                     </div>
 
