@@ -104,6 +104,9 @@ div.card-divider {
   opacity: 1 !important;
 }
 
+.table.table-head-fixed thead tr:nth-child(1) th {
+  background:$gray-900;
+}
 
 
 

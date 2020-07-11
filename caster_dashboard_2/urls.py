@@ -17,16 +17,16 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
-from dashboard import views
+from dashboard.views import sites, forms
 
 urlpatterns = [
-    path('', views.index),
-    path('login/', views.login_view),
-    path('login/form', views.login_form),
-    path('register/', views.register),
-    path('register/form', views.register_form),
-    path('register/success', views.register_success),
-    path('logout/', views.logout_view),
+    path('', sites.index),
+    path('login/', sites.login_view),
+    path('login/form', forms.login_form),
+    path('register/', sites.register),
+    path('register/form', forms.register_form),
+    path('register/success', sites.register_success),
+    path('logout/', sites.logout_view),
 
     path('dashboard/', include('dashboard.urls')),
     path('overlays/', include('overlays.urls')),

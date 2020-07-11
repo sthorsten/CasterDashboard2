@@ -67,6 +67,15 @@ class League(models.Model):
         return self.name
 
 
+class LeagueGroup(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
+    rank = models.CharField(max_length=255, default="user")
+
+    def __str__(self):
+        return "LeagueGroup: " + str(self.user) + " / " + str(self.league) + " / " + self.rank
+
+
 class Season(models.Model):
     name = models.CharField(max_length=255)
     league = models.ForeignKey(League, on_delete=models.SET_NULL, blank=True, null=True)

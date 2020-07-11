@@ -1,11 +1,13 @@
 from django.urls import path
 
-from . import views
+from dashboard.views import sites
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', sites.index, name='index'),
 
-    path('home', views.home, name='home'),
+    path('home', sites.home, name='home'),
 
-    path('overlays/control-center', views.overlay_control_center, name='control-center')
+    path('overlays/control-center', sites.overlay_control_center, name='control-center'),
+
+    path('data/leagues', sites.leagues, name='leagues')
 ]

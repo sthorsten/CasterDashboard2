@@ -22,28 +22,6 @@ def login_view(request):
     return render(request, 'login/login.html')
 
 
-def login_form(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            profile = Profile.objects.filter(user=user).first()
-            if not profile.confirmed:
-                messages.error(request, _("Your account must be confirmed by an admin before you can login"),
-                               extra_tags=_("Login failed"))
-                return redirect('/login')
-
-            login(request, user)
-            messages.success(request, _("You have been logged in successfully"), extra_tags=_("Welcome %s!" % user))
-            return redirect('/dashboard/home')
-        else:
-            messages.error(request, _("Username or password incorrect!"), extra_tags=_("Login failed"))
-            return redirect('/login')
-
-    return render(request, 'login/login.html')
-
-
 def register(request):
     return render(request, 'login/register.html')
 
@@ -52,28 +30,10 @@ def register_success(requset):
     return render(requset, 'login/register-success.html')
 
 
-def register_form(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-
-        user = User.objects.create_user(username=username, email=email, password=password)
-
-        if user is not None:
-            return redirect('/register/success')
-        else:
-            messages.error(request, _("Your account could not be created! Please try again or contact an admin!"),
-                           extra_tags=_("Registration failed"))
-            return redirect('/login')
-
-    return render(request, 'login/register.html')
-
-
 def logout_view(request):
     logout(request)
     messages.success(request, _("You have been logged out! See you next time!"),
-                   extra_tags=_("Logged out"))
+                     extra_tags=_("Logged out"))
     return redirect('/')
 
 
@@ -82,14 +42,32 @@ def home(request):
     league_count = len(League.objects.all())
     match_count = len(Match.objects.all())
     round_count = len(Round.objects.all())
+    social_count = len(SocialOverlayData.objects.filter(user=request.user).all())
+    personal_match_count = len(Match.objects.filter(user=request.user).all())
+
+    match_overlay_data = MatchOverlayData.objects.filter(user=request.user).first()
+    if match_overlay_data.current_match:
+        current_match = Match.objects.filter(id=match_overlay_data.current_match.id).first()
+    else:
+        current_match = None
 
     template_data = {
         'league_count': league_count,
         'match_count': match_count,
         'round_count': round_count,
+        'social_count': social_count,
+        'personal_match_count': personal_match_count,
+
+        'match_overlay_data': match_overlay_data,
+        'current_match': current_match,
     }
 
-    return render(request, 'index.html', template_data)
+    return render(request, 'home.html', template_data)
+
+
+'''
+    Overlays
+'''
 
 
 @login_required
@@ -115,3 +93,23 @@ def overlay_control_center(request):
     }
 
     return render(request, 'overlays/control-center.html', template_data)
+
+
+'''
+    Data
+'''
+
+
+@login_required
+def leagues(request):
+    leagues = League.objects.all()
+    league_groups = LeagueGroup.objects.all()
+    seasons = Season.objects.all()
+
+    template_data = {
+        'leagues': leagues,
+        'league_groups': league_groups,
+        'seasons': seasons,
+    }
+
+    return render(request, 'data/leagues.html', template_data)

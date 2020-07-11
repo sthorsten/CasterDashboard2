@@ -147,4 +147,8 @@ div.card-divider {
   opacity: 1 !important;
 }
 
+.table.table-head-fixed thead tr:nth-child(1) th {
+  background: #212529;
+}
+
 /*# sourceMappingURL=adminlte-extension.css.map */

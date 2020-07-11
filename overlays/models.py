@@ -85,11 +85,11 @@ def create_user_poll_overlay_data(sender, instance, created, **kwargs):
 
 
 class SocialOverlayData(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True)
-    social_type = models.CharField(max_length=255)
-    social_title = models.CharField(max_length=255)
-    social_text = models.CharField(max_length=255)
+    social_type = models.CharField(max_length=255, blank=True, null=True)
+    social_title = models.CharField(max_length=255, blank=True, null=True)
+    social_text = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return "SocialOverlayData: " + str(self.user)
