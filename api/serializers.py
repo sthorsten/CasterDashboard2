@@ -26,3 +26,15 @@ class TimerOverlayDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimerOverlayData
         fields = ['mode', 'value']
+
+
+class MatchOverlayDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MatchOverlayData
+        fields = ['current_match', 'current_map', 'current_atk_team']
+
+
+class NextMatchOverlayDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NextMatchOverlayData
+        fields = ['match']

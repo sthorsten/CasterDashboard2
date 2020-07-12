@@ -47,3 +47,57 @@ def timer_overlay_data(request, user_id):
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
+
+
+def get_current_match(request, user_id):
+    try:
+        match_overlay_data = MatchOverlayData.objects.get(user=user_id)
+    except MatchOverlayData.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = MatchOverlayDataSerializer(match_overlay_data)
+        return JsonResponse(serializer.data)
+
+    else:
+        return JsonResponse(data={"error": "method not allowed"}, status=405)
+
+
+@csrf_exempt
+def set_current_match(request, user_id):
+    try:
+        match_overlay_data = MatchOverlayData.objects.get(user=user_id)
+    except MatchOverlayData.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = MatchOverlayDataSerializer(match_overlay_data)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = MatchOverlayDataSerializer(match_overlay_data, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def set_next_match(request, user_id):
+    try:
+        match_overlay_data = NextMatchOverlayData.objects.get(user=user_id)
+    except NextMatchOverlayData.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = NextMatchOverlayDataSerializer(match_overlay_data)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = NextMatchOverlayDataSerializer(match_overlay_data, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
