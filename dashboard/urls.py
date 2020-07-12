@@ -9,5 +9,8 @@ urlpatterns = [
 
     path('overlays/control-center', sites.overlay_control_center, name='control-center'),
 
-    path('data/leagues', sites.leagues, name='leagues')
+    # Data
+    path('data/leagues', sites.leagues, name='leagues'),
+    path('data/seasons', sites.seasons, name='seasons'),
+
 ]

@@ -104,12 +104,25 @@ def overlay_control_center(request):
 def leagues(request):
     leagues = League.objects.all()
     league_groups = LeagueGroup.objects.all()
-    seasons = Season.objects.all()
 
     template_data = {
         'leagues': leagues,
         'league_groups': league_groups,
-        'seasons': seasons,
     }
 
     return render(request, 'data/leagues.html', template_data)
+
+
+@login_required
+def seasons(request):
+    seasons = Season.objects.all()
+    leagues = League.objects.all()
+    league_groups = LeagueGroup.objects.all()
+
+    template_data = {
+        'seasons': seasons,
+        'leagues': leagues,
+        'league_groups': league_groups,
+    }
+
+    return render(request, 'data/seasons.html', template_data)
