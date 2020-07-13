@@ -12,5 +12,6 @@ urlpatterns = [
     # Data
     path('data/leagues', sites.leagues, name='leagues'),
     path('data/seasons', sites.seasons, name='seasons'),
+    path('data/teams', sites.teams, name='teams'),
 
 ]

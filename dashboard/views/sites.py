@@ -126,3 +126,14 @@ def seasons(request):
     }
 
     return render(request, 'data/seasons.html', template_data)
+
+
+@login_required
+def teams(request):
+    teams = Team.objects.all().order_by('name')
+
+    template_data = {
+        'teams': teams,
+    }
+
+    return render(request, 'data/teams.html', template_data)
