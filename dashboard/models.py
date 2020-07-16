@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth.models import User
@@ -91,9 +92,21 @@ class Team(models.Model):
     name = models.CharField(max_length=22)
     created = models.DateTimeField(auto_now_add=True)
     has_logo = models.BooleanField(default=False)
+    team_logo = models.ImageField(upload_to='teams', blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+
+@receiver(models.signals.post_delete, sender=Team)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `MediaFile` object is deleted.
+    """
+    if instance.team_logo:
+        if os.path.isfile(instance.team_logo.path):
+            os.remove(instance.team_logo.path)
 
 
 class Sponsor(models.Model):

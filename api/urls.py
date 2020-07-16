@@ -1,5 +1,4 @@
 from django.conf.urls import url, include
-from django.contrib.auth.models import User
 from django.urls import path
 from rest_framework import routers, serializers, viewsets
 from api.serializers import *
@@ -18,4 +17,8 @@ urlpatterns = [
     path('overlay/timer_overlay_data/<int:user_id>/', views.timer_overlay_data),
     path('overlay/current_match/<int:user_id>/', views.set_current_match),
     path('overlay/next_match/<int:user_id>/', views.set_next_match),
+
+    # Data
+    path('data/teams/new/', views.add_new_team),
 ]
+

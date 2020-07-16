@@ -1,0 +1,177 @@
+{% load i18n %}
+{% load static %}
+
+<div class="modal fade" role="dialog" id="new-team-modal">
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success">
+                <h5 class="modal-title">{% trans "Add a new team" %}</h5>
+            </div>
+
+            <form id="new-team-form" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                <div class="modal-body bg-dark">
+
+                    <div class="form-group row">
+                        <div class="input-group">
+                            <label for="team_name"
+                                   class="col-sm-4 col-form-label">{% trans "Team Name" %}</label>
+                            <div class="col-sm-8">
+                                <input id="team_name" name="team_name" class="form-control" type="text"
+                                       maxlength="22"
+                                       placeholder="{% trans "Enter a Team Name" %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border-top: 1px solid #fff">
+
+                    <div class="form-group row">
+                        <div class="input-group">
+                            <label for="logo_file"
+                                   class="col-sm-4 col-form-label">{% trans "Team Logo File" %}</label>
+                            <div class="col-sm-8">
+                                <input id="logo_file" name="logo_file" class="mt-1" type="file"
+                                       placeholder="{% trans "Select a file to upload" %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="input-group">
+                            <label for="logo_url"
+                                   class="col-sm-4 col-form-label">{% trans "Team Logo URL" %}</label>
+                            <div class="col-sm-8">
+                                <input id="logo_url" name="logo_url" class="form-control" type="url"
+                                       placeholder="{% trans "Paste an image link" %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="input-group">
+                            <div class="col-sm-4">
+                                <label>{% trans "No Logo" %}</label>
+                            </div>
+                            <div class="col-sm-8 custom-control custom-checkbox">
+                                <input id="no_logo" name="no_logo" class="custom-control-input"
+                                       type="checkbox">
+                                <label for="no_logo"
+                                       class="custom-control-label ml-2">{% trans "Team has no logo" %}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border-top: 1px solid #fff">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <span><i class="far fa-question-circle"></i> <b>{% trans "Quick Help" %}</b></span>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <i>
+                                {% trans "1. Enter a team name" %}<br>
+                                {% trans "2. Add a logo by either uploading one, pasting in a link to the logo or checking the 'Team has no logo' checkbox if the team does not has a logo." %}
+                            </i>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer justify-content-between bg-gray-800">
+                    <button class="btn btn-secondary" data-dismiss="modal">
+                        {% trans "Cancel" %}
+                    </button>
+                    <button class="btn btn-success" type="submit">
+                        {% trans "Add a new team" %}
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Loading modal -->
+<div class="modal fade" role="dialog" id="new-team-loading-modal">
+    <div class="modal-dialog modal-sm" role="document">
+
+        <div class="modal-content">
+            <div id="new-team-loading-modal-body" class="modal-body bg-dark">
+
+                <div id="new-team-loading-block" class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    <br><br>
+                    <span>{% trans "Adding team." %} {% trans "Please wait..." %}</span>
+                </div>
+
+                <div id="new-team-success-block" class="text-center d-none">
+                    <span><i class="fas fa-check fa-2x"></i></span>
+                    <br><br>
+                    <span>{% trans "The team has been added successfully" %}.</span>
+                </div>
+
+                <div id="new-team-error-block" class="text-center d-none">
+                    <span><i class="fas fa-times fa-2x"></i></span>
+                    <br><br>
+                    <span>{% trans "Error" %}: {% trans "The team could not be created" %} :/</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#new-team-form').submit(function () {
+        // Loading modal
+        $('#new-team-modal').modal('hide');
+        $('#new-team-loading-modal').modal('show');
+
+        var formData = new FormData();
+        formData.append("csrfmiddlewaretoken", $('[name="csrfmiddlewaretoken"]').val())
+        formData.append("team_name", $('#team_name').val())
+        formData.append("no_logo", $('#no_logo').val())
+        formData.append("logo_url", $('#logo_url').val())
+        formData.append("logo_file", $('#logo_file')[0].files[0]);
+
+        $.ajax({
+            url: '/api/data/teams/new/',
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (result) {
+
+                // Success modal
+                $('#new-team-loading-block').addClass("d-none");
+                $('#new-team-success-block').removeClass("d-none");
+                $('#new-team-loading-modal-body').removeClass("bg-dark");
+                $('#new-team-loading-modal-body').addClass("bg-success");
+                setTimeout(function () {
+                    location.reload();
+                }, 2000)
+            },
+            error: function (xhr, resp, text) {
+                console.log(this.data);
+                console.log(xhr, resp, text);
+
+                // Error modal
+                $('#new-team-loading-block').addClass("d-none");
+                $('#new-team-error-block').removeClass("d-none");
+                $('#new-team-loading-modal-body').removeClass("bg-dark");
+                $('#new-team-loading-modal-body').addClass("bg-danger");
+                setTimeout(function () {
+                    location.reload();
+                }, 2000)
+            }
+        });
+        return false;
+    });
+</script>

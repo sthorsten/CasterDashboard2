@@ -15,6 +15,11 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
+'''
+     Overlay Serializers
+'''
+
+
 class OverlayStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OverlayState
@@ -38,3 +43,4 @@ class NextMatchOverlayDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = NextMatchOverlayData
         fields = ['match']
+
