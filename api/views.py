@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.conf import settings as django_settings
@@ -13,6 +14,8 @@ from rest_framework.parsers import JSONParser
 from api.serializers import *
 from caster_dashboard_2 import settings
 from overlays.models import *
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt

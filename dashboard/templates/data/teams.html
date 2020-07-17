@@ -55,7 +55,7 @@
                                     <td>{{ t.name }}</td>
                                     {% if t.has_logo %}
                                         <td>
-                                            <img src="{% static "data/../../../static/media/teams/" %}{{ t.name }}.png" alt="-"
+                                            <img src="/media/teams/{{ t.id }}.png" alt="-"
                                                  style="height: 30px; width: 30px;">
                                         </td>
                                     {% else %}

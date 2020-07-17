@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -10,11 +12,14 @@ from django.utils.translation import gettext as _
 from dashboard.models import *
 from overlays.models import *
 
+logger = logging.getLogger(__name__)
+
 
 def index(request):
     if auth.get_user(request).is_anonymous:
         return redirect('/login')
     else:
+        logger.info("[User %s] Login successful" % request.user)
         return redirect('home')
 
 
@@ -32,6 +37,7 @@ def register_success(requset):
 
 def logout_view(request):
     logout(request)
+    logger.info("[User %s] Logout successful" % request.user)
     messages.success(request, _("You have been logged out! See you next time!"),
                      extra_tags=_("Logged out"))
     return redirect('/')
@@ -137,3 +143,38 @@ def teams(request):
     }
 
     return render(request, 'data/teams.html', template_data)
+
+
+'''
+    Matches
+'''
+
+
+@login_required
+def match_history(request):
+    matches = Match.objects.filter(user=request.user).order_by("-id").all()
+
+    template_data = {
+        'matches': matches,
+    }
+
+    return render(request, 'matches/history.html', template_data)
+
+
+@login_required
+def match_create(request):
+    league_groups = LeagueGroup.objects.filter(user=request.user).all()
+    leagues = League.objects.order_by("name").all()
+    seasons = Season.objects.order_by("name").all()
+    teams = Team.objects.order_by("name").all()
+    sponsors = Sponsor.objects.order_by("name").all()
+
+    template_data = {
+        'league_groups': league_groups,
+        'leagues': leagues,
+        'seasons': seasons,
+        'teams': teams,
+        'sponsors': sponsors,
+    }
+
+    return render(request, 'matches/create.html', template_data)

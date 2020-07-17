@@ -26,6 +26,69 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
 
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s.%(msecs)03d] %(levelname)s [%(name)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 1024*1024*10, # 10 MB
+            'formatter': 'verbose',
+        },
+        'caster_dashboard': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 1024*1024*10, # 10 MB
+            'formatter': 'verbose',
+        }
+
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'caster_dashboard_2': {
+            'handlers': ['caster_dashboard'],
+            'level': 'DEBUG',
+        },
+        'dashboard': {
+            'handlers': ['caster_dashboard'],
+            'level': 'DEBUG',
+        },
+        'overlays': {
+            'handlers': ['caster_dashboard'],
+            'level': 'DEBUG',
+        },
+        'api': {
+            'handlers': ['caster_dashboard'],
+            'level': 'DEBUG',
+        },
+        '': {
+            'handlers': ['console', 'file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        }
+    },
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -139,7 +202,7 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]

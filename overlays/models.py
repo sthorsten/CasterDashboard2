@@ -1,9 +1,13 @@
+import logging
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from dashboard.models import Match, Team, Map
+
+logger = logging.getLogger(__name__)
 
 
 class OverlayStyle(models.Model):
@@ -24,6 +28,7 @@ class OverlayStyle(models.Model):
 @receiver(post_save, sender=User)
 def create_user_overlay_style(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating OverlayStyle via receiver" % instance)
         OverlayStyle.objects.create(user=instance)
 
 
@@ -48,6 +53,7 @@ class OverlayState(models.Model):
 @receiver(post_save, sender=User)
 def create_user_overlay_state(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating OverlayState via receiver" % instance)
         OverlayState.objects.create(user=instance)
 
 
@@ -64,6 +70,7 @@ class MatchOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_match_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating MatchOverlayData via receiver" % instance)
         MatchOverlayData.objects.create(user=instance)
 
 
@@ -81,6 +88,7 @@ class PollOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_poll_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating PollOverlayData via receiver" % instance)
         PollOverlayData.objects.create(user=instance)
 
 
@@ -98,6 +106,7 @@ class SocialOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_social_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating SocialOverlayData via receiver" % instance)
         SocialOverlayData.objects.create(user=instance)
 
 
@@ -113,6 +122,7 @@ class TimerOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_timer_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating TimerOverlayData via receiver" % instance)
         TimerOverlayData.objects.create(user=instance)
 
 
@@ -131,6 +141,7 @@ class TickerOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_ticker_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating TickerOverlayData via receiver" % instance)
         TickerOverlayData.objects.create(user=instance)
 
 
@@ -145,4 +156,5 @@ class NextMatchOverlayData(models.Model):
 @receiver(post_save, sender=User)
 def create_user_next_match_overlay_data(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating NextMatchOverlayData via receiver" % instance)
         NextMatchOverlayData.objects.create(user=instance)

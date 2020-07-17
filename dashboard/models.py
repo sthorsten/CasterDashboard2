@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import datetime
 
@@ -5,6 +6,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+logger = logging.getLogger(__name__)
 
 
 class Profile(models.Model):
@@ -18,6 +21,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
+        logger.debug("[User %s] Creating profile via receiver" % instance)
         Profile.objects.create(user=instance)
 
 
@@ -63,9 +67,18 @@ class Operator(models.Model):
 class League(models.Model):
     name = models.CharField(max_length=255)
     is_restricted = models.BooleanField(default=True)
+    league_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+
+@receiver(models.signals.post_delete, sender=League)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    # Auto delete image
+    if instance.league_logo:
+        if os.path.isfile(instance.league_logo.path):
+            os.remove(instance.league_logo.path)
 
 
 class LeagueGroup(models.Model):
@@ -100,10 +113,7 @@ class Team(models.Model):
 
 @receiver(models.signals.post_delete, sender=Team)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes file from filesystem
-    when corresponding `MediaFile` object is deleted.
-    """
+    # Auto delete image
     if instance.team_logo:
         if os.path.isfile(instance.team_logo.path):
             os.remove(instance.team_logo.path)
@@ -111,9 +121,18 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 
 class Sponsor(models.Model):
     name = models.CharField(max_length=255)
+    sponsor_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+
+@receiver(models.signals.post_delete, sender=Sponsor)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    # Auto delete image
+    if instance.sponsor_logo:
+        if os.path.isfile(instance.sponsor_logo.path):
+            os.remove(instance.sponsor_logo.path)
 
 
 class Match(models.Model):
