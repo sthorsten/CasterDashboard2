@@ -135,6 +135,13 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
             os.remove(instance.sponsor_logo.path)
 
 
+class MatchState(models.Model):
+    state = models.CharField(max_length=255, default="created")
+
+    def __str__(self):
+        return self.state
+
+
 class Match(models.Model):
     user = models.ManyToManyField(User)
     share_mode = models.CharField(max_length=5, blank=True, null=True)
@@ -143,7 +150,7 @@ class Match(models.Model):
     title = models.CharField(max_length=22)
     subtitle = models.CharField(max_length=22, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    state = models.CharField(max_length=255, default="created")
+    state = models.ForeignKey(MatchState, default=1, on_delete=models.SET_DEFAULT)
     best_of = models.IntegerField(default=1)
     team_blue = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team_blue")
     team_orange = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team_orange")

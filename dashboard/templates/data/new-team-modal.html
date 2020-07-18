@@ -10,7 +10,9 @@
                 <h5 class="modal-title">{% trans "Add a new team" %}</h5>
             </div>
 
-            <form id="new-team-form" class="needs-validation" novalidate>
+            <form id="new-team-form" class="needs-validation" action="/dashboard/data/teams/new"
+                  enctype="multipart/form-data" method="post"
+                  novalidate>
                 {% csrf_token %}
 
                 <div class="modal-body bg-dark">
@@ -21,8 +23,9 @@
                                    class="col-sm-4 col-form-label">{% trans "Team Name" %}</label>
                             <div class="col-sm-8">
                                 <input id="team_name" name="team_name" class="form-control" type="text"
-                                       maxlength="22"
+                                       maxlength="22" required
                                        placeholder="{% trans "Enter a Team Name" %}">
+                                <div class="invalid-feedback">{% trans "Please enter a team name" %}!</div>
                             </div>
                         </div>
                     </div>
@@ -96,82 +99,13 @@
     </div>
 </div>
 
-<!-- Loading modal -->
-<div class="modal fade" role="dialog" id="new-team-loading-modal">
-    <div class="modal-dialog modal-sm" role="document">
-
-        <div class="modal-content">
-            <div id="new-team-loading-modal-body" class="modal-body bg-dark">
-
-                <div id="new-team-loading-block" class="text-center">
-                    <div class="spinner-border" role="status">
-                    </div>
-                    <br><br>
-                    <span>{% trans "Adding team." %} {% trans "Please wait..." %}</span>
-                </div>
-
-                <div id="new-team-success-block" class="text-center d-none">
-                    <span><i class="fas fa-check fa-2x"></i></span>
-                    <br><br>
-                    <span>{% trans "The team has been added successfully" %}.</span>
-                </div>
-
-                <div id="new-team-error-block" class="text-center d-none">
-                    <span><i class="fas fa-times fa-2x"></i></span>
-                    <br><br>
-                    <span>{% trans "Error" %}: {% trans "The team could not be created" %} :/</span>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
+{% include 'base/form-validation.html' %}
+{% include 'base/loading-modal.html' with  modal_id="add-team-loading-modal" title=_('Adding Team') %}
 
 <script>
     $('#new-team-form').submit(function () {
         // Loading modal
         $('#new-team-modal').modal('hide');
-        $('#new-team-loading-modal').modal('show');
-
-        var formData = new FormData();
-        formData.append("csrfmiddlewaretoken", $('[name="csrfmiddlewaretoken"]').val())
-        formData.append("team_name", $('#team_name').val())
-        formData.append("no_logo", $('#no_logo').val())
-        formData.append("logo_url", $('#logo_url').val())
-        formData.append("logo_file", $('#logo_file')[0].files[0]);
-
-        $.ajax({
-            url: '/api/data/teams/new/',
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (result) {
-
-                // Success modal
-                $('#new-team-loading-block').addClass("d-none");
-                $('#new-team-success-block').removeClass("d-none");
-                $('#new-team-loading-modal-body').removeClass("bg-dark");
-                $('#new-team-loading-modal-body').addClass("bg-success");
-                setTimeout(function () {
-                    location.reload();
-                }, 2000)
-            },
-            error: function (xhr, resp, text) {
-                console.log(this.data);
-                console.log(xhr, resp, text);
-
-                // Error modal
-                $('#new-team-loading-block').addClass("d-none");
-                $('#new-team-error-block').removeClass("d-none");
-                $('#new-team-loading-modal-body').removeClass("bg-dark");
-                $('#new-team-loading-modal-body').addClass("bg-danger");
-                setTimeout(function () {
-                    location.reload();
-                }, 2000)
-            }
-        });
-        return false;
+        $('#add-team-loading-modal').modal('show');
     });
 </script>

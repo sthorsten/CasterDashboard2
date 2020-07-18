@@ -62,7 +62,8 @@
                                         <td>{% trans "-" %}</td>
                                     {% endif %}
                                     <td>
-                                        <button class="btn btn-sm btn-warning">{% trans "Change Logo" %}</button>
+                                        <button class="btn btn-sm btn-warning" data-teamid="{{ t.id }}"
+                                                onclick="editTeam(this)">{% trans "Change Logo" %}</button>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -105,5 +106,14 @@
     </div>
 
     {% include "data/new-team-modal.html" %}
+    {% include "data/edit-team-modal.html" %}
+
+    <script>
+        function editTeam(elem) {
+            changeTeamID = $(elem).attr("data-teamid");
+            $("#edit_team_id").attr("value", changeTeamID);
+            $('#edit-team-modal').modal('show');
+        }
+    </script>
 
 {% endblock %}

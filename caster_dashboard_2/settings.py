@@ -55,7 +55,7 @@ LOGGING = {
         'caster_dashboard': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'filename': os.path.join(BASE_DIR, 'logs', 'caster_dashboard.log'),
             'maxBytes': 1024*1024*10, # 10 MB
             'formatter': 'verbose',
         }

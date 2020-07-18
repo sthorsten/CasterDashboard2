@@ -36,8 +36,8 @@ def register_success(requset):
 
 
 def logout_view(request):
+    logger.info("[User: %s] User logout" % request.user)
     logout(request)
-    logger.info("[User %s] Logout successful" % request.user)
     messages.success(request, _("You have been logged out! See you next time!"),
                      extra_tags=_("Logged out"))
     return redirect('/')
@@ -178,3 +178,16 @@ def match_create(request):
     }
 
     return render(request, 'matches/create.html', template_data)
+
+
+@login_required
+def match_overview(request, match_id):
+    match = Match.objects.filter(id=match_id).first()
+    match_users = match.user.all()
+
+    template_data = {
+        'match': match,
+        'match_users': match_users,
+    }
+
+    return render(request, 'matches/overview.html', template_data)
