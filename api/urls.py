@@ -18,7 +18,8 @@ urlpatterns = [
     path('overlay/current_match/<int:user_id>/', views.set_current_match),
     path('overlay/next_match/<int:user_id>/', views.set_next_match),
 
-    # Data
-    path('data/teams/new/', views.add_new_team),
+    # Match Data
+    path('matches/map_ban/<int:match_id>/', views.map_ban),
+
 ]
 

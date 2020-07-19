@@ -47,6 +47,14 @@ class Map(models.Model):
         return self.name
 
 
+class MapPool(models.Model):
+    name = models.CharField(max_length=255)
+    maps = models.ManyToManyField(Map)
+
+    def __str__(self):
+        return self.name
+
+
 class BombSpot(models.Model):
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     floor = models.CharField(max_length=7, default='1F')
@@ -166,6 +174,7 @@ class MapBan(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     type = models.CharField(max_length=255)
+    order = models.IntegerField(default=1)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

@@ -191,3 +191,16 @@ def match_overview(request, match_id):
     }
 
     return render(request, 'matches/overview.html', template_data)
+
+
+@login_required
+def match_maps(request, match_id):
+    match = Match.objects.filter(id=match_id).first()
+    maps = Map.objects.all()
+
+    template_data = {
+        'match': match,
+        'maps': maps,
+    }
+
+    return render(request, 'matches/maps.html', template_data)

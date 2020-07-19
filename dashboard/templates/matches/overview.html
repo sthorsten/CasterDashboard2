@@ -164,8 +164,10 @@
                     <h5 class="card-title card-title-upper">{% trans "Match Actions" %}:</h5><br>
                     <div class="card-divider"></div>
 
-                    <button class="btn btn-primary w-100 mb-2">{% trans "Set Match to Overlays" %}</button>
-                    <button class="btn btn-primary w-100">{% trans "Continue to Map Picks & Bans" %}</button>
+                    <button class="btn btn-primary w-100 mb-2"
+                            onclick="setMatchToOverlay()">{% trans "Set Match to Overlays" %}</button>
+                    <a href="/dashboard/matches/{{ match.id }}/maps"
+                       class="btn btn-primary w-100">{% trans "Continue to Map Picks & Bans" %}</a>
 
                     <div class="card-divider mt-4 mb-4"></div>
 
@@ -182,6 +184,18 @@
 
         </div>
     </div>
+
+    <script>
+        function setMatchToOverlay() {
+            var matchID = "{{ match.id }}";
+            var postURL = "/api/overlay/current_match/" + {{ user.id }} +"/";
+            var data = `{"current_match": ${matchID}, "current_map": ${null}, "current_atk_team": ${null}}`;
+
+            console.log(`POST: ${postURL} => ${data}`);
+            $.post(postURL, data)
+            toastr.success("{% trans "Overlays updated to current match" %}");
+        }
+    </script>
 
 {% endblock %}
 

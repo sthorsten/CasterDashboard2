@@ -11,6 +11,7 @@ urlpatterns = [
     path('matches/history', sites.match_history, name='history'),
     path('matches/create', sites.match_create, name='create'),
     path('matches/<int:match_id>', sites.match_overview, name='match-overview'),
+    path('matches/<int:match_id>/maps', sites.match_maps, name='match-maps'),
 
     # Overlays
     path('overlays/control-center', sites.overlay_control_center, name='control-center'),

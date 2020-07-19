@@ -1,5 +1,15 @@
 @import "bootstrap-variables";
 
+@font-face {
+  font-family: 'ScoutCond Regular';
+  src: url("/static/fonts/ScoutCond-Regular.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'ScoutCond Bold';
+  src: url("/static/fonts/ScoutCond-Bold.woff") format('woff');
+}
+
 div.title-icon {
   width: max-content;
   padding: 1em;
@@ -159,3 +169,5 @@ div.card-divider {
 .login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
   background: $gray-900;
 }
+
+

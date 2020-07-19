@@ -99,20 +99,20 @@
 
     function setCurrentMatch() {
         var matchID = $('#setCurrentMatchSelect').val();
-        postURL = "/api/overlay/current_match/" + current_user_id + "/";
-        data = '{"current_match": ' + matchID + '}';
+        var postURL = `/api/overlay/current_match/${current_user_id}/`;
+        var data = `{"current_match": ${matchID}, "current_map": ${null}, "current_atk_team": ${null}}`;
 
-        console.log("POST: " + postURL + " => " + data);
+        console.log(`POST: ${postURL} => ${data}`);
         $.post(postURL, data)
         toastr.success("{% trans "The current match has been set to " %}" + matchID);
     }
 
     function setNextMatch() {
         var matchID = $('#setNextMatchSelect').val()
-        postURL = "/api/overlay/next_match/" + current_user_id + "/";
-        data = '{"match": ' + matchID + '}';
+        var postURL = `/api/overlay/next_match/${current_user_id}/`;
+        var data = `{"match": ${matchID}}`;
 
-        console.log("POST: " + postURL + " => " + data);
+        console.log(`POST: ${postURL} => ${data}`);
         $.post(postURL, data)
         toastr.success("{% trans "The next match has been set to " %}" + matchID);
     }

@@ -48,7 +48,7 @@
                 </li>
 
                 <!-- Play -->
-                <li class="nav-item has-treeview {% if active_page == "match_overview" %}menu-open{% endif %}">
+                <li class="nav-item has-treeview {% if active_page == "match_overview" or active_page == "match_maps" %}menu-open{% endif %}">
                     <a class="nav-link">
                         <i class="nav-icon fas fa-play-circle"></i>
                         <p>
@@ -75,9 +75,13 @@
 
                         <!-- Match Overview -->
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="" class="nav-link {% if active_page == "match_maps" %}active{% endif %}">
                                 <p>
-                                    <i class="far fa-circle nav-icon"></i>
+                                    {% if active_page == "match_maps" %}
+                                        <i class="fas fa-chevron-circle-right nav-icon"></i>
+                                    {% else %}
+                                        <i class="far fa-circle nav-icon"></i>
+                                    {% endif %}
                                     {% trans "Map Pick & Bans" %}
                                 </p>
                             </a>

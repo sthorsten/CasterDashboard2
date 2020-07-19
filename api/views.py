@@ -13,6 +13,7 @@ from rest_framework.parsers import JSONParser
 
 from api.serializers import *
 from caster_dashboard_2 import settings
+from dashboard.models import MapBan
 from overlays.models import *
 
 logger = logging.getLogger(__name__)
@@ -112,71 +113,47 @@ def set_next_match(request, user_id):
         return JsonResponse(serializer.errors, status=400)
 
 
-def add_new_team(request):
+@csrf_exempt
+def map_ban(request, match_id):
+    match = Match.objects.filter(id=match_id).first()
+
     if request.method == 'GET':
-        return HttpResponse(status=405)
+        map_ban = MapBan.objects.filter(match=match).all().order_by("order")
+        if not map_ban or len(map_ban) == 0:
+            return JsonResponse({"status": "Not Found"}, status=404)
 
-    elif request.method == 'POST':
-        data = request.POST
+        data = []
+        for map in map_ban:
+            data.append({
+                "map": map.map.name,
+                "map_id": map.map.id,
+                "type": map.type,
+                "order": map.order,
+                "team": map.team.name
+            })
+        return JsonResponse(data, safe=False)
 
-        # Validate / Format
-        if not len(data['team_name']) > 0:
-            return HttpResponse(reason="no team_name", status=400)
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        map = Map.objects.filter(id=data['map']).first()
 
-        # Handle files
-        if not request.FILES:
-            if not len(data['logo_url']) > 0:
-                if not (data['no_logo']):
-                    return HttpResponse(reason="no logo", status=400)
-                else:
-                    try:
-                        new_team = Team(name=data['team_name'], has_logo=False)
-                        new_team.save()
-                    except DatabaseError:
-                        return HttpResponse(reason="database error", status=500)
+        if data['type']:
+            if data['type'] == "delete":
+                map_ban = MapBan.objects.filter(match=match, map=map).first()
+                map_ban.delete()
 
-                    return HttpResponse(content="ok", status=200)
+        team = Team.objects.filter(id=data['team']).first()
+        if not map or not team or not data['type'] or not data['order']:
+            return JsonResponse({"status": "Bad Request"}, status=400)
 
-            else:
-                try:
-                    new_team = Team(name=data['team_name'], has_logo=True)
-                    new_team.save()
-                    new_team.team_logo = 'teams/' + str(new_team.id) + ".png"
-                    new_team.save()
-                except DatabaseError:
-                    return HttpResponse(reason="database error", status=500)
+        # Check if map is already in map_ban
+        map_ban = MapBan.objects.filter(match=match, map=map)
+        if map_ban:
+            return JsonResponse({"status": "Duplicate"}, status=400)
 
-                try:
-                    # Download and save file
-                    url = data['logo_url']
-                    r = requests.get(url, allow_redirects=True)
-                    save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
-                    open(save_path, 'wb').write(r.content)
-
-                except requests.exceptions.RequestException:
-                    new_team.delete()
-                    return HttpResponse(reason="logo download failed", status=500)
-                except OSError:
-                    new_team.delete()
-                    return HttpResponse(reason="logo save failed", status=500)
-
-                return HttpResponse(content="ok", status=200)
-
-        else:
-            try:
-                new_team = Team(name=data['team_name'], has_logo=True)
-                new_team.save()
-                new_team.team_logo = 'teams/' + str(new_team.id) + ".png"
-                new_team.save()
-
-            except DatabaseError:
-                return HttpResponse(reason="database error", status=500)
-
-            try:
-                save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
-                open(save_path, 'wb').write(request.FILES['logo_file'].read())
-            except OSError:
-                new_team.delete()
-                return HttpResponse(reason="logo save failed", status=500)
-
-            return HttpResponse(content="ok", status=200)
+        map_ban = MapBan(match=match, map=map, type=data['type'], order=data['order'], team=team)
+        try:
+            map_ban.save()
+            return JsonResponse({"status": "ok"})
+        except DatabaseError:
+            return JsonResponse({"status": "Database Error"}, status=500)

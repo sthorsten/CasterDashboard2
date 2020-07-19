@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets
 
+from dashboard.models import *
 from overlays.models import *
 
 
@@ -44,3 +45,8 @@ class NextMatchOverlayDataSerializer(serializers.ModelSerializer):
         model = NextMatchOverlayData
         fields = ['match']
 
+
+class MapBanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapBan
+        fields = ['map', 'type', 'order', 'team']
