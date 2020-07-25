@@ -50,3 +50,20 @@ class MapBanSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapBan
         fields = ['map', 'type', 'order', 'team']
+
+
+'''
+    Match Serializers
+'''
+
+
+class MapSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapSettings
+        fields = ['atk_team', 'ot_atk_team', 'final_score_blue', 'final_score_orange']
+
+
+class OperatorBanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OperatorBans
+        fields = ['operator', 'team', 'order']

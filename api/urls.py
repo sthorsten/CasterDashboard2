@@ -20,6 +20,9 @@ urlpatterns = [
 
     # Match Data
     path('matches/map_ban/<int:match_id>/', views.map_ban),
+    path('matches/map_settings/<int:match_id>/<int:map_id>/', views.map_settings),
+    path('matches/swap_teams/<int:match_id>/', views.swap_teams),
+    path('matches/operator_bans/<int:match_id>/<int:map_id>/', views.operator_bans),
 
 ]
 

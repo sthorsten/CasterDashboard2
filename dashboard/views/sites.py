@@ -204,3 +204,44 @@ def match_maps(request, match_id):
     }
 
     return render(request, 'matches/maps.html', template_data)
+
+
+@login_required
+def match_opbans(request, match_id, map_id):
+    match = Match.objects.filter(id=match_id).first()
+    map = Map.objects.filter(id=map_id).first()
+    map_settings = MapSettings.objects.filter(match=match, map=map).first()
+    atk_ops = Operator.objects.filter(side="ATK").order_by('name')
+    def_ops = Operator.objects.filter(side="DEF").order_by('name')
+    operator_ban_query = OperatorBans.objects.filter(match_id=match.id, map_id=map.id).all()
+
+    operator_bans = []
+    for op in operator_ban_query:
+        operator_bans.append(op)
+
+    # Add MapSettings entry if not present
+    if not map_settings:
+        map_settings = MapSettings(match=match, map=map, atk_team=match.team_blue, ot_atk_team=match.team_blue)
+        map_settings.save()
+
+    template_data = {
+        'match': match,
+        'map': map,
+        'map_settings': map_settings,
+        'atk_ops': atk_ops,
+        'def_ops': def_ops,
+        'operator_bans': operator_bans,
+    }
+
+    return render(request, 'matches/opbans.html', template_data)
+
+
+@login_required
+def match_rounds(request, match_id, map_id):
+    match = Match.objects.filter(id=match_id).first()
+
+    template_data = {
+        'match': match,
+    }
+
+    return render(request, 'matches/rounds.html', template_data)

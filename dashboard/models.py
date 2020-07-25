@@ -187,7 +187,19 @@ class MapWins(models.Model):
     win_team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return str(self.map.name) + "- Match: " + str(self.match)
+        return "MapWins:" + str(self.map.name) + " - Match: " + str(self.match)
+
+
+class MapSettings(models.Model):
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_settings_atk_team")
+    ot_atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_settings_ot_atk_team")
+    final_score_blue = models.IntegerField(default=0)
+    final_score_orange = models.IntegerField(default=0)
+
+    def __str__(self):
+        return "MapSettings: " + str(self.map.name) + " - Match: " + str(self.match.id)
 
 
 class OperatorBans(models.Model):
@@ -195,6 +207,7 @@ class OperatorBans(models.Model):
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    order = models.IntegerField(default=1)
 
     def __str__(self):
         return self.operator.name + " - Match: " + str(self.match)
@@ -205,8 +218,8 @@ class Round(models.Model):
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     round_no = models.IntegerField()
     bombspot = models.ForeignKey(BombSpot, on_delete=models.CASCADE)
-    atk_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="atk_team")
-    def_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="def_team")
+    atk_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_atk_team")
+    def_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_def_team")
     win_type = models.CharField(max_length=255)
     win_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_win_team")
     score_blue = models.IntegerField()

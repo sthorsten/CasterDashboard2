@@ -48,7 +48,7 @@
                 </li>
 
                 <!-- Play -->
-                <li class="nav-item has-treeview {% if active_page == "match_overview" or active_page == "match_maps" %}menu-open{% endif %}">
+                <li class="nav-item has-treeview {% if active_page == "match_overview" or active_page == "match_maps" or active_page == "match_rounds" %}menu-open{% endif %}">
                     <a class="nav-link">
                         <i class="nav-icon fas fa-play-circle"></i>
                         <p>
@@ -73,7 +73,7 @@
                             </a>
                         </li>
 
-                        <!-- Match Overview -->
+                        <!-- Map Picks & Bans -->
                         <li class="nav-item">
                             <a href="" class="nav-link {% if active_page == "match_maps" %}active{% endif %}">
                                 <p>
@@ -87,21 +87,15 @@
                             </a>
                         </li>
 
-                        <!-- Match Overview -->
+                        <!-- Rounds -->
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="" class="nav-link {% if active_page == "match_rounds" %}active{% endif %}">
                                 <p>
-                                    <i class="far fa-circle nav-icon"></i>
-                                    {% trans "Operator Bans" %}
-                                </p>
-                            </a>
-                        </li>
-
-                        <!-- Match Overview -->
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <p>
-                                    <i class="far fa-circle nav-icon"></i>
+                                    {% if active_page == "match_rounds" %}
+                                        <i class="fas fa-chevron-circle-right nav-icon"></i>
+                                    {% else %}
+                                        <i class="far fa-circle nav-icon"></i>
+                                    {% endif %}
                                     {% trans "Rounds" %}
                                 </p>
                             </a>

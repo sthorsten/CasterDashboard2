@@ -1,11 +1,13 @@
 {% load i18n %}
 
 <script>
+
     let ban_data;
     let order = 1;
     let firstTeam = null;
     let secondTeam = null;
     let nextTeam = null;
+    let nextMap = null;
 
     $(document).ready(function () {
         firstTeam = "{{ match.team_blue.id }}";
@@ -37,54 +39,65 @@
 
     function update() {
         $.getJSON("/api/matches/map_ban/{{ match.id }}/", function (data) {
-            if (data.length === 0) return;
+                if (data.length === 0) return;
 
-            ban_data = data;
+                ban_data = data;
 
-            $("#first_ban_team option").filter(function () {
-                return this.text == data[0]['team'];
-            }).attr('selected', true);
+                $("#first_ban_team option").filter(function () {
+                    return this.text == data[0]['team'];
+                }).attr('selected', true);
 
-            for (let i = 0; i < data.length; i++) {
-                $('#log').append(
-                    data[i]['order'] < 7
-                        ? `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']} / ${data[i]['team']}</li>`
-                        : `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']}</li>`
-                )
-
-                let badge = $(`#map_${data[i]['map_id']}_badge`);
-                if (data[i].type === 'ban') {
-                    badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
-                    badge.removeClass("badge-primary");
-                    badge.addClass("badge-danger");
-
-                    $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                } else if (data[i].type === 'pick') {
-                    badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
-                    badge.removeClass("badge-primary");
-                    badge.addClass("badge-success");
-
-                    $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                } else if (data[i].type === 'decider') {
-                    badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
-                    badge.removeClass("badge-primary");
-                    badge.addClass("badge-success");
-                } else if (data[i].type === 'default_ban') {
-                    badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
-                    badge.removeClass("badge-primary");
-                    badge.addClass("badge-danger");
+                if (nextTeam === null) {
+                    nextTeam = firstTeam;
                 }
 
-                order++;
-                (nextTeam === firstTeam)
-                    ? nextTeam = secondTeam
-                    : nextTeam = firstTeam
+                for (let i = 0; i < data.length; i++) {
+                    $('#log').append(
+                        data[i]['order'] < 7
+                            ? `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']} / ${data[i]['team']}</li>`
+                            : `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']}</li>`
+                    )
 
+                    let badge = $(`#map_${data[i]['map_id']}_badge`);
+                    if (data[i].type === 'ban') {
+                        badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
+                        badge.removeClass("badge-primary");
+                        badge.addClass("badge-danger");
+
+                        $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
+                    } else if (data[i].type === 'pick') {
+                        badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
+                        badge.removeClass("badge-primary");
+                        badge.addClass("badge-success");
+
+                        $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
+                        if (nextMap === null){
+                            nextMap = data[i]['map_id'];
+                        }
+
+                    } else if (data[i].type === 'decider') {
+                        badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
+                        badge.removeClass("badge-primary");
+                        badge.addClass("badge-success");
+                    } else if (data[i].type === 'default_ban') {
+                        badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
+                        badge.removeClass("badge-primary");
+                        badge.addClass("badge-danger");
+                    }
+
+                    order++;
+
+                    (nextTeam === firstTeam)
+                        ? nextTeam = secondTeam
+                        : nextTeam = firstTeam
+
+                }
+
+                $('#no_log').addClass("d-none");
+                $('#log').removeClass("d-none");
+                $('#continue_btn').attr("href", "/dashboard/matches/{{ match.id }}/map/" + nextMap + "/opbans");
             }
-
-            $('#no_log').addClass("d-none");
-            $('#log').removeClass("d-none");
-        });
+        );
     }
 
     function banMap(id) {

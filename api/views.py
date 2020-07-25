@@ -24,7 +24,7 @@ def overlay_state(request, user_id):
     try:
         overlay_state = OverlayState.objects.get(user=user_id)
     except OverlayState.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({"status": "Not Found"}, status=404)
 
     if request.method == 'GET':
         serializer = OverlayStateSerializer(overlay_state)
@@ -44,7 +44,7 @@ def timer_overlay_data(request, user_id):
     try:
         timer_overlay_data = TimerOverlayData.objects.get(user=user_id)
     except TimerOverlayData.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({"status": "Not Found"}, status=404)
 
     if request.method == 'GET':
         serializer = TimerOverlayDataSerializer(timer_overlay_data)
@@ -63,7 +63,7 @@ def get_current_match(request, user_id):
     try:
         match_overlay_data = MatchOverlayData.objects.get(user=user_id)
     except MatchOverlayData.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({"status": "Not Found"}, status=404)
 
     if request.method == 'GET':
         serializer = MatchOverlayDataSerializer(match_overlay_data)
@@ -78,7 +78,7 @@ def set_current_match(request, user_id):
     try:
         match_overlay_data = MatchOverlayData.objects.get(user=user_id)
     except MatchOverlayData.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({"status": "Not Found"}, status=404)
 
     if request.method == 'GET':
         serializer = MatchOverlayDataSerializer(match_overlay_data)
@@ -98,7 +98,7 @@ def set_next_match(request, user_id):
     try:
         match_overlay_data = NextMatchOverlayData.objects.get(user=user_id)
     except NextMatchOverlayData.DoesNotExist:
-        return HttpResponse(status=404)
+        return JsonResponse({"status": "Not Found"}, status=404)
 
     if request.method == 'GET':
         serializer = NextMatchOverlayDataSerializer(match_overlay_data)
@@ -157,3 +157,105 @@ def map_ban(request, match_id):
             return JsonResponse({"status": "ok"})
         except DatabaseError:
             return JsonResponse({"status": "Database Error"}, status=500)
+
+
+@csrf_exempt
+def map_settings(request, match_id, map_id):
+    match = Match.objects.filter(id=match_id).first()
+    map = Map.objects.filter(id=map_id).first()
+
+    try:
+        map_settings = MapSettings.objects.filter(match=match, map=map).first()
+    except MapSettings.DoesNotExist:
+        return JsonResponse({"status": "Not Found"}, status=404)
+
+    if request.method == 'GET':
+        serializer = MapSettingsSerializer(map_settings)
+        return JsonResponse(serializer.data)
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = MapSettingsSerializer(map_settings, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def swap_teams(request, match_id):
+    try:
+        match = Match.objects.filter(id=match_id).first()
+    except Match.DoesNotExist:
+        return JsonResponse({"status": "Not Found"}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({"team_blue": match.team_blue.id, "team_orange": match.team_orange.id})
+
+    if request.method == 'POST':
+        team_blue = match.team_blue
+        match.team_blue = match.team_orange
+        match.team_orange = team_blue
+        match.save()
+
+        return JsonResponse({"team_blue": match.team_blue.id, "team_orange": match.team_orange.id})
+
+
+@csrf_exempt
+def operator_bans(request, match_id, map_id):
+    match = Match.objects.filter(id=match_id).first()
+    map = Map.objects.filter(id=map_id).first()
+
+    operator_bans = OperatorBans.objects.filter(match=match, map=map).all()
+
+    if request.method == 'GET':
+        if len(operator_bans) == 0:
+            return JsonResponse({"status": "Not Found"}, status=404)
+
+        data = []
+        for op_ban in operator_bans:
+            serializer = OperatorBanSerializer(op_ban)
+            data.append(serializer.data)
+
+        return JsonResponse(data, safe=False)
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+
+        # Reset Last Ban
+        if data.get('reset'):
+            if data['reset'] == "single":
+                last_op_ban = operator_bans.last()
+                last_op_ban.delete()
+            elif data['reset'] == "all":
+                for op_ban in operator_bans:
+                    op_ban.delete()
+
+            return JsonResponse({"status": "ok"})
+
+        # Abort if there are already 4 Operator Bans
+        if len(operator_bans) >= 4:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        if not data['operator'] or not data['team']:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            operator = Operator.objects.filter(id=data['operator']).first()
+        except Operator.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            team = Team.objects.filter(id=data['team']).first()
+        except Team.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+            # Check if team is in current match
+        if not (team == match.team_blue or team == match.team_orange):
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        next_order = len(operator_bans) + 1
+        op_ban = OperatorBans(match=match, map=map, operator=operator, team=team, order=next_order)
+        op_ban.save()
+
+        return JsonResponse({"status": "ok"})

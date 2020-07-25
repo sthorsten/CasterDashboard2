@@ -12,6 +12,8 @@ urlpatterns = [
     path('matches/create', sites.match_create, name='create'),
     path('matches/<int:match_id>', sites.match_overview, name='match-overview'),
     path('matches/<int:match_id>/maps', sites.match_maps, name='match-maps'),
+    path('matches/<int:match_id>/map/<int:map_id>/opbans', sites.match_opbans, name='match-opbans'),
+    path('matches/<int:match_id>/map/<int:map_id>/rounds', sites.match_rounds, name='match-rounds'),
 
     # Overlays
     path('overlays/control-center', sites.overlay_control_center, name='control-center'),
