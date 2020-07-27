@@ -181,6 +181,15 @@ class MapBan(models.Model):
         return str(self.id) + "- Match: " + str(self.match)
 
 
+class MapPlayOrder(models.Model):
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    order = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str(self.id) + "- Match: " + str(self.match)
+
+
 class MapWins(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -193,8 +202,10 @@ class MapWins(models.Model):
 class MapSettings(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_settings_atk_team")
-    ot_atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_settings_ot_atk_team")
+    atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name="map_settings_atk_team")
+    ot_atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name="map_settings_ot_atk_team")
     final_score_blue = models.IntegerField(default=0)
     final_score_orange = models.IntegerField(default=0)
 
@@ -213,6 +224,13 @@ class OperatorBans(models.Model):
         return self.operator.name + " - Match: " + str(self.match)
 
 
+class WinType(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class Round(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -220,10 +238,12 @@ class Round(models.Model):
     bombspot = models.ForeignKey(BombSpot, on_delete=models.CASCADE)
     atk_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_atk_team")
     def_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_def_team")
-    win_type = models.CharField(max_length=255)
+    of_team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.CASCADE, related_name="round_of_team")
+    win_type = models.ForeignKey(WinType, on_delete=models.CASCADE)
     win_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_win_team")
     score_blue = models.IntegerField()
     score_orange = models.IntegerField()
+    notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str(self.round_no) + " - Match: " + str(self.match)

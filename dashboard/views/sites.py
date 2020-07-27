@@ -239,9 +239,17 @@ def match_opbans(request, match_id, map_id):
 @login_required
 def match_rounds(request, match_id, map_id):
     match = Match.objects.filter(id=match_id).first()
+    map = Map.objects.filter(id=map_id).first()
+    bomb_spots = BombSpot.objects.filter(map=map).all()
+    win_types = WinType.objects.all()
+    rounds = Round.objects.filter(match=match, map=map).all()
 
     template_data = {
         'match': match,
+        'map': map,
+        'bomb_spots': bomb_spots,
+        'win_types': win_types,
+        'rounds': rounds,
     }
 
     return render(request, 'matches/rounds.html', template_data)

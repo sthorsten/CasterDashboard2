@@ -2,6 +2,8 @@ import logging
 import os
 
 from django.conf import settings as django_settings
+from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.db import DatabaseError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -70,7 +72,7 @@ def get_current_match(request, user_id):
         return JsonResponse(serializer.data)
 
     else:
-        return JsonResponse(data={"error": "method not allowed"}, status=405)
+        return JsonResponse(data={"error": "Method Not Allowed"}, status=405)
 
 
 @csrf_exempt
@@ -259,3 +261,171 @@ def operator_bans(request, match_id, map_id):
         op_ban.save()
 
         return JsonResponse({"status": "ok"})
+
+
+@csrf_exempt
+def rounds(request, match_id, map_id):
+    match = Match.objects.filter(id=match_id).first()
+    map = Map.objects.filter(id=map_id).first()
+    map_settings = MapSettings.objects.filter(match=match, map=map).first()
+
+    rounds = Round.objects.filter(match=match, map=map).all()
+
+    if request.method == 'GET':
+        if len(rounds) == 0:
+            return JsonResponse({"status": "Not Found"}, status=404)
+
+        data = []
+        for round in rounds:
+            serializer = RoundSerializer(round)
+            data.append(serializer.data)
+
+        return JsonResponse(data, safe=False)
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+
+        # Reset Round(s)
+        if data.get('reset'):
+            if data['reset'] == "single":
+                last_round = rounds.last()
+                last_round.delete()
+            elif data['reset'] == "all":
+                for round in rounds:
+                    round.delete()
+
+            return JsonResponse({"status": "ok"})
+
+        # Check data
+        if not data['bombspot'] or not data['win_type'] or not data['win_team'] or not data['of_team']:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            bombspot = BombSpot.objects.filter(id=data['bombspot']).first()
+        except BombSpot.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            win_type = WinType.objects.filter(id=data['win_type']).first()
+        except WinType.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            win_team = Team.objects.filter(id=data['win_team']).first()
+        except Team.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        try:
+            of_team = Team.objects.filter(id=data['of_team']).first()
+        except Team.DoesNotExist:
+            return JsonResponse({"status": "Bad Request"}, status=400)
+
+        if not data.get('notes'):
+            notes = None
+        else:
+            notes = data['notes']
+
+        # Format data
+        round_no = len(rounds) + 1
+
+        # Set ATK / DEF team for round
+        if round_no <= 6:
+            atk_team = map_settings.atk_team
+            if atk_team == match.team_blue:
+                def_team = match.team_orange
+            else:
+                def_team = match.team_blue
+
+        elif 6 < round_no <= 12:
+            def_team = map_settings.atk_team
+            if def_team == match.team_blue:
+                atk_team = match.team_orange
+            else:
+                atk_team = match.team_blue
+
+        # Odd OT Rounds (13, 15, ...)
+        elif round_no > 12 and (round_no % 2 != 0):
+            atk_team = map_settings.ot_atk_team
+            if atk_team == match.team_blue:
+                def_team = match.team_orange
+            else:
+                def_team = match.team_blue
+
+        # Even OT Rounds (14, 16, ...)
+        else:
+            def_team = map_settings.ot_atk_team
+            if def_team == match.team_blue:
+                atk_team = match.team_orange
+            else:
+                atk_team = match.team_blue
+
+        # Set Score
+        if round_no <= 1:
+            score_blue = 0
+            score_orange = 0
+        else:
+            score_blue = rounds.last().score_blue
+            score_orange = rounds.last().score_orange
+
+        if win_team == match.team_blue:
+            score_blue += 1
+        else:
+            score_orange += 1
+
+        new_round = Round(match=match, map=map, round_no=round_no, bombspot=bombspot, atk_team=atk_team,
+                          def_team=def_team, of_team=of_team, win_type=win_type, win_team=win_team,
+                          score_blue=score_blue, score_orange=score_orange, notes=notes)
+
+        try:
+            new_round.save()
+        except DatabaseError:
+            return JsonResponse({"error": "Database Error"}, status=500)
+
+        messages.success(request, _('The round has been added successfully'))
+        return JsonResponse({"status": "ok"})
+
+
+@csrf_exempt
+def finish_map(request, match_id, map_id):
+    if request.method == 'GET':
+        return JsonResponse({"status": "Method Not Allowed"}, status=405)
+
+    data = JSONParser().parse(request)
+
+    if data.get('finish_map'):
+        match = Match.objects.filter(id=match_id).first()
+        map = Map.objects.filter(id=map_id).first()
+        last_round = Round.objects.filter(match=match, map=map).last()
+
+        if last_round.score_blue > last_round.score_orange:
+            win_team = match.team_blue
+            match.score_blue += 1
+        elif last_round.score_orange > last_round.score_blue:
+            win_team = match.team_orange
+            match.score_orange += 1
+        else:
+            win_team = None
+
+        map_win = MapWins(match=match, map=map, win_team=win_team)
+        try:
+            map_win.save()
+            match.save()
+        except DatabaseError:
+            return JsonResponse({"error": "Database Error"}, status=500)
+
+        # Set Next URL
+        map_win_len = len(MapWins.objects.filter(match=match).all())
+        if match.best_of == 1:
+            next_url = "/dashboard/matches/history"
+
+        else:
+            if map_win_len >= match.best_of:
+                next_url = "/dashboard/matches/history"
+            else:
+                next_map = MapPlayOrder.objects.filter(match=match, order=(map_win_len + 1)).first()
+                next_url = "/dashboard/matches/%s/map/%s/opbans" % (match.id, next_map.map.id)
+
+        return JsonResponse({"status": "ok", "next_url": next_url})
+
+    else:
+        return JsonResponse({"status": "Bad Request"}, status=400)

@@ -2,29 +2,48 @@
 
 {% block messages %}
 
+    <script>
+        // Global toastr options
+        toastr.options.closeButton = true;
+        toastr.options.timeOut = 10000;
+        toastr.options.extendedTimeOut = 1500;
+        toastr.options.progressBar = true;
+        toastr.options.positionClass = "toast-top-right";
+        toastr.options.showMethod = "slideDown";
+        toastr.options.hideMethod = "slideUp";
+        toastr.options.closeMethod = "slideUp";
+        toastr.options.closeDuration = 500;
+        toastr.options.hideDuration = 500;
+    </script>
+
     {% if messages %}
         {% for m in messages %}
 
             <script>
-                toastr.options.closeButton = true;
-                toastr.options.timeOut = 10000;
-                toastr.options.extendedTimeOut = 1500;
-                toastr.options.progressBar = true;
-                toastr.options.positionClass = "toast-top-right";
-                toastr.options.showMethod = "slideDown";
-                toastr.options.hideMethod = "slideUp";
-                toastr.options.closeMethod = "slideUp";
-                toastr.options.closeDuration = 500;
-                toastr.options.hideDuration = 500;
-
                 {% if m.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                    toastr.info("{{ m }}", "{{ m.extra_tags }}");
+                    {% if m.extra_tags %}
+                        toastr.info("{{ m }}", "{{ m.extra_tags }}");
+                    {% else %}
+                        toastr.info("{{ m }}");
+                    {% endif %}
                 {% elif m.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                    toastr.success("{{ m }}", "{{ m.extra_tags }}");
+                    {% if m.extra_tags %}
+                        toastr.success("{{ m }}", "{{ m.extra_tags }}");
+                    {% else %}
+                        toastr.success("{{ m }}");
+                    {% endif %}
                 {% elif m.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                    toastr.warn("{{ m }}", "{{ m.extra_tags }}");
+                    {% if m.extra_tags %}
+                        toastr.warn("{{ m }}", "{{ m.extra_tags }}");
+                    {% else %}
+                        toastr.warn("{{ m }}");
+                    {% endif %}
                 {% elif m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    toastr.error("{{ m }}", "{{ m.extra_tags }}");
+                    {% if m.extra_tags %}
+                        toastr.error("{{ m }}", "{{ m.extra_tags }}");
+                    {% else %}
+                        toastr.error("{{ m }}");
+                    {% endif %}
                 {% endif %}
             </script>
 

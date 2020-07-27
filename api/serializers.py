@@ -67,3 +67,10 @@ class OperatorBanSerializer(serializers.ModelSerializer):
     class Meta:
         model = OperatorBans
         fields = ['operator', 'team', 'order']
+
+
+class RoundSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Round
+        fields = ['round_no', 'bombspot', 'atk_team', 'def_team', 'win_type', 'win_team', 'score_blue', 'score_orange',
+                  'notes']
