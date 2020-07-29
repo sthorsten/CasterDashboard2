@@ -16,10 +16,12 @@
         setInterval(update, 1000);
 
         // Animations
-        animateTitle();
-        setInterval(function () {
+        {% if current_map_pick_team %}
             animateTitle();
-        }, 19000);
+            setInterval(function () {
+                animateTitle();
+            }, 19000);
+        {% endif %}
     });
 
     function animateIN() {

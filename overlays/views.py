@@ -14,7 +14,10 @@ def ingame(request, user_name):
     overlay_states = OverlayState.objects.filter(user=user).first()
 
     current_map = match_overlay_data.current_map
-    current_map_pick_team = MapBan.objects.filter(match=match, map=current_map).first().team
+    if current_map:
+        current_map_pick_team = MapBan.objects.filter(match=match, map=current_map).first().team
+    else:
+        current_map_pick_team = None
 
     template_data = {
         'match_overlay_data': match_overlay_data,

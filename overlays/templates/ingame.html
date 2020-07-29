@@ -39,7 +39,10 @@
 
             <div id="map-pick" class="title-wrapper-big d-none">
                 <span class="title-big">{% trans "Map Pick" %}</span>
-                <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}.png" alt="">
+                {% if current_map_pick_team %}
+                    <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}.png"
+                         alt="">
+                {% endif %}
             </div>
         </div>
 

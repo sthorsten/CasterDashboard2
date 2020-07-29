@@ -143,6 +143,9 @@ def map_ban(request, match_id):
             if data['type'] == "delete":
                 map_ban = MapBan.objects.filter(match=match, map=map).first()
                 map_ban.delete()
+                map_play_order = MapPlayOrder.objects.filter(match=match, map=map).first()
+                if map_play_order:
+                    map_play_order.delete()
 
         team = Team.objects.filter(id=data['team']).first()
         if not map or not team or not data['type'] or not data['order']:
@@ -152,6 +155,14 @@ def map_ban(request, match_id):
         map_ban = MapBan.objects.filter(match=match, map=map)
         if map_ban:
             return JsonResponse({"status": "Duplicate"}, status=400)
+
+        if data['type'] == "pick" or data['type'] == "decider":
+            next_order = len(MapPlayOrder.objects.filter(match=match).all()) + 1
+            map_play_order = MapPlayOrder(match=match, map=map, order=next_order)
+            try:
+                map_play_order.save()
+            except DatabaseError:
+                return JsonResponse({"status": "Database Error"}, status=500)
 
         map_ban = MapBan(match=match, map=map, type=data['type'], order=data['order'], team=team)
         try:

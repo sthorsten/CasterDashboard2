@@ -316,9 +316,10 @@ def new_match_form(request):
     league = League.objects.filter(id=data['new-match-league']).first()
     team_blue = Team.objects.filter(id=data['new-match-team-blue']).first()
     team_orange = Team.objects.filter(id=data['new-match-team-orange']).first()
+    match_state = MatchState.objects.filter(state="Created").first()
 
     match = Match(season=season, league=league, title=data['new-match-title'],
-                  subtitle=data['new-match-subtitle'], state="created", best_of=data['new-match-bestof'],
+                  subtitle=data['new-match-subtitle'], state=match_state, best_of=data['new-match-bestof'],
                   team_blue=team_blue, team_orange=team_orange)
     try:
         match.save()
