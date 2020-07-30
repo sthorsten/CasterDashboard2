@@ -198,9 +198,21 @@ def match_maps(request, match_id):
     match = Match.objects.filter(id=match_id).first()
     maps = Map.objects.all()
 
+    if 4 <= match.state.id <= 7:
+        try:
+            next_map_id = MapPlayOrder.objects.get(match=match, order=(match.state.id - 2)).map.id
+        except MapPlayOrder.DoesNotExist:
+            next_map_id = None
+    else:
+        try:
+            next_map_id = MapPlayOrder.objects.get(match=match, order=1).map.id
+        except MapPlayOrder.DoesNotExist:
+            next_map_id = None
+
     template_data = {
         'match': match,
         'maps': maps,
+        'next_map_id': next_map_id,
     }
 
     return render(request, 'matches/maps.html', template_data)

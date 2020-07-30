@@ -71,7 +71,7 @@
                         badge.addClass("badge-success");
 
                         $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                        if (nextMap === null){
+                        if (nextMap === null) {
                             nextMap = data[i]['map_id'];
                         }
 
@@ -95,7 +95,6 @@
 
                 $('#no_log').addClass("d-none");
                 $('#log').removeClass("d-none");
-                $('#continue_btn').attr("href", "/dashboard/matches/{{ match.id }}/map/" + nextMap + "/opbans");
             }
         );
     }

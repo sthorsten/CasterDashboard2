@@ -77,7 +77,10 @@
                                         {% trans "Reset All Maps" %}
                                     </button>
                                     <a id="continue_btn"
-                                            class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
+                                            {% if next_map_id %}
+                                       href="/dashboard/matches/{{ match.id }}/map/{{ next_map_id }}/opbans"
+                                            {% endif %}
+                                       class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
                                 </div>
                             </div>
 
@@ -149,7 +152,7 @@
                                 <div class="col text-center mt-auto mb-auto">
                                     <span>{{ m }}</span><br>
                                     <div id="map_{{ m.id }}_badge"
-                                         class="badge badge-primary">{% trans "Not selected yet" %}</div>
+                                         class="badge badge-pill badge-primary">{% trans "Not selected yet" %}</div>
                                     <br>
                                     <i id="map_{{ m.id }}_team"></i>
                                 </div>

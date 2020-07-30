@@ -9,13 +9,14 @@ from overlays.models import *
 
 def ingame(request, user_name):
     user = get_object_or_404(User, username=user_name)
-    match_overlay_data = MatchOverlayData.objects.filter(user=user).first()
+    match_overlay_data = MatchOverlayData.objects.get(user=user)
     match = match_overlay_data.current_match
-    overlay_states = OverlayState.objects.filter(user=user).first()
+    overlay_states = OverlayState.objects.get(user=user)
 
-    current_map = match_overlay_data.current_map
-    if current_map:
-        current_map_pick_team = MapBan.objects.filter(match=match, map=current_map).first().team
+    current_map_order = match.state.id - 2
+    if 1 <= current_map_order <= 5:
+        current_map = MapPlayOrder.objects.get(match=match, order=current_map_order).map
+        current_map_pick_team = MapBan.objects.get(match=match, map=current_map).team
     else:
         current_map_pick_team = None
 

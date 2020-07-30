@@ -117,7 +117,7 @@ def set_next_match(request, user_id):
 
 @csrf_exempt
 def map_ban(request, match_id):
-    match = Match.objects.filter(id=match_id).first()
+    match = Match.objects.get(id=match_id)
 
     if request.method == 'GET':
         map_ban = MapBan.objects.filter(match=match).all().order_by("order")
@@ -137,15 +137,13 @@ def map_ban(request, match_id):
 
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        map = Map.objects.filter(id=data['map']).first()
+        map = Map.objects.get(id=data['map'])
 
         if data['type']:
             if data['type'] == "delete":
-                map_ban = MapBan.objects.filter(match=match, map=map).first()
+                map_ban = MapBan.objects.get(match=match, map=map)
                 map_ban.delete()
-                map_play_order = MapPlayOrder.objects.filter(match=match, map=map).first()
-                if map_play_order:
-                    map_play_order.delete()
+                return JsonResponse({"status": "ok"})
 
         team = Team.objects.filter(id=data['team']).first()
         if not map or not team or not data['type'] or not data['order']:
@@ -155,14 +153,6 @@ def map_ban(request, match_id):
         map_ban = MapBan.objects.filter(match=match, map=map)
         if map_ban:
             return JsonResponse({"status": "Duplicate"}, status=400)
-
-        if data['type'] == "pick" or data['type'] == "decider":
-            next_order = len(MapPlayOrder.objects.filter(match=match).all()) + 1
-            map_play_order = MapPlayOrder(match=match, map=map, order=next_order)
-            try:
-                map_play_order.save()
-            except DatabaseError:
-                return JsonResponse({"status": "Database Error"}, status=500)
 
         map_ban = MapBan(match=match, map=map, type=data['type'], order=data['order'], team=team)
         try:
@@ -174,8 +164,8 @@ def map_ban(request, match_id):
 
 @csrf_exempt
 def map_settings(request, match_id, map_id):
-    match = Match.objects.filter(id=match_id).first()
-    map = Map.objects.filter(id=map_id).first()
+    match = Match.objects.get(id=match_id)
+    map = Map.objects.get(id=map_id)
 
     try:
         map_settings = MapSettings.objects.filter(match=match, map=map).first()
@@ -198,7 +188,7 @@ def map_settings(request, match_id, map_id):
 @csrf_exempt
 def swap_teams(request, match_id):
     try:
-        match = Match.objects.filter(id=match_id).first()
+        match = Match.objects.get(id=match_id)
     except Match.DoesNotExist:
         return JsonResponse({"status": "Not Found"}, status=404)
 
@@ -216,8 +206,8 @@ def swap_teams(request, match_id):
 
 @csrf_exempt
 def operator_bans(request, match_id, map_id):
-    match = Match.objects.filter(id=match_id).first()
-    map = Map.objects.filter(id=map_id).first()
+    match = Match.objects.get(id=match_id)
+    map = Map.objects.get(id=map_id)
 
     operator_bans = OperatorBans.objects.filter(match=match, map=map).all()
 
@@ -276,9 +266,9 @@ def operator_bans(request, match_id, map_id):
 
 @csrf_exempt
 def rounds(request, match_id, map_id):
-    match = Match.objects.filter(id=match_id).first()
-    map = Map.objects.filter(id=map_id).first()
-    map_settings = MapSettings.objects.filter(match=match, map=map).first()
+    match = Match.objects.get(id=match_id)
+    map = Map.objects.get(id=map_id)
+    map_settings = MapSettings.objects.get(match=match, map=map)
 
     rounds = Round.objects.filter(match=match, map=map).all()
 
@@ -312,22 +302,22 @@ def rounds(request, match_id, map_id):
             return JsonResponse({"status": "Bad Request"}, status=400)
 
         try:
-            bombspot = BombSpot.objects.filter(id=data['bombspot']).first()
+            bombspot = BombSpot.objects.get(id=data['bombspot'])
         except BombSpot.DoesNotExist:
             return JsonResponse({"status": "Bad Request"}, status=400)
 
         try:
-            win_type = WinType.objects.filter(id=data['win_type']).first()
+            win_type = WinType.objects.get(id=data['win_type'])
         except WinType.DoesNotExist:
             return JsonResponse({"status": "Bad Request"}, status=400)
 
         try:
-            win_team = Team.objects.filter(id=data['win_team']).first()
+            win_team = Team.objects.get(id=data['win_team'])
         except Team.DoesNotExist:
             return JsonResponse({"status": "Bad Request"}, status=400)
 
         try:
-            of_team = Team.objects.filter(id=data['of_team']).first()
+            of_team = Team.objects.get(id=data['of_team'])
         except Team.DoesNotExist:
             return JsonResponse({"status": "Bad Request"}, status=400)
 
@@ -404,8 +394,8 @@ def finish_map(request, match_id, map_id):
     data = JSONParser().parse(request)
 
     if data.get('finish_map'):
-        match = Match.objects.filter(id=match_id).first()
-        map = Map.objects.filter(id=map_id).first()
+        match = Match.objects.get(id=match_id)
+        map = Map.objects.get(id=map_id)
         last_round = Round.objects.filter(match=match, map=map).last()
 
         if last_round.score_blue > last_round.score_orange:
@@ -427,15 +417,22 @@ def finish_map(request, match_id, map_id):
         # Set Next URL
         map_win_len = len(MapWins.objects.filter(match=match).all())
         if match.best_of == 1:
-            next_url = "/dashboard/matches/history"
+            match.state = MatchState.objects.get(id=8)
+            match.save()
+            next_url = "/dashboard/matches/%s" % match.id
 
         else:
             if map_win_len >= match.best_of:
-                next_url = "/dashboard/matches/history"
+                match.state = MatchState.objects.get(id=8)
+                match.save()
+                next_url = "/dashboard/matches/%s" % match.id
             else:
-                next_map = MapPlayOrder.objects.filter(match=match, order=(map_win_len + 1)).first()
+                next_map = MapPlayOrder.objects.get(match=match, order=(map_win_len + 1))
+                match.state = MatchState.objects.get(id=(2 + next_map.order))
+                match.save()
                 next_url = "/dashboard/matches/%s/map/%s/opbans" % (match.id, next_map.map.id)
 
+        messages.info(request, _('Match Finished!'))
         return JsonResponse({"status": "ok", "next_url": next_url})
 
     else:

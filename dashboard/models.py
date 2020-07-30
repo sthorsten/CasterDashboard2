@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import *
 from django.dispatch import receiver
 
 logger = logging.getLogger(__name__)
@@ -16,18 +16,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return "Profile: " + str(self.user)
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        logger.debug("[User %s] Creating profile via receiver" % instance)
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class Version(models.Model):
@@ -181,6 +169,30 @@ class MapBan(models.Model):
         return str(self.id) + "- Match: " + str(self.match)
 
 
+# Add MapPlayOrder
+@receiver(post_save, sender=MapBan)
+def map_ban_post_save(sender, instance, **kwargs):
+    # Set Match state
+    match_state = MatchState.objects.get(id=2)
+    instance.match.state = match_state
+    instance.match.save()
+
+    # Create MapPlayOrder instance
+    if instance.type == "pick" or instance.type == "decider":
+        next_order = len(MapPlayOrder.objects.filter(match=instance.match)) + 1
+        map_play_order = MapPlayOrder(match=instance.match, map=instance.map, order=next_order)
+        map_play_order.save()
+
+
+# Remove MapPlayOrder
+@receiver(pre_delete, sender=MapBan)
+def auto_delete_map_play_order(sender, instance, **kwargs):
+    if instance.type == "pick" or instance.type == "decider":
+        map_play_order = MapPlayOrder.objects.filter(match=instance.match, map=instance.map).first()
+        if map_play_order:
+            map_play_order.delete()
+
+
 class MapPlayOrder(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
@@ -222,6 +234,16 @@ class OperatorBans(models.Model):
 
     def __str__(self):
         return self.operator.name + " - Match: " + str(self.match)
+
+
+@receiver(post_save, sender=OperatorBans)
+def operator_bans_post_save(sender, instance, **kwargs):
+    # Update Match state
+    map_play_order = MapPlayOrder.objects.get(match=instance.match, map=instance.map)
+    new_match_state = MatchState.objects.get(id=(2 + map_play_order.order))
+    match = instance.match
+    match.state = new_match_state
+    match.save()
 
 
 class WinType(models.Model):
