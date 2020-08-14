@@ -50,7 +50,11 @@
                             {% trans "Match State" %}
                         </div>
                         <div class="col-6 text-right text-capitalize">
-                            <b>{{ match.state }}</b>
+                            {% if match.state.id == 10 %}
+                                <b class="text-danger">{{ match.state }}</b>
+                            {% else %}
+                                <b>{{ match.state }}</b>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="row">
@@ -88,6 +92,18 @@
                         </div>
                         <div class="col-6 text-right">
                             <b>{{ match.best_of }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Sponsors" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            {% if match_sponsors|length > 0 %}
+                                <b>{{ match_sponsors|join:", " }}</b>
+                            {% else %}
+                                <b>-</b>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -166,12 +182,26 @@
 
                     <button class="btn btn-primary w-100 mb-2"
                             onclick="setMatchToOverlay()">{% trans "Set Match to Overlays" %}</button>
-                    <a href="/dashboard/matches/{{ match.id }}/maps"
-                       class="btn btn-primary w-100">{% trans "Continue to Map Picks & Bans" %}</a>
+                    {% if match.state.id == 10 %}
+                        <button class="btn btn-primary w-100 disabled" disabled="disabled">
+                            {% trans "Continue to Map Picks & Bans" %} ({% trans "disabled" %})
+                        </button>
 
-                    <div class="card-divider mt-4 mb-4"></div>
+                        <div class="card-divider mt-4 mb-4"></div>
 
-                    <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
+                        <button class="btn btn-secondary w-100 mb-2 disabled" disabled="disabled">
+                            {% trans "Show Match Details" %} ({% trans "disabled" %})
+                        </button>
+                    {% else %}
+                        <a href="/dashboard/matches/{{ match.id }}/maps"
+                           class="btn btn-primary w-100">{% trans "Continue to Map Picks & Bans" %}
+                        </a>
+
+                        <div class="card-divider mt-4 mb-4"></div>
+
+                        <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
+                    {% endif %}
+
                     <button class="btn btn-secondary w-100">{% trans "Share Match" %}</button>
 
                     <div class="card-divider mt-4 mb-4"></div>

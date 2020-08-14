@@ -6,12 +6,17 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.db import DatabaseError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 from pip._vendor import requests
+from rest_framework import status
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.serializers import *
 from caster_dashboard_2 import settings
@@ -19,6 +24,93 @@ from dashboard.models import MapBan
 from overlays.models import *
 
 logger = logging.getLogger(__name__)
+
+
+###
+# New Team Form
+###
+
+class NewTeamForm(View):
+    def get(self, request):
+        return JsonResponse({"error": "Method Not Allowed"}, status=405)
+
+    def post(self, request):
+        logger.info("[User: %s] Creating a new team..." % request.user)
+
+        data = request.POST
+
+        # Validate data
+        if not data.get('name'):
+            messages.error(request, _("No team name"), extra_tags=_("Team creation failed"))
+            return redirect('/dashboard/data/teams')
+        else:
+            new_team = Team(name=data.get('name'))
+
+        # Handle no logo
+        if data.get('no_logo'):
+            new_team.has_logo = False
+
+            try:
+                new_team.full_clean()
+                new_team.save()
+                messages.success(request, _('Team created successfully'))
+            except ValidationError as e:
+                logger.error('Invalid team data: ' + str(e))
+                for m in e.messages:
+                    messages.error(request, _("Invalid team data: ") + m, extra_tags=_("Team creation failed"))
+            finally:
+                return redirect('/dashboard/data/teams')
+
+        # Handle uploaded logo
+        if request.FILES:
+            new_team.has_logo = True
+            new_team.team_logo = request.FILES['team_logo']
+
+            try:
+                new_team.full_clean()
+                new_team.save()
+                messages.success(request, _('Team created successfully'))
+            except ValidationError as e:
+                logger.error('Invalid team logo: ' + str(e))
+                for m in e.messages:
+                    messages.error(request, _("Invalid team logo: ") + m, extra_tags=_("Team creation failed"))
+            finally:
+                return redirect('/dashboard/data/teams')
+
+        # Handle file download
+        try:
+            url = data.get('team_logo_url')
+            if not url:
+                messages.error(_('No team logo!'), extra_tags=_("Team creation failed"))
+                return redirect('/dashboard/data/teams')
+
+            r = requests.get(url, allow_redirects=True)
+            save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', data.get('name') + '.png')
+            image_file = open(save_path, 'wb')
+            image_file.write(r.content)
+            image_file.close()
+
+        except requests.exceptions.RequestException as e:
+            logger.error('Team logo download failed: ' + str(e))
+            messages.error(request, _('Team logo download failed! Please try uploading the logo manually'))
+
+        try:
+            new_team.team_logo = 'teams/' + data.get('name') + '.png'
+            new_team.full_clean()
+            new_team.save()
+            messages.success(request, _('Team created successfully'))
+        except ValidationError as e:
+            try:
+                if os.path.isfile(save_path):
+                    os.remove(save_path)
+            except OSError:
+                logger.error("Unable to delete file: " + save_path)
+
+            logger.error('Invalid team logo: ' + str(e))
+            for m in e.messages:
+                messages.error(request, _("Invalid team logo: ") + m, extra_tags=_("Team creation failed"))
+        finally:
+            return redirect('/dashboard/data/teams')
 
 
 @csrf_exempt
@@ -116,6 +208,33 @@ def set_next_match(request, user_id):
 
 
 @csrf_exempt
+def update_match_score(request, match_id):
+    try:
+        match = Match.objects.get(id=match_id)
+    except Match.DoesNotExist:
+        return JsonResponse({"status": "Not Found"}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({"error": "Method Not Allowed"}, status=405)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        if data.get("score_blue"):
+            match.score_blue = data.get("score_blue")
+        elif data.get("score_orange"):
+            match.score_orange = data.get("score_orange")
+        else:
+            return JsonResponse({"error": "Bad Request"}, status=400)
+
+        try:
+            match.save()
+        except ValidationError:
+            return JsonResponse({"error": "Internal Server Error"}, status=500)
+
+        return JsonResponse({"status": "OK"})
+
+
+@csrf_exempt
 def map_ban(request, match_id):
     match = Match.objects.get(id=match_id)
 
@@ -131,7 +250,8 @@ def map_ban(request, match_id):
                 "map_id": map.map.id,
                 "type": map.type,
                 "order": map.order,
-                "team": map.team.name
+                "team": map.team.name,
+                "team_id": map.team.id,
             })
         return JsonResponse(data, safe=False)
 

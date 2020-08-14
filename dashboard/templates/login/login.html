@@ -20,6 +20,9 @@
 
             <form action="/login/form" method="post">
                 {% csrf_token %}
+                {% if next_url %}
+                    <input type="hidden" name="next_url" value="{{ next_url }}">
+                {% endif %}
                 <div class="input-group mb-3">
                     <input id="username" name="username" type="text" class="form-control"
                            placeholder="{% trans "Username" %}">

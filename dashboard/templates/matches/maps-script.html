@@ -12,6 +12,11 @@
     $(document).ready(function () {
         firstTeam = "{{ match.team_blue.id }}";
         secondTeam = "{{ match.team_orange.id }}";
+
+        if ($('#first_ban_team').val() !== ""){
+            nextTeam = $('#first_ban_team').val();
+        }
+
         update();
     });
 
@@ -43,9 +48,14 @@
 
                 ban_data = data;
 
+                // Set select to first ban team
                 $("#first_ban_team option").filter(function () {
-                    return this.text == data[0]['team'];
+                    return this.text === data[0]['team'];
                 }).attr('selected', true);
+
+                // Disable selects
+                $('#first_ban_team').attr("disabled", "disabled");
+                $('#map_pool_select').attr("disabled", "disabled");
 
                 if (nextTeam === null) {
                     nextTeam = firstTeam;

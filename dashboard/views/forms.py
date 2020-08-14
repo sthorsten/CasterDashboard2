@@ -31,6 +31,11 @@ def login_form(request):
             login(request, user)
             logger.info("[User: %s] Login successful" % user)
             messages.success(request, _("You have been logged in successfully"), extra_tags=_("Welcome %s!" % user))
+
+            next_url = request.POST.get('next_url')
+            if next_url:
+                return redirect(next_url)
+
             return redirect('/dashboard/home')
         else:
             logger.info("[User: %s] Login failed: Invalid credentials" % username)
@@ -96,6 +101,8 @@ def new_team_form(request):
                         "[User: %s] [Team %s] Creating team without logo..." % (request.user, data['team_name']))
                     new_team = Team(name=data['team_name'], has_logo=False)
                     new_team.save()
+                    logger.info(
+                        "[User: %s] [Team: %s] ...Team created successfully" % (request.user, data['team_name']))
                     messages.success(request, _("The team has been added successfully"), extra_tags=_("Team created"))
 
                 except DatabaseError:
@@ -104,8 +111,6 @@ def new_team_form(request):
                     messages.error(request, _("Database error (please report this!)'"),
                                    extra_tags=_("Team creation failed"))
                 finally:
-                    logger.info(
-                        "[User: %s] [Team: %s] ...Team created successfully" % (request.user, data['team_name']))
                     return redirect('/dashboard/data/teams')
 
         else:
@@ -316,14 +321,23 @@ def new_match_form(request):
     league = League.objects.filter(id=data['new-match-league']).first()
     team_blue = Team.objects.filter(id=data['new-match-team-blue']).first()
     team_orange = Team.objects.filter(id=data['new-match-team-orange']).first()
-    match_state = MatchState.objects.filter(state="Created").first()
+
+    if data.get('new-match-dummy'):
+        match_state = MatchState.objects.get(state="Dummy")
+    else:
+        match_state = MatchState.objects.filter(state="Created").first()
 
     match = Match(season=season, league=league, title=data['new-match-title'],
                   subtitle=data['new-match-subtitle'], state=match_state, best_of=data['new-match-bestof'],
                   team_blue=team_blue, team_orange=team_orange)
+
     try:
         match.save()
         match.user.add(request.user)
+        for s_id in request.POST.getlist('new-match-sponsors'):
+            sponsor = Sponsor.objects.get(id=s_id)
+            match.sponsors.add(sponsor)
+
         match.save()
     except DatabaseError:
         messages.error(request, _("The match could not be created"), extra_tags=_("Database Error"))

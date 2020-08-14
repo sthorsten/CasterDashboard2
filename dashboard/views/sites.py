@@ -9,6 +9,7 @@ from django.contrib import auth
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
+from dashboard.forms import NewMatchForm
 from dashboard.models import *
 from overlays.models import *
 
@@ -23,8 +24,17 @@ def index(request):
         return redirect('home')
 
 
+def error_500(request, exception=None):
+    return render(request, "errors/error500.html", status=500)
+
+
+def error_404(request, exception=None):
+    return render(request, "errors/error404.html", status=404)
+
+
 def login_view(request):
-    return render(request, 'login/login.html')
+    next_url = request.GET.get('next', None)
+    return render(request, 'login/login.html', {'next_url': next_url})
 
 
 def register(request):
@@ -101,6 +111,17 @@ def overlay_control_center(request):
     return render(request, 'overlays/control-center.html', template_data)
 
 
+@login_required
+def popout_overlay_toggles(request):
+    overlay_states = OverlayState.objects.filter(user=request.user).first()
+
+    template_data = {
+        'overlay_states': overlay_states,
+    }
+
+    return render(request, 'popouts/overlay-toggles.html', template_data)
+
+
 '''
     Data
 '''
@@ -132,6 +153,21 @@ def seasons(request):
     }
 
     return render(request, 'data/seasons.html', template_data)
+
+
+@login_required
+def sponsors(request):
+    sponsors = Sponsor.objects.all()
+    leagues = League.objects.all()
+    league_groups = LeagueGroup.objects.all()
+
+    template_data = {
+        'sponsors': sponsors,
+        'leagues': leagues,
+        'league_groups': league_groups,
+    }
+
+    return render(request, 'data/sponsors.html', template_data)
 
 
 @login_required
@@ -168,6 +204,7 @@ def match_create(request):
     seasons = Season.objects.order_by("name").all()
     teams = Team.objects.order_by("name").all()
     sponsors = Sponsor.objects.order_by("name").all()
+    form = NewMatchForm()
 
     template_data = {
         'league_groups': league_groups,
@@ -175,6 +212,7 @@ def match_create(request):
         'seasons': seasons,
         'teams': teams,
         'sponsors': sponsors,
+        'form': form,
     }
 
     return render(request, 'matches/create.html', template_data)
@@ -184,10 +222,14 @@ def match_create(request):
 def match_overview(request, match_id):
     match = Match.objects.filter(id=match_id).first()
     match_users = match.user.all()
+    match_sponsors = []
+    for s in match.sponsors.all():
+        match_sponsors.append(s)
 
     template_data = {
         'match': match,
         'match_users': match_users,
+        'match_sponsors': match_sponsors,
     }
 
     return render(request, 'matches/overview.html', template_data)

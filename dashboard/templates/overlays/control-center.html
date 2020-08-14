@@ -25,7 +25,6 @@
     <li class="breadcrumb-item active">{% trans "Control Center" %}</li>
 {% endblock %}
 
-
 {% block content %}
 
     <div class="row">
@@ -291,7 +290,8 @@
                             </select>
                         </div>
                         <div class="col-3">
-                            <button class="btn badge badge-primary w-100 h-100" onclick="setCurrentMatch()">{% trans "Confirm" %}</button>
+                            <button class="btn badge badge-primary w-100 h-100"
+                                    onclick="setCurrentMatch()">{% trans "Confirm" %}</button>
                         </div>
                     </div>
 
@@ -310,7 +310,46 @@
                             </select>
                         </div>
                         <div class="col-3">
-                            <button class="btn badge badge-primary w-100 h-100" onclick="setNextMatch()">{% trans "Confirm" %}</button>
+                            <button class="btn badge badge-primary w-100 h-100"
+                                    onclick="setNextMatch()">{% trans "Confirm" %}</button>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <!-- Set match score -->
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            {% trans "Set Match Score Blue" %}
+                        </div>
+                        <div class="col-3">
+                            {% if current_match %}
+                                <input id="match_score_blue" type="number" class="form-control form-control-sm w-100"
+                                       value="{{ current_match.score_blue }}">
+                            {% else %}
+                                <input id="match_score_blue" type="number" class="form-control form-control-sm w-100">
+                            {% endif %}
+                        </div>
+                        <div class="col-3">
+                            <button class="btn badge badge-primary w-100 h-100"
+                                    onclick="setMatchScore('blue')">{% trans "Confirm" %}</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            {% trans "Set Match Score Orange" %}
+                        </div>
+                        <div class="col-3">
+                            {% if current_match %}
+                                <input id="match_score_orange" type="number" class="form-control form-control-sm w-100"
+                                       value="{{ current_match.score_orange }}">
+                            {% else %}
+                                <input id="match_score_orange" type="number" class="form-control form-control-sm w-100">
+                            {% endif %}
+                        </div>
+                        <div class="col-3">
+                            <button class="btn badge badge-primary w-100 h-100"
+                                    onclick="setMatchScore('orange')">{% trans "Confirm" %}</button>
                         </div>
                     </div>
 
@@ -400,7 +439,7 @@
                         </div>
                         <div class="col-8 text-right">
                             {% if current_match %}
-                            <b>{{ current_match.score_blue }} - {{ current_match.score_orange }}</b>
+                                <b>{{ current_match.score_blue }} - {{ current_match.score_orange }}</b>
                             {% else %}
                                 <b>0 - 0</b>
                             {% endif %}

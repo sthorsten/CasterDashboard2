@@ -49,14 +49,14 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 1024*1024*10, # 10 MB
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'formatter': 'verbose',
         },
         'caster_dashboard': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'caster_dashboard.log'),
-            'maxBytes': 1024*1024*10, # 10 MB
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'formatter': 'verbose',
         }
 
@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'widget_tweaks',
     'dashboard.apps.DashboardConfig',
     'overlays.apps.OverlaysConfig',
 ]
@@ -189,6 +190,8 @@ LANGUAGES = (
     ('en', 'English'),
     ('de', 'German'),
 )
+
+LOGIN_URL = '/login'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 
 {% load i18n %}
+{% load widget_tweaks %}
 
 {% block head %}
     {% include "base/head.html" with page_title="Create a Match" %}
@@ -173,13 +174,33 @@
                             <div class="form-group col">
                                 <label for="new-match-sponsors">{% trans "Sponsors" %} ({% trans "optional" %})</label>
                                 <select id="new-match-sponsors" name="new-match-sponsors"
-                                        class="selectpicker form-control" multiple
+                                        class="selectpicker form-control" multiple="multiple"
                                         data-style="bg-dark-900 text-white border"
                                         data-live-search="true" title="{% trans "Please select..." %}">
                                     {% for s in sponsors %}
-                                        <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% if s.public %}
+                                            <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% else %}
+                                            {% if s.league.is_restricted %}
+                                                {% for lg in league_groups %}
+                                                    {% if lg.league == s.league and lg.user == lg.user %}
+                                                        <option value="{{ s.id }}">{{ s.name }} ({{ s.league }})
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col d-flex">
+                                <div class="icheck-primary d-inline mr-2 w-100 text-center">
+                                    <input type="checkbox" name="new-match-dummy" id="new-match-dummy">
+                                    <label for="new-match-dummy">{{ _('Create as Dummy Match') }}?</label>
+                                </div>
                             </div>
                         </div>
 
@@ -195,11 +216,9 @@
 
             </div>
         </div>
-    </div>
 
-
-    <div class="row">
         <div class="col-lg-6 col-12">
+
 
             <div class="card card-danger card-outline-all mb-3">
                 <div class="card-body bg-gray-800 text-white">
@@ -212,7 +231,10 @@
                             <i>{% trans "Missing a team?" %}</i>
                         </div>
                     </div>
-                    <button class="btn btn-danger w-100 mb-2">{% trans "Add a team" %}</button>
+                    <button type="button" class="btn btn-danger w-100 mb-2" data-toggle="modal"
+                            data-target="#new-team-modal">
+                        {% trans "Add a new team" %}
+                    </button>
                     <button class="btn btn-secondary w-100 mb-2">Test</button>
                     <button class="btn btn-secondary w-100 mb-2">Test</button>
                     <button class="btn btn-secondary w-100">Test</button>
@@ -222,6 +244,9 @@
             </div>
         </div>
     </div>
+
+    {% include 'data/new-team-modal.html' %}
+
 
 {% endblock %}
 

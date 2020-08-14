@@ -3,11 +3,26 @@ import os
 from datetime import datetime
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import *
 from django.dispatch import receiver
+import caster_dashboard_2.settings as django_settings
+from dashboard.validators import *
 
 logger = logging.getLogger(__name__)
+
+
+class OverwriteStorage(FileSystemStorage):
+
+    def get_available_name(self, name, max_length=None):
+        # Found at http://djangosnippets.org/snippets/976/
+
+        # If the filename already exists, remove it as if it was a true file system
+        if self.exists(name):
+            self.delete(name)
+        return name
 
 
 class Profile(models.Model):
@@ -60,17 +75,44 @@ class Operator(models.Model):
         return self.name
 
 
+def league_logo_path(instance, filename):
+    return "leagues/{0}.png".format(instance.id)
+
+
 class League(models.Model):
     name = models.CharField(max_length=255)
     is_restricted = models.BooleanField(default=True)
-    league_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
+    league_logo = models.ImageField(storage=OverwriteStorage(), upload_to=league_logo_path,
+                                    validators=[validate_image, validate_square_logo], blank=True, null=True)
+    light_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
+    dark_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
+
+    league_logo_validated = False
 
     def __str__(self):
         return self.name
 
 
-@receiver(models.signals.post_delete, sender=League)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
+@receiver(pre_save, sender=League)
+def league_pre_save(sender, instance, **kwargs):
+    if not instance.league_logo_validated:
+        instance.full_clean()
+
+
+@receiver(post_save, sender=League)
+def league_post_save(sender, instance, **kwargs):
+    # Rename file to id
+    if not instance.league_logo_validated and not instance.league_logo.name.__contains__(str(instance.id)):
+        old_path = os.path.join(django_settings.MEDIA_ROOT, instance.league_logo.name)
+        new_path = os.path.join(django_settings.MEDIA_ROOT, "leagues", str(instance.id) + ".png")
+        os.rename(old_path, new_path)
+        instance.league_logo = "leagues/{0}.png".format(str(instance.id))
+        instance.league_logo_validated = True
+        instance.save()
+
+
+@receiver(pre_delete, sender=League)
+def league_pre_delete(sender, instance, **kwargs):
     # Auto delete image
     if instance.league_logo:
         if os.path.isfile(instance.league_logo.path):
@@ -97,27 +139,62 @@ class Season(models.Model):
         return self.name
 
 
+def team_logo_path(instance, filename):
+    if instance.id:
+        return "teams/{0}.png".format(instance.id)
+    else:
+        return "teams/{0}".format(filename)
+
+
 class Team(models.Model):
     name = models.CharField(max_length=22)
     created = models.DateTimeField(auto_now_add=True)
     has_logo = models.BooleanField(default=False)
-    team_logo = models.ImageField(upload_to='teams', blank=True, null=True)
+    team_logo = models.ImageField(storage=OverwriteStorage(), validators=[validate_image, validate_square_logo],
+                                  upload_to=team_logo_path, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
-@receiver(models.signals.post_delete, sender=Team)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
-    # Auto delete image
+@receiver(pre_save, sender=Team)
+def team_pre_save(sender, instance, **kwargs):
+    instance.full_clean()
+
+
+@receiver(post_save, sender=Team)
+def team_post_save(sender, instance, **kwargs):
+    # Rename file to id
     if instance.team_logo:
-        if os.path.isfile(instance.team_logo.path):
-            os.remove(instance.team_logo.path)
+        if not instance.team_logo.name.__contains__(str(instance.id)):
+            old_path = os.path.join(django_settings.MEDIA_ROOT, instance.team_logo.name)
+            new_path = os.path.join(django_settings.MEDIA_ROOT, "teams", str(instance.id) + ".png")
+            try:
+                os.rename(old_path, new_path)
+            except OSError as e:
+                logger.error('Error moving team logo file: ' + str(e))
+
+            instance.team_logo = "teams/{0}.png".format(str(instance.id))
+            instance.save()
+
+
+@receiver(pre_delete, sender=Team)
+def team_pre_delete(sender, instance, **kwargs):
+    if instance.team_logo:
+        logo = instance.team_logo.path
+        # Auto delete image
+        if logo:
+            if os.path.exists(instance.team_logo.path):
+                os.remove(instance.team_logo.path)
 
 
 class Sponsor(models.Model):
     name = models.CharField(max_length=255)
+    public = models.BooleanField(default=True)
     sponsor_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
+    light_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
+    dark_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -144,6 +221,7 @@ class Match(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
     title = models.CharField(max_length=22)
+    sponsors = models.ManyToManyField(Sponsor, blank=True, null=True)
     subtitle = models.CharField(max_length=22, null=True)
     created = models.DateTimeField(auto_now_add=True)
     state = models.ForeignKey(MatchState, default=1, on_delete=models.SET_DEFAULT)

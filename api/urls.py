@@ -8,9 +8,19 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
+router.register(r'data/leagues', LeagueViewSet)
+router.register(r'data/seasons', SeasonViewSet)
+router.register(r'data/sponsors', SponsorViewSet)
+router.register(r'data/teams', TeamViewSet)
+
+router.register(r'matches', MatchViewSet)
+router.register(r'matchstate', MatchStateViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    url('forms/teams/new', views.NewTeamForm.as_view()),
 
     # Overlays
     path('overlay/overlay_state/<int:user_id>/', views.overlay_state),
@@ -19,6 +29,7 @@ urlpatterns = [
     path('overlay/next_match/<int:user_id>/', views.set_next_match),
 
     # Match Data
+    path('matches/<int:match_id>/update_score', views.update_match_score),
     path('matches/map_ban/<int:match_id>/', views.map_ban),
     path('matches/map_settings/<int:match_id>/<int:map_id>/', views.map_settings),
     path('matches/swap_teams/<int:match_id>/', views.swap_teams),

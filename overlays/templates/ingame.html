@@ -12,7 +12,11 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static "css/ingame.css" %}">
+    {% if overlay_styles.ingame_style == "default" %}
+        <link rel="stylesheet" href="{% static "css/ingame.css" %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static "css/ingame-"|add:overlay_styles.ingame_style|add:".css" %}">
+    {% endif %}
 
     <!-- JS -->
     <!-- JQuery -->
@@ -22,6 +26,7 @@
 </head>
 <body>
 
+<div id="main-bg" class="main-bg invisible"></div>
 <div id="main" class="main d-none {% if not overlay_states.ingame_state %}d-disabled{% endif %}">
 
     <div id="container-left" class="container-left invisible">
@@ -54,37 +59,45 @@
 
     <div class="container-center">
         <div id="score-left" class="invisible">
-            <div id="score-left-1" class="container-score-left d-none">
-                <div id="score-left-1-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
-            </div>
-            <div id="score-left-2" class="container-score-left">
-                <div id="score-left-2-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
-                <div id="score-left-2-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
-            </div>
-            <div id="score-left-3" class="container-score-left d-none">
-                <div id="score-left-3-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
-                <div id="score-left-3-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
-                <div id="score-left-3-3" class="score {% if match.score_blue >= 3 %}active{% endif %}"></div>
-            </div>
+            {% if match.best_of == 1 %}
+                <div id="score-left-1" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 2 or match.best_of == 3 %}
+                <div id="score-left-2" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                    <div id="score-left-inner-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 5 %}
+                <div id="score-left-3" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                    <div id="score-left-inner-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
+                    <div id="score-left-inner-3" class="score {% if match.score_blue >= 3 %}active{% endif %}"></div>
+                </div>
+            {% endif %}
         </div>
 
         <div id="main-logo-container" class="container-logo invisible">
-            <img id="main-logo" class="logo" src="/media/leagues/1.png" alt="">
+            <img id="main-logo" class="logo" src="/media/leagues/{{ match.league.id }}.png" alt="">
         </div>
 
         <div id="score-right" class="invisible">
-            <div id="score-right-1" class="container-score-right d-none">
-                <div id="score-right-1-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
-            </div>
-            <div id="score-right-2" class="container-score-right">
-                <div id="score-right-2-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
-                <div id="score-right-2-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
-            </div>
-            <div id="score-right-3" class="container-score-right d-none">
-                <div id="score-right-3-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
-                <div id="score-right-3-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
-                <div id="score-right-3-3" class="score {% if match.score_orange >= 3 %}active{% endif %}"></div>
-            </div>
+            {% if match.best_of == 1 %}
+                <div id="score-right-1" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 2 or match.best_of == 3 %}
+                <div id="score-right-2" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                    <div id="score-right-inner-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 5 %}
+                <div id="score-right-3" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                    <div id="score-right-inner-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
+                    <div id="score-right-inner-3" class="score {% if match.score_orange >= 3 %}active{% endif %}"></div>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -93,8 +106,16 @@
             <span id="team-orange-name" class="team-name-text-right">{{ match.team_orange }}</span>
             <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_orange.id }}.png" alt="">
         </div>
-        <div class="container-sponsor">
-
+        <div id="sponsor-container" class="container-sponsor">
+            {% for s in sponsors %}
+                {% if forloop.counter0 == 0 %}
+                    <img class="sponsor" src="/media/sponsors/{{ s.id }}.png" alt=""
+                         data-order="{{ forloop.counter0 }}">
+                {% else %}
+                    <img class="sponsor d-none" src="/media/sponsors/{{ s.id }}.png" alt=""
+                         data-order="{{ forloop.counter0 }}">
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 

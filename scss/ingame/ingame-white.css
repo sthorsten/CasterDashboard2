@@ -5,6 +5,18 @@
   font-family: "ScoutCond Bold";
   src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
 }
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+}
+
 .d-none {
   display: none !important;
 }
@@ -21,6 +33,18 @@
   font-family: "ScoutCond Bold";
   src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
 }
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+}
+
 .d-none {
   display: none !important;
 }
@@ -152,24 +176,16 @@
 /*
   InGame SCSS
  */
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow: hidden;
-  width: 1920px;
-  height: 100%;
-  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
-}
-
 div {
   height: 100%;
   width: 100%;
 }
 div.d-disabled {
   display: none !important;
+}
+div.main-bg {
+  position: absolute;
+  height: 48px !important;
 }
 div.main {
   position: absolute;
@@ -191,6 +207,12 @@ div.container-center {
   display: grid;
   grid-template-columns: 54px 1fr 54px;
   background: #111;
+}
+div.container-sponsor {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 div.title-wrapper, div.title-wrapper-sm, div.title-wrapper-big {
   display: flex;
@@ -252,6 +274,11 @@ img.logo, img.logo-team {
 img.logo-team {
   margin-left: 7px;
   margin-right: 7px;
+}
+img.sponsor {
+  margin-right: 7px;
+  height: 40px;
+  width: auto;
 }
 
 span {

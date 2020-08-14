@@ -4,7 +4,6 @@ from dashboard.views import sites, forms
 
 urlpatterns = [
     path('', sites.index, name='index'),
-
     path('home', sites.home, name='home'),
 
     # Matches
@@ -18,9 +17,13 @@ urlpatterns = [
     # Overlays
     path('overlays/control-center', sites.overlay_control_center, name='control-center'),
 
+    # Popouts
+    path('popout/overlay/toggles', sites.popout_overlay_toggles),
+
     # Data
     path('data/leagues', sites.leagues, name='leagues'),
     path('data/seasons', sites.seasons, name='seasons'),
+    path('data/sponsors', sites.sponsors, name='sponsors'),
     path('data/teams', sites.teams, name='teams'),
 
     # Forms
