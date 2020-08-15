@@ -33,7 +33,9 @@
             if (score_orange === null) score_orange = data['score_orange']
 
             if (score_blue !== data['score_blue'] || score_orange !== data['score_orange']) {
-                if (score_blue === 0 === score_orange) {
+                if (data['score_blue'] === 0 && data['score_orange'] === 0) {
+                    score_blue = data['score_blue'];
+                    score_orange = data['score_orange'];
                     $('#center-text').html("- vs -");
                 } else {
                     score_blue = data['score_blue'];

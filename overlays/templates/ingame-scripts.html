@@ -54,12 +54,22 @@
 
             if (score_blue !== data['score_blue']) {
                 score_blue = data['score_blue']
+                if (score_blue < 1) {
+                    $('#score-left-inner-1').removeClass("active");
+                    $('#score-left-inner-2').removeClass("active");
+                    $('#score-left-inner-3').removeClass("active");
+                }
                 if (score_blue >= 1) $('#score-left-inner-1').addClass("active");
                 if (score_blue >= 2) $('#score-left-inner-2').addClass("active");
                 if (score_blue >= 3) $('#score-left-inner-3').addClass("active");
             }
             if (score_orange !== data['score_orange']) {
                 score_orange = data['score_orange']
+                if (score_orange < 1) {
+                    $('#score-right-inner-1').removeClass("active");
+                    $('#score-right-inner-2').removeClass("active");
+                    $('#score-right-inner-3').removeClass("active");
+                }
                 if (score_orange >= 1) $('#score-right-inner-1').addClass("active");
                 if (score_orange >= 2) $('#score-right-inner-2').addClass("active");
                 if (score_orange >= 3) $('#score-right-inner-3').addClass("active");

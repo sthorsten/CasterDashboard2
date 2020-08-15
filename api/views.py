@@ -219,9 +219,9 @@ def update_match_score(request, match_id):
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        if data.get("score_blue"):
+        if data.get("score_blue") is not None:
             match.score_blue = data.get("score_blue")
-        elif data.get("score_orange"):
+        elif data.get("score_orange") is not None:
             match.score_orange = data.get("score_orange")
         else:
             return JsonResponse({"error": "Bad Request"}, status=400)
