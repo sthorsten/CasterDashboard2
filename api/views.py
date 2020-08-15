@@ -381,6 +381,11 @@ def operator_bans(request, match_id, map_id):
         op_ban = OperatorBans(match=match, map=map, operator=operator, team=team, order=next_order)
         op_ban.save()
 
+        # Set current map
+        match_overlay_data = MatchOverlayData.objects.get(user=request.user)
+        match_overlay_data.current_map = map
+        match_overlay_data.save()
+
         return JsonResponse({"status": "ok"})
 
 
