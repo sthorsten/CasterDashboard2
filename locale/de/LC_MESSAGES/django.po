@@ -1,16 +1,58 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: Caster Dashboard v2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-16 12:48+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: Caster Dashboard v2\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\api\views.py:384
+#: .\api\views.py:44 .\dashboard\views\forms.py:85
+msgid "No team name"
+msgstr ""
+
+#: .\api\views.py:44 .\api\views.py:60 .\api\views.py:76 .\api\views.py:84
+#: .\api\views.py:111 .\dashboard\views\forms.py:85
+#: .\dashboard\views\forms.py:95 .\dashboard\views\forms.py:112
+#: .\dashboard\views\forms.py:129 .\dashboard\views\forms.py:146
+#: .\dashboard\views\forms.py:152 .\dashboard\views\forms.py:167
+#: .\dashboard\views\forms.py:181 .\dashboard\views\forms.py:270
+#: .\dashboard\views\forms.py:297
+msgid "Team creation failed"
+msgstr ""
+
+#: .\api\views.py:56 .\api\views.py:72 .\api\views.py:101
+msgid "Team created successfully"
+msgstr ""
+
+#: .\api\views.py:60
+msgid "Invalid team data: "
+msgstr ""
+
+#: .\api\views.py:76 .\api\views.py:111
+msgid "Invalid team logo: "
+msgstr ""
+
+#: .\api\views.py:84
+msgid "No team logo!"
+msgstr ""
+
+#: .\api\views.py:95
+msgid "Team logo download failed! Please try uploading the logo manually"
+msgstr ""
+
+#: .\api\views.py:510
 msgid "The round has been added successfully"
 msgstr ""
+
+#: .\api\views.py:560
+#, fuzzy
+#| msgid "Match Actions"
+msgid "Match Finished!"
+msgstr "Match Aktionen"
 
 #: .\dashboard\templates\base\confirm-modal.html:18
 #: .\dashboard\templates\data\edit-team-modal.html:62
@@ -72,7 +114,7 @@ msgid "Home Page"
 msgstr "Startseite"
 
 #: .\dashboard\templates\base\sidebar.html:26
-#: .\dashboard\templates\matches\create.html:24
+#: .\dashboard\templates\matches\create.html:25
 #: .\dashboard\templates\matches\history.html:24
 #: .\dashboard\templates\matches\maps.html:24
 #: .\dashboard\templates\matches\opbans.html:24
@@ -124,6 +166,7 @@ msgstr "Anpassen"
 #: .\dashboard\templates\base\sidebar.html:132
 #: .\dashboard\templates\data\leagues.html:24
 #: .\dashboard\templates\data\seasons.html:24
+#: .\dashboard\templates\data\sponsors.html:24
 #: .\dashboard\templates\data\teams.html:25
 msgid "Data"
 msgstr "Daten"
@@ -140,30 +183,33 @@ msgstr "Ligen"
 msgid "Seasons"
 msgstr "Seasons"
 
-#: .\dashboard\templates\base\sidebar.html:161
-#: .\dashboard\templates\matches\create.html:174
+#: .\dashboard\templates\base\sidebar.html:162
+#: .\dashboard\templates\data\sponsors.html:19
+#: .\dashboard\templates\data\sponsors.html:25
+#: .\dashboard\templates\matches\create.html:175
+#: .\dashboard\templates\matches\overview.html:99
 msgid "Sponsors"
 msgstr "Sponsoren"
 
-#: .\dashboard\templates\base\sidebar.html:171
+#: .\dashboard\templates\base\sidebar.html:172
 #: .\dashboard\templates\data\teams.html:20
 #: .\dashboard\templates\data\teams.html:26
 msgid "Teams"
 msgstr "Teams"
 
-#: .\dashboard\templates\base\sidebar.html:177
+#: .\dashboard\templates\base\sidebar.html:178
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: .\dashboard\templates\base\sidebar.html:184
+#: .\dashboard\templates\base\sidebar.html:185
 msgid "Map Statistics"
 msgstr "Map Statistiken"
 
-#: .\dashboard\templates\base\sidebar.html:194
+#: .\dashboard\templates\base\sidebar.html:195
 msgid "Operator Ban Statistics"
 msgstr "Operator Ban Statistiken"
 
-#: .\dashboard\templates\base\sidebar.html:204
+#: .\dashboard\templates\base\sidebar.html:205
 msgid "Round Statistics"
 msgstr "Runden Statistiken"
 
@@ -213,8 +259,9 @@ msgid "You have access to the following leagues"
 msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:45
+#: .\dashboard\templates\data\sponsors.html:46
 #: .\dashboard\templates\matches\history.html:44
-#: .\dashboard\templates\matches\overview.html:71
+#: .\dashboard\templates\matches\overview.html:75
 msgid "League"
 msgstr "Liga"
 
@@ -228,19 +275,22 @@ msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:58
 #: .\dashboard\templates\data\seasons.html:85
+#: .\dashboard\templates\data\sponsors.html:58
 msgid "yes"
 msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:67
 #: .\dashboard\templates\data\seasons.html:61
 #: .\dashboard\templates\data\seasons.html:87
+#: .\dashboard\templates\data\sponsors.html:71
 msgid "no"
 msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:89
 #: .\dashboard\templates\data\seasons.html:119
+#: .\dashboard\templates\data\sponsors.html:100
 #: .\dashboard\templates\data\teams.html:96
-#: .\dashboard\templates\overlays\control-center.html:534
+#: .\dashboard\templates\overlays\control-center.html:573
 msgid "Info"
 msgstr ""
 
@@ -249,16 +299,21 @@ msgid "Leagues can only be created by an admin"
 msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:93
-msgid "If you are a caster and need access to a certain league, please contact an admin as well"
+msgid ""
+"If you are a caster and need access to a certain league, please contact an "
+"admin as well"
 msgstr ""
 
 #: .\dashboard\templates\data\leagues.html:94
-msgid "Tournament Organizers and League admins can manage their league in the user menu section 'League Administration'"
+msgid ""
+"Tournament Organizers and League admins can manage their league in the user "
+"menu section 'League Administration'"
 msgstr ""
 
 #: .\dashboard\templates\data\new-team-modal.html:10
 #: .\dashboard\templates\data\new-team-modal.html:92
 #: .\dashboard\templates\data\teams.html:79
+#: .\dashboard\templates\matches\create.html:236
 msgid "Add a new team"
 msgstr ""
 
@@ -287,7 +342,9 @@ msgid "1. Enter a team name"
 msgstr ""
 
 #: .\dashboard\templates\data\new-team-modal.html:80
-msgid "2. Add a logo by either uploading one, pasting in a link to the logo or checking the 'Team has no logo' checkbox if the team does not has a logo."
+msgid ""
+"2. Add a logo by either uploading one, pasting in a link to the logo or "
+"checking the 'Team has no logo' checkbox if the team does not has a logo."
 msgstr ""
 
 #: .\dashboard\templates\data\new-team-modal.html:103
@@ -299,7 +356,7 @@ msgid "You have access to the following seasons"
 msgstr ""
 
 #: .\dashboard\templates\data\seasons.html:45
-#: .\dashboard\templates\matches\overview.html:79
+#: .\dashboard\templates\matches\overview.html:83
 msgid "Season"
 msgstr "Season"
 
@@ -324,11 +381,50 @@ msgid "Seasons can only be created by an admin"
 msgstr ""
 
 #: .\dashboard\templates\data\seasons.html:123
-msgid "Seasons are usually tied to a league. The official R6 seasons are available to all users"
+msgid ""
+"Seasons are usually tied to a league. The official R6 seasons are available "
+"to all users"
 msgstr ""
 
 #: .\dashboard\templates\data\seasons.html:124
-msgid "Tournament Organizers and League admins can manage seasons in the user menu section 'League Administration'"
+msgid ""
+"Tournament Organizers and League admins can manage seasons in the user menu "
+"section 'League Administration'"
+msgstr ""
+
+#: .\dashboard\templates\data\sponsors.html:37
+msgid "You have access to the following sponsors"
+msgstr ""
+
+#: .\dashboard\templates\data\sponsors.html:45
+#, fuzzy
+#| msgid "Sponsors"
+msgid "Sponsor"
+msgstr "Sponsoren"
+
+#: .\dashboard\templates\data\sponsors.html:47
+#, fuzzy
+#| msgid "Sponsors"
+msgid "Public Sponsor"
+msgstr "Sponsoren"
+
+#: .\dashboard\templates\data\sponsors.html:48
+#: .\dashboard\templates\data\teams.html:47
+msgid "Logo"
+msgstr ""
+
+#: .\dashboard\templates\data\sponsors.html:103
+msgid "Sponsors can only be created by an admin"
+msgstr ""
+
+#: .\dashboard\templates\data\sponsors.html:103
+msgid "Public sponsors can be used by any user"
+msgstr ""
+
+#: .\dashboard\templates\data\sponsors.html:104
+msgid ""
+"Tournament Organizers and League admins can manage league specific sponsors "
+"in the user menu section 'League Administration'"
 msgstr ""
 
 #: .\dashboard\templates\data\teams.html:38
@@ -338,10 +434,6 @@ msgstr ""
 #: .\dashboard\templates\data\teams.html:46
 msgid "Team"
 msgstr "Team"
-
-#: .\dashboard\templates\data\teams.html:47
-msgid "Logo"
-msgstr ""
 
 #: .\dashboard\templates\data\teams.html:48
 msgid "Edit Team"
@@ -360,11 +452,15 @@ msgid "You can create a new team by clicking the 'Add Team' button"
 msgstr ""
 
 #: .\dashboard\templates\data\teams.html:100
-msgid "If you create a team, it will be available globally to all other users as well"
+msgid ""
+"If you create a team, it will be available globally to all other users as "
+"well"
 msgstr ""
 
 #: .\dashboard\templates\data\teams.html:101
-msgid "You can NOT remove a team, but change it's logo by clicking the 'Change Logo' button for the team you want to edit"
+msgid ""
+"You can NOT remove a team, but change it's logo by clicking the 'Change "
+"Logo' button for the team you want to edit"
 msgstr ""
 
 #: .\dashboard\templates\data\teams.html:102
@@ -372,10 +468,13 @@ msgid "If you want a team to be removed, please contact an admin"
 msgstr ""
 
 #: .\dashboard\templates\home.html:34
-msgid "\n"
+#, python-format
+msgid ""
+"\n"
 "                        Hi <b>%(user)s</b>!<br>\n"
 "                        Welcome to the new R6 Caster Dashboard!<br>\n"
-"                        New features, an improved design and easier navigation makes the Caster Dashboard easier to\n"
+"                        New features, an improved design and easier "
+"navigation makes the Caster Dashboard easier to\n"
 "                        use then ever.\n"
 "                    "
 msgstr ""
@@ -405,7 +504,8 @@ msgid "Map Overlay Style"
 msgstr ""
 
 #: .\dashboard\templates\home.html:88
-#: .\dashboard\templates\overlays\control-center.html:136
+#: .\dashboard\templates\overlays\control-center.html:135
+#: .\dashboard\templates\popouts\overlay-toggles.html:117
 msgid "Social Overlay"
 msgstr "Social Overlay"
 
@@ -428,32 +528,32 @@ msgstr "Match ID"
 
 #: .\dashboard\templates\home.html:118 .\dashboard\templates\home.html:131
 #: .\dashboard\templates\home.html:144
-#: .\dashboard\templates\overlays\control-center.html:363
-#: .\dashboard\templates\overlays\control-center.html:377
-#: .\dashboard\templates\overlays\control-center.html:391
+#: .\dashboard\templates\overlays\control-center.html:402
+#: .\dashboard\templates\overlays\control-center.html:416
+#: .\dashboard\templates\overlays\control-center.html:430
 msgid "No Match"
 msgstr "Kein Match"
 
 #: .\dashboard\templates\home.html:125
-#: .\dashboard\templates\matches\create.html:144
+#: .\dashboard\templates\matches\create.html:145
 #: .\dashboard\templates\matches\history.html:48
 #: .\dashboard\templates\matches\opbans.html:111
-#: .\dashboard\templates\matches\overview.html:117
-#: .\dashboard\templates\overlays\control-center.html:371
+#: .\dashboard\templates\matches\overview.html:133
+#: .\dashboard\templates\overlays\control-center.html:410
 msgid "Team Blue"
 msgstr ""
 
 #: .\dashboard\templates\home.html:138
-#: .\dashboard\templates\matches\create.html:157
+#: .\dashboard\templates\matches\create.html:158
 #: .\dashboard\templates\matches\history.html:49
 #: .\dashboard\templates\matches\opbans.html:122
-#: .\dashboard\templates\matches\overview.html:125
-#: .\dashboard\templates\overlays\control-center.html:385
+#: .\dashboard\templates\matches\overview.html:141
+#: .\dashboard\templates\overlays\control-center.html:424
 msgid "Team Orange"
 msgstr ""
 
 #: .\dashboard\templates\home.html:151
-#: .\dashboard\templates\overlays\control-center.html:415
+#: .\dashboard\templates\overlays\control-center.html:454
 msgid "Current Map"
 msgstr ""
 
@@ -486,31 +586,31 @@ msgid "Rounds Played"
 msgstr "Runden Gespielt"
 
 #: .\dashboard\templates\login\login.html:19
-#: .\dashboard\templates\login\login.html:44
+#: .\dashboard\templates\login\login.html:47
 msgid "Sign In"
 msgstr ""
 
-#: .\dashboard\templates\login\login.html:25
+#: .\dashboard\templates\login\login.html:28
 #: .\dashboard\templates\login\register.html:25
 msgid "Username"
 msgstr ""
 
-#: .\dashboard\templates\login\login.html:34
+#: .\dashboard\templates\login\login.html:37
 #: .\dashboard\templates\login\register.html:45
 msgid "Password"
 msgstr ""
 
-#: .\dashboard\templates\login\login.html:51
+#: .\dashboard\templates\login\login.html:54
 #: .\dashboard\templates\login\register.html:86
 #: .\venv\Lib\site-packages\django\utils\text.py:235
 msgid "or"
 msgstr ""
 
-#: .\dashboard\templates\login\login.html:56
+#: .\dashboard\templates\login\login.html:59
 msgid "I forgot my password"
 msgstr ""
 
-#: .\dashboard\templates\login\login.html:59
+#: .\dashboard\templates\login\login.html:62
 #: .\dashboard\templates\login\register.html:19
 msgid "Register a new account"
 msgstr ""
@@ -520,11 +620,15 @@ msgid "You have been registered successfully"
 msgstr ""
 
 #: .\dashboard\templates\login\register-success.html:27
-msgid "Your registration has to be confirmed by an admin before you are able to log in"
+msgid ""
+"Your registration has to be confirmed by an admin before you are able to log "
+"in"
 msgstr ""
 
 #: .\dashboard\templates\login\register-success.html:28
-msgid "Contact ThorsHero on the ThorsHero Discord or via Twitter to get your account activated right away"
+msgid ""
+"Contact ThorsHero on the ThorsHero Discord or via Twitter to get your "
+"account activated right away"
 msgstr ""
 
 #: .\dashboard\templates\login\register-success.html:30
@@ -557,8 +661,11 @@ msgid "Confirm Password"
 msgstr ""
 
 #: .\dashboard\templates\login\register.html:68
-msgid "\n"
-"                                        I agree to the <a href=\"/terms/\">%(tc)s</a>\n"
+#, python-format
+msgid ""
+"\n"
+"                                        I agree to the <a href=\"/terms/\">%"
+"(tc)s</a>\n"
 "                                    "
 msgstr ""
 
@@ -587,93 +694,95 @@ msgstr ""
 msgid "The passwords don't match! Please try again!"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:19
-#: .\dashboard\templates\matches\create.html:25
-#: .\dashboard\templates\matches\create.html:41
+#: .\dashboard\templates\matches\create.html:20
+#: .\dashboard\templates\matches\create.html:26
+#: .\dashboard\templates\matches\create.html:42
 msgid "Create a match"
 msgstr "Ein Match Erstellen"
 
-#: .\dashboard\templates\matches\create.html:47
+#: .\dashboard\templates\matches\create.html:48
 msgid "Select League"
 msgstr "Liga Auswählen"
 
-#: .\dashboard\templates\matches\create.html:51
-#: .\dashboard\templates\matches\create.html:72
-#: .\dashboard\templates\matches\create.html:148
-#: .\dashboard\templates\matches\create.html:161
-#: .\dashboard\templates\matches\create.html:178
+#: .\dashboard\templates\matches\create.html:52
+#: .\dashboard\templates\matches\create.html:73
+#: .\dashboard\templates\matches\create.html:149
+#: .\dashboard\templates\matches\create.html:162
+#: .\dashboard\templates\matches\create.html:179
 #: .\dashboard\templates\matches\maps.html:49
 #: .\dashboard\templates\matches\rounds.html:45
 #: .\dashboard\templates\matches\rounds.html:56
 msgid "Please select..."
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:68
+#: .\dashboard\templates\matches\create.html:69
 msgid "Select Season"
 msgstr "Season Auswählen"
 
-#: .\dashboard\templates\matches\create.html:99
-#: .\dashboard\templates\matches\overview.html:87
+#: .\dashboard\templates\matches\create.html:100
+#: .\dashboard\templates\matches\overview.html:91
 msgid "Best Of"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:103
+#: .\dashboard\templates\matches\create.html:104
 msgid "Best Of 1"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:107
+#: .\dashboard\templates\matches\create.html:108
 msgid "Best Of 2"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:111
+#: .\dashboard\templates\matches\create.html:112
 msgid "Best Of 3"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:115
+#: .\dashboard\templates\matches\create.html:116
 msgid "Best Of 5"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:125
-#: .\dashboard\templates\matches\overview.html:98
+#: .\dashboard\templates\matches\create.html:126
+#: .\dashboard\templates\matches\overview.html:114
 msgid "Match Title"
 msgstr "Match Titel"
 
-#: .\dashboard\templates\matches\create.html:127
+#: .\dashboard\templates\matches\create.html:128
 msgid "e.g. EULeague"
 msgstr "z.B. EULeague"
 
-#: .\dashboard\templates\matches\create.html:132
+#: .\dashboard\templates\matches\create.html:133
 #: .\dashboard\templates\matches\history.html:46
-#: .\dashboard\templates\matches\overview.html:106
+#: .\dashboard\templates\matches\overview.html:122
 msgid "Playday"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:133
-#: .\dashboard\templates\matches\create.html:174
+#: .\dashboard\templates\matches\create.html:134
+#: .\dashboard\templates\matches\create.html:175
 #: .\dashboard\templates\matches\opbans.html:74
 #: .\dashboard\templates\matches\rounds.html:93
 #: .\dashboard\templates\matches\rounds.html:124
 msgid "optional"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:136
+#: .\dashboard\templates\matches\create.html:137
 msgid "e.g. Playday #1"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:190
+#: .\dashboard\templates\matches\create.html:202
+#, fuzzy
+#| msgid "Create a match"
+msgid "Create as Dummy Match"
+msgstr "Ein Match Erstellen"
+
+#: .\dashboard\templates\matches\create.html:211
 msgid "Create Match"
 msgstr "Match Erstellen"
 
-#: .\dashboard\templates\matches\create.html:207
+#: .\dashboard\templates\matches\create.html:226
 msgid "Quick Actions"
 msgstr ""
 
-#: .\dashboard\templates\matches\create.html:212
+#: .\dashboard\templates\matches\create.html:231
 msgid "Missing a team?"
-msgstr ""
-
-#: .\dashboard\templates\matches\create.html:215
-msgid "Add a team"
 msgstr ""
 
 #: .\dashboard\templates\matches\history.html:19
@@ -704,47 +813,47 @@ msgstr ""
 msgid "Go to match"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:63
+#: .\dashboard\templates\matches\maps-script.html:73
 msgid "Ban"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:69
+#: .\dashboard\templates\matches\maps-script.html:79
 msgid "Pick"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:79
+#: .\dashboard\templates\matches\maps-script.html:89
 msgid "Decider"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:83
+#: .\dashboard\templates\matches\maps-script.html:93
 msgid "Default Ban"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:105
-#: .\dashboard\templates\matches\maps-script.html:125
+#: .\dashboard\templates\matches\maps-script.html:114
+#: .\dashboard\templates\matches\maps-script.html:134
 msgid "Please select the team that starts the ban phase first"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:118
+#: .\dashboard\templates\matches\maps-script.html:127
 msgid "Map banned "
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:138
+#: .\dashboard\templates\matches\maps-script.html:147
 msgid "Map banned"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:146
+#: .\dashboard\templates\matches\maps-script.html:155
 msgid "You can only remove the last map ban or pick"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps-script.html:157
-#: .\dashboard\templates\matches\maps-script.html:171
+#: .\dashboard\templates\matches\maps-script.html:166
+#: .\dashboard\templates\matches\maps-script.html:180
 msgid "Map removed"
 msgstr ""
 
 #: .\dashboard\templates\matches\maps.html:19
 #: .\dashboard\templates\matches\maps.html:26
-#: .\dashboard\templates\matches\maps.html:120
+#: .\dashboard\templates\matches\maps.html:123
 msgid "Map Picks & Bans"
 msgstr "Map Picks & Bans"
 
@@ -765,10 +874,10 @@ msgid "Competetive"
 msgstr ""
 
 #: .\dashboard\templates\matches\maps.html:64
-#: .\dashboard\templates\overlays\control-center.html:459
-#: .\dashboard\templates\overlays\control-center.html:473
-#: .\dashboard\templates\overlays\control-center.html:501
-#: .\dashboard\templates\overlays\control-center.html:515
+#: .\dashboard\templates\overlays\control-center.html:498
+#: .\dashboard\templates\overlays\control-center.html:512
+#: .\dashboard\templates\overlays\control-center.html:540
+#: .\dashboard\templates\overlays\control-center.html:554
 msgid "default"
 msgstr ""
 
@@ -777,44 +886,44 @@ msgid "All Maps"
 msgstr ""
 
 #: .\dashboard\templates\matches\maps.html:77
-#: .\dashboard\templates\matches\maps.html:177
+#: .\dashboard\templates\matches\maps.html:180
 msgid "Reset All Maps"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:80
+#: .\dashboard\templates\matches\maps.html:83
 msgid "Continue to Operator Bans"
 msgstr "Weiter zu den Operator Bans"
 
-#: .\dashboard\templates\matches\maps.html:96
+#: .\dashboard\templates\matches\maps.html:99
 msgid "Log"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:101
+#: .\dashboard\templates\matches\maps.html:104
 msgid "Nothing here yet"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:129
-#: .\dashboard\templates\matches\maps.html:152
-#: .\dashboard\templates\overlays\control-center.html:421
+#: .\dashboard\templates\matches\maps.html:132
+#: .\dashboard\templates\matches\maps.html:155
+#: .\dashboard\templates\overlays\control-center.html:460
 msgid "Not selected yet"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:135
-#: .\dashboard\templates\matches\maps.html:158
+#: .\dashboard\templates\matches\maps.html:138
+#: .\dashboard\templates\matches\maps.html:161
 msgid "Ban Map"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:137
-#: .\dashboard\templates\matches\maps.html:160
+#: .\dashboard\templates\matches\maps.html:140
+#: .\dashboard\templates\matches\maps.html:163
 msgid "Pick Map"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:139
-#: .\dashboard\templates\matches\maps.html:162
+#: .\dashboard\templates\matches\maps.html:142
+#: .\dashboard\templates\matches\maps.html:165
 msgid "Reset"
 msgstr ""
 
-#: .\dashboard\templates\matches\maps.html:177
+#: .\dashboard\templates\matches\maps.html:180
 msgid "Are you sure you want to remove all maps?"
 msgstr ""
 
@@ -889,47 +998,55 @@ msgstr ""
 msgid "Match State"
 msgstr "Match Status"
 
-#: .\dashboard\templates\matches\overview.html:58
+#: .\dashboard\templates\matches\overview.html:62
 msgid "Match Access"
 msgstr "Match Zugriff"
 
-#: .\dashboard\templates\matches\overview.html:136
+#: .\dashboard\templates\matches\overview.html:152
 msgid "Current Score"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:145
+#: .\dashboard\templates\matches\overview.html:161
 msgid "Winner"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:164
+#: .\dashboard\templates\matches\overview.html:180
 msgid "Match Actions"
 msgstr "Match Aktionen"
 
-#: .\dashboard\templates\matches\overview.html:168
+#: .\dashboard\templates\matches\overview.html:184
 msgid "Set Match to Overlays"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:170
+#: .\dashboard\templates\matches\overview.html:187
+#: .\dashboard\templates\matches\overview.html:197
 msgid "Continue to Map Picks & Bans"
 msgstr "Weiter zu den Map Picks & Bans"
 
-#: .\dashboard\templates\matches\overview.html:174
+#: .\dashboard\templates\matches\overview.html:187
+#: .\dashboard\templates\matches\overview.html:193
+#: .\dashboard\templates\overlays\control-center.html:528
+msgid "disabled"
+msgstr ""
+
+#: .\dashboard\templates\matches\overview.html:193
+#: .\dashboard\templates\matches\overview.html:202
 msgid "Show Match Details"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:175
+#: .\dashboard\templates\matches\overview.html:205
 msgid "Share Match"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:179
+#: .\dashboard\templates\matches\overview.html:209
 msgid "Edit Match"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:180
+#: .\dashboard\templates\matches\overview.html:210
 msgid "Delete Match"
 msgstr ""
 
-#: .\dashboard\templates\matches\overview.html:196
+#: .\dashboard\templates\matches\overview.html:226
 msgid "Overlays updated to current match"
 msgstr ""
 
@@ -995,30 +1112,52 @@ msgid "Score"
 msgstr ""
 
 #: .\dashboard\templates\overlays\control-center-script.html:23
-#: .\dashboard\templates\overlays\control-center.html:53
-#: .\dashboard\templates\overlays\control-center.html:71
-#: .\dashboard\templates\overlays\control-center.html:89
-#: .\dashboard\templates\overlays\control-center.html:107
-#: .\dashboard\templates\overlays\control-center.html:125
-#: .\dashboard\templates\overlays\control-center.html:145
-#: .\dashboard\templates\overlays\control-center.html:163
-#: .\dashboard\templates\overlays\control-center.html:181
-#: .\dashboard\templates\overlays\control-center.html:199
-#: .\dashboard\templates\overlays\control-center.html:217
+#: .\dashboard\templates\overlays\control-center.html:52
+#: .\dashboard\templates\overlays\control-center.html:70
+#: .\dashboard\templates\overlays\control-center.html:88
+#: .\dashboard\templates\overlays\control-center.html:106
+#: .\dashboard\templates\overlays\control-center.html:124
+#: .\dashboard\templates\overlays\control-center.html:144
+#: .\dashboard\templates\overlays\control-center.html:162
+#: .\dashboard\templates\overlays\control-center.html:180
+#: .\dashboard\templates\overlays\control-center.html:198
+#: .\dashboard\templates\overlays\control-center.html:216
+#: .\dashboard\templates\popouts\overlay-toggles.html:34
+#: .\dashboard\templates\popouts\overlay-toggles.html:52
+#: .\dashboard\templates\popouts\overlay-toggles.html:70
+#: .\dashboard\templates\popouts\overlay-toggles.html:88
+#: .\dashboard\templates\popouts\overlay-toggles.html:106
+#: .\dashboard\templates\popouts\overlay-toggles.html:126
+#: .\dashboard\templates\popouts\overlay-toggles.html:144
+#: .\dashboard\templates\popouts\overlay-toggles.html:162
+#: .\dashboard\templates\popouts\overlay-toggles.html:180
+#: .\dashboard\templates\popouts\overlay-toggles.html:198
+#: .\dashboard\templates\popouts\overlay-toggles.html:223
 msgid "off"
 msgstr ""
 
 #: .\dashboard\templates\overlays\control-center-script.html:36
-#: .\dashboard\templates\overlays\control-center.html:49
-#: .\dashboard\templates\overlays\control-center.html:67
-#: .\dashboard\templates\overlays\control-center.html:85
-#: .\dashboard\templates\overlays\control-center.html:103
-#: .\dashboard\templates\overlays\control-center.html:121
-#: .\dashboard\templates\overlays\control-center.html:141
-#: .\dashboard\templates\overlays\control-center.html:159
-#: .\dashboard\templates\overlays\control-center.html:177
-#: .\dashboard\templates\overlays\control-center.html:195
-#: .\dashboard\templates\overlays\control-center.html:213
+#: .\dashboard\templates\overlays\control-center.html:48
+#: .\dashboard\templates\overlays\control-center.html:66
+#: .\dashboard\templates\overlays\control-center.html:84
+#: .\dashboard\templates\overlays\control-center.html:102
+#: .\dashboard\templates\overlays\control-center.html:120
+#: .\dashboard\templates\overlays\control-center.html:140
+#: .\dashboard\templates\overlays\control-center.html:158
+#: .\dashboard\templates\overlays\control-center.html:176
+#: .\dashboard\templates\overlays\control-center.html:194
+#: .\dashboard\templates\overlays\control-center.html:212
+#: .\dashboard\templates\popouts\overlay-toggles.html:30
+#: .\dashboard\templates\popouts\overlay-toggles.html:48
+#: .\dashboard\templates\popouts\overlay-toggles.html:66
+#: .\dashboard\templates\popouts\overlay-toggles.html:84
+#: .\dashboard\templates\popouts\overlay-toggles.html:102
+#: .\dashboard\templates\popouts\overlay-toggles.html:122
+#: .\dashboard\templates\popouts\overlay-toggles.html:140
+#: .\dashboard\templates\popouts\overlay-toggles.html:158
+#: .\dashboard\templates\popouts\overlay-toggles.html:176
+#: .\dashboard\templates\popouts\overlay-toggles.html:194
+#: .\dashboard\templates\popouts\overlay-toggles.html:236
 msgid "on"
 msgstr ""
 
@@ -1034,87 +1173,107 @@ msgstr ""
 msgid "The next match has been set to "
 msgstr ""
 
+#: .\dashboard\templates\overlays\control-center-script.html:129
+msgid "The blue team score has been set to "
+msgstr ""
+
+#: .\dashboard\templates\overlays\control-center-script.html:135
+msgid "The orange team score has been set to "
+msgstr ""
+
 #: .\dashboard\templates\overlays\control-center.html:19
 msgid "Overlays Control Center"
 msgstr "Overlays Kontrollzentrum"
 
-#: .\dashboard\templates\overlays\control-center.html:37
+#: .\dashboard\templates\overlays\control-center.html:36
+#: .\dashboard\templates\popouts\overlay-toggles.html:18
 msgid "Toggle Overlays"
 msgstr "Overlays Umschalten"
 
-#: .\dashboard\templates\overlays\control-center.html:44
-#: .\dashboard\templates\overlays\control-center.html:455
+#: .\dashboard\templates\overlays\control-center.html:43
+#: .\dashboard\templates\overlays\control-center.html:494
+#: .\dashboard\templates\popouts\overlay-toggles.html:25
 msgid "Start Overlay"
 msgstr "Start Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:62
-#: .\dashboard\templates\overlays\control-center.html:469
+#: .\dashboard\templates\overlays\control-center.html:61
+#: .\dashboard\templates\overlays\control-center.html:508
+#: .\dashboard\templates\popouts\overlay-toggles.html:43
 msgid "InGame Overlay"
 msgstr "InGame Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:80
-#: .\dashboard\templates\overlays\control-center.html:511
+#: .\dashboard\templates\overlays\control-center.html:79
+#: .\dashboard\templates\overlays\control-center.html:550
+#: .\dashboard\templates\popouts\overlay-toggles.html:61
 msgid "Maps Overlay"
 msgstr "Maps Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:98
-#: .\dashboard\templates\overlays\control-center.html:497
+#: .\dashboard\templates\overlays\control-center.html:97
+#: .\dashboard\templates\overlays\control-center.html:536
+#: .\dashboard\templates\popouts\overlay-toggles.html:79
 msgid "Operator Bans Overlay"
 msgstr "Operator Bans Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:116
+#: .\dashboard\templates\overlays\control-center.html:115
+#: .\dashboard\templates\popouts\overlay-toggles.html:97
 msgid "Rounds Overlay"
 msgstr "Runden Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:154
+#: .\dashboard\templates\overlays\control-center.html:153
+#: .\dashboard\templates\popouts\overlay-toggles.html:135
 msgid "Poll Overlay"
 msgstr "Umfragen Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:172
+#: .\dashboard\templates\overlays\control-center.html:171
+#: .\dashboard\templates\popouts\overlay-toggles.html:153
 msgid "Timer Overlay"
 msgstr "Timer Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:190
+#: .\dashboard\templates\overlays\control-center.html:189
+#: .\dashboard\templates\popouts\overlay-toggles.html:171
 msgid "Ticker Overlay"
 msgstr "Ticker Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:208
+#: .\dashboard\templates\overlays\control-center.html:207
+#: .\dashboard\templates\popouts\overlay-toggles.html:189
 msgid "Next Match Overlay"
 msgstr "Nächestes Match Overlay"
 
-#: .\dashboard\templates\overlays\control-center.html:231
+#: .\dashboard\templates\overlays\control-center.html:230
 msgid "Overlay Actions"
 msgstr "Overlay Aktionen"
 
-#: .\dashboard\templates\overlays\control-center.html:238
+#: .\dashboard\templates\overlays\control-center.html:237
 msgid "Set Timer Mode"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:243
-#: .\dashboard\templates\overlays\control-center.html:247
+#: .\dashboard\templates\overlays\control-center.html:242
+#: .\dashboard\templates\overlays\control-center.html:246
 msgid "timer mode"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:254
-#: .\dashboard\templates\overlays\control-center.html:258
+#: .\dashboard\templates\overlays\control-center.html:253
+#: .\dashboard\templates\overlays\control-center.html:257
 msgid "clock mode"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:265
+#: .\dashboard\templates\overlays\control-center.html:264
 msgid "Set Timer"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:273
+#: .\dashboard\templates\overlays\control-center.html:272
 #: .\dashboard\templates\overlays\control-center.html:294
-#: .\dashboard\templates\overlays\control-center.html:313
+#: .\dashboard\templates\overlays\control-center.html:314
+#: .\dashboard\templates\overlays\control-center.html:335
+#: .\dashboard\templates\overlays\control-center.html:352
 msgid "Confirm"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:282
+#: .\dashboard\templates\overlays\control-center.html:281
 msgid "Set Current Match"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:286
+#: .\dashboard\templates\overlays\control-center.html:285
 #: .\dashboard\templates\overlays\control-center.html:305
 msgid "Select"
 msgstr ""
@@ -1123,80 +1282,109 @@ msgstr ""
 msgid "Set Next Match"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:330
+#: .\dashboard\templates\overlays\control-center.html:323
+#, fuzzy
+#| msgid "Match created"
+msgid "Set Match Score Blue"
+msgstr "Match erstellt"
+
+#: .\dashboard\templates\overlays\control-center.html:340
+#, fuzzy
+#| msgid "Match created"
+msgid "Set Match Score Orange"
+msgstr "Match erstellt"
+
+#: .\dashboard\templates\overlays\control-center.html:369
 msgid "Overlay Match Data"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:337
+#: .\dashboard\templates\overlays\control-center.html:376
 msgid "Current Match ID"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:351
+#: .\dashboard\templates\overlays\control-center.html:390
 msgid "Match Status"
 msgstr "Match Status"
 
-#: .\dashboard\templates\overlays\control-center.html:356
+#: .\dashboard\templates\overlays\control-center.html:395
 msgid "Created"
 msgstr "Erstellt"
 
-#: .\dashboard\templates\overlays\control-center.html:358
+#: .\dashboard\templates\overlays\control-center.html:397
 msgid "In Progress"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:360
+#: .\dashboard\templates\overlays\control-center.html:399
 msgid "Finished"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:399
+#: .\dashboard\templates\overlays\control-center.html:438
 msgid "Current Match Score"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:429
+#: .\dashboard\templates\overlays\control-center.html:468
 msgid "Current Map Score"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:448
+#: .\dashboard\templates\overlays\control-center.html:487
 msgid "Overlay Styles"
 msgstr "Overlay Styles"
 
-#: .\dashboard\templates\overlays\control-center.html:459
-#: .\dashboard\templates\overlays\control-center.html:515
+#: .\dashboard\templates\overlays\control-center.html:498
+#: .\dashboard\templates\overlays\control-center.html:554
 msgid "dark"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:473
+#: .\dashboard\templates\overlays\control-center.html:512
 msgid "blue"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:473
+#: .\dashboard\templates\overlays\control-center.html:512
 msgid "orange"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:483
+#: .\dashboard\templates\overlays\control-center.html:522
 msgid "Team Names"
 msgstr "Team Namen"
 
-#: .\dashboard\templates\overlays\control-center.html:487
+#: .\dashboard\templates\overlays\control-center.html:526
 msgid "enabled"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:489
-msgid "disabled"
-msgstr ""
-
-#: .\dashboard\templates\overlays\control-center.html:501
+#: .\dashboard\templates\overlays\control-center.html:540
 msgid "bottom right"
 msgstr ""
 
-#: .\dashboard\templates\overlays\control-center.html:537
+#: .\dashboard\templates\overlays\control-center.html:576
 msgid "Coming soon"
+msgstr ""
+
+#: .\dashboard\validators.py:19
+#, python-format
+msgid ""
+"The file size exceeds the limit of 500 kB (is %(current_file_size)s kB)!"
+msgstr ""
+
+#: .\dashboard\validators.py:26
+#, python-format
+msgid "The image must be a .png file (is %(image_file_type)s)!"
+msgstr ""
+
+#: .\dashboard\validators.py:33
+#, python-format
+msgid "The image must not be greater then 500x500 (is %(width)sx%(height)s)!"
+msgstr ""
+
+#: .\dashboard\validators.py:44
+#, python-format
+msgid "Image must be square (is %(height)sx%(width)s)!"
 msgstr ""
 
 #: .\dashboard\views\forms.py:27
 msgid "Your account must be confirmed by an admin before you can login"
 msgstr ""
 
-#: .\dashboard\views\forms.py:28 .\dashboard\views\forms.py:37
+#: .\dashboard\views\forms.py:28 .\dashboard\views\forms.py:42
 msgid "Login failed"
 msgstr ""
 
@@ -1205,114 +1393,110 @@ msgid "You have been logged in successfully"
 msgstr ""
 
 #: .\dashboard\views\forms.py:33
+#, python-format
 msgid "Welcome %s!"
 msgstr ""
 
-#: .\dashboard\views\forms.py:37
+#: .\dashboard\views\forms.py:42
 msgid "Username or password incorrect!"
 msgstr ""
 
-#: .\dashboard\views\forms.py:56
-msgid "Your account could not be created! Please try again or contact an admin!"
+#: .\dashboard\views\forms.py:61
+msgid ""
+"Your account could not be created! Please try again or contact an admin!"
 msgstr ""
 
-#: .\dashboard\views\forms.py:57
+#: .\dashboard\views\forms.py:62
 msgid "Registration failed"
 msgstr ""
 
-#: .\dashboard\views\forms.py:80
-msgid "No team name"
-msgstr ""
-
-#: .\dashboard\views\forms.py:80 .\dashboard\views\forms.py:90
-#: .\dashboard\views\forms.py:105 .\dashboard\views\forms.py:124
-#: .\dashboard\views\forms.py:141 .\dashboard\views\forms.py:147
-#: .\dashboard\views\forms.py:162 .\dashboard\views\forms.py:176
-#: .\dashboard\views\forms.py:265 .\dashboard\views\forms.py:292
-msgid "Team creation failed"
-msgstr ""
-
-#: .\dashboard\views\forms.py:89 .\dashboard\views\forms.py:211
+#: .\dashboard\views\forms.py:94 .\dashboard\views\forms.py:216
 msgid "Please add a logo or select 'Team has no logo'"
 msgstr ""
 
-#: .\dashboard\views\forms.py:99 .\dashboard\views\forms.py:133
-#: .\dashboard\views\forms.py:168
+#: .\dashboard\views\forms.py:106 .\dashboard\views\forms.py:138
+#: .\dashboard\views\forms.py:173
 msgid "The team has been added successfully"
 msgstr ""
 
-#: .\dashboard\views\forms.py:99 .\dashboard\views\forms.py:133
-#: .\dashboard\views\forms.py:168
+#: .\dashboard\views\forms.py:106 .\dashboard\views\forms.py:138
+#: .\dashboard\views\forms.py:173
 msgid "Team created"
 msgstr ""
 
-#: .\dashboard\views\forms.py:104 .\dashboard\views\forms.py:123
-#: .\dashboard\views\forms.py:161 .\dashboard\views\forms.py:227
-#: .\dashboard\views\forms.py:264 .\dashboard\views\forms.py:291
+#: .\dashboard\views\forms.py:111 .\dashboard\views\forms.py:128
+#: .\dashboard\views\forms.py:166 .\dashboard\views\forms.py:232
+#: .\dashboard\views\forms.py:269 .\dashboard\views\forms.py:296
 msgid "Database error (please report this!)'"
 msgstr ""
 
-#: .\dashboard\views\forms.py:140 .\dashboard\views\forms.py:146
-#: .\dashboard\views\forms.py:245 .\dashboard\views\forms.py:250
+#: .\dashboard\views\forms.py:145 .\dashboard\views\forms.py:151
+#: .\dashboard\views\forms.py:250 .\dashboard\views\forms.py:255
 msgid "Team Logo could not be downloaded. Please upload it manually!"
 msgstr ""
 
-#: .\dashboard\views\forms.py:175 .\dashboard\views\forms.py:277
+#: .\dashboard\views\forms.py:180 .\dashboard\views\forms.py:282
 msgid "Team Logo could not be saved. Please try again!"
 msgstr ""
 
-#: .\dashboard\views\forms.py:193
+#: .\dashboard\views\forms.py:198
 msgid "No team id"
 msgstr ""
 
-#: .\dashboard\views\forms.py:193 .\dashboard\views\forms.py:200
-#: .\dashboard\views\forms.py:212 .\dashboard\views\forms.py:228
-#: .\dashboard\views\forms.py:246 .\dashboard\views\forms.py:251
-#: .\dashboard\views\forms.py:278
+#: .\dashboard\views\forms.py:198 .\dashboard\views\forms.py:205
+#: .\dashboard\views\forms.py:217 .\dashboard\views\forms.py:233
+#: .\dashboard\views\forms.py:251 .\dashboard\views\forms.py:256
+#: .\dashboard\views\forms.py:283
 msgid "Team edit failed"
 msgstr ""
 
-#: .\dashboard\views\forms.py:200
+#: .\dashboard\views\forms.py:205
 msgid "Invalid team id"
 msgstr ""
 
-#: .\dashboard\views\forms.py:222 .\dashboard\views\forms.py:258
-#: .\dashboard\views\forms.py:285
+#: .\dashboard\views\forms.py:227 .\dashboard\views\forms.py:263
+#: .\dashboard\views\forms.py:290
 msgid "The team has been edited successfully"
 msgstr ""
 
-#: .\dashboard\views\forms.py:222 .\dashboard\views\forms.py:258
-#: .\dashboard\views\forms.py:285
+#: .\dashboard\views\forms.py:227 .\dashboard\views\forms.py:263
+#: .\dashboard\views\forms.py:290
 msgid "Team edited"
 msgstr ""
 
-#: .\dashboard\views\forms.py:312 .\dashboard\views\forms.py:328
+#: .\dashboard\views\forms.py:317 .\dashboard\views\forms.py:343
 msgid "The match could not be created"
 msgstr ""
 
-#: .\dashboard\views\forms.py:312
+#: .\dashboard\views\forms.py:317
 msgid "Invalid Match Data"
 msgstr ""
 
-#: .\dashboard\views\forms.py:328
+#: .\dashboard\views\forms.py:343
 msgid "Database Error"
 msgstr ""
 
-#: .\dashboard\views\forms.py:331
+#: .\dashboard\views\forms.py:346
 msgid "The match has been created successfully"
 msgstr ""
 
-#: .\dashboard\views\forms.py:331
+#: .\dashboard\views\forms.py:346
 msgid "Match created"
 msgstr "Match erstellt"
 
-#: .\dashboard\views\sites.py:41
+#: .\dashboard\views\sites.py:51
 msgid "You have been logged out! See you next time!"
 msgstr ""
 
-#: .\dashboard\views\sites.py:42
+#: .\dashboard\views\sites.py:52
 msgid "Logged out"
 msgstr ""
+
+#: .\overlays\templates\ingame.html:46
+#, fuzzy
+#| msgid "Map Pick & Bans"
+msgid "Map Pick"
+msgstr "Map Pick & Bans"
 
 #: .\venv\Lib\site-packages\django\contrib\messages\apps.py:7
 msgid "Messages"
@@ -1361,11 +1545,14 @@ msgstr ""
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
 #: .\venv\Lib\site-packages\django\core\validators.py:240
-msgid "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:247
-msgid "Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or hyphens."
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:256
@@ -1388,26 +1575,39 @@ msgid "Enter only digits separated by commas."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:311
+#, python-format
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:343
+#, python-format
 msgid "Ensure this value is less than or equal to %(limit_value)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:352
+#, python-format
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:362
-msgid "Ensure this value has at least %(limit_value)d character (it has %(show_value)d)."
-msgid_plural "Ensure this value has at least %(limit_value)d characters (it has %(show_value)d)."
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has %"
+"(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has %"
+"(show_value)d)."
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:377
-msgid "Ensure this value has at most %(limit_value)d character (it has %(show_value)d)."
-msgid_plural "Ensure this value has at most %(limit_value)d characters (it has %(show_value)d)."
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has %(show_value)"
+"d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has %"
+"(show_value)d)."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1418,25 +1618,33 @@ msgid "Enter a number."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:398
+#, python-format
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:403
+#, python-format
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:408
-msgid "Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural "Ensure that there are no more than %(max)s digits before the decimal point."
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:470
-msgid "File extension “%(extension)s” is not allowed. Allowed extensions are: %(allowed_extensions)s."
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: %"
+"(allowed_extensions)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\core\validators.py:522
@@ -1449,10 +1657,12 @@ msgid "and"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\base.py:1183
+#, python-format
 msgid "%(model_name)s with this %(field_labels)s already exists."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:104
+#, python-format
 msgid "Value %(value)r is not a valid choice."
 msgstr ""
 
@@ -1465,24 +1675,30 @@ msgid "This field cannot be blank."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:107
+#, python-format
 msgid "%(model_name)s with this %(field_label)s already exists."
 msgstr ""
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:111
-msgid "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:130
+#, python-format
 msgid "Field of type: %(field_type)s"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:937
+#, python-format
 msgid "“%(value)s” value must be either True or False."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:938
+#, python-format
 msgid "“%(value)s” value must be either True, False, or None."
 msgstr ""
 
@@ -1491,6 +1707,7 @@ msgid "Boolean (Either True or False)"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:981
+#, python-format
 msgid "String (up to %(max_length)s)"
 msgstr ""
 
@@ -1499,12 +1716,18 @@ msgid "Comma-separated integers"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1094
-msgid "“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD format."
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1096
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1239
-msgid "“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid date."
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1099
@@ -1512,11 +1735,17 @@ msgid "Date (without time)"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1237
-msgid "“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format."
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1241
-msgid "“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1245
@@ -1524,6 +1753,7 @@ msgid "Date (with time)"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1393
+#, python-format
 msgid "“%(value)s” value must be a decimal number."
 msgstr ""
 
@@ -1532,7 +1762,10 @@ msgid "Decimal number"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1534
-msgid "“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[.uuuuuu] format."
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1537
@@ -1548,6 +1781,7 @@ msgid "File path"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1676
+#, python-format
 msgid "“%(value)s” value must be a float."
 msgstr ""
 
@@ -1556,6 +1790,7 @@ msgid "Floating point number"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1716
+#, python-format
 msgid "“%(value)s” value must be an integer."
 msgstr ""
 
@@ -1577,6 +1812,7 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1928
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1929
+#, python-format
 msgid "“%(value)s” value must be either None, True or False."
 msgstr ""
 
@@ -1593,6 +1829,7 @@ msgid "Positive small integer"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1993
+#, python-format
 msgid "Slug (up to %(max_length)s)"
 msgstr ""
 
@@ -1605,11 +1842,17 @@ msgid "Text"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2060
-msgid "“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] format."
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2062
-msgid "“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an invalid time."
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2065
@@ -1625,6 +1868,7 @@ msgid "Raw binary data"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2278
+#, python-format
 msgid "“%(value)s” is not a valid UUID."
 msgstr ""
 
@@ -1641,6 +1885,7 @@ msgid "Image"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\related.py:778
+#, python-format
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
 msgstr ""
 
@@ -1653,10 +1898,12 @@ msgid "One-to-one relationship"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\related.py:1066
+#, python-format
 msgid "%(from)s-%(to)s relationship"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\db\models\fields\related.py:1067
+#, python-format
 msgid "%(from)s-%(to)s relationships"
 msgstr ""
 
@@ -1713,8 +1960,10 @@ msgid "The submitted file is empty."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\fields.py:537
+#, python-format
 msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural "Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1723,12 +1972,15 @@ msgid "Please either submit a file or check the clear checkbox, not both."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\fields.py:601
-msgid "Upload a valid image. The file you uploaded was either not an image or a corrupted image."
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\fields.py:763
 #: .\venv\Lib\site-packages\django\forms\fields.py:853
 #: .\venv\Lib\site-packages\django\forms\models.py:1275
+#, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
 
@@ -1752,6 +2004,7 @@ msgid ":"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\forms.py:207
+#, python-format
 msgid "(Hidden field %(name)s) %(error)s"
 msgstr ""
 
@@ -1760,12 +2013,14 @@ msgid "ManagementForm data is missing or has been tampered with"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\formsets.py:345
+#, python-format
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\forms\formsets.py:352
+#, python-format
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
 msgstr[0] ""
@@ -1781,15 +2036,20 @@ msgid "Delete"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\models.py:754
+#, python-format
 msgid "Please correct the duplicate data for %(field)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\models.py:758
+#, python-format
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\models.py:764
-msgid "Please correct the duplicate data for %(field_name)s which must be unique for the %(lookup)s in %(date_field)s."
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\models.py:773
@@ -1805,11 +2065,15 @@ msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\models.py:1277
+#, python-format
 msgid "“%(pk)s” is not a valid value."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\utils.py:162
-msgid "%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it may be ambiguous or it may not exist."
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\forms\widgets.py:395
@@ -1842,28 +2106,34 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:817
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:834
+#, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:836
+#, python-format
 msgid "%s KB"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:838
+#, python-format
 msgid "%s MB"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:840
+#, python-format
 msgid "%s GB"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:842
+#, python-format
 msgid "%s TB"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:844
+#, python-format
 msgid "%s PB"
 msgstr ""
 
@@ -2168,6 +2438,7 @@ msgid "This is not a valid IPv6 address."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\text.py:69
+#, python-format
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
 msgstr ""
@@ -2179,36 +2450,42 @@ msgid ", "
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:14
+#, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
@@ -2231,23 +2508,40 @@ msgid "CSRF verification failed. Request aborted."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:115
-msgid "You are seeing this message because this HTTPS site requires a “Referer header” to be sent by your Web browser, but none was sent. This header is required for security reasons, to ensure that your browser is not being hijacked by third parties."
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:120
-msgid "If you have configured your browser to disable “Referer” headers, please re-enable them, at least for this site, or for HTTPS connections, or for “same-origin” requests."
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:124
-msgid "If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or including the “Referrer-Policy: no-referrer” header, please remove them. The CSRF protection requires the “Referer” header to do strict referer checking. If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer\" …> for links to third-party sites."
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" …> for links to third-party sites."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:132
-msgid "You are seeing this message because this site requires a CSRF cookie when submitting forms. This cookie is required for security reasons, to ensure that your browser is not being hijacked by third parties."
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:137
-msgid "If you have configured your browser to disable cookies, please re-enable them, at least for this site, or for “same-origin” requests."
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\csrf.py:142
@@ -2278,18 +2572,24 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\dates.py:338
 #: .\venv\Lib\site-packages\django\views\generic\dates.py:367
+#, python-format
 msgid "No %(verbose_name_plural)s available"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\dates.py:589
-msgid "Future %(verbose_name_plural)s not available because %(class_name)s.allow_future is False."
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\dates.py:623
+#, python-format
 msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\detail.py:54
+#, python-format
 msgid "No %(verbose_name)s found matching the query"
 msgstr ""
 
@@ -2298,10 +2598,12 @@ msgid "Page is not “last”, nor can it be converted to an int."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\list.py:72
+#, python-format
 msgid "Invalid page (%(page_number)s): %(message)s"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\generic\list.py:154
+#, python-format
 msgid "Empty list and “%(class_name)s.allow_empty” is False."
 msgstr ""
 
@@ -2310,10 +2612,12 @@ msgid "Directory indexes are not allowed here."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\static.py:42
+#, python-format
 msgid "“%(path)s” does not exist"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\static.py:80
+#, python-format
 msgid "Index of %(directory)s"
 msgstr ""
 
@@ -2322,7 +2626,10 @@ msgid "Django: the Web framework for perfectionists with deadlines."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:346
-msgid "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:368
@@ -2330,7 +2637,12 @@ msgid "The install worked successfully! Congratulations!"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:369
-msgid "You are seeing this page because <a href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not configured any URLs."
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:384
@@ -2356,4 +2668,3 @@ msgstr ""
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:409
 msgid "Connect, get help, or contribute"
 msgstr ""
-
