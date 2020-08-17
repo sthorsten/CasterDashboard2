@@ -27,34 +27,6 @@ body {
 }
 
 /*
-  Base SCSS
- */
-@font-face {
-  font-family: "ScoutCond Bold";
-  src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
-}
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow: hidden;
-  width: 1920px;
-  height: 100%;
-  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
-}
-
-.d-none {
-  display: none !important;
-}
-
-.invisible {
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-/*
   Animations SCSS
  */
 .anim_scaleInRight {
@@ -206,140 +178,71 @@ body {
   }
 }
 /*
-  InGame SCSS
+  Rounds SCSS
  */
 div {
   height: 100%;
   width: 100%;
+  margin: 0;
 }
-div.d-disabled {
-  display: none !important;
-}
-div.main-bg {
+div.container {
   position: absolute;
-  height: 48px !important;
+  bottom: 20px;
+  width: 1920px;
+  height: max-content;
+  display: grid;
+  align-items: center;
+  justify-content: center;
 }
 div.main {
-  position: absolute;
+  bottom: 20px;
   display: grid;
-  grid-template-columns: 1fr 186px 1fr;
-  height: 48px !important;
-}
-div.container-left {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  background: linear-gradient(0.25turn, rgba(255, 255, 255, 0.3) 10%, rgba(255, 255, 255, 0.8) 80%);
-}
-div.container-right {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  background: linear-gradient(0.75turn, rgba(255, 255, 255, 0.3) 10%, rgba(255, 255, 255, 0.8) 80%);
-}
-div.container-center {
-  display: grid;
-  grid-template-columns: 54px 1fr 54px;
-  background: #111;
-}
-div.container-sponsor {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-}
-div.title-wrapper, div.title-wrapper-sm, div.title-wrapper-big {
-  display: flex;
-}
-div.title-wrapper-big {
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-}
-div.title-wrapper-sm {
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-}
-div.container-team, div.container-team-right, div.container-team-left {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-}
-div.container-team-left {
-  justify-content: flex-end;
-}
-div.container-team-right {
-  justify-content: start;
-}
-div.container-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-div.container-score, div.container-score-right, div.container-score-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-div.container-score-left {
-  background: #0870d3;
-}
-div.container-score-right {
-  background: #ea7516;
-}
-div.score {
-  width: 34px;
-  height: 8px;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  background: #555;
-}
-div.score.active {
-  background: yellow;
-  box-shadow: 0px 0px 2px 0px yellow;
-}
-
-img.logo, img.logo-team {
-  height: 40px;
-  width: 40px;
-}
-img.logo-team {
-  margin-left: 7px;
-  margin-right: 7px;
-}
-img.sponsor {
-  margin-right: 7px;
-  height: 40px;
+  grid-template-rows: 110px 46px;
   width: auto;
+  height: 156px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background: rgba(0, 0, 0, 0.7);
+}
+div.title-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 3px solid white;
 }
 
-span {
-  text-transform: uppercase;
-  color: #000;
+table {
+  margin: 5px;
+  border-collapse: collapse;
+  border-style: hidden;
 }
-span.title, span.title-sm, span.title-big {
-  margin-left: 7px;
+
+th, td {
+  border: 3px solid white;
+  text-align: center;
 }
-span.title-big {
-  margin-top: -4px;
+
+th {
+  padding-right: 5px;
+}
+
+img.logo {
+  margin: 5px;
+  width: 35px;
+  height: 35px;
+}
+img.win-icon {
+  margin: 5px 6px;
+  width: 35px;
+  height: 35px;
+}
+
+span.title {
+  width: 100%;
   font-size: 32px;
-}
-span.title-sm {
-  margin-top: -2px;
-  font-size: 24px;
-  line-height: 24px;
-}
-span.team-name-text, span.team-name-text-right, span.team-name-text-left {
-  margin-top: -4px;
-  margin-left: 7px;
-  margin-right: 7px;
-  font-size: 40px;
-}
-span.team-name-text-left {
-  margin-right: 14px;
-}
-span.team-name-text-right {
-  margin-left: 14px;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-/*# sourceMappingURL=ingame-white.css.map */
+/*# sourceMappingURL=rounds.css.map */

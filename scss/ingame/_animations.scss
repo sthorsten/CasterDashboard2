@@ -2,12 +2,16 @@
   Animations SCSS
  */
 
-.anim_scaleInRight{
+.anim_scaleInRight {
   animation: scaleInRight 0.5s;
 }
 
-.anim_scaleInLeft{
+.anim_scaleInLeft {
   animation: scaleInLeft 0.5s;
+}
+
+.anim_scaleInUp {
+  animation: scaleInUp 0.5s;
 }
 
 .anim_reverse {
@@ -131,5 +135,37 @@
     -webkit-transform: scale3d(1, 1, 1);
     transform: scale3d(1, 1, 1);
     transform-origin: right;
+  }
+}
+
+@-webkit-keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
   }
 }

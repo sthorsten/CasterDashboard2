@@ -1,9 +1,13 @@
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.translation import gettext_lazy as _
 
 
 def validate_image(image):
     if not image:
+        return
+
+    if isinstance(image, InMemoryUploadedFile):
         return
 
     try:
@@ -37,6 +41,9 @@ def validate_image(image):
 
 def validate_square_logo(image):
     if not image:
+        return
+
+    if isinstance(image, InMemoryUploadedFile):
         return
 
     if image.height != image.width:

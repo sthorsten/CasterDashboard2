@@ -1,13 +1,17 @@
-import logging
+"""
+Main database model definitions
+"""
+
 import os
+import logging
 from datetime import datetime
 
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import *
 from django.dispatch import receiver
+
 import caster_dashboard_2.settings as django_settings
 from dashboard.validators import *
 
@@ -15,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class OverwriteStorage(FileSystemStorage):
+    """Replaces existing files on model update"""
 
     def get_available_name(self, name, max_length=None):
         # Found at http://djangosnippets.org/snippets/976/
@@ -31,6 +36,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return "Profile: " + str(self.user)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        logger.debug("[User: %(user)s] Creating Profile via receiver" % {'user': instance})
+        Profile.objects.create(user=instance)
 
 
 class Version(models.Model):
@@ -166,6 +178,7 @@ def team_pre_save(sender, instance, **kwargs):
 def team_post_save(sender, instance, **kwargs):
     # Rename file to id
     if instance.team_logo:
+        instance.has_logo = True
         if not instance.team_logo.name.__contains__(str(instance.id)):
             old_path = os.path.join(django_settings.MEDIA_ROOT, instance.team_logo.name)
             new_path = os.path.join(django_settings.MEDIA_ROOT, "teams", str(instance.id) + ".png")

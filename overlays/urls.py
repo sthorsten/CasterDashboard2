@@ -7,4 +7,5 @@ urlpatterns = [
     path('<str:user_name>/ingame', views.ingame, name='ingame'),
     path('<str:user_name>/maps', views.maps, name='maps'),
     path('<str:user_name>/opbans', views.opbans, name='opbans'),
+    path('<str:user_name>/rounds', views.rounds, name='rounds'),
 ]

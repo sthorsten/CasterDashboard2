@@ -72,6 +72,10 @@ body {
   animation: scaleInLeft 0.5s;
 }
 
+.anim_scaleInUp {
+  animation: scaleInUp 0.5s;
+}
+
 .anim_reverse {
   animation-direction: reverse;
 }
@@ -178,6 +182,34 @@ body {
     -webkit-transform: scale3d(1, 1, 1);
     transform: scale3d(1, 1, 1);
     transform-origin: right;
+  }
+}
+@-webkit-keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
+@keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
   }
 }
 /*

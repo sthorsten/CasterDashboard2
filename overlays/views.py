@@ -100,4 +100,20 @@ def opbans(request, user_name):
 
 
 def rounds(request, user_name):
-    return
+    user = get_object_or_404(User, username=user_name)
+    match_overlay_data = MatchOverlayData.objects.get(user=user)
+    match = match_overlay_data.current_match
+    current_map = match_overlay_data.current_map
+    overlay_states = OverlayState.objects.get(user=user)
+    rounds = Round.objects.filter(match=match, map=current_map).all()
+
+    template_data = {
+        'overlay_user': user,
+        'match_overlay_data': match_overlay_data,
+        'match': match,
+        'current_map': current_map,
+        'overlay_states': overlay_states,
+        'rounds': rounds,
+    }
+
+    return render(request, 'rounds.html', template_data)

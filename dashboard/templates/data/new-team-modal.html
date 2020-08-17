@@ -11,7 +11,7 @@
             </div>
 
             <form id="new-team-form" class="needs-validation"
-                  enctype="multipart/form-data" method="post" action="/api/forms/teams/new"
+                  enctype="multipart/form-data" method="post" action=""
                   novalidate>
                 {% csrf_token %}
 
@@ -103,9 +103,26 @@
 {% include 'base/loading-modal.html' with  modal_id="add-team-loading-modal" title=_('Adding Team') %}
 
 <script>
-    $('#new-team-form').submit(function () {
+    $('#new-team-form').submit(function (e) {
+        e.preventDefault();
+
         // Loading modal
         $('#new-team-modal').modal('hide');
         $('#add-team-loading-modal').modal('show');
+
+        let form = $('#new-team-form')[0];
+        let formData = new FormData(form);
+
+        $.ajax({
+            url: '/api/data/teams/',
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false
+        }).fail(function () {
+            toastr.error("{% trans "Team could not be created. Please try again or contact an administrator!" %}");
+        }).done(function (){
+            location.reload();
+        });
     });
 </script>
