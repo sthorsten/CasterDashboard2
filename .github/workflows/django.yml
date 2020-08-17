@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8]
 
     steps:
     - name: Shutdown Ubuntu MySQL (SUDO)
@@ -23,7 +23,6 @@ jobs:
       with:
         character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
         collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-        mysql database: 'test_caster_dashboard_2' # Optional, default value is "test". The specified database which will be create
         mysql user: 'caster_dashboard_2' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
         mysql password: 'caster_dashboard_2' # Required if "mysql user" exists. The password for the "mysql user"
     - uses: actions/checkout@v2
