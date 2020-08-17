@@ -1,6 +1,6 @@
 # R6 Caster Dashboard
 
-[![Version](https://img.shields.io/badge/version-2.0.0--beta3-orange)](https://github.com/sthorsten/CasterDashboard2/releases)
+[![Version](https://img.shields.io/badge/version-2.0.0--alpha1-orange)](https://github.com/sthorsten/CasterDashboard2/releases)
 [![Django CI](https://github.com/sthorsten/CasterDashboard2/workflows/Django%20CI/badge.svg)](https://github.com/sthorsten/CasterDashboard2/actions)
 [![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE)
 
