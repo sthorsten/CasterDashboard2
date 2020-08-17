@@ -12,6 +12,7 @@
 
     // Variables
     let current_match = null;
+    let current_map = null;
     let score_blue = null;
     let score_orange = null;
     let overlay_state = null;
@@ -45,6 +46,9 @@
         $.getJSON("/api/overlay/current_match/{{ overlay_user.id }}/", function (data) {
             if (current_match === null) current_match = data['current_match'];
             if (current_match !== data['current_match']) location.reload();
+
+            if (current_map === null) current_map = data['current_map'];
+            if (current_map !== data['current_map']) location.reload();
         });
 
         // Match State
