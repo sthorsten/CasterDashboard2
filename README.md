@@ -23,10 +23,10 @@ If you want to help translate the Caster Dashboard, feel free to join the transl
 
 ## Changelog
 
-See the full [Changelog](CHANGELOG.md) for further information.
+See the full [Changelog](CHANGELOG) for further information.
 
 ## License
 
 This project is licensed under the GNU AGPLv3 license.
 
-See the full [License](LICENSE.md) for further information.
+See the full [License](LICENSE) for further information.
