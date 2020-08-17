@@ -9,17 +9,23 @@ This is the repository for the new Rainbow Six Siege Caster Dashboard.
 The dashboard aims to help Casters with production by providing easy-to-use and modular Overlays and control via a web dashboard.
 
 ## Features
-*To Do*
+*Coming Soon*
 
 ## Screenshots
-*To Do*
+*Coming Soon*
+
+## Contributing
+
+If you want to help me develop the dashboard, please get in touch (preferably via one of my social media channels).
 
 ## Translations
 
 ![POEditorEN](https://img.shields.io/poeditor/progress/366547/en?token=3ccd865457316dfc812702f32c533003)
 ![POEditorDE](https://img.shields.io/poeditor/progress/366547/de?token=3ccd865457316dfc812702f32c533003)
 
-If you want to help translate the Caster Dashboard, feel free to join the translation project on [POEditor.com](https://poeditor.com/projects/view?id=366547 
+If you want to help translate the Caster Dashboard, feel free to join the translation project on [POEditor.com](https://poeditor.com/join/project/eticzeSXau).
+You can also use the [direct link](https://poeditor.com/projects/view?id=366547) if you already joined the project.
+
 
 ## Changelog
 
