@@ -1,5 +1,15 @@
 @import "bootstrap-variables";
 
+@font-face {
+  font-family: 'ScoutCond Regular';
+  src: url("/static/fonts/ScoutCond-Regular.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'ScoutCond Bold';
+  src: url("/static/fonts/ScoutCond-Bold.woff") format('woff');
+}
+
 div.title-icon {
   width: max-content;
   padding: 1em;
@@ -104,6 +114,60 @@ div.card-divider {
   opacity: 1 !important;
 }
 
+.table.table-head-fixed thead tr:nth-child(1) th {
+  background: $gray-900;
+}
 
+.page-item.disabled .page-link {
+  color: #fff;
+  background: $gray-700;
+  border-color: $primary;
+}
+
+.dropdown-menu {
+  background: $gray-800;
+  color: #fff;
+}
+
+.dropdown-item {
+  color: #fff;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: $primary;
+}
+
+.bootstrap-select .no-results {
+  background: $dark;
+  color: #fff;
+}
+
+.form-control {
+  background: $gray-900;
+  color: #fff;
+}
+
+.form-control:focus {
+  background: $gray-900;
+  color: #fff;
+}
+
+// Login page
+.login-page, .register-page {
+  background: $dark;
+}
+
+.login-logo a, .register-logo a {
+  color: #fff;
+}
+
+.login-card-body, .register-card-body {
+  background: $gray-900;
+  color: #fff;
+}
+
+.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
+  background: $gray-900;
+}
 
 

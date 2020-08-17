@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load i18n %}
+
+{% include "base/head.html" with page_title="Register" %}
+
+<body class="hold-transition register-page">
+
+{% include "base/messages.html" %}
+
+<div class="register-box">
+    <div class="register-logo">
+        <a href="/">R6 <b>Caster Dashboard</b></a>
+    </div>
+
+    <div class="card">
+        <div class="card-body register-card-body">
+            <p class="login-box-msg">{% trans "Register a new account" %}</p>
+
+            <form action="/register/form" method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input id="username" name="username" type="text" class="form-control"
+                           placeholder="{% trans "Username" %}" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">{% trans "This field is required" %}!</div>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="email" name="email" type="email" class="form-control" placeholder="{% trans "Email" %}"
+                           required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">{% trans "This field is required" %}!</div>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="password" name="password" type="password" class="form-control"
+                           placeholder="{% trans "Password" %}" required minlength="8">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">{% trans "The password must be at least 8 characters long" %}!</div>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="confirm_password" name="confirm_password" type="password" class="form-control"
+                           placeholder="{% trans "Confirm Password" %}" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="agreeTerms" name="terms" value="agree" required>
+                                <label for="agreeTerms">
+                                    {% blocktrans with "Terms and Conditions" as tc %}
+                                        I agree to the <a href="/terms/">{{ tc }}</a>
+                                    {% endblocktrans %}
+                                </label>
+                                <div class="invalid-feedback">{% trans "You have to accept the terms and conditions" %}!</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block">{% trans "Register" %}</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            <div class="social-auth-links text-center">
+                <p class="text-uppercase">- {% trans "or" %} -</p>
+                <a href="login.html" class="text-center">{% trans "I already have an account" %}</a>
+            </div>
+
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<script>
+    toastr.options.closeButton = true;
+    toastr.options.timeOut = 10000;
+    toastr.options.extendedTimeOut = 1500;
+    toastr.options.progressBar = true;
+    toastr.options.positionClass = "toast-top-right";
+    toastr.options.showMethod = "slideDown";
+    toastr.options.hideMethod = "slideUp";
+    toastr.options.closeMethod = "slideUp";
+    toastr.options.closeDuration = 500;
+    toastr.options.hideDuration = 500;
+
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        toastr.error("{% trans "Please fill out all required fields!" %}", "{% trans "Error" %}")
+                    }
+                    if ($('#password').val() !== $('#confirm_password').val()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        toastr.error("{% trans "The passwords don't match! Please try again!" %}", "{% trans "Error" %}")
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Operator Bans" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="match_opbans" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-users-slash"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Operator Bans" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Matches" %}</li>
+    <li class="breadcrumb-item active">{{ match.id }}</li>
+    <li class="breadcrumb-item active">{{ map }}</li>
+    <li class="breadcrumb-item active">{% trans "Operator Bans" %}</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-xl-6 col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Settings" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <label>{% trans "Team Starting ATK" %}</label>
+
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <button id="atk_team_blue_btn"
+                                            {% if map_settings.atk_team == match.team_blue %}
+                                            class="btn btn-primary w-100"
+                                            {% else %}
+                                            class="btn btn-outline-primary w-100"
+                                            {% endif %}
+                                            data-value="{{ match.team_blue.id }}"
+                                            onclick="setATKTeam(this)">
+                                        {{ match.team_blue }}
+                                    </button>
+                                </div>
+                                <div class="col-xl-6">
+                                    <button id="atk_team_orange_btn"
+                                            {% if map_settings.atk_team == match.team_orange %}
+                                            class="btn btn-primary w-100"
+                                            {% else %}
+                                            class="btn btn-outline-primary w-100"
+                                            {% endif %}
+                                            data-value="{{ match.team_orange.id }}"
+                                            onclick="setATKTeam(this)">
+                                        {{ match.team_orange }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label>{% trans "Team Starting ATK (Overtime)" %} ({% trans "optional" %})</label>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <button id="ot_atk_team_blue_btn"
+                                            {% if map_settings.ot_atk_team == match.team_blue %}
+                                            class="btn btn-primary w-100"
+                                            {% else %}
+                                            class="btn btn-outline-primary w-100"
+                                            {% endif %}
+                                            data-value="{{ match.team_blue.id }}"
+                                            onclick="setOTATKTeam(this)">
+                                        {{ match.team_blue }}
+                                    </button>
+                                </div>
+                                <div class="col-xl-6">
+                                    <button id="ot_atk_team_orange_btn"
+                                            {% if map_settings.ot_atk_team == match.team_orange %}
+                                            class="btn btn-primary w-100"
+                                            {% else %}
+                                            class="btn btn-outline-primary w-100"
+                                            {% endif %}
+                                            data-value="{{ match.team_orange.id }}"
+                                            onclick="setOTATKTeam(this)">
+                                        {{ match.team_orange }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-4"></div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>{% trans "Swap Teams" %}?</label><br>
+                        </div>
+                        <div class="col-xl-2 col-md-3 col-4">
+                            {% trans "Team Blue" %}:<br>
+                            <i>{{ match.team_blue }}</i>
+                        </div>
+                        <div class="col-xl-8 col-md-6 col-4">
+                            <button class="btn btn-primary w-100 h-100" onclick="swapTeams()">
+                                <i class="fas fa-long-arrow-alt-left"></i>
+                                {% trans "Swap Teams" %}
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </button>
+                        </div>
+                        <div class="col-xl-2 col-md-3 col-4 text-right">
+                            {% trans "Team Orange" %}:<br>
+                            <i>{{ match.team_orange }}</i>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-4"></div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>{% trans "Current Operator Bans" %}:</label>
+
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-2 text-center mr-2">
+                                    {% if operator_bans|length >= 1 %}
+                                        <img id="ban1_icon" src="/media/operators/{{ operator_bans.0.operator.id }}.svg"
+                                             style="height: 40px"><br>
+                                        <span id="ban1_text">{{ operator_bans.0.operator }}</span><br>
+                                        <i id="ban1_team">{{ operator_bans.0.team.name }}</i>
+                                    {% else %}
+                                        <img id="ban1_icon" alt="-" style="height: 40px"><br>
+                                        <span id="ban1_text">{% trans "Not Selected" %}</span><br>
+                                        <i id="ban1_team"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="col-2 text-center mr-2">
+                                    {% if operator_bans|length >= 2 %}
+                                        <img id="ban2_icon" src="/media/operators/{{ operator_bans.1.operator.id }}.svg"
+                                             style="height: 40px"><br>
+                                        <span id="ban2_text">{{ operator_bans.1.operator }}</span><br>
+                                        <i id="ban2_team">{{ operator_bans.1.team.name }}</i>
+                                    {% else %}
+                                        <img id="ban2_icon" alt="-" style="height: 40px"><br>
+                                        <span id="ban2_text">{% trans "Not Selected" %}</span><br>
+                                        <i id="ban2_team"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="col-2 text-center mr-2">
+                                    {% if operator_bans|length >= 3 %}
+                                        <img id="ban3_icon" src="/media/operators/{{ operator_bans.2.operator.id }}.svg"
+                                             style="height: 40px"><br>
+                                        <span id="ban3_text">{{ operator_bans.2.operator }}</span><br>
+                                        <i id="ban3_team">{{ operator_bans.2.team.name }}</i>
+                                    {% else %}
+                                        <img id="ban3_icon" alt="-" style="height: 40px"><br>
+                                        <span id="ban3_text">{% trans "Not Selected" %}</span><br>
+                                        <i id="ban3_team"></i>
+                                    {% endif %}
+                                </div>
+                                <div class=" col-2 text-center">
+                                    {% if operator_bans|length >= 4 %}
+                                        <img id="ban4_icon" src="/media/operators/{{ operator_bans.3.operator.id }}.svg"
+                                             style="height: 40px"><br>
+                                        <span id="ban4_text">{{ operator_bans.3.operator }}</span><br>
+                                        <i id="ban4_team">{{ operator_bans.3.team.name }}</i>
+                                    {% else %}
+                                        <img id="ban4_icon" alt="-" style="height: 40px"><br>
+                                        <span id="ban4_text">{% trans "Not Selected" %}</span><br>
+                                        <i id="ban4_team"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-4"></div>
+
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <button class="btn btn-danger w-100" onclick="resetOperatorBan('single')">
+                                {% trans "Remove Last Operator Ban" %}
+                            </button>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <button class="btn btn-danger w-100" onclick="resetOperatorBan('all')">
+                                {% trans "Remove All Operator Bans" %}
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <a class="btn btn-primary w-100" href="/dashboard/matches/{{ match.id }}/map/{{ map.id }}/rounds">
+                                {% trans "Continue to Rounds" %}
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- ./col -->
+
+        <div class="col-xl-6 col-12">
+
+            <div class="card card-danger card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Operator Bans" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-xl-6 text-center">
+                            <label>{% trans "ATK Operators" %}</label>
+                            <input id="atk_ops_search" class="form-control mb-4" placeholder="{% trans "Search" %}...">
+
+                            <div id="atk_ops_container" class="row">
+                                {% for op in atk_ops %}
+                                    <div class="col-6">
+                                        <button id="ban_{{ op.id }}_btn"
+                                                class="btn btn-secondary text-left w-100 mb-2 {% if operator_bans|length > 1 or operator_bans|length == 4 %}disabled{% endif %}"
+                                                data-value="{{ op.id }}"
+                                                onclick="banOperator(this)">
+                                            <img src="/media/operators/{{ op.id }}.svg" style="height: 30px;">
+                                            {{ op.name }}
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 text-center">
+                            <label>{% trans "DEF Operators" %}</label>
+                            <input id="def_ops_search" class="form-control mb-4" placeholder="{% trans "Search" %}...">
+
+                            <div id="def_ops_container" class="row">
+                                {% for op in def_ops %}
+                                    <div class="col-6">
+                                        <button id="ban_{{ op.id }}_btn"
+                                                class="btn btn-secondary text-left w-100 mb-2 {% if operator_bans|length <= 1 or operator_bans|length == 4 %}disabled{% endif %}"
+                                                data-value="{{ op.id }}"
+                                                onclick="banOperator(this)">
+                                            <img src="/media/operators/{{ op.id }}.svg" style="height: 30px;">
+                                            {{ op.name }}
+                                        </button>
+
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% include "matches/opbans-script.html" %}
+
+{% endblock %}
+

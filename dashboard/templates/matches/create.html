@@ -1,0 +1,252 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Create a Match" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="match_create" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-plus"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Create a match" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Matches" %}</li>
+    <li class="breadcrumb-item active">{% trans "Create a match" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-6 col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+
+                <form class="form needs-validation" novalidate method="post" action="/dashboard/matches/create/new">
+                    {% csrf_token %}
+
+                    <div class="card-body bg-gray-800 text-white">
+
+                        <h5 class="card-title card-title-upper">{% trans "Create a match" %}:</h5><br>
+                        <div class="card-divider"></div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-league">{% trans "Select League" %}</label><br>
+                                    <select id="new-match-league" name="new-match-league"
+                                            class="selectpicker form-control"
+                                            data-style="bg-dark-900 text-white border"
+                                            data-live-search="true" title="{% trans "Please select..." %}" required>
+                                        {% for l in leagues %}
+                                            {% if not l.is_restricted %}
+                                                <option value="{{ l.id }}">{{ l.name }}</option>
+                                            {% else %}
+                                                {% for lg in league_groups %}
+                                                    {% if lg.league == l %}
+                                                        <option value="{{ l.id }}">{{ l.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-season">{% trans "Select Season" %}</label><br>
+                                    <select id="new-match-season" name="new-match-season"
+                                            class="selectpicker form-control"
+                                            data-style="bg-dark-900 text-white border"
+                                            data-live-search="true" title="{% trans "Please select..." %}" required>
+                                        {% for s in seasons %}
+                                            {% if s.official_season %}
+                                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                            {% else %}
+                                                {% if s.league %}
+                                                    {% if not s.league.is_restricted %}
+                                                        <option value="{{ s.id }}">{{ s.name }}</option>
+                                                    {% else %}
+                                                        {% for lg in league_groups %}
+                                                            {% if lg.league == s.league %}
+                                                                <option value="{{ s.id }}">{{ s.name }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    <option value="{{ s.id }}">{{ s.name }}</option>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label>{% trans "Best Of" %}</label>
+                                <br class="mb-2">
+                                <div class="icheck-primary d-inline mr-2">
+                                    <input type="radio" name="new-match-bestof" id="bo1" value="1" required>
+                                    <label for="bo1">{{ _('Best Of 1') }}</label>
+                                </div>
+                                <div class="icheck-primary d-inline mr-2">
+                                    <input type="radio" name="new-match-bestof" id="bo2" value="2" required>
+                                    <label for="bo2">{{ _('Best Of 2') }}</label>
+                                </div>
+                                <div class="icheck-primary d-inline mr-2">
+                                    <input type="radio" name="new-match-bestof" id="bo3" value="3" required>
+                                    <label for="bo3">{{ _('Best Of 3') }}</label>
+                                </div>
+                                <div class="icheck-primary d-inline mr-2">
+                                    <input type="radio" name="new-match-bestof" id="bo5" value="5" required>
+                                    <label for="bo5">{{ _('Best Of 5') }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-divider mt-2"></div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-title">{% trans "Match Title" %}</label>
+                                    <input id="new-match-title" name="new-match-title" type="text" class="form-control"
+                                           maxlength="22" required placeholder="{% trans "e.g. EULeague" %}">
+                                </div>
+                            </div>
+                            <div class=" col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-subtitle">{% trans "Playday" %}
+                                        ({% trans "optional" %})</label>
+                                    <input id="new-match-subtitle" name="new-match-subtitle" type="text"
+                                           class="form-control" maxlength="22"
+                                           placeholder="{% trans "e.g. Playday #1" %}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-team-blue">{% trans "Team Blue" %}</label>
+                                    <select id="new-match-team-blue" name="new-match-team-blue"
+                                            class="selectpicker form-control"
+                                            data-style="bg-dark-900 text-white border"
+                                            data-live-search="true" title="{% trans "Please select..." %}" required>
+                                        {% for t in teams %}
+                                            <option value="{{ t.id }}">{{ t.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="new-match-team-orange">{% trans "Team Orange" %}</label>
+                                    <select id="new-match-team-orange" name="new-match-team-orange"
+                                            class="selectpicker form-control"
+                                            data-style="bg-dark-900 text-white border"
+                                            data-live-search="true" title="{% trans "Please select..." %}" required>
+                                        {% for t in teams %}
+                                            <option value="{{ t.id }}">{{ t.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-divider mt-2"></div>
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label for="new-match-sponsors">{% trans "Sponsors" %} ({% trans "optional" %})</label>
+                                <select id="new-match-sponsors" name="new-match-sponsors"
+                                        class="selectpicker form-control" multiple="multiple"
+                                        data-style="bg-dark-900 text-white border"
+                                        data-live-search="true" title="{% trans "Please select..." %}">
+                                    {% for s in sponsors %}
+                                        {% if s.public %}
+                                            <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% else %}
+                                            {% if s.league.is_restricted %}
+                                                {% for lg in league_groups %}
+                                                    {% if lg.league == s.league and lg.user == lg.user %}
+                                                        <option value="{{ s.id }}">{{ s.name }} ({{ s.league }})
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col d-flex">
+                                <div class="icheck-primary d-inline mr-2 w-100 text-center">
+                                    <input type="checkbox" name="new-match-dummy" id="new-match-dummy">
+                                    <label for="new-match-dummy">{{ _('Create as Dummy Match') }}?</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer bg-gray-700">
+                        <div class="row justify-content-center">
+                            <button class="btn btn-primary pl-4 pr-4" type="submit">{% trans "Create Match" %}</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-12">
+
+
+            <div class="card card-danger card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Quick Actions" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row mb-2">
+                        <div class="col">
+                            <i>{% trans "Missing a team?" %}</i>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger w-100 mb-2" data-toggle="modal"
+                            data-target="#new-team-modal">
+                        {% trans "Add a new team" %}
+                    </button>
+                    <button class="btn btn-secondary w-100 mb-2">Test</button>
+                    <button class="btn btn-secondary w-100 mb-2">Test</button>
+                    <button class="btn btn-secondary w-100">Test</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'data/new-team-modal.html' %}
+
+
+{% endblock %}
+

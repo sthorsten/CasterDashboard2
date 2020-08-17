@@ -30,26 +30,6 @@
                     {% trans "Changelog" %}
                 </a>
             </li>
-            {% if user.is_staff %}
-                <li class="nav-item dropdown">
-                    <a id="admin-dropdown-link" class="nav-link dropdown-toggle"
-                       data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false" href="#">
-                        <i class="fas fa-tools"></i>
-                        {% trans "Administration" %}
-                    </a>
-                    <ul class="dropdown-menu border-0 shadow"
-                        aria-labelledby="admin-dropdown-link">
-                        <li>
-                            <a href="/admin" target="_blank"
-                               class="dropdown-item">{% trans "Django Admin" %}</a>
-                        </li>
-                        <li>
-                            <a href="" class="dropdown-item">Item</a>
-                        </li>
-                    </ul>
-                </li>
-            {% endif %}
         </ul>
 
 
@@ -66,16 +46,25 @@
                             <span class="user-email">{{ user.email }}</span>
                         </div>
                     </div>
-
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right border-0 shadow"
                     aria-labelledby="user-menu">
+                    {% if user.is_staff %}
+                        <li class="dropdown-header">{% trans "Administration" %}</li>
+                        <li>
+                            <a href="/admin" target="_blank"
+                               class="dropdown-item text-center">{% trans "Django Admin" %}</a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                    {% endif %}
+
+
+                    <li class="dropdown-header">{% trans "User" %}</li>
                     <li>
-                        <a href="/admin" target="_blank"
-                           class="dropdown-item">{% trans "Django Admin" %}</a>
+                        <a href="" class="dropdown-item text-center">{% trans "Profile & Settings" %}</a>
                     </li>
                     <li>
-                        <a href="" class="dropdown-item">Item</a>
+                        <a href="/logout" class="dropdown-item text-center">{% trans "Log out" %}</a>
                     </li>
                 </ul>
             </li>

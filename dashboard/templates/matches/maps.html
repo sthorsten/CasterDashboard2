@@ -1,0 +1,185 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Map Picks & Bans" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="match_maps" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-map"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Map Picks & Bans" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Matches" %}</li>
+    <li class="breadcrumb-item active">{{ match.id }}</li>
+    <li class="breadcrumb-item active">{% trans "Map Picks & Bans" %}</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-6 col-12">
+
+            <div class="row">
+                <div class="col">
+
+                    <div class="card card-danger card-outline-all mb-3">
+                        <div class="card-body bg-gray-800 text-white">
+
+                            <h5 class="card-title card-title-upper">{% trans "Map Picks & Bans Settings" %}:</h5><br>
+                            <div class="card-divider"></div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="first_ban_team">{% trans "Team, that starts banning" %}:</label>
+                                    <select id="first_ban_team" class="form-control w-100" type="text"
+                                            onchange="setFirstBanTeam(this)">
+                                        <option value="" selected disabled
+                                                hidden>{% trans "Please select..." %}</option>
+                                        <option value="{{ match.team_blue.id }}">{{ match.team_blue }}</option>
+                                        <option value="{{ match.team_orange.id }}">{{ match.team_orange }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="card-divider mt-4"></div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="map_pool_select">{% trans "Select a map pool" %}:</label>
+                                    <select id="map_pool_select" class="form-control w-100" type="text"
+                                            onchange="changeMapPool(this)">
+                                        <option value="competetive" selected="selected">{% trans "Competetive" %}
+                                            ({% trans "default" %})
+                                        </option>
+                                        <option value="all">{% trans "All Maps" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="card-divider mt-4"></div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <button id="reset_all" class="btn btn-danger w-100 mb-2"
+                                            data-toggle="modal" data-target="#reset-map-confirm-modal">
+                                        {% trans "Reset All Maps" %}
+                                    </button>
+                                    <a id="continue_btn"
+                                            {% if next_map_id %}
+                                       href="/dashboard/matches/{{ match.id }}/map/{{ next_map_id }}/opbans"
+                                            {% endif %}
+                                       class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div><!-- ./col -->
+            </div><!-- ./row -->
+
+            <div class="row">
+                <div class="col">
+
+                    <div class="card card-success card-outline-all mb-3">
+                        <div class="card-body bg-gray-800 text-white">
+
+                            <h5 class="card-title card-title-upper">{% trans "Log" %}:</h5><br>
+                            <div class="card-divider"></div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <i id="no_log">{% trans "Nothing here yet" %}.</i>
+                                    <ul id="log" class="pl-3 d-none">
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div><!-- ./col -->
+            </div><!-- ./row-->
+
+        </div>
+
+        <div class="col-lg-6 col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Map Picks & Bans" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    {% for m in maps %}
+                        {% if m.name == "Bank" or m.name == "Border" %}
+                            <div id="map{{ m.id }}_container" class="row d-none">
+                                <div class="col text-center mt-auto mb-auto">
+                                    <span>{{ m }}</span><br>
+                                    <div id="map_{{ m.id }}_badge"
+                                         class="badge badge-primary">{% trans "Not selected yet" %}</div>
+                                    <br>
+                                    <i id="map_{{ m.id }}_team"></i>
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <button id="ban_{{ m.id }}_btn" class="btn btn-danger h-100 mb-1"
+                                            onclick="banMap({{ m.id }})">{% trans "Ban Map" %}</button>
+                                    <button id="pick_{{ m.id }}_btn" class="btn btn-success h-100 mb-1"
+                                            onclick="pickMap({{ m.id }})">{% trans "Pick Map" %}</button>
+                                    <button id="reset_{{ m.id }}_btn" class="btn btn-secondary h-100"
+                                            onclick="resetMap({{ m.id }})">{% trans "Reset" %}</button>
+                                </div>
+                                <div class="col-4">
+                                    <img src="/media/maps/{{ m.id }}.png" class="w-100">
+                                </div>
+                            </div>
+
+                            <div id="map{{ m.id }}_divider" class="card-divider mt-3 d-none"></div>
+                        {% else %}
+                            <div id="map{{ m.id }}_container" class="row">
+                                <div class="col text-center mt-auto mb-auto">
+                                    <span>{{ m }}</span><br>
+                                    <div id="map_{{ m.id }}_badge"
+                                         class="badge badge-pill badge-primary">{% trans "Not selected yet" %}</div>
+                                    <br>
+                                    <i id="map_{{ m.id }}_team"></i>
+                                </div>
+                                <div class="col-3 d-flex flex-column">
+                                    <button id="ban_{{ m.id }}_btn" class="btn btn-danger h-100 mb-1"
+                                            onclick="banMap({{ m.id }})">{% trans "Ban Map" %}</button>
+                                    <button id="pick_{{ m.id }}_btn" class="btn btn-success h-100 mb-1"
+                                            onclick="pickMap({{ m.id }})">{% trans "Pick Map" %}</button>
+                                    <button id="reset_{{ m.id }}_btn" class="btn btn-secondary h-100"
+                                            onclick="resetMap({{ m.id }})">{% trans "Reset" %}</button>
+                                </div>
+                                <div class="col-4">
+                                    <img src="/media/maps/{{ m.id }}.png" class="w-100">
+                                </div>
+                            </div>
+
+                            <div id="map{{ m.id }}_divider" class="card-divider mt-3"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "base/confirm-modal.html" with id='reset-map' title=_('Reset All Maps') text=_('Are you sure you want to remove all maps?') confirm_btn_fn="resetAllMaps()" confirm_btn_text=_('Reset All Maps') %}
+
+    {% include "matches/maps-script.html" %}
+
+{% endblock %}
+

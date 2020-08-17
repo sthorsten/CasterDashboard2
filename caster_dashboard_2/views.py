@@ -1,5 +1,1 @@
-from django.shortcuts import redirect
-
-
-def index(request):
-    return redirect()
+from django.shortcuts import redirect, render

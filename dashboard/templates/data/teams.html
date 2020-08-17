@@ -1,0 +1,119 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Teams" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="teams" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-users"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Teams" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active"><a href="/">{% trans "Data" %}</a></LI>
+    <li class="breadcrumb-item active">{% trans "Teams" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "You have access to the following teams" %}:</h5>
+                    <br><br>
+
+                    <div class="table-responsive" style="height: 400px;">
+                        <table class="table table-sm table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{% trans "Team" %}</th>
+                                <th>{% trans "Logo" %}</th>
+                                <th>{% trans "Edit Team" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for t in teams %}
+                                <tr>
+                                    <td>{{ t.id }}</td>
+                                    <td>{{ t.name }}</td>
+                                    {% if t.has_logo %}
+                                        <td>
+                                            <img src="/media/teams/{{ t.id }}.png" alt="-"
+                                                 style="height: 30px; width: 30px;">
+                                        </td>
+                                    {% else %}
+                                        <td>{% trans "-" %}</td>
+                                    {% endif %}
+                                    <td>
+                                        <button class="btn btn-sm btn-warning" data-teamid="{{ t.id }}"
+                                                onclick="editTeam(this)">{% trans "Change Logo" %}</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-gray-700">
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-success pl-4 pr-4" data-toggle="modal"
+                                data-target="#new-team-modal">
+                            {% trans "Add a new team" %}
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Info Box -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h3>
+                    <i class="icon fas fa-info"></i>
+                    {% trans "Info" %}
+                </h3>
+                <p>
+                    {% trans "You can create a new team by clicking the 'Add Team' button" %}.<br>
+                    {% trans "If you create a team, it will be available globally to all other users as well" %}.<br>
+                    {% trans "You can NOT remove a team, but change it's logo by clicking the 'Change Logo' button for the team you want to edit" %}.<br>
+                    {% trans "If you want a team to be removed, please contact an admin" %}.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% include "data/new-team-modal.html" %}
+    {% include "data/edit-team-modal.html" %}
+
+    <script>
+        function editTeam(elem) {
+            changeTeamID = $(elem).attr("data-teamid");
+            $("#edit_team_id").attr("value", changeTeamID);
+            $('#edit-team-modal').modal('show');
+        }
+    </script>
+
+{% endblock %}

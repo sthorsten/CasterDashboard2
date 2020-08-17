@@ -1,0 +1,122 @@
+<script>
+    // HTML Elements
+    let main = $('#main');
+    let table = $('#rounds-table');
+    let center_title = $('#title-container');
+
+    // Variables
+    let current_match = null;
+    let current_map = null;
+    let overlay_state = null;
+    let round_count = null;
+
+    $(document).ready(function () {
+        round_count = {{ rounds|length }};
+        console.log(round_count);
+
+        // Data
+        update();
+        setInterval(update, 1000);
+    });
+
+    function update() {
+        // Current Match
+        $.getJSON("/api/overlay/current_match/{{ overlay_user.id }}/", function (data) {
+            if (current_match === null) current_match = data['current_match'];
+            if (current_match !== data['current_match']) location.reload();
+
+            if (current_map === null) current_map = data['current_map'];
+            if (current_map !== data['current_map']) location.reload();
+        });
+
+        // Get Current Rounds
+        $.getJSON("/api/matches/rounds/{{ match.id }}/{{ current_map.id }}/", function (data) {
+            if (data.length !== round_count) location.reload();
+        })
+
+        // Overlay State
+        $.getJSON("/api/overlay/overlay_state/{{ overlay_user.id }}/", function (data) {
+            if (overlay_state === null) {
+                overlay_state = data['rounds_state'];
+                if (overlay_state) animateIN();
+            } else {
+                if (overlay_state !== data['rounds_state']) {
+                    console.log("state_changed");
+                    overlay_state = data['rounds_state'];
+                    if (overlay_state) {
+                        $('#main').removeClass("d-disabled");
+                        animateIN();
+                    } else {
+                        animateOUT();
+                        setTimeout(function () {
+                            $('#main').addClass("d-disabled");
+                        }, 2000)
+                    }
+                }
+            }
+        });
+    }
+
+    function animateIN() {
+        // Start 1s. after page load
+        setTimeout(function () {
+            main.removeClass("d-none");
+            main.addClass("animate__animated animate__faster animate__slideInUp");
+        }, 1000)
+
+        // Table (1.3s.)
+        setTimeout(function () {
+            table.removeClass("invisible");
+            table.addClass("anim_scaleInLeft");
+        }, 1300)
+
+        // Round Icons (1.8+ s.)
+        for (let i = 1; i <= round_count; i++) {
+            setTimeout(function () {
+                $('#round' + i).removeClass("invisible");
+                $('#round' + i).addClass("animate__animated animate__faster animate__zoomIn");
+            }, 1800 + ((i - 1) * 500));
+
+            setTimeout(function () {
+                $('#round' + i).removeClass("animate__animated animate__faster animate__zoomIn");
+            }, 2500 + ((i - 1) * 500))
+        }
+
+        // Remove animation classes
+        setTimeout(function () {
+            main.removeClass("animate__animated animate__faster animate__slideInUp");
+            table.removeClass("anim_scaleInLeft");
+        }, 2500)
+    }
+
+    function animateOUT() {
+        // Remove Round Icons
+        for (let i = 1; i <= round_count; i++) {
+            $('#round' + i).addClass("animate__animated animate__faster animate__zoomOut");
+            setTimeout(function () {
+                $('#round' + i).removeClass("animate__animated animate__faster animate__zoomOut");
+                $('#round' + i).addClass("invisible");
+            }, 1000 + ((i - 1) * 500));
+        }
+
+        // Remove Table
+        setTimeout(function () {
+            table.addClass("anim_scaleInLeft anim_reverse");
+        }, 500)
+
+        // Remove Main
+        setTimeout(function () {
+            table.addClass("invisible");
+            main.addClass("animate__animated animate__faster animate__slideOutDown");
+        }, 1000)
+
+        // Remove animation classes
+        setTimeout(function () {
+            table.removeClass("anim_scaleInLeft anim_reverse");
+            main.removeClass("animate__animated animate__faster animate__slideOutDown");
+            main.addClass("d-none");
+        }, 1500)
+    }
+
+
+</script>

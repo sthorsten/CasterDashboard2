@@ -27,7 +27,8 @@
 
                 <!-- Overview -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/matches/history"
+                       class="nav-link {% if active_page == "match_history" %}active{% endif %}">
                         <i class="nav-icon fas fa-list-ul"></i>
                         <p>
                             {% trans "Overview & History" %}
@@ -37,7 +38,8 @@
 
                 <!-- Create -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/matches/create"
+                       class="nav-link {% if active_page == "match_create" %}active{% endif %}">
                         <i class="nav-icon fas fa-plus"></i>
                         <p>
                             {% trans "Create" %}
@@ -46,7 +48,7 @@
                 </li>
 
                 <!-- Play -->
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview {% if active_page == "match_overview" or active_page == "match_maps" or active_page == "match_rounds" %}menu-open{% endif %}">
                     <a class="nav-link">
                         <i class="nav-icon fas fa-play-circle"></i>
                         <p>
@@ -59,39 +61,41 @@
 
                         <!-- Match Overview -->
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="" class="nav-link {% if active_page == "match_overview" %}active{% endif %}">
                                 <p>
-                                    <i class="far fa-circle nav-icon"></i>
+                                    {% if active_page == "match_overview" %}
+                                        <i class="fas fa-chevron-circle-right nav-icon"></i>
+                                    {% else %}
+                                        <i class="far fa-circle nav-icon"></i>
+                                    {% endif %}
                                     {% trans "Match Overview" %}
                                 </p>
                             </a>
                         </li>
 
-                        <!-- Match Overview -->
+                        <!-- Map Picks & Bans -->
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="" class="nav-link {% if active_page == "match_maps" %}active{% endif %}">
                                 <p>
-                                    <i class="far fa-circle nav-icon"></i>
+                                    {% if active_page == "match_maps" %}
+                                        <i class="fas fa-chevron-circle-right nav-icon"></i>
+                                    {% else %}
+                                        <i class="far fa-circle nav-icon"></i>
+                                    {% endif %}
                                     {% trans "Map Pick & Bans" %}
                                 </p>
                             </a>
                         </li>
 
-                        <!-- Match Overview -->
+                        <!-- Rounds -->
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="" class="nav-link {% if active_page == "match_rounds" %}active{% endif %}">
                                 <p>
-                                    <i class="far fa-circle nav-icon"></i>
-                                    {% trans "Operator Bans" %}
-                                </p>
-                            </a>
-                        </li>
-
-                        <!-- Match Overview -->
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <p>
-                                    <i class="far fa-circle nav-icon"></i>
+                                    {% if active_page == "match_rounds" %}
+                                        <i class="fas fa-chevron-circle-right nav-icon"></i>
+                                    {% else %}
+                                        <i class="far fa-circle nav-icon"></i>
+                                    {% endif %}
                                     {% trans "Rounds" %}
                                 </p>
                             </a>
@@ -105,7 +109,8 @@
 
                 <!-- Control Center -->
                 <li class="nav-item">
-                    <a href="/dashboard/overlays/control-center" class="nav-link {% if active_page == "control-center" %}active{% endif %}">
+                    <a href="/dashboard/overlays/control-center"
+                       class="nav-link {% if active_page == "control-center" %}active{% endif %}">
                         <i class="nav-icon fas fa-desktop"></i>
                         <p>
                             {% trans "Control Center" %}
@@ -128,7 +133,8 @@
 
                 <!-- Leagues -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/data/leagues"
+                       class="nav-link {% if active_page == "leagues" %}active{% endif %}">
                         <i class="nav-icon fas fa-trophy"></i>
                         <p>
                             {% trans "Leagues" %}
@@ -138,7 +144,8 @@
 
                 <!-- Seasons -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/data/seasons"
+                       class="nav-link {% if active_page == "seasons" %}active{% endif %}">
                         <i class="nav-icon fas fa-calendar-alt"></i>
                         <p>
                             {% trans "Seasons" %}
@@ -148,7 +155,8 @@
 
                 <!-- Sponsors -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/data/sponsors"
+                       class="nav-link {% if active_page == "sponsors" %}active{% endif %}">
                         <i class="nav-icon fas fa-money-bill-alt"></i>
                         <p>
                             {% trans "Sponsors" %}
@@ -158,7 +166,7 @@
 
                 <!-- Teams -->
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="/dashboard/data/teams" class="nav-link {% if active_page == "teams" %}active{% endif %}">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             {% trans "Teams" %}

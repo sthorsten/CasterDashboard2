@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<!-- Loading modal -->
+<div class="modal fade" role="dialog" id="{{ modal_id }}">
+    <div class="modal-dialog modal-sm" role="document">
+
+        <div class="modal-content">
+            <div class="modal-body bg-dark">
+
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    <br><br>
+                    <span>{{ title }} - {% trans "Please wait..." %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

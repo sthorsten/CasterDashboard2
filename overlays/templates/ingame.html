@@ -1,0 +1,127 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InGame Overlay - Caster Dashboard</title>
+
+    <!-- CSS -->
+    <!-- Animate.css -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
+    <!-- Main CSS -->
+    {% if overlay_styles.ingame_style == "default" %}
+        <link rel="stylesheet" href="{% static "css/ingame.css" %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static "css/ingame-"|add:overlay_styles.ingame_style|add:".css" %}">
+    {% endif %}
+
+    <!-- JS -->
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div id="main-bg" class="main-bg invisible"></div>
+<div id="main" class="main d-none {% if not overlay_states.ingame_state %}d-disabled{% endif %}">
+
+    <div id="container-left" class="container-left invisible">
+        <div class="container-title">
+            {% if match.subtitle %}
+                <div id="title-wrapper" class="title-wrapper-sm">
+                    <span id="title" class="title-sm">{{ match.title }}</span>
+                    <span id="playday" class="title-sm">{{ match.subtitle }}</span>
+                </div>
+            {% else %}
+                <div id="title-wrapper" class="title-wrapper-big">
+                    <span id="title" class="title-big">{{ match.title }}</span>
+                </div>
+            {% endif %}
+
+            <div id="map-pick" class="title-wrapper-big d-none">
+                <span class="title-big">{% trans "Map Pick" %}</span>
+                {% if current_map_pick_team %}
+                    <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}.png"
+                         alt="">
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="container-team container-team-left">
+            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_blue.id }}.png" alt="">
+            <span id="team-blue-name" class="team-name-text-left">{{ match.team_blue }}</span>
+        </div>
+    </div>
+
+    <div class="container-center">
+        <div id="score-left" class="invisible">
+            {% if match.best_of == 1 %}
+                <div id="score-left-1" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 2 or match.best_of == 3 %}
+                <div id="score-left-2" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                    <div id="score-left-inner-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 5 %}
+                <div id="score-left-3" class="container-score-left">
+                    <div id="score-left-inner-1" class="score {% if match.score_blue >= 1 %}active{% endif %}"></div>
+                    <div id="score-left-inner-2" class="score {% if match.score_blue >= 2 %}active{% endif %}"></div>
+                    <div id="score-left-inner-3" class="score {% if match.score_blue >= 3 %}active{% endif %}"></div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="main-logo-container" class="container-logo invisible">
+            <img id="main-logo" class="logo" src="/media/leagues/{{ match.league.id }}.png" alt="">
+        </div>
+
+        <div id="score-right" class="invisible">
+            {% if match.best_of == 1 %}
+                <div id="score-right-1" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 2 or match.best_of == 3 %}
+                <div id="score-right-2" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                    <div id="score-right-inner-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
+                </div>
+            {% elif match.best_of == 5 %}
+                <div id="score-right-3" class="container-score-right">
+                    <div id="score-right-inner-1" class="score {% if match.score_orange >= 1 %}active{% endif %}"></div>
+                    <div id="score-right-inner-2" class="score {% if match.score_orange >= 2 %}active{% endif %}"></div>
+                    <div id="score-right-inner-3" class="score {% if match.score_orange >= 3 %}active{% endif %}"></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="container-right" class="container-right invisible">
+        <div class="container-team">
+            <span id="team-orange-name" class="team-name-text-right">{{ match.team_orange }}</span>
+            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_orange.id }}.png" alt="">
+        </div>
+        <div id="sponsor-container" class="container-sponsor">
+            {% for s in sponsors %}
+                {% if forloop.counter0 == 0 %}
+                    <img class="sponsor" src="/media/sponsors/{{ s.id }}.png" alt=""
+                         data-order="{{ forloop.counter0 }}">
+                {% else %}
+                    <img class="sponsor d-none" src="/media/sponsors/{{ s.id }}.png" alt=""
+                         data-order="{{ forloop.counter0 }}">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% include "ingame-scripts.html" %}
+
+</body>
+</html>

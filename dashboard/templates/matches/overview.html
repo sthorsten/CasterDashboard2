@@ -1,0 +1,231 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Match Overview" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="match_overview" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-gamepad"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Match Overview" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Matches" %}</li>
+    <li class="breadcrumb-item active">{{ match.id }}</li>
+    <li class="breadcrumb-item active">{% trans "Overview" %}</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-6 col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Current Match Data" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Match ID" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.id }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Match State" %}
+                        </div>
+                        <div class="col-6 text-right text-capitalize">
+                            {% if match.state.id == 10 %}
+                                <b class="text-danger">{{ match.state }}</b>
+                            {% else %}
+                                <b>{{ match.state }}</b>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Match Access" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            {% for u in match_users %}
+                                <b>{{ u }}</b><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "League" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.league }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Season" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.season }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Best Of" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.best_of }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Sponsors" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            {% if match_sponsors|length > 0 %}
+                                <b>{{ match_sponsors|join:", " }}</b>
+                            {% else %}
+                                <b>-</b>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Match Title" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.title }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Playday" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.subtitle }}</b>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Team Blue" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.team_blue }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Team Orange" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.team_orange }}</b>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Current Score" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            <b>{{ match.score_blue }} - {{ match.score_orange }}</b>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            {% trans "Winner" %}
+                        </div>
+                        <div class="col-6 text-right">
+                            {% if match.win_team %}
+                                <b>{{ match.win_team }}</b>
+                            {% else %}
+                                <b>-</b>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-12">
+
+            <div class="card card-danger card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Match Actions" %}:</h5><br>
+                    <div class="card-divider"></div>
+
+                    <button class="btn btn-primary w-100 mb-2"
+                            onclick="setMatchToOverlay()">{% trans "Set Match to Overlays" %}</button>
+                    {% if match.state.id == 10 %}
+                        <button class="btn btn-primary w-100 disabled" disabled="disabled">
+                            {% trans "Continue to Map Picks & Bans" %} ({% trans "disabled" %})
+                        </button>
+
+                        <div class="card-divider mt-4 mb-4"></div>
+
+                        <button class="btn btn-secondary w-100 mb-2 disabled" disabled="disabled">
+                            {% trans "Show Match Details" %} ({% trans "disabled" %})
+                        </button>
+                    {% else %}
+                        <a href="/dashboard/matches/{{ match.id }}/maps"
+                           class="btn btn-primary w-100">{% trans "Continue to Map Picks & Bans" %}
+                        </a>
+
+                        <div class="card-divider mt-4 mb-4"></div>
+
+                        <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
+                    {% endif %}
+
+                    <button class="btn btn-secondary w-100">{% trans "Share Match" %}</button>
+
+                    <div class="card-divider mt-4 mb-4"></div>
+
+                    <button class="btn btn-danger w-100 mb-2">{% trans "Edit Match" %}</button>
+                    <button class="btn btn-danger w-100">{% trans "Delete Match" %}</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function setMatchToOverlay() {
+            var matchID = "{{ match.id }}";
+            var postURL = "/api/overlay/current_match/" + {{ user.id }} +"/";
+            var data = `{"current_match": ${matchID}, "current_map": ${null}, "current_atk_team": ${null}}`;
+
+            console.log(`POST: ${postURL} => ${data}`);
+            $.post(postURL, data)
+            toastr.success("{% trans "Overlays updated to current match" %}");
+        }
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,110 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Sponsors" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="sponsors" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-money-bill-alt"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Sponsors" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active"><a href="/">{% trans "Data" %}</a></LI>
+    <li class="breadcrumb-item active">{% trans "Sponsors" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "You have access to the following sponsors" %}:</h5>
+                    <br><br>
+
+                    <div class="table-responsive" style="height: 400px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{% trans "Sponsor" %}</th>
+                                <th>{% trans "League" %}</th>
+                                <th>{% trans "Public Sponsor" %}?</th>
+                                <th>{% trans "Logo" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for s in sponsors %}
+                                {% if s.public %}
+                                    <tr>
+                                        <td>{{ s.id }}</td>
+                                        <td>{{ s.name }}</td>
+                                        <td>-</td>
+                                        <td class="text-capitalize">{% trans "yes" %}</td>
+                                        <td>
+                                            <img src="/media/sponsors/{{ s.id }}.png" alt="-" style="height: 30px;">
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% if s.league.is_restricted %}
+                                        {% for lg in league_groups %}
+                                            {% if lg.league == s.league and lg.user == lg.user %}
+                                                <tr>
+                                                    <td>{{ s.id }}</td>
+                                                    <td>{{ s.name }}</td>
+                                                    <td>{{ s.league }}</td>
+                                                    <td class="text-capitalize">{% trans "no" %}</td>
+                                                    <td>
+                                                        <img src="/media/sponsors/{{ s.id }}.png" alt="-"
+                                                             style="height: 30px;">
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Info Box -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h3>
+                    <i class="icon fas fa-info"></i>
+                    {% trans "Info" %}
+                </h3>
+                <p>
+                    {% trans "Sponsors can only be created by an admin" %}. {% trans "Public sponsors can be used by any user" %}.<br>
+                    {% trans "Tournament Organizers and League admins can manage league specific sponsors in the user menu section 'League Administration'" %}.
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

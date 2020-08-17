@@ -1,0 +1,100 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Leagues" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="leagues" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-trophy"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Leagues" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active"><a href="/">{% trans "Data" %}</a></LI>
+    <li class="breadcrumb-item active">{% trans "Leagues" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "You have access to the following leagues" %}:</h5>
+                    <br><br>
+
+                    <div class="table-responsive" style="height: 400px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{% trans "League" %}</th>
+                                <th>{% trans "Private League" %}?</th>
+                                <th>{% trans "Private League Role" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for l in leagues %}
+                                {% if l.is_restricted %}
+                                    {% for lg in league_groups %}
+                                        {% if lg.league == l and lg.user == lg.user %}
+                                            <tr>
+                                                <td>{{ l.id }}</td>
+                                                <td>{{ l.name }}</td>
+                                                <td>{% trans "yes" %}</td>
+                                                <td class="text-capitalize">{{ lg.rank }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td>{{ l.id }}</td>
+                                        <td>{{ l.name }}</td>
+                                        <td>{% trans "no" %}</td>
+                                        <td>-</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Info Box -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h3>
+                    <i class="icon fas fa-info"></i>
+                    {% trans "Info" %}
+                </h3>
+                <p>
+                    {% trans "Leagues can only be created by an admin" %}.<br>
+                    {% trans "If you are a caster and need access to a certain league, please contact an admin as well" %}.<br>
+                    {% trans "Tournament Organizers and League admins can manage their league in the user menu section 'League Administration'" %}.
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

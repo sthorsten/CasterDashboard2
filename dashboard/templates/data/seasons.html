@@ -1,0 +1,130 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Seaons" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="seasons" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-calendar-alt"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Seasons" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active"><a href="/">{% trans "Data" %}</a></LI>
+    <li class="breadcrumb-item active">{% trans "Seasons" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "You have access to the following seasons" %}:</h5>
+                    <br><br>
+
+                    <div class="table-responsive" style="height: 400px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{% trans "Season" %}</th>
+                                <th>{% trans "Associated League" %}</th>
+                                <th>{% trans "Official Season" %}</th>
+                                <th>{% trans "Start Date" %}</th>
+                                <th>{% trans "End Date" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for s in seasons %}
+                                {% if s.league.is_restricted %}
+                                    {% for lg in league_groups %}
+                                        {% if lg.league == s.league and lg.user == lg.user %}
+                                            <tr>
+                                                <td>{{ s.id }}</td>
+                                                <td>{{ s.name }}</td>
+                                                <td>{{ s.league.name }}</td>
+                                                <td class="text-capitalize">{% trans "no" %}</td>
+                                                {% if s.start_date %}
+                                                    <td>{{ s.start_date }}</td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                {% if s.end_date %}
+                                                    <td>{{ s.end_date }}</td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td>{{ s.id }}</td>
+                                        <td>{{ s.name }}</td>
+                                        {% if s.league %}
+                                            <td>{{ s.league.name }}</td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
+                                        {% if s.official_season %}
+                                            <td class="text-capitalize">{% trans "yes" %}</td>
+                                        {% else %}
+                                            <td class="text-capitalize">{% trans "no" %}</td>
+                                        {% endif %}
+                                        {% if s.start_date %}
+                                            <td>{{ s.start_date }}</td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
+                                        {% if s.end_date %}
+                                            <td>{{ s.end_date }}</td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Info Box -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h3>
+                    <i class="icon fas fa-info"></i>
+                    {% trans "Info" %}
+                </h3>
+                <p>
+                    {% trans "Seasons can only be created by an admin" %}.<br>
+                    {% trans "Seasons are usually tied to a league. The official R6 seasons are available to all users" %}.<br>
+                    {% trans "Tournament Organizers and League admins can manage seasons in the user menu section 'League Administration'" %}.
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

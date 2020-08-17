@@ -1,0 +1,103 @@
+{% load i18n %}
+
+<script>
+
+    function addRound() {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let bomb_spot = $('#bomb_spot_select').val();
+        let win_type = $('#win_type_select').val();
+
+        if (bomb_spot === "" || win_type === "") {
+            toastr.error("{% trans "Please select a bomb spot and a win type first to add a round" %}!");
+            return;
+        }
+
+        let win_team = null;
+        ($('#win_team_blue_btn').attr("data-state") === "active")
+            ? win_team = $('#win_team_blue_btn').attr("data-value")
+            : win_team = $('#win_team_orange_btn').attr("data-value")
+
+        let of_team = null;
+        ($('#of_team_blue_btn').attr("data-state") === "active")
+            ? of_team = $('#of_team_blue_btn').attr("data-value")
+            : of_team = $('#of_team_orange_btn').attr("data-value")
+
+        let notes = $('#round_notes').val();
+        notes = notes.split("\n").join("\\n");
+
+        let data = `{"bombspot": ${bomb_spot}, "win_type": ${win_type}, "win_team": ${win_team}, "of_team": ${of_team}, "notes": "${notes}" }`
+        let postURL = `/api/matches/rounds/${matchID}/${mapID}/`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function removeLastRound() {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let data = `{"reset": "single"}`;
+
+        let postURL = `/api/matches/rounds/${matchID}/${mapID}/`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function setWinTeam(elem) {
+        let blue_btn = $('#win_team_blue_btn');
+        let orange_btn = $('#win_team_orange_btn');
+        let inactive_btn = null;
+
+        ($(elem)[0].id === "win_team_blue_btn")
+            ? inactive_btn = orange_btn
+            : inactive_btn = blue_btn
+
+        inactive_btn.attr("data-state", "inactive");
+        inactive_btn.removeClass("btn-primary");
+        inactive_btn.addClass("btn-outline-primary");
+
+        $(elem).attr("data-state", "active");
+        $(elem).removeClass("btn-outline-primary");
+        $(elem).addClass("btn-primary");
+    }
+
+    function finishMap() {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let data = `{"finish_map": true}`;
+
+        let postURL = `/api/matches/finish_map/${matchID}/${mapID}/`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).done(function (data) {
+            window.location = data['next_url'];
+        }).fail(function () {
+            location.reload();
+        });
+    }
+
+    function setOFTeam(elem) {
+        let blue_btn = $('#of_team_blue_btn');
+        let orange_btn = $('#of_team_orange_btn');
+        let inactive_btn = null;
+
+        ($(elem)[0].id === "of_team_blue_btn")
+            ? inactive_btn = orange_btn
+            : inactive_btn = blue_btn
+
+        inactive_btn.attr("data-state", "inactive");
+        inactive_btn.removeClass("btn-primary");
+        inactive_btn.addClass("btn-outline-primary");
+
+        $(elem).attr("data-state", "active");
+        $(elem).removeClass("btn-outline-primary");
+        $(elem).addClass("btn-primary");
+    }
+
+</script>

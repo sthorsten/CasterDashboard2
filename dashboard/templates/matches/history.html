@@ -1,0 +1,102 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="Match History" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" with active_page="match_history" %}
+{% endblock %}
+
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-list-ul"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "Match History" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Matches" %}</li>
+    <li class="breadcrumb-item active">{% trans "History" %}</li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Your recent matches" %}:</h5>
+                    <br><br>
+
+                    <div class="table-responsive-xl m-0 p-0" style="height: 500px;">
+                        <table id="match-history-table" class="table table-sm table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{% trans "League" %}</th>
+                                <th>{% trans "Title" %}</th>
+                                <th>{% trans "Playday" %}</th>
+                                <th>{% trans "BestOf" %}</th>
+                                <th>{% trans "Team Blue" %}</th>
+                                <th>{% trans "Team Orange" %}</th>
+                                <th>{% trans "Actions" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for m in matches %}
+                                <tr>
+                                    <td>{{ m.id }}</td>
+                                    <td>{{ m.league }}</td>
+                                    <td>{{ m.title }}</td>
+                                    {% if m.subtitle %}
+                                        <td>{{ m.subtitle }}</td>
+                                    {% else %}
+                                        <td>-</td>
+                                    {% endif %}
+                                    <td>{{ m.best_of }}</td>
+                                    <td>{{ m.team_blue }}</td>
+                                    <td>{{ m.team_orange }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary w-100" href="/dashboard/matches/{{ m.id }}">
+                                            {% trans "Go to match" %}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/jquery.dataTables.min.js"
+            integrity="sha256-L4cf7m/cgC51e7BFPxQcKZcXryzSju7VYBKJLOKPHvQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.20/js/dataTables.bootstrap4.min.js"
+            integrity="sha256-A8HQsn/9uXt+VRkaLhWtj7KMC8bYT76r3IB7iTqDtLo=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $("#match-history-table").DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "autoWidth": true,
+                "ordering": false
+            });
+        });
+    </script>
+
+{% endblock %}
+

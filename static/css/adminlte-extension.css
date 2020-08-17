@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "ScoutCond Regular";
+  src: url("/static/fonts/ScoutCond-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "ScoutCond Bold";
+  src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
+}
 div.title-icon {
   width: max-content;
   padding: 1em;
@@ -145,6 +153,61 @@ div.card-divider {
 }
 .toast {
   opacity: 1 !important;
+}
+
+.table.table-head-fixed thead tr:nth-child(1) th {
+  background: #212529;
+}
+
+.page-item.disabled .page-link {
+  color: #fff;
+  background: #495057;
+  border-color: #007bff;
+}
+
+.dropdown-menu {
+  background: #343a40;
+  color: #fff;
+}
+
+.dropdown-item {
+  color: #fff;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: #007bff;
+}
+
+.bootstrap-select .no-results {
+  background: #343a40;
+  color: #fff;
+}
+
+.form-control {
+  background: #212529;
+  color: #fff;
+}
+
+.form-control:focus {
+  background: #212529;
+  color: #fff;
+}
+
+.login-page, .register-page {
+  background: #343a40;
+}
+
+.login-logo a, .register-logo a {
+  color: #fff;
+}
+
+.login-card-body, .register-card-body {
+  background: #212529;
+  color: #fff;
+}
+
+.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
+  background: #212529;
 }
 
 /*# sourceMappingURL=adminlte-extension.css.map */

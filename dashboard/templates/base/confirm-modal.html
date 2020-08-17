@@ -1,0 +1,27 @@
+{% load i18n %}
+
+<div class="modal fade" role="dialog" id="{{ id }}-confirm-modal">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-success">
+                <h5 class="modal-title">{{ title }}</h5>
+            </div>
+
+            <div class="modal-body bg-dark">
+                <b>{{ text }}</b>
+            </div>
+
+            <div class="modal-footer justify-content-between bg-gray-800">
+                <button class="btn btn-secondary" data-dismiss="modal">
+                    {% trans "Cancel" %}
+                </button>
+                <button class="btn btn-success" onclick="{{ confirm_btn_fn }}">
+                    {{ confirm_btn_text }}
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

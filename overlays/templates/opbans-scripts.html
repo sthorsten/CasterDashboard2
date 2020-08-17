@@ -1,0 +1,211 @@
+<script>
+    // HTML Elements
+    let main = $('#main');
+    let op1 = $('#op1');
+    let op2 = $('#op2');
+    let op3 = $('#op3');
+    let op4 = $('#op4');
+    let op1_img = $('#op1-img');
+    let op2_img = $('#op2-img');
+    let op3_img = $('#op3-img');
+    let op4_img = $('#op4-img');
+
+    // Variables
+    let opbans_animation = null;
+    let current_match = null;
+    let current_map = null;
+    let team_blue = {{ match.team_blue.id }};
+    let overlay_state = null;
+    let ban1 = null;
+    let ban2 = null;
+    let ban3 = null;
+    let ban4 = null;
+
+    $(document).ready(function () {
+        // Data
+        update();
+        setInterval(update, 1000);
+    });
+
+    function update() {
+        // Current Match & Map
+        $.getJSON("/api/overlay/current_match/{{ overlay_user.id }}/", function (data) {
+            if (current_match === null) current_match = data['current_match'];
+            if (current_match !== data['current_match']) location.reload();
+
+            if (current_map === null) current_map = data['current_map'];
+            if (current_map !== data['current_map']) location.reload();
+        });
+
+        // Overlay State
+        $.getJSON("/api/overlay/overlay_state/{{ overlay_user.id }}/", function (data) {
+            if (overlay_state === null) {
+                overlay_state = data['opbans_state'];
+                if (overlay_state) {
+                    animateIN();
+                    opbans_animation = setInterval(animateOperators, 1000);
+                }
+            } else {
+                if (overlay_state !== data['opbans_state']) {
+                    console.log("state_changed");
+                    overlay_state = data['opbans_state'];
+                    if (overlay_state) {
+                        $('#main').removeClass("d-disabled");
+                        animateIN();
+                        opbans_animation = setInterval(animateOperators, 1000);
+                    } else {
+                        animateOUT();
+                        clearInterval(opbans_animation);
+                        setTimeout(function () {
+                            $('#main').addClass("d-disabled");
+                            op1.removeAttr("data-animated");
+                            op2.removeAttr("data-animated");
+                            op3.removeAttr("data-animated");
+                            op4.removeAttr("data-animated");
+                        }, 2000)
+                    }
+                }
+            }
+        });
+
+        // Operator Bans
+        $.getJSON(`/api/matches/operator_bans/{{ match.id }}/{{ current_map.id }}/`, function (data) {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].order === 1 && ban1 === null) ban1 = data[i];
+                if (data[i].order === 2 && ban2 === null) ban2 = data[i];
+                if (data[i].order === 3 && ban3 === null) ban3 = data[i];
+                if (data[i].order === 4 && ban4 === null) ban4 = data[i];
+
+                if (data[i].order === 1 && data[i].operator !== ban1) ban1 = data[i];
+                if (data[i].order === 2 && data[i].operator !== ban2) ban2 = data[i];
+                if (data[i].order === 3 && data[i].operator !== ban3) ban3 = data[i];
+                if (data[i].order === 4 && data[i].operator !== ban4) ban4 = data[i];
+
+                if (ban1 !== null) {
+                    if (ban1.team === team_blue) op1_img.attr("src", `/media/operators/${ban1.operator}.svg`);
+                    else op3_img.attr("src", `/media/operators/${ban1.operator}.svg`);
+                }
+                if (ban2 !== null) {
+                    if (ban2.team === team_blue) op1_img.attr("src", `/media/operators/${ban2.operator}.svg`);
+                    else op3_img.attr("src", `/media/operators/${ban2.operator}.svg`);
+                }
+                if (ban3 !== null) {
+                    if (ban3.team === team_blue) op2_img.attr("src", `/media/operators/${ban3.operator}.svg`);
+                    else op4_img.attr("src", `/media/operators/${ban3.operator}.svg`);
+                }
+                if (ban4 !== null) {
+                    if (ban4.team === team_blue) op2_img.attr("src", `/media/operators/${ban4.operator}.svg`);
+                    else op4_img.attr("src", `/media/operators/${ban4.operator}.svg`);
+                }
+            }
+        });
+    }
+
+    function animateIN() {
+        // Start 1s. after page load
+        setTimeout(function () {
+            main.removeClass("d-none");
+        }, 1000)
+    }
+
+    function animateOUT() {
+        op1.addClass("animate__animated animate__faster animate__zoomOut");
+        op2.addClass("animate__animated animate__faster animate__zoomOut");
+        op3.addClass("animate__animated animate__faster animate__zoomOut");
+        op4.addClass("animate__animated animate__faster animate__zoomOut");
+
+        // Remove animation classes
+        setTimeout(function () {
+            op1.removeClass("animate__animated animate__faster animate__zoomOut");
+            op2.removeClass("animate__animated animate__faster animate__zoomOut");
+            op3.removeClass("animate__animated animate__faster animate__zoomOut");
+            op4.removeClass("animate__animated animate__faster animate__zoomOut");
+
+            main.addClass("d-none");
+            op1.addClass("invisible");
+            op2.addClass("invisible");
+            op3.addClass("invisible");
+            op4.addClass("invisible");
+        }, 1000)
+    }
+
+    function animateOperators() {
+        // Operators (1.3+ s.)
+        setTimeout(function () {
+            if (ban1 !== null) {
+                if (ban1.team === team_blue) {
+                    if (op1.attr("data-animated") !== "true") {
+                        op1.removeClass("invisible");
+                        op1.addClass("animate__animated animate__faster animate__zoomIn");
+                        op1.attr("data-animated", "true");
+                    }
+                } else {
+                    if (op3.attr("data-animated") !== "true") {
+                        op3.removeClass("invisible");
+                        op3.addClass("animate__animated animate__faster animate__zoomIn");
+                        op3.attr("data-animated", "true");
+                    }
+                }
+            }
+
+            if (ban2 !== null) {
+                if (ban2.team === team_blue) {
+                    if (op1.attr("data-animated") !== "true") {
+                        op1.removeClass("invisible");
+                        op1.addClass("animate__animated animate__faster animate__zoomIn");
+                        op1.attr("data-animated", "true");
+                    }
+                } else {
+                    if (op3.attr("data-animated") !== "true") {
+                        op3.removeClass("invisible");
+                        op3.addClass("animate__animated animate__faster animate__zoomIn");
+                        op3.attr("data-animated", "true");
+                    }
+                }
+            }
+
+            if (ban3 !== null) {
+                if (ban3.team === team_blue) {
+                    if (op2.attr("data-animated") !== "true") {
+                        op2.removeClass("invisible");
+                        op2.addClass("animate__animated animate__faster animate__zoomIn");
+                        op2.attr("data-animated", "true");
+                    }
+                } else {
+                    if (op4.attr("data-animated") !== "true") {
+                        op4.removeClass("invisible");
+                        op4.addClass("animate__animated animate__faster animate__zoomIn");
+                        op4.attr("data-animated", "true");
+                    }
+                }
+            }
+
+            if (ban4 !== null) {
+                if (ban4.team === team_blue) {
+                    if (op2.attr("data-animated") !== "true") {
+                        op2.removeClass("invisible");
+                        op2.addClass("animate__animated animate__faster animate__zoomIn");
+                        op2.attr("data-animated", "true");
+                    }
+                } else {
+                    if (op4.attr("data-animated") !== "true") {
+                        op4.removeClass("invisible");
+                        op4.addClass("animate__animated animate__faster animate__zoomIn");
+                        op4.attr("data-animated", "true");
+                    }
+                }
+            }
+
+        }, 1300)
+
+        // Remove animation classes
+        setTimeout(function () {
+            op1.removeClass("animate__animated animate__faster animate__zoomIn");
+            op2.removeClass("animate__animated animate__faster animate__zoomIn");
+            op3.removeClass("animate__animated animate__faster animate__zoomIn");
+            op4.removeClass("animate__animated animate__faster animate__zoomIn");
+        }, 2000)
+    }
+
+
+</script>

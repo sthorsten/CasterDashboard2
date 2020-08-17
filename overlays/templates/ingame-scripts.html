@@ -1,0 +1,246 @@
+<script>
+    // HTML Elements
+    let main = $('#main');
+    let main_bg = $('#main-bg');
+    let center_logo = $('#main-logo-container');
+    let container_left = $('#container-left');
+    let container_right = $('#container-right');
+    let score_left = $('#score-left');
+    let score_right = $('#score-right');
+    let sponsor_wrapper = $('#sponsor-container');
+    let sponsors = $('.sponsor');
+
+    // Variables
+    let current_match = null;
+    let current_map = null;
+    let score_blue = null;
+    let score_orange = null;
+    let overlay_state = null;
+
+    let sponsor_len = {{ sponsors|length }};
+    let sponsor_current_order = 0;
+
+    $(document).ready(function () {
+        // Data
+        update();
+        setInterval(update, 1000);
+
+        // Animations
+        {% if current_map_pick_team %}
+            animateTitle();
+            setInterval(function () {
+                animateTitle();
+            }, 19000);
+        {% endif %}
+
+        if (sponsor_len >= 2) {
+            animateSponsor();
+            setInterval(function () {
+                animateSponsor();
+            }, 19000);
+        }
+    });
+
+    function update() {
+        // Current Match
+        $.getJSON("/api/overlay/current_match/{{ overlay_user.id }}/", function (data) {
+            if (current_match === null) current_match = data['current_match'];
+            if (current_match !== data['current_match']) location.reload();
+
+            if (current_map === null) current_map = data['current_map'];
+            if (current_map !== data['current_map']) location.reload();
+        });
+
+        // Match State
+        $.getJSON(`/api/matches/{{ match.id }}/`, function (data) {
+            if (score_blue === null) score_blue = data['score_blue']
+            if (score_orange === null) score_orange = data['score_orange']
+
+            if (score_blue !== data['score_blue']) {
+                score_blue = data['score_blue']
+                if (score_blue < 1) {
+                    $('#score-left-inner-1').removeClass("active");
+                    $('#score-left-inner-2').removeClass("active");
+                    $('#score-left-inner-3').removeClass("active");
+                }
+                if (score_blue >= 1) $('#score-left-inner-1').addClass("active");
+                if (score_blue >= 2) $('#score-left-inner-2').addClass("active");
+                if (score_blue >= 3) $('#score-left-inner-3').addClass("active");
+            }
+            if (score_orange !== data['score_orange']) {
+                score_orange = data['score_orange']
+                if (score_orange < 1) {
+                    $('#score-right-inner-1').removeClass("active");
+                    $('#score-right-inner-2').removeClass("active");
+                    $('#score-right-inner-3').removeClass("active");
+                }
+                if (score_orange >= 1) $('#score-right-inner-1').addClass("active");
+                if (score_orange >= 2) $('#score-right-inner-2').addClass("active");
+                if (score_orange >= 3) $('#score-right-inner-3').addClass("active");
+            }
+        })
+
+        // Overlay State
+        $.getJSON("/api/overlay/overlay_state/{{ overlay_user.id }}/", function (data) {
+            if (overlay_state === null) {
+                overlay_state = data['ingame_state'];
+                if (overlay_state) animateIN();
+            } else {
+                if (overlay_state !== data['ingame_state']) {
+                    console.log("state_changed");
+                    overlay_state = data['ingame_state'];
+                    if (overlay_state) {
+                        $('#main').removeClass("d-disabled");
+                        animateIN();
+                    } else {
+                        animateOUT();
+                        setTimeout(function () {
+                            $('#main').addClass("d-disabled");
+                        }, 2000)
+                    }
+                }
+            }
+        });
+    }
+
+    function animateIN() {
+        // Start 1s. after page load
+        setTimeout(function () {
+            main.removeClass("d-none");
+            main.addClass("animate__animated animate__faster animate__slideInDown");
+        }, 1000)
+
+        // Logo & Team Container (1.3s.)
+        setTimeout(function () {
+            center_logo.removeClass("invisible");
+            center_logo.addClass("animate__animated animate__faster animate__fadeIn");
+
+            container_left.removeClass("invisible");
+            container_left.addClass("anim_scaleInRight");
+            container_right.removeClass("invisible");
+            container_right.addClass("anim_scaleInLeft");
+        }, 1300)
+
+        // Score & Background Logo (1.3 + 0.5 = 1.8s.)
+        setTimeout(function () {
+            score_left.removeClass("invisible");
+            score_left.addClass("anim_scaleInLeft");
+            score_right.removeClass("invisible");
+            score_right.addClass("anim_scaleInRight");
+
+            main_bg.removeClass("invisible");
+            main_bg.addClass("animate__animated animate__faster animate__fadeIn");
+        }, 1800)
+
+        // Remove animation classes
+        setTimeout(function () {
+            main.removeClass("animate__animated animate__faster animate__slideInDown");
+            center_logo.removeClass("animate__animated animate__faster animate__fadeIn");
+            container_left.removeClass("anim_scaleInRight");
+            container_right.removeClass("anim_scaleInLeft");
+            score_left.removeClass("anim_scaleInLeft");
+            score_right.removeClass("anim_scaleInRight");
+            main_bg.removeClass("animate__animated animate__faster animate__fadeIn");
+        }, 2500)
+    }
+
+    function animateOUT() {
+        score_left.addClass("animate__animated animate__zoomOut");
+        score_right.addClass("animate__animated animate__zoomOut");
+        center_logo.addClass("animate__animated animate__zoomOut");
+        main_bg.addClass("animate__animated animate__faster animate__fadeOut");
+
+        container_left.addClass("anim_scaleInRight anim_reverse");
+        container_right.addClass("anim_scaleInLeft anim_reverse");
+
+        setTimeout(function () {
+            container_left.addClass("invisible");
+            container_right.addClass("invisible");
+            score_left.addClass("invisible");
+            score_right.addClass("invisible");
+            center_logo.addClass("invisible");
+            main_bg.addClass("invisible");
+
+            main.addClass("animate__animated animate__faster animate__fadeOutUp");
+        }, 500)
+
+        // Remove animation classes
+        setTimeout(function () {
+            main.addClass("d-none");
+            main.removeClass("animate__animated animate__faster animate__fadeOutUp");
+            score_left.removeClass("animate__animated animate__zoomOut");
+            score_right.removeClass("animate__animated animate__zoomOut");
+            center_logo.removeClass("animate__animated animate__zoomOut");
+            container_left.removeClass("anim_scaleInRight anim_reverse");
+            container_right.removeClass("anim_scaleInLeft anim_reverse");
+            main_bg.removeClass("animate__animated animate__faster animate__fadeOut");
+        }, 1500)
+    }
+
+    function animateTitle() {
+        let title_wrapper = $('#title-wrapper');
+        let map_pick = $('#map-pick');
+
+        // Animate Title Out (at 8s.)
+        setTimeout(function () {
+            title_wrapper.addClass("animate__animated animate__fadeOut");
+        }, 8000)
+
+        // Animate Map Pick In (at 8+1 = 9s.)
+        setTimeout(function () {
+            title_wrapper.addClass("d-none");
+            title_wrapper.removeClass("animate__animated animate__fadeOut");
+
+            map_pick.removeClass("d-none");
+            map_pick.addClass("animate__animated animate__fadeIn")
+        }, 9000)
+
+        // Animate Map Pick Out (at 9+8 = 17s.)
+        setTimeout(function () {
+            map_pick.addClass("animate__animated animate__fadeOut");
+        }, 17000)
+
+        // Animate Title In (at 17+1 = 18s.)
+        setTimeout(function () {
+            map_pick.addClass("d-none");
+            map_pick.removeClass("animate__animated animate__fadeOut");
+
+            title_wrapper.removeClass("d-none");
+            title_wrapper.addClass("animate__animated animate__fadeIn")
+        }, 18000)
+    }
+
+    function animateSponsor() {
+        let current_sponsor = $(`.sponsor[data-order="${sponsor_current_order}"]`);
+
+        let next_sponsor_id = sponsor_current_order + 1
+        if (next_sponsor_id >= sponsor_len) {
+            next_sponsor_id = 0;
+        }
+
+        let next_sponsor = $(`.sponsor[data-order="${next_sponsor_id}"]`);
+
+        // Animate Current Sponsor Out (at 8s.)
+        setTimeout(function () {
+            current_sponsor.addClass("animate__animated animate__fadeOut");
+        }, 8000)
+
+        // Animate Next Sponsor In (at 8+1 = 9s.)
+        setTimeout(function () {
+            current_sponsor.addClass("d-none");
+            current_sponsor.removeClass("animate__animated animate__fadeOut");
+
+            next_sponsor.removeClass("d-none");
+            next_sponsor.addClass("animate__animated animate__fadeIn");
+        }, 9000)
+
+        // Remove Animation Classes (at 9 + 1.5 = 10.5s.)
+        setTimeout(function () {
+            next_sponsor.removeClass("animate__animated animate__fadeIn");
+        }, 10500)
+
+        sponsor_current_order = next_sponsor_id;
+    }
+
+
+</script>

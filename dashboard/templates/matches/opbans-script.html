@@ -1,0 +1,114 @@
+{% load i18n %}
+
+<script>
+
+    let next_ban_order = 0;
+    let atk_team = 0;
+    let def_team = 0;
+
+    $(document).ready(function () {
+        next_ban_order = {{ operator_bans|length }} +1;
+        atk_team = {{ map_settings.atk_team.id }};
+        {% if map_settings.atk_team == match.team_blue %}
+            def_team = {{ match.team_orange.id }};
+        {% else %}
+            def_team = {{ match.team_blue.id }}
+        {% endif %}
+
+    // Set active buttons
+    {% for op in operator_bans %}
+        $('#ban_{{ op.operator.id }}_btn').removeClass("btn-secondary");
+        $('#ban_{{ op.operator.id }}_btn').addClass("btn-danger");
+        $('#ban_{{ op.operator.id }}_btn').append(" ({{ op.order }})");
+    {% endfor %}
+
+        // ATK Ops Search
+        $("#atk_ops_search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#atk_ops_container .col-6").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+        // DEF Ops Search
+        $("#def_ops_search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#def_ops_container .col-6").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function setATKTeam(elem) {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let postURL = `/api/matches/map_settings/${matchID}/${mapID}/`;
+        let atk_team = $(elem).attr("data-value");
+        let data = `{"atk_team": ${atk_team}}`
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function setOTATKTeam(elem) {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let postURL = `/api/matches/map_settings/${matchID}/${mapID}/`;
+        let atk_team = $(elem).attr("data-value");
+        let data = `{"ot_atk_team": ${atk_team}}`
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function swapTeams() {
+        let matchID = "{{ match.id }}";
+        let postURL = `/api/matches/swap_teams/${matchID}/`;
+        let data = "{}";
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function banOperator(elem) {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let postURL = `/api/matches/operator_bans/${matchID}/${mapID}/`;
+        let operator = $(elem).attr("data-value");
+        let data = null;
+
+        // Abort if there are already 4 Operator Bans
+        if (next_ban_order > 4) return;
+
+        if (next_ban_order === 1 || next_ban_order === 4) {
+            data = `{"operator": ${operator}, "team": ${atk_team}}`
+        } else {
+            data = `{"operator": ${operator}, "team": ${def_team}}`
+        }
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+    function resetOperatorBan(all) {
+        let matchID = "{{ match.id }}";
+        let mapID = "{{ map.id }}";
+        let postURL = `/api/matches/operator_bans/${matchID}/${mapID}/`;
+        let data = `{"reset": "${all}"}`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data).always(function () {
+            location.reload();
+        });
+    }
+
+
+</script>

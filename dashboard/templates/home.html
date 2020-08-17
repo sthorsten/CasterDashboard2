@@ -38,7 +38,6 @@
                         use then ever.
                     {% endblocktrans %}
                 </p>
-
             </div>
         </div>
     </div>
@@ -89,7 +88,11 @@
                             {% trans "Social Overlay" %}
                         </div>
                         <div class="col-4 text-right">
-                            <span class="badge badge-pill badge-primary">3 {% trans "entries" %}</span>
+                            {% if social_count == 1 %}
+                                <span class="badge badge-pill badge-primary">{{ social_count }} {% trans "entry" %}</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-primary">{{ social_count }} {% trans "entries" %}</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -109,7 +112,11 @@
                             {% trans "Match ID" %}
                         </div>
                         <div class="col-4 text-right">
-                            <span class="badge badge-pill badge-danger">243</span>
+                            {% if current_match %}
+                                <span class="badge badge-pill badge-danger">{{ current_match.id }}</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-danger">{% trans "No Match" %}</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -118,7 +125,11 @@
                             {% trans "Team Blue" %}
                         </div>
                         <div class="col-8 text-right">
-                            <span class="badge badge-pill badge-danger">Deep Gaming Industries</span>
+                            {% if current_match %}
+                                <span class="badge badge-pill badge-danger">{{ current_match.team_blue }}</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-danger">{% trans "No Match" %}</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -127,7 +138,11 @@
                             {% trans "Team Orange" %}
                         </div>
                         <div class="col-8 text-right">
-                            <span class="badge badge-pill badge-danger">Recast Gaming</span>
+                            {% if current_match %}
+                                <span class="badge badge-pill badge-danger">{{ current_match.team_orange }}</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-danger">{% trans "No Match" %}</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -136,7 +151,11 @@
                             {% trans "Current Map" %}
                         </div>
                         <div class="col-4 text-right">
-                            <span class="badge badge-pill badge-danger">Border</span>
+                            {% if match_overlay_data.current_map %}
+                                <span class="badge badge-pill badge-danger">{{ match_overlay_data.current_map }}</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-danger">{% trans "No Map" %}</span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -173,7 +192,7 @@
                             {% trans "Matches Created" %}
                         </div>
                         <div class="col-4 text-right">
-                            <span class="badge badge-pill badge-success">24</span>
+                            <span class="badge badge-pill badge-success">{{ personal_match_count }}</span>
                         </div>
                     </div>
 
@@ -186,18 +205,18 @@
 
     <div class="row">
 
-    <div class="col-md-6 col-xl-4">
-        <div class="small-box bg-primary">
-            <div class="inner">
-                <h3>{{ league_count }}</h3>
+        <div class="col-md-6 col-xl-4">
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h3>{{ league_count }}</h3>
 
-                <p>{% trans "Teams Added" %}</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-users"></i>
+                    <p>{% trans "Teams Added" %}</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
             </div>
         </div>
-    </div>
 
         <div class="col-md-6 col-xl-4">
             <div class="small-box bg-danger">

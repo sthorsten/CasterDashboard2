@@ -97,4 +97,43 @@
         toastr.success("{% trans "The timer has been set to " %}" + value);
     }
 
+    function setCurrentMatch() {
+        var matchID = $('#setCurrentMatchSelect').val();
+        var postURL = `/api/overlay/current_match/${current_user_id}/`;
+        var data = `{"current_match": ${matchID}, "current_map": ${null}, "current_atk_team": ${null}}`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data)
+        toastr.success("{% trans "The current match has been set to " %}" + matchID);
+    }
+
+    function setNextMatch() {
+        var matchID = $('#setNextMatchSelect').val()
+        var postURL = `/api/overlay/next_match/${current_user_id}/`;
+        var data = `{"match": ${matchID}}`;
+
+        console.log(`POST: ${postURL} => ${data}`);
+        $.post(postURL, data)
+        toastr.success("{% trans "The next match has been set to " %}" + matchID);
+    }
+
+    function setMatchScore(side) {
+        var matchID = {{ current_match }};
+        var postURL = `/api/matches/${matchID}/update_score`;
+
+        if (side === 'blue') {
+            var score = $('#match_score_blue').val()
+            var data = `{"score_blue": ${score}}`;
+            console.log(`POST: ${postURL} => ${data}`);
+            $.post(postURL, data);
+            toastr.success("{% trans "The blue team score has been set to " %}" + score);
+        } else if (side === 'orange') {
+            var score = $('#match_score_orange').val()
+            var data = `{"score_orange": ${score}}`;
+            console.log(`POST: ${postURL} => ${data}`);
+            $.post(postURL, data);
+            toastr.success("{% trans "The orange team score has been set to " %}" + score);
+        }
+    }
+
 </script>
