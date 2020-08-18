@@ -4,12 +4,18 @@
 
 {% block head %}
     {% include "base/head.html" with page_title="Customize Overlays" %}
+
+    <!-- Custom style for this page only -->
+    <style>
+        .btn-drag {
+            cursor: move !important;
+        }
+    </style>
 {% endblock %}
 
 {% block sidebar %}
     {% include "base/sidebar.html" with active_page="customize" %}
 {% endblock %}
-
 
 {% block page_title_icon %}
     <i class="fas fa-2x fa-palette"></i>
@@ -64,107 +70,9 @@
                         <div class="tab-pane fade show active" id="overlay-tabs-start" role="tabpanel"
                              aria-labelledby="overlay-tabs-start-tab">
 
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="card card-success card-outline-all mb-3">
-                                        <div class="card-body bg-gray-800 text-white">
-                                            <h5 class="card-title card-title-upper">{% trans "Customize Overlay" %}</h5>
-                                            <br>
-
-                                            <div class="card-divider"></div>
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{% trans "Default Styles" %}:</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                <div class="col-lg-4 col-12">
-                                                    <button class="btn btn-success w-100" data-value="default">
-                                                        {% trans "Default" %} ({% trans "blue / orange" %})
-                                                    </button>
-                                                </div>
-                                                <div class="col-lg-4 col-12">
-                                                    <button class="btn btn-outline-success w-100" data-value="default">
-                                                        {% trans "Light" %}
-                                                    </button>
-                                                </div>
-                                                <div class="col-lg-4 col-12">
-                                                    <button class="btn btn-outline-success w-100" data-value="default">
-                                                        {% trans "Dark" %}
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div class="card-divider mt-4"></div>
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{% trans "Custom Styles" %}:</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-2">
-                                                {% for l in leagues %}
-                                                    {% if l.is_restricted and l.has_custom_overlay %}
-                                                        {% for lg in league_groups %}
-                                                            {% if lg.league == l and lg.user == lg.user %}
-                                                                <div class="col-lg-4 col-12 mb-2">
-                                                                    <button class="btn btn-outline-success w-100"
-                                                                            data-value="{{ l.name }}">
-                                                                        {{ l.name }}
-                                                                    </button>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </div>
-
-                                            <div class="card-divider mt-4"></div>
-
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <span>
-                                                        <i class="fas fa-info-circle"></i> <b>{% trans "Quick Info" %}</b>
-                                                    </span>
-                                                </div>
-                                                <div class="col-12 mt-2">
-                                                    <i>
-                                                        {% trans "The default overlay styles are available to all users" %}.<br>
-                                                        {% trans "Custom Styles are available for specific leagues or tournaments, which you can only use if you have been granted access to it" %}.
-                                                    </i>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="card card-danger card-outline-all mb-3">
-                                        <div class="card-body bg-gray-800 text-white">
-                                            <h5 class="card-title card-title-upper">{% trans "Preview & Links" %}</h5>
-                                            <br>
-
-                                            <div class="card-divider"></div>
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <!-- TODO: Add Screenshot -->
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                            {% include "overlays/customize-start-overlay.html" %}
                         </div>
+
                         <div class="tab-pane fade" id="overlay-tabs-ingame" role="tabpanel"
                              aria-labelledby="overlay-tabs-ingame-tab">
 
@@ -185,8 +93,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card -->
             </div>
+            <!-- /.card -->
         </div>
+    </div>
+
+    {% include "overlays/customize-script.html" %}
 
 {% endblock %}
