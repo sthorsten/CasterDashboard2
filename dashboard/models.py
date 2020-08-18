@@ -94,6 +94,7 @@ def league_logo_path(instance, filename):
 class League(models.Model):
     name = models.CharField(max_length=255)
     is_restricted = models.BooleanField(default=True)
+    has_custom_overlay = models.BooleanField(default=False)
     league_logo = models.ImageField(storage=OverwriteStorage(), upload_to=league_logo_path,
                                     validators=[validate_image, validate_square_logo], blank=True, null=True)
     light_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
@@ -114,13 +115,14 @@ def league_pre_save(sender, instance, **kwargs):
 @receiver(post_save, sender=League)
 def league_post_save(sender, instance, **kwargs):
     # Rename file to id
-    if not instance.league_logo_validated and not instance.league_logo.name.__contains__(str(instance.id)):
-        old_path = os.path.join(django_settings.MEDIA_ROOT, instance.league_logo.name)
-        new_path = os.path.join(django_settings.MEDIA_ROOT, "leagues", str(instance.id) + ".png")
-        os.rename(old_path, new_path)
-        instance.league_logo = "leagues/{0}.png".format(str(instance.id))
-        instance.league_logo_validated = True
-        instance.save()
+    if instance.league_logo:
+        if not instance.league_logo_validated and not instance.league_logo.name.__contains__(str(instance.id)):
+            old_path = os.path.join(django_settings.MEDIA_ROOT, instance.league_logo.name)
+            new_path = os.path.join(django_settings.MEDIA_ROOT, "leagues", str(instance.id) + ".png")
+            os.rename(old_path, new_path)
+            instance.league_logo = "leagues/{0}.png".format(str(instance.id))
+            instance.league_logo_validated = True
+            instance.save()
 
 
 @receiver(pre_delete, sender=League)

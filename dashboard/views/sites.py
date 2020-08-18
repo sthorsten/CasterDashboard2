@@ -122,6 +122,21 @@ def popout_overlay_toggles(request):
     return render(request, 'popouts/overlay-toggles.html', template_data)
 
 
+@login_required
+def overlay_customize(request):
+    leagues = League.objects.all()
+    league_groups = LeagueGroup.objects.all()
+    overlay_styles = OverlayStyle.objects.get(user=request.user)
+
+    template_data = {
+        'leagues': leagues,
+        'league_groups': league_groups,
+        'overlay_styles': overlay_styles
+    }
+
+    return render(request, 'overlays/customize.html', template_data)
+
+
 '''
     Data
 '''

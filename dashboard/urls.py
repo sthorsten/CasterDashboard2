@@ -16,6 +16,7 @@ urlpatterns = [
 
     # Overlays
     path('overlays/control-center', sites.overlay_control_center, name='control-center'),
+    path('overlays/customize', sites.overlay_customize, name='customize'),
 
     # Popouts
     path('popout/overlay/toggles', sites.popout_overlay_toggles),
