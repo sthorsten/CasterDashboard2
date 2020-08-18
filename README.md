@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/version-2.0.0--alpha1-orange)](https://github.com/sthorsten/CasterDashboard2/releases)
 [![Django CI](https://github.com/sthorsten/CasterDashboard2/workflows/Django%20CI/badge.svg)](https://github.com/sthorsten/CasterDashboard2/actions)
-[![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE)
+[![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE.md)
 
 ## Description
 
@@ -30,4 +30,4 @@ You can also use the [direct link](https://poeditor.com/projects/view?id=366547)
 
 ## Changelog
 
-See the full [Changelog](CHANGELOG) for further information.
+See the full [Changelog](CHANGELOG.md) for further information.
