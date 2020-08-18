@@ -16,6 +16,14 @@ div {
   height: 100%;
   width: 100%;
 
+  &.main-bg {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 210px;
+    width: 1500px !important;
+    height: 80px !important;
+  }
+
   &.main {
     position: absolute;
     top: calc(50% - 40px);

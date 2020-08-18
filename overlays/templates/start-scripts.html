@@ -1,6 +1,7 @@
 <script>
     // HTML Elements
     let main = $('#main');
+    let main_bg = $('#main-bg');
     let container_center = $('#container-center');
     let center_text = $('#center-text');
     let container_left = $('#container-left');
@@ -85,7 +86,14 @@
             container_left.addClass("anim_scaleInRight");
             container_right.removeClass("invisible");
             container_right.addClass("anim_scaleInLeft");
+
         }, 1300)
+
+        // Animate background logo (1.5s.)
+        setTimeout(function () {
+            main_bg.removeClass("invisible");
+            main_bg.addClass("animate__animated animate__faster animate__fadeIn");
+        }, 1500)
 
         // Remove animation classes
         setTimeout(function () {
@@ -93,6 +101,7 @@
             center_text.removeClass("animate__animated animate__faster animate__fadeIn");
             container_left.removeClass("anim_scaleInRight");
             container_right.removeClass("anim_scaleInLeft");
+            main_bg.removeClass("animate__animated animate__faster animate__fadeIn");
         }, 2000)
     }
 
@@ -101,6 +110,7 @@
 
         container_left.addClass("anim_scaleInRight anim_reverse");
         container_right.addClass("anim_scaleInLeft anim_reverse");
+        main_bg.addClass("animate__animated animate__faster animate__fadeOut");
 
         setTimeout(function () {
             container_left.addClass("invisible");
@@ -116,6 +126,7 @@
             center_text.removeClass("animate__animated animate__fadeOut");
             container_left.removeClass("anim_scaleInRight anim_reverse");
             container_right.removeClass("anim_scaleInLeft anim_reverse");
+            main_bg.removeClass("animate__animated animate__faster animate__fadeOut");
             main.addClass("d-none");
         }, 1500)
     }

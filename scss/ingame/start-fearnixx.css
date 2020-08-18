@@ -26,6 +26,41 @@ body {
   opacity: 0 !important;
 }
 
+div.main-bg {
+  background-image: url("/static/css/FearNixx.png");
+  background-size: contain;
+  background-position-x: 42%;
+  background-repeat: no-repeat;
+}
+
+/*
+  Base SCSS
+ */
+@font-face {
+  font-family: "ScoutCond Bold";
+  src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 /*
   Animations SCSS
  */
@@ -184,6 +219,13 @@ div {
   height: 100%;
   width: 100%;
 }
+div.main-bg {
+  position: absolute;
+  top: calc(50% - 40px);
+  left: 210px;
+  width: 1500px !important;
+  height: 80px !important;
+}
 div.main {
   position: absolute;
   top: calc(50% - 40px);
@@ -199,14 +241,14 @@ div.container-left {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211, 0.8) 80%);
+  background: linear-gradient(90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
 }
 div.container-right {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%);
+  background: linear-gradient(-90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
 }
 div.container-center {
   display: flex;
@@ -245,4 +287,4 @@ span.team-name-text-right {
   margin-left: 14px;
 }
 
-/*# sourceMappingURL=start.css.map */
+/*# sourceMappingURL=start-fearnixx.css.map */

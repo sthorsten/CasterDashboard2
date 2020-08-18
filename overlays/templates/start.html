@@ -12,7 +12,11 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static "css/start.css" %}">
+    {% if overlay_styles.start_style == "default" %}
+        <link rel="stylesheet" href="{% static "css/start.css" %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static "css/start-"|add:overlay_styles.start_style|add:".css" %}">
+    {% endif %}
 
     <!-- JS -->
     <!-- JQuery -->
@@ -23,6 +27,7 @@
 
 <body>
 
+<div id="main-bg" class="main-bg invisible"></div>
 <div id="main" class="main d-none">
     <div id="container-left" class="container-left invisible">
         <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_blue.id }}.png" alt="">
@@ -32,7 +37,8 @@
         {% if match.score_blue == 0 and match.score_orange == 0 %}
             <span id="center-text" class="center-text invisible">- vs -</span>
         {% else %}
-            <span id="center-text" class="center-text invisible">{{ match.score_blue }} - {{ match.score_orange }}</span>
+            <span id="center-text"
+                  class="center-text invisible">{{ match.score_blue }} - {{ match.score_orange }}</span>
         {% endif %}
     </div>
     <div id="container-right" class="container-right invisible">
