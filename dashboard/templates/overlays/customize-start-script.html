@@ -16,8 +16,28 @@
     });
 
     function setStartStyle(elem) {
+        // Set new theme
         elem = $(elem);
+        let new_theme = elem.attr("data-value");
+
+        let post_url = "/api/overlay/overlay_style/{{ user.id }}";
+        let data = `{"start_style": "${new_theme}"}`;
+
+        console.log("POST: " + post_url + " => " + data);
+
+        $.post(post_url, data)
+            .fail(function () {
+                toastr.error("{% trans "Overlay Style update failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            })
+            .done(function () {
+                toastr.success("{% trans "Overlay Style updated" %}.", "{% trans "Success" %}")
+                updateStartElements(elem, new_theme);
+            });
+    }
+
+    function updateStartElements(elem, new_theme) {
         let all_elements = $('[data-style="start"]');
+        $('#start-screenshot').attr("src", `/static/img/screenshots/start-${new_theme}.png`);
 
         for (let i = 0; i < all_elements.length; i++) {
             let tmp_elem = $(all_elements[i])
@@ -31,17 +51,6 @@
         elem.removeClass("btn-outline-success");
         elem.addClass("btn-success");
         elem.attr("data-active", "true");
-
-        let new_theme = elem.attr("data-value");
-        $('#start-screenshot').attr("src", `/static/img/screenshots/start-${new_theme}.png`);
-
-        let post_url = "/api/overlay/overlay_style/{{ user.id }}";
-        let data = `{"start_style": "${new_theme}"}`;
-
-        console.log("POST: " + post_url + " => " + data);
-
-        $.post(post_url, data);
-
     }
 
 </script>
