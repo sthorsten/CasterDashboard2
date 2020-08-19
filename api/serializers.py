@@ -77,6 +77,13 @@ class OverlayStateSerializer(serializers.ModelSerializer):
                   'poll_state', 'timer_state', 'ticker_state', 'next_match_state']
 
 
+class OverlayStyleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OverlayStyle
+        fields = ['start_style', 'ingame_style', 'opbans_style', 'maps_style', 'rounds_style', 'timer_style',
+                  'next_match_style']
+
+
 class TimerOverlayDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimerOverlayData

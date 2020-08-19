@@ -26,13 +26,6 @@ body {
   opacity: 0 !important;
 }
 
-div.main-bg {
-  background-image: url("/static/css/FearNixx.png");
-  background-size: contain;
-  background-position-x: 42%;
-  background-repeat: no-repeat;
-}
-
 /*
   Base SCSS
  */
@@ -241,21 +234,21 @@ div.container-left {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+  background: linear-gradient(0.25turn, transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0.8) 60%);
 }
 div.container-right {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background: linear-gradient(-90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+  background: linear-gradient(0.75turn, transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0.8) 60%);
 }
 div.container-center {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: #111;
+  background: #000;
 }
 
 img.logo, img.logo-team {
@@ -283,11 +276,11 @@ span.team-name-text, span.team-name-text-right, span.team-name-text-left {
 }
 span.team-name-text-left {
   margin-right: 14px;
-  color: #fff;
+  color: #0870d3;
 }
 span.team-name-text-right {
   margin-left: 14px;
-  color: #fff;
+  color: #ea7516;
 }
 
-/*# sourceMappingURL=start-fearnixx.css.map */
+/*# sourceMappingURL=start-dark.css.map */

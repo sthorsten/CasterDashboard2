@@ -18,17 +18,20 @@
 
                 <div class="row mb-2">
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-success w-100" data-value="default">
+                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
+                                data-style="start" data-value="default" data-active="false">
                             {% trans "Default" %} ({% trans "blue / orange" %})
                         </button>
                     </div>
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-outline-success w-100" data-value="default">
+                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
+                                data-style="start" data-value="light" data-active="false">
                             {% trans "Light" %}
                         </button>
                     </div>
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-outline-success w-100" data-value="default">
+                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
+                                data-style="start" data-value="dark" data-active="false">
                             {% trans "Dark" %}
                         </button>
                     </div>
@@ -46,10 +49,10 @@
                     {% for l in leagues %}
                         {% if l.is_restricted and l.has_custom_overlay %}
                             {% for lg in league_groups %}
-                                {% if lg.league == l and lg.user == lg.user %}
+                                {% if lg.league == l and lg.user == user %}
                                     <div class="col-lg-4 col-12 mb-2">
-                                        <button class="btn btn-outline-success w-100"
-                                                data-value="{{ l.name }}">
+                                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
+                                                data-style="start" data-value="{{ l.name|lower }}" data-active="false">
                                             {{ l.name }}
                                         </button>
                                     </div>

@@ -274,6 +274,7 @@ span {
 }
 span.center-text {
   margin-top: -4px;
+  color: #fff;
 }
 span.team-name-text, span.team-name-text-right, span.team-name-text-left {
   margin-top: -4px;
@@ -282,9 +283,11 @@ span.team-name-text, span.team-name-text-right, span.team-name-text-left {
 }
 span.team-name-text-left {
   margin-right: 14px;
+  color: #fff;
 }
 span.team-name-text-right {
   margin-left: 14px;
+  color: #fff;
 }
 
 /*# sourceMappingURL=start-fearnixx.css.map */

@@ -134,6 +134,26 @@ def overlay_state(request, user_id):
 
 
 @csrf_exempt
+def overlay_style(request, user_id):
+    try:
+        overlay_style = OverlayStyle.objects.get(user=user_id)
+    except OverlayStyle.DoesNotExist:
+        return JsonResponse({"status": "Not Found"}, status=404)
+
+    if request.method == 'GET':
+        serializer = OverlayStyleSerializer(overlay_style)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = OverlayStyleSerializer(overlay_style, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
 def timer_overlay_data(request, user_id):
     try:
         timer_overlay_data = TimerOverlayData.objects.get(user=user_id)
