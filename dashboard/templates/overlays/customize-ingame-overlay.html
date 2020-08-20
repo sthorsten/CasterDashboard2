@@ -18,20 +18,20 @@
 
                 <div class="row mb-2">
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
-                                data-style="start" data-value="default" data-active="false">
+                        <button class="btn btn-outline-success w-100" onclick="setIngameStyle(this)"
+                                data-style="ingame" data-value="default" data-active="false">
                             {% trans "Default" %} ({% trans "blue / orange" %})
                         </button>
                     </div>
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
-                                data-style="start" data-value="light" data-active="false">
+                        <button class="btn btn-outline-success w-100" onclick="setIngameStyle(this)"
+                                data-style="ingame" data-value="light" data-active="false">
                             {% trans "Light" %}
                         </button>
                     </div>
                     <div class="col-lg-4 col-12">
-                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
-                                data-style="start" data-value="dark" data-active="false">
+                        <button class="btn btn-outline-success w-100" onclick="setIngameStyle(this)"
+                                data-style="ingame" data-value="dark" data-active="false">
                             {% trans "Dark" %}
                         </button>
                     </div>
@@ -51,8 +51,8 @@
                             {% for lg in league_groups %}
                                 {% if lg.league == l and lg.user == user %}
                                     <div class="col-lg-4 col-12 mb-2">
-                                        <button class="btn btn-outline-success w-100" onclick="setStartStyle(this)"
-                                                data-style="start" data-value="{{ l.name|lower }}" data-active="false">
+                                        <button class="btn btn-outline-success w-100" onclick="setIngameStyle(this)"
+                                                data-style="ingame" data-value="{{ l.name|lower }}" data-active="false">
                                             {{ l.name }}
                                         </button>
                                     </div>
@@ -91,17 +91,17 @@
 
                 <div class="row">
                     <div class="col">
-                        <a href="/overlays/{{ user }}/start" target="_blank">
-                            <img id="start-screenshot" class="w-100 h-auto"
-                                 src="/static/img/screenshots/start-default.png">
+                        <a href="/overlays/{{ user }}/ingame" target="_blank">
+                            <img id="ingame-screenshot" class="w-100 h-auto"
+                                 src="/static/img/screenshots/ingame-default.png">
                         </a>
                     </div>
                 </div>
 
                 <div class="row mt-2">
                     <div class="col">
-                        <a id="start-drag-btn" class="btn btn-danger btn-drag w-100"
-                           href="/overlays/{{ user }}/start?layer-name=Start Overlay&layer-width=1920&layer-height=1080">
+                        <a id="ingame-drag-btn" class="btn btn-danger btn-drag w-100"
+                           href="/overlays/{{ user }}/ingame?layer-name=InGame Overlay&layer-width=1920&layer-height=1080">
                             {% trans "Drag this button to OBS" %}
                         </a>
                     </div>

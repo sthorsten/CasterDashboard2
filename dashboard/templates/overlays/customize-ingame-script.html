@@ -5,23 +5,23 @@
     $(document).ready(function () {
         // Load current overlay data
         $.getJSON("/api/overlay/overlay_style/{{ user.id }}", function (data) {
-            let current_style = data['start_style'];
-            let selected_elem = $(`[data-style="start"][data-value="${current_style}"]`);
+            let current_style = data['ingame_style'];
+            let selected_elem = $(`[data-style="ingame"][data-value="${current_style}"]`);
             selected_elem.removeClass("btn-outline-success");
             selected_elem.addClass("btn-success");
 
-            $('#start-screenshot').attr("src", `/static/img/screenshots/start-${current_style}.png`);
+            $('#ingame-screenshot').attr("src", `/static/img/screenshots/ingame-${current_style}.png`);
         });
 
     });
 
-    function setStartStyle(elem) {
+    function setIngameStyle(elem) {
         // Set new theme
         elem = $(elem);
         let new_theme = elem.attr("data-value");
 
         let post_url = "/api/overlay/overlay_style/{{ user.id }}";
-        let data = `{"start_style": "${new_theme}"}`;
+        let data = `{"ingame_style": "${new_theme}"}`;
 
         console.log("POST: " + post_url + " => " + data);
 
@@ -31,13 +31,13 @@
             })
             .done(function () {
                 toastr.success("{% trans "Overlay Style updated" %}.", "{% trans "Success" %}")
-                updateStartElements(elem, new_theme);
+                updateIngameElements(elem, new_theme);
             });
     }
 
-    function updateStartElements(elem, new_theme) {
-        let all_elements = $('[data-style="start"]');
-        $('#start-screenshot').attr("src", `/static/img/screenshots/start-${new_theme}.png`);
+    function updateIngameElements(elem, new_theme) {
+        let all_elements = $('[data-style="ingame"]');
+        $('#ingame-screenshot').attr("src", `/static/img/screenshots/ingame-${new_theme}.png`);
 
         for (let i = 0; i < all_elements.length; i++) {
             let tmp_elem = $(all_elements[i])
