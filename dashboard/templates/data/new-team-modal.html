@@ -119,10 +119,18 @@
             type: 'POST',
             contentType: false,
             processData: false
-        }).fail(function () {
+        }).fail(function (data) {
+            console.log(data);
             toastr.error("{% trans "Team could not be created. Please try again or contact an administrator!" %}");
-        }).done(function (){
-            location.reload();
+            setTimeout(function () {
+                $('#add-team-loading-modal').modal('hide');
+            }, 500);
+        }).done(function (data) {
+            toastr.success("{% trans "The team has been created." %}", "{% trans "Success" %}");
+            setTimeout(function () {
+                $('#add-team-loading-modal').modal('hide');
+            }, 500);
+            refresh();
         });
     });
 </script>

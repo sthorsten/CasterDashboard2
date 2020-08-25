@@ -187,11 +187,7 @@ def sponsors(request):
 
 @login_required
 def teams(request):
-    teams = Team.objects.all().order_by('name')
-
-    template_data = {
-        'teams': teams,
-    }
+    template_data = {}
 
     return render(request, 'data/teams.html', template_data)
 
