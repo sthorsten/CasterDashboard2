@@ -213,6 +213,8 @@ def team_post_save(sender, instance, **kwargs):
             if image.height > 500 or image.width > 500:
                 converted_image = image.resize((500, 500))
                 converted_image.save(new_path)
+            else:
+                image.save(new_path)
 
             instance.team_logo = "teams/{0}.png".format(str(instance.id))
             instance.save()
