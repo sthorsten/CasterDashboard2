@@ -6,6 +6,7 @@ import os
 import logging
 from datetime import datetime
 
+from PIL import Image
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.db import models
@@ -128,11 +129,11 @@ def league_post_save(sender, instance, **kwargs):
                 except OSError as e:
                     logger.error("Error removing old sponsor logo file: " + str(e))
 
-            # Move new file in place
-            try:
-                os.rename(old_path, new_path)
-            except OSError as e:
-                logger.error('Error moving team logo file: ' + str(e))
+            # Convert and save new file
+            image = Image.open(old_path)
+            if image.height > 500 or image.width > 500:
+                converted_image = image.resize((500, 500))
+                converted_image.save(new_path)
 
             instance.league_logo = "leagues/{0}.png".format(str(instance.id))
             instance.league_logo_validated = True
@@ -207,11 +208,11 @@ def team_post_save(sender, instance, **kwargs):
                 except OSError as e:
                     logger.error("Error removing old team logo file: " + str(e))
 
-            # Move new file in place
-            try:
-                os.rename(old_path, new_path)
-            except OSError as e:
-                logger.error('Error moving team logo file: ' + str(e))
+            # Convert and save new file
+            image = Image.open(old_path)
+            if image.height > 500 or image.width > 500:
+                converted_image = image.resize((500, 500))
+                converted_image.save(new_path)
 
             instance.team_logo = "teams/{0}.png".format(str(instance.id))
             instance.save()
