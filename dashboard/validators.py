@@ -32,6 +32,11 @@ def validate_square_logo(image):
     if isinstance(image, InMemoryUploadedFile):
         return
 
+    try:
+        image_file = image.file
+    except FileNotFoundError:
+        return
+
     if image.height != image.width:
         raise ValidationError(
             _('Image must be square (is %(height)sx%(width)s)!'),
