@@ -3,9 +3,9 @@ Main Django settings file of the project
 """
 
 import os
+from caster_dashboard_2.secret_key import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = 'n@_*s5i0zlq3%%+c@e3@$5t__-1b1aqqx9eq9=i3kfj!v9**h='
 
 # Disable in production!
 DEBUG = True
