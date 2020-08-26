@@ -35,4 +35,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test --settings=caster_dashboard_2.test_settings
+        python manage.py test --settings=caster_dashboard_2.settings.test_settings
