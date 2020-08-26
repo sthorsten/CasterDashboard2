@@ -1,19 +1,12 @@
 """
-Main Django settings file of the project
+    Base Django settings file of the project
 """
 
 import os
-from caster_dashboard_2.secret_key import *
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Disable in production!
-DEBUG = True
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
-
-# Logging
-from caster_dashboard_2.logging_settings import *
+WSGI_APPLICATION = 'caster_dashboard_2.wsgi.application'
 
 # Application definition
 INSTALLED_APPS = [
@@ -40,7 +33,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuration
 ROOT_URLCONF = 'caster_dashboard_2.urls'
+LOGIN_URL = '/login'
 
 TEMPLATES = [
     {
@@ -59,11 +54,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'caster_dashboard_2.wsgi.application'
-
-# Database
-from caster_dashboard_2.database_settings import *
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -105,8 +95,7 @@ LANGUAGES = (
     ('de', 'German'),
 )
 
-LOGIN_URL = '/login'
-
+# Django REST framework
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -114,8 +103,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissions'
     ]
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-from caster_dashboard_2.static_settings import *

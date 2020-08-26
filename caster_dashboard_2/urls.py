@@ -17,7 +17,7 @@ from django.conf.urls import url, handler404, handler500
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from . import settings
+from caster_dashboard_2.settings.local_settings import *
 
 from dashboard.views import sites, forms
 
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
 
 handler404 = sites.error_404
 handler500 = sites.error_500

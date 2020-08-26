@@ -3,4 +3,4 @@ venv/
 __pycache__/
 media/
 logs/*.log
-caster_dashboard_2/secret_key.py
+caster_dashboard_2/settings/local_settings.py
