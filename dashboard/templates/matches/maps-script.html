@@ -9,11 +9,11 @@
     let nextTeam = null;
     let nextMap = null;
 
-    $(document).ready(function () {
+    $(document).ready(() => {
         firstTeam = "{{ match.team_blue.id }}";
         secondTeam = "{{ match.team_orange.id }}";
 
-        if ($('#first_ban_team').val() !== ""){
+        if ($('#first_ban_team').val() !== "") {
             nextTeam = $('#first_ban_team').val();
         }
 
@@ -43,70 +43,100 @@
     }
 
     function update() {
-        $.getJSON("/api/matches/map_ban/{{ match.id }}/", function (data) {
-                if (data.length === 0) return;
+        // Set all badges to default
+        for (let i = 1; i <= 9; i++) {
+            let badge = $(`#map_${i}_badge`);
+            badge.removeClass("badge-danger badge-success");
+            badge.addClass("badge-primary");
+            badge.html("{% trans "Not selected yet" %}");
+        }
 
-                ban_data = data;
+        // Set log to default
+        $('#no_log').removeClass("d-none");
+        $('#log').addClass("d-none");
 
-                // Set select to first ban team
-                $("#first_ban_team option").filter(function () {
-                    return this.text === data[0]['team'];
-                }).attr('selected', true);
+        $.getJSON("/api/matches/map_ban/{{ match.id }}/")
+            .done((data) => {
+                    if (data.length === 0) return;
+                    ban_data = data;
 
-                // Disable selects
-                $('#first_ban_team').attr("disabled", "disabled");
-                $('#map_pool_select').attr("disabled", "disabled");
+                    // Set select to first ban team
+                    $("#first_ban_team option").filter(() => {
+                        return this.text === data[0]['team'];
+                    }).attr('selected', true);
 
-                if (nextTeam === null) {
-                    nextTeam = firstTeam;
-                }
+                    // Disable selects
+                    $('#first_ban_team').attr("disabled", "disabled");
+                    $('#map_pool_select').attr("disabled", "disabled");
 
-                for (let i = 0; i < data.length; i++) {
-                    $('#log').append(
-                        data[i]['order'] < 7
-                            ? `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']} / ${data[i]['team']}</li>`
-                            : `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']}</li>`
-                    )
-
-                    let badge = $(`#map_${data[i]['map_id']}_badge`);
-                    if (data[i].type === 'ban') {
-                        badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
-                        badge.removeClass("badge-primary");
-                        badge.addClass("badge-danger");
-
-                        $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                    } else if (data[i].type === 'pick') {
-                        badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
-                        badge.removeClass("badge-primary");
-                        badge.addClass("badge-success");
-
-                        $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                        if (nextMap === null) {
-                            nextMap = data[i]['map_id'];
-                        }
-
-                    } else if (data[i].type === 'decider') {
-                        badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
-                        badge.removeClass("badge-primary");
-                        badge.addClass("badge-success");
-                    } else if (data[i].type === 'default_ban') {
-                        badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
-                        badge.removeClass("badge-primary");
-                        badge.addClass("badge-danger");
+                    if (nextTeam === null) {
+                        nextTeam = firstTeam;
                     }
 
-                    order++;
+                    let log = $('#log');
+                    let log_content = "";
 
-                    (nextTeam === firstTeam)
-                        ? nextTeam = secondTeam
-                        : nextTeam = firstTeam
+                    for (let i = 0; i < data.length; i++) {
 
+                        // Add log entries
+                        data[i]['order'] < 7
+                            ? log_content += `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']} / ${data[i]['team']}</li>`
+                            : log_content += `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']}</li>`
+
+
+                        // Set badges
+                        let badge = $(`#map_${data[i]['map_id']}_badge`);
+                        if (data[i].type === 'ban') {
+                            badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
+                            badge.removeClass("badge-primary");
+                            badge.addClass("badge-danger");
+
+                            $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
+                        } else if (data[i].type === 'pick') {
+                            badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
+                            badge.removeClass("badge-primary");
+                            badge.addClass("badge-success");
+
+                            $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
+                            if (nextMap === null) {
+                                nextMap = data[i]['map_id'];
+                            }
+
+                        } else if (data[i].type === 'decider') {
+                            badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
+                            badge.removeClass("badge-primary");
+                            badge.addClass("badge-success");
+                        } else if (data[i].type === 'default_ban') {
+                            badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
+                            badge.removeClass("badge-primary");
+                            badge.addClass("badge-danger");
+                        }
+                    }
+
+                    // Set order and next team
+                    order = data.length + 1;
+                    (order % 2 !== 0)
+                        ? nextTeam = firstTeam
+                        : nextTeam = secondTeam;
+
+                    // Update log
+                    log.html(log_content);
+                    $('#no_log').addClass("d-none");
+                    log.removeClass("d-none");
                 }
+            )
+            .fail((data) => {
+                // 404 => No data
+                if (data.status === 404) {
+                    // Set selects to default
+                    $('#first_ban_team').removeAttr("disabled");
+                    $('#map_pool_select').removeAttr("disabled");
 
-                $('#no_log').addClass("d-none");
-                $('#log').removeClass("d-none");
-            }
-        );
+                    // Reset order and next team
+                    order = 1;
+                    nextTeam = firstTeam;
+                }
+            });
     }
 
     function banMap(id) {
@@ -124,9 +154,17 @@
 
         console.log(`POST: ${postURL} => ${data}`);
         $.post(postURL, data)
-        toastr.success("{% trans "Map banned " %}");
+            .fail((data) => {
+                console.log(data)
+                toastr.error("{% trans "Map ban failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            })
+            .done(() => {
+                toastr.success("{% trans "Map banned" %}.", "{% trans "Success" %}");
+                update();
+            });
 
-        location.reload();
+
+        //location.reload();
     }
 
     function pickMap(id) {
@@ -144,12 +182,22 @@
 
         console.log(`POST: ${postURL} => ${data}`);
         $.post(postURL, data)
-        toastr.success("{% trans "Map banned" %}");
+            .fail((data) => {
+                console.log(data)
+                toastr.error("{% trans "Map pick failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            })
+            .done(() => {
+                toastr.success("{% trans "Map picked" %}.", "{% trans "Success" %}");
+                update();
+            });
 
-        location.reload();
+        //location.reload();
     }
 
     function resetMap(id) {
+        // Ignore if no maps have been picked or banned
+        if (order === 1) return;
+
         let last_map_id = ban_data[ban_data.length - 1]['map_id'];
         if (last_map_id !== id) {
             toastr.error("{% trans "You can only remove the last map ban or pick" %}.");
@@ -162,9 +210,14 @@
 
         console.log(`POST: ${postURL} => ${data}`);
         $.post(postURL, data)
-
-        toastr.success("{% trans "Map removed" %}");
-        location.reload();
+            .fail((data) => {
+                console.log(data)
+                toastr.error("{% trans "Map reset failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            })
+            .done(() => {
+                toastr.success("{% trans "Map reset" %}.", "{% trans "Success" %}");
+                update();
+            });
     }
 
     function resetAllMaps() {
@@ -175,10 +228,17 @@
             let data = `{"type": "delete", "map": ${ban_data[i]['map_id']}}`;
             console.log(`POST: ${postURL} => ${data}`);
             $.post(postURL, data)
+                .fail((data) => {
+                    console.log(data)
+                    toastr.error("{% trans "Map reset failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+                });
         }
 
-        toastr.success("{% trans "Map removed" %}");
-        location.reload();
+        setTimeout(() => {
+            update();
+            $('#reset-map-confirm-modal').modal('hide');
+            toastr.success("{% trans "All maps have been reset" %}.", "{% trans "Success" %}");
+        }, 200)
     }
 
 </script>
