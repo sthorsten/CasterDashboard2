@@ -51,7 +51,7 @@
                             {% for l in leagues %}
                                 {% if l.is_restricted %}
                                     {% for lg in league_groups %}
-                                        {% if lg.league == l and lg.user == lg.user %}
+                                        {% if lg.league == l and lg.user == user %}
                                             <tr>
                                                 <td>{{ l.id }}</td>
                                                 <td>{{ l.name }}</td>

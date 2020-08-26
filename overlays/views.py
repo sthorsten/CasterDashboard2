@@ -12,12 +12,14 @@ def start(request, user_name):
     match_overlay_data = MatchOverlayData.objects.get(user=user)
     match = match_overlay_data.current_match
     overlay_states = OverlayState.objects.get(user=user)
+    overlay_styles = OverlayStyle.objects.get(user=user)
 
     template_data = {
         'overlay_user': user,
         'match_overlay_data': match_overlay_data,
         'match': match,
         'overlay_states': overlay_states,
+        'overlay_styles': overlay_styles,
     }
 
     return render(request, 'start.html', template_data)

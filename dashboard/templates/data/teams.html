@@ -48,7 +48,8 @@
                                 <th>{% trans "Edit Team" %}</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="team_list_tbody">
+                            <!--
                             {% for t in teams %}
                                 <tr>
                                     <td>{{ t.id }}</td>
@@ -67,6 +68,7 @@
                                     </td>
                                 </tr>
                             {% endfor %}
+                            -->
                             </tbody>
                         </table>
                     </div>
@@ -105,15 +107,8 @@
         </div>
     </div>
 
+    {% include "data/teams-scripts.html" %}
     {% include "data/new-team-modal.html" %}
     {% include "data/edit-team-modal.html" %}
-
-    <script>
-        function editTeam(elem) {
-            changeTeamID = $(elem).attr("data-teamid");
-            $("#edit_team_id").attr("value", changeTeamID);
-            $('#edit-team-modal').modal('show');
-        }
-    </script>
 
 {% endblock %}

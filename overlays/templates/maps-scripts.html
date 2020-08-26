@@ -69,7 +69,7 @@
                 let name = $(`#map${order}-name`);
 
                 // Set values
-                img.attr("src", `/media/maps/${data[i]['map_id']}.png`);
+                img.attr("src", `/static/img/maps/${data[i]['map_id']}.png`);
                 name.html(data[i]['map']);
                 (order < 7)
                     ? team.attr("src", `/media/teams/${data[i]['team_id']}.png`)

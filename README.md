@@ -1,8 +1,8 @@
 # R6 Caster Dashboard
 
-[![Version](https://img.shields.io/badge/version-2.0.0--alpha1-orange)](https://github.com/sthorsten/CasterDashboard2/releases)
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)
 [![Django CI](https://github.com/sthorsten/CasterDashboard2/workflows/Django%20CI/badge.svg)](https://github.com/sthorsten/CasterDashboard2/actions)
-[![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE)
+[![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE.md)
 
 ## Description
 
@@ -10,7 +10,33 @@ This is the repository for the new Rainbow Six Siege Caster Dashboard.
 The dashboard aims to help Casters with production by providing easy-to-use and modular Overlays and control via a web dashboard.
 
 ## Features
-*Coming Soon*
+
+### Matches
+- Create, view, edit, share and manage matches
+- Map Picks & Bans
+- Operator Bans
+- Round History (BombSpot, WinTeam, Opening Frag Team, Notes, Live Statistics)   
+
+### Data Management
+- Create, view and edit Teams (and their logos)
+- No need to add teams every time you want to cast or produce a match
+
+### League Administration
+- Manage your league
+- Add and edit sponsors
+- Grant or revoke other users access to your league
+
+### Statistics
+- Map pick, ban and win rates
+- BombSpot pick and win rates
+- Filter for a specific league, season or team
+
+### Overlays
+- Show viewers match related data with the Start, InGame, Maps, Round overlays and more
+- Show your social media tags, create polls and more
+- Leagues can easily get custom overlay styles
+
+*Not all features are implemented yet!*
 
 ## Screenshots
 *Coming Soon*
@@ -30,4 +56,4 @@ You can also use the [direct link](https://poeditor.com/projects/view?id=366547)
 
 ## Changelog
 
-See the full [Changelog](CHANGELOG) for further information.
+See the full [Changelog](CHANGELOG.md) for further information.

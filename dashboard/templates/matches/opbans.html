@@ -134,7 +134,7 @@
                                 <div class="col"></div>
                                 <div class="col-2 text-center mr-2">
                                     {% if operator_bans|length >= 1 %}
-                                        <img id="ban1_icon" src="/media/operators/{{ operator_bans.0.operator.id }}.svg"
+                                        <img id="ban1_icon" src="/static/img/operators/{{ operator_bans.0.operator.id }}.svg"
                                              style="height: 40px"><br>
                                         <span id="ban1_text">{{ operator_bans.0.operator }}</span><br>
                                         <i id="ban1_team">{{ operator_bans.0.team.name }}</i>
@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="col-2 text-center mr-2">
                                     {% if operator_bans|length >= 2 %}
-                                        <img id="ban2_icon" src="/media/operators/{{ operator_bans.1.operator.id }}.svg"
+                                        <img id="ban2_icon" src="/static/img/operators/{{ operator_bans.1.operator.id }}.svg"
                                              style="height: 40px"><br>
                                         <span id="ban2_text">{{ operator_bans.1.operator }}</span><br>
                                         <i id="ban2_team">{{ operator_bans.1.team.name }}</i>
@@ -158,7 +158,7 @@
                                 </div>
                                 <div class="col-2 text-center mr-2">
                                     {% if operator_bans|length >= 3 %}
-                                        <img id="ban3_icon" src="/media/operators/{{ operator_bans.2.operator.id }}.svg"
+                                        <img id="ban3_icon" src="/static/img/operators/{{ operator_bans.2.operator.id }}.svg"
                                              style="height: 40px"><br>
                                         <span id="ban3_text">{{ operator_bans.2.operator }}</span><br>
                                         <i id="ban3_team">{{ operator_bans.2.team.name }}</i>
@@ -170,7 +170,7 @@
                                 </div>
                                 <div class=" col-2 text-center">
                                     {% if operator_bans|length >= 4 %}
-                                        <img id="ban4_icon" src="/media/operators/{{ operator_bans.3.operator.id }}.svg"
+                                        <img id="ban4_icon" src="/static/img/operators/{{ operator_bans.3.operator.id }}.svg"
                                              style="height: 40px"><br>
                                         <span id="ban4_text">{{ operator_bans.3.operator }}</span><br>
                                         <i id="ban4_team">{{ operator_bans.3.team.name }}</i>
@@ -230,7 +230,7 @@
                                                 class="btn btn-secondary text-left w-100 mb-2 {% if operator_bans|length > 1 or operator_bans|length == 4 %}disabled{% endif %}"
                                                 data-value="{{ op.id }}"
                                                 onclick="banOperator(this)">
-                                            <img src="/media/operators/{{ op.id }}.svg" style="height: 30px;">
+                                            <img src="/static/img/operators/{{ op.id }}.svg" style="height: 30px;">
                                             {{ op.name }}
                                         </button>
                                     </div>
@@ -249,7 +249,7 @@
                                                 class="btn btn-secondary text-left w-100 mb-2 {% if operator_bans|length <= 1 or operator_bans|length == 4 %}disabled{% endif %}"
                                                 data-value="{{ op.id }}"
                                                 onclick="banOperator(this)">
-                                            <img src="/media/operators/{{ op.id }}.svg" style="height: 30px;">
+                                            <img src="/static/img/operators/{{ op.id }}.svg" style="height: 30px;">
                                             {{ op.name }}
                                         </button>
 

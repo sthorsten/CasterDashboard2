@@ -1,8 +1,8 @@
-from dashboard.models import Version
+from caster_dashboard_2.version import get_current_version
 
 
-def test_context(request):
+def version_context(request):
     return {
-        "version": Version.objects.filter().order_by('-id')[0],
+        "version": get_current_version(),
         "theme": "dark",
     }

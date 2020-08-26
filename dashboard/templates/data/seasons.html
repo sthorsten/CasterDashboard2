@@ -53,7 +53,7 @@
                             {% for s in seasons %}
                                 {% if s.league.is_restricted %}
                                     {% for lg in league_groups %}
-                                        {% if lg.league == s.league and lg.user == lg.user %}
+                                        {% if lg.league == s.league and lg.user == user %}
                                             <tr>
                                                 <td>{{ s.id }}</td>
                                                 <td>{{ s.name }}</td>

@@ -11,10 +11,21 @@ $left-bg: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211
 $center-bg: $dark-gray !default;
 $right-bg: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%) !default;
 $text-col: #fff !default;
+$center-text-col: #fff !default;
+$team-left-col: $text-col !default;
+$team-right-col: $text-col !default;
 
 div {
   height: 100%;
   width: 100%;
+
+  &.main-bg {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 210px;
+    width: 1500px !important;
+    height: 80px !important;
+  }
 
   &.main {
     position: absolute;
@@ -72,6 +83,7 @@ span {
 
   &.center-text {
     margin-top: -4px;
+    color: $center-text-col;
   }
 
   &.team-name-text {
@@ -82,12 +94,14 @@ span {
     &-left {
       @extend .team-name-text;
       margin-right: 14px;
+      color: $team-left-col;
     }
 
 
     &-right {
       @extend .team-name-text;
       margin-left: 14px;
+      color: $team-right-col;
     }
   }
 }

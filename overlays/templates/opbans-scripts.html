@@ -82,20 +82,20 @@
                 if (data[i].order === 4 && data[i].operator !== ban4) ban4 = data[i];
 
                 if (ban1 !== null) {
-                    if (ban1.team === team_blue) op1_img.attr("src", `/media/operators/${ban1.operator}.svg`);
-                    else op3_img.attr("src", `/media/operators/${ban1.operator}.svg`);
+                    if (ban1.team === team_blue) op1_img.attr("src", `/static/img/operators/${ban1.operator}.svg`);
+                    else op3_img.attr("src", `/static/img/operators/${ban1.operator}.svg`);
                 }
                 if (ban2 !== null) {
-                    if (ban2.team === team_blue) op1_img.attr("src", `/media/operators/${ban2.operator}.svg`);
-                    else op3_img.attr("src", `/media/operators/${ban2.operator}.svg`);
+                    if (ban2.team === team_blue) op1_img.attr("src", `/static/img/operators/${ban2.operator}.svg`);
+                    else op3_img.attr("src", `/static/img/operators/${ban2.operator}.svg`);
                 }
                 if (ban3 !== null) {
-                    if (ban3.team === team_blue) op2_img.attr("src", `/media/operators/${ban3.operator}.svg`);
-                    else op4_img.attr("src", `/media/operators/${ban3.operator}.svg`);
+                    if (ban3.team === team_blue) op2_img.attr("src", `/static/img/operators/${ban3.operator}.svg`);
+                    else op4_img.attr("src", `/static/img/operators/${ban3.operator}.svg`);
                 }
                 if (ban4 !== null) {
-                    if (ban4.team === team_blue) op2_img.attr("src", `/media/operators/${ban4.operator}.svg`);
-                    else op4_img.attr("src", `/media/operators/${ban4.operator}.svg`);
+                    if (ban4.team === team_blue) op2_img.attr("src", `/static/img/operators/${ban4.operator}.svg`);
+                    else op4_img.attr("src", `/static/img/operators/${ban4.operator}.svg`);
                 }
             }
         });
