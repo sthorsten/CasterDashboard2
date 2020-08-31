@@ -95,6 +95,10 @@ LANGUAGES = (
     ('de', 'German'),
 )
 
+# Default Media Settings, can be overwritten in local_settings.py
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 # Django REST framework
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

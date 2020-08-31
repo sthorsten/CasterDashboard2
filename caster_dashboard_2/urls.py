@@ -13,16 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url, handler404, handler500
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-try:
-    from caster_dashboard_2.settings.local_settings import *
-except ModuleNotFoundError as e:
-    print("WARNING: No local settings found!")
-
+from caster_dashboard_2.settings.base import *
 from dashboard.views import sites, forms
 
 urlpatterns = [
@@ -46,10 +42,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
 
-if MEDIA_URL is not None and MEDIA_ROOT is not None:
-    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
-else:
-    urlpatterns += static('/media/', document_root=os.path.join(BASE_DIR, "media"))
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
 
 handler404 = sites.error_404
 handler500 = sites.error_500
