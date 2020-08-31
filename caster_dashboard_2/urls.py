@@ -17,7 +17,11 @@ from django.conf.urls import url, handler404, handler500
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from caster_dashboard_2.settings.local_settings import *
+
+try:
+    from caster_dashboard_2.settings.local_settings import *
+except ModuleNotFoundError as e:
+    print("WARNING: No local settings found!")
 
 from dashboard.views import sites, forms
 
