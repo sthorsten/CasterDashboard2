@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
 
-urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+urlpatterns += static(MEDIA_URL or '/media/', document_root=(MEDIA_ROOT or os.path.join(BASE_DIR, "media")))
 
 handler404 = sites.error_404
 handler500 = sites.error_500
