@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
 
-if MEDIA_URL and MEDIA_ROOT:
+if MEDIA_URL is not None and MEDIA_ROOT is not None:
     urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
 else:
     urlpatterns += static('/media/', document_root=os.path.join(BASE_DIR, "media"))
