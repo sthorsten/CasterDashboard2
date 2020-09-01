@@ -64,7 +64,7 @@ class SponsorViewSet(viewsets.ModelViewSet):
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
-        fields = ['id', 'url', 'name', 'team_logo']
+        fields = ['id', 'url', 'name', 'team_logo', 'team_logo_small']
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -87,10 +87,13 @@ class TeamViewSet(viewsets.ModelViewSet):
                         with open(save_path, 'wb') as logo_file:
                             logo_file.write(r.content)
 
+                        new_team.team_logo = "teams/%(id)s.png" % ({'id': new_team.id})
+                        new_team.save()
+
                     except requests.RequestException as e:
                         print(e.messages[0])
 
-                return Response(serializer.validated_data, status=201)
+                return Response({"status": "ok"}, status=201)
 
             except ValidationError as e:
                 return Response({"error": e.messages[0]}, status=400)
@@ -116,6 +119,9 @@ class TeamViewSet(viewsets.ModelViewSet):
                         save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(team.id) + '.png')
                         with open(save_path, 'wb') as logo_file:
                             logo_file.write(r.content)
+
+                        team.team_logo = "teams/%(id)s.png" % ({'id': team.id})
+                        team.save()
 
                     except requests.RequestException as e:
                         print(e.messages[0])

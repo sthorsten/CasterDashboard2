@@ -116,12 +116,13 @@
         }).done((data) => {
             console.log(data);
             toastr.success("{% trans "The team has been updated" %}.", "{% trans "Success" %}");
-            refresh();
 
         }).always(() => {
             setTimeout(function () {
                 $('#edit-team-loading-modal').modal('hide');
+                refresh();
             }, 500);
+
         });
     });
 </script>

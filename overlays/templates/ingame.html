@@ -45,14 +45,14 @@
             <div id="map-pick" class="title-wrapper-big d-none">
                 <span class="title-big">{% trans "Map Pick" %}</span>
                 {% if current_map_pick_team %}
-                    <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}.png"
+                    <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}_50.webp"
                          alt="">
                 {% endif %}
             </div>
         </div>
 
         <div class="container-team container-team-left">
-            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_blue.id }}.png" alt="">
+            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_blue.id }}_50.webp" alt="">
             <span id="team-blue-name" class="team-name-text-left">{{ match.team_blue }}</span>
         </div>
     </div>
@@ -104,7 +104,7 @@
     <div id="container-right" class="container-right invisible">
         <div class="container-team">
             <span id="team-orange-name" class="team-name-text-right">{{ match.team_orange }}</span>
-            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_orange.id }}.png" alt="">
+            <img id="team-blue-logo" class="logo-team" src="/media/teams/{{ match.team_orange.id }}_50.webp" alt="">
         </div>
         <div id="sponsor-container" class="container-sponsor">
             {% for s in sponsors %}

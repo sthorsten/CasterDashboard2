@@ -20,14 +20,15 @@
             for (let i = 0; i < data.length; i++) {
                 let team_id = data[i]['id'];
                 let team_name = data[i]['name'];
-                let team_logo = data[i]['team_logo'];
+                let team_logo_small = data[i]['team_logo_small'];
+                let time = new Date().getTime();
 
                 let formatted_html = `
                 <tr>
                     <td>${team_id}</td>
                     <td>${team_name}</td>
                     <td>
-                        <img src="${team_logo}" alt="-" style="height: 30px; width: 30px;">
+                        <img src="${team_logo_small}#${time}" alt="-" style="height: 30px; width: 30px;">
                     </td>
                     <td>
                         <button class="btn btn-sm btn-warning" data-teamid="${team_id}" data-teamname="${team_name}"

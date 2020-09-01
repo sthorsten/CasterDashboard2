@@ -16,6 +16,7 @@ from django.dispatch import receiver
 
 import caster_dashboard_2.settings.base as django_settings
 from dashboard.validators import *
+from caster_dashboard_2.helpers.image_handler import *
 
 logger = logging.getLogger(__name__)
 
@@ -179,8 +180,9 @@ def team_logo_path(instance, filename):
 class Team(models.Model):
     name = models.CharField(max_length=22, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    team_logo = models.ImageField(storage=OverwriteStorage(), validators=[validate_image, validate_square_logo],
-                                  upload_to=team_logo_path, blank=True, null=True)
+
+    team_logo = models.ImageField(upload_to=team_logo_path, validators=[validate_square_logo], blank=True, null=True)
+    team_logo_small = models.ImageField(upload_to=team_logo_path, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -195,45 +197,22 @@ def team_pre_save(sender, instance, **kwargs):
 def team_post_save(sender, instance, **kwargs):
     # Rename file to id
     if instance.team_logo:
-        instance.has_logo = True
-        if not instance.team_logo.name.__contains__(str(instance.id)):
-            old_path = os.path.join(django_settings.MEDIA_ROOT, instance.team_logo.name)
-            new_path = os.path.join(django_settings.MEDIA_ROOT, "teams", str(instance.id) + ".png")
+        if not instance.team_logo.name.__contains__(str(instance.id) + "_500.webp"):
+            convert_team_logo(instance.id, instance.team_logo.path)
+            os.remove(instance.team_logo.path)
 
-            # Remove old file if it exists
-            if os.path.isfile(new_path):
-                logger.info("Removing old team logo file: " + new_path)
-                try:
-                    os.remove(new_path)
-                except OSError as e:
-                    logger.error("Error removing old team logo file: " + str(e))
-
-            # Convert and save new file
-            image = Image.open(old_path)
-            if image.height > 500 or image.width > 500:
-                converted_image = image.resize((500, 500))
-                converted_image.save(new_path)
-            else:
-                image.save(new_path)
-
-            instance.team_logo = "teams/{0}.png".format(str(instance.id))
+            instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
+            instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+            instance.logo_converted = True
             instance.save()
 
     else:
-        nologo_path = os.path.join(django_settings.MEDIA_ROOT, "teams", "_nologo.png")
-        new_path = os.path.join(django_settings.MEDIA_ROOT, "teams", str(instance.id) + ".png")
+        no_logo_path = os.path.join(django_settings.MEDIA_ROOT, "teams", "_nologo.png")
+        convert_team_logo(instance.id, no_logo_path)
 
-        # Remove old file if it exists
-        if os.path.isfile(new_path):
-            logger.info("Removing old team logo file: " + new_path)
-            try:
-                os.remove(new_path)
-            except OSError as e:
-                logger.error("Error removing old team logo file: " + str(e))
-
-        shutil.copy(nologo_path, new_path)
-
-        instance.team_logo = "teams/{0}.png".format(str(instance.id))
+        instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
+        instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+        instance.logo_converted = True
         instance.save()
 
 
