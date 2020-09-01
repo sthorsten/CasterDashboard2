@@ -187,6 +187,13 @@
                 toastr.error("{% trans "Map pick failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
             })
             .done(() => {
+                // Set continue button
+                let continue_btn = $('#continue_btn');
+                if (continue_btn.attr("data-nextmap") === "0") {
+                    continue_btn.attr("href", `/dashboard/matches/${matchID}/map/${id}/opbans`);
+                    continue_btn.attr("data-nextmap", `${matchID}`);
+                }
+
                 toastr.success("{% trans "Map picked" %}.", "{% trans "Success" %}");
                 update();
             });
@@ -215,6 +222,11 @@
                 toastr.error("{% trans "Map reset failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
             })
             .done(() => {
+                // Reset continue btn
+                let continue_btn = $('#continue_btn');
+                continue_btn.removeAttr("href");
+                continue_btn.attr("data-nextmap", "0");
+
                 toastr.success("{% trans "Map reset" %}.", "{% trans "Success" %}");
                 update();
             });
@@ -235,6 +247,11 @@
         }
 
         setTimeout(() => {
+            // Reset continue btn
+            let continue_btn = $('#continue_btn');
+            continue_btn.removeAttr("href");
+            continue_btn.attr("data-nextmap", "0");
+
             update();
             $('#reset-map-confirm-modal').modal('hide');
             toastr.success("{% trans "All maps have been reset" %}.", "{% trans "Success" %}");

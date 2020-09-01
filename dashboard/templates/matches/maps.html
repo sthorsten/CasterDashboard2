@@ -76,11 +76,14 @@
                                             data-toggle="modal" data-target="#reset-map-confirm-modal">
                                         {% trans "Reset All Maps" %}
                                     </button>
-                                    <a id="continue_btn"
-                                            {% if next_map_id %}
-                                       href="/dashboard/matches/{{ match.id }}/map/{{ next_map_id }}/opbans"
-                                            {% endif %}
-                                       class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
+                                    {% if next_map_id %}
+                                        <a id="continue_btn" data-nextmap="{{ next_map_id }}"
+                                           href="/dashboard/matches/{{ match.id }}/map/{{ next_map_id }}/opbans"
+                                           class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
+                                    {% else %}
+                                        <a id="continue_btn" data-nextmap="0"
+                                           class="btn btn-primary w-100">{% trans "Continue to Operator Bans" %}</a>
+                                    {% endif %}
                                 </div>
                             </div>
 
