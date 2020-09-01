@@ -218,12 +218,12 @@ def team_post_save(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=Team)
 def team_pre_delete(sender, instance, **kwargs):
-    if instance.team_logo:
-        logo = instance.team_logo.path
-        # Auto delete image
-        if logo:
-            if os.path.exists(instance.team_logo.path):
-                os.remove(instance.team_logo.path)
+    # Auto delete images
+    team_logo = instance.team_logo.path
+    team_logo_small = instance.team_logo_small.path
+
+    os.remove(team_logo)
+    os.remove(team_logo_small)
 
 
 class Sponsor(models.Model):
@@ -266,7 +266,7 @@ def sponsor_post_save(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Sponsor)
-def team_pre_delete(sender, instance, **kwargs):
+def sponsor_pre_delete(sender, instance, **kwargs):
     if instance.sponsor_logo:
         logo = instance.sponsor_logo.path
         # Auto delete image
