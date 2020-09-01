@@ -8,7 +8,7 @@
         loadTeamData();
     });
 
-    function refresh(){
+    function refresh() {
         resetTeamList();
         loadTeamData();
     }
@@ -30,7 +30,7 @@
                         <img src="${team_logo}" alt="-" style="height: 30px; width: 30px;">
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-warning" data-teamid="${team_id}"
+                        <button class="btn btn-sm btn-warning" data-teamid="${team_id}" data-teamname="${team_name}"
                                                 onclick="editTeam(this)">{% trans "Change Logo" %}</button>
                     </td>
                 </tr>
@@ -54,8 +54,10 @@
 
 
     function editTeam(elem) {
-        changeTeamID = $(elem).attr("data-teamid");
+        let changeTeamID = $(elem).attr("data-teamid");
+        let changeTeamName = $(elem).attr("data-teamname");
         $("#edit_team_id").attr("value", changeTeamID);
+         $("#edit_team_name").attr("value", changeTeamName);
         $('#edit-team-modal').modal('show');
     }
 

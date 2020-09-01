@@ -12,7 +12,13 @@ admin.site.register(Operator)
 admin.site.register(League)
 admin.site.register(LeagueGroup)
 admin.site.register(Season)
-admin.site.register(Team)
+
+
+class TeamAdmin(admin.ModelAdmin):
+    readonly_fields = ('created',)
+
+
+admin.site.register(Team, TeamAdmin)
 admin.site.register(Sponsor)
 admin.site.register(MatchState)
 admin.site.register(Match)

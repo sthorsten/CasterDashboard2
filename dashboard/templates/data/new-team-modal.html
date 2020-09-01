@@ -54,20 +54,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="input-group">
-                            <div class="col-sm-4">
-                                <label>{% trans "No Logo" %}</label>
-                            </div>
-                            <div class="col-sm-8 custom-control custom-checkbox">
-                                <input id="no_logo" name="no_logo" class="custom-control-input"
-                                       type="checkbox">
-                                <label for="no_logo"
-                                       class="custom-control-label ml-2">{% trans "Team has no logo" %}</label>
-                            </div>
-                        </div>
-                    </div>
-
                     <hr style="border-top: 1px solid #fff">
 
                     <div class="row">
@@ -76,8 +62,9 @@
                         </div>
                         <div class="col-12 mt-2">
                             <i>
-                                {% trans "1. Enter a team name" %}<br>
-                                {% trans "2. Add a logo by either uploading one, pasting in a link to the logo or checking the 'Team has no logo' checkbox if the team does not has a logo." %}
+                                {% trans "1. Enter a team name" %}.<br>
+                                {% trans "2. Add a logo by either uploading one or pasting in a link to the logo file" %}.<br>
+                                {% trans "If the team has no logo you can leave both fields blank" %}.<br>
                             </i>
                         </div>
                     </div>
@@ -103,34 +90,45 @@
 {% include 'base/loading-modal.html' with  modal_id="add-team-loading-modal" title=_('Adding Team') %}
 
 <script>
-    $('#new-team-form').submit(function (e) {
-        e.preventDefault();
-
-        // Loading modal
-        $('#new-team-modal').modal('hide');
-        $('#add-team-loading-modal').modal('show');
-
+    $('#new-team-form').submit((event) => {
         let form = $('#new-team-form')[0];
         let formData = new FormData(form);
 
+        event.preventDefault();
+
+        // Form Validation
+        if (form.checkValidity() === false) {
+            return;
+        }
+        form.classList.add('was-validated');
+
+        // Show loading modal
+        $('#new-team-modal').modal('hide');
+        $('#add-team-loading-modal').modal('show');
+
+        // Send data to API
         $.ajax({
             url: '/api/data/teams/',
             data: formData,
             type: 'POST',
             contentType: false,
             processData: false
-        }).fail(function (data) {
+
+        }).fail((data) => {
+            if (data.status === 500)
+                toastr.error("{% trans "Team could not be created" %}: {% trans "Internal Server Error" %} - {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            else if (data.status === 400)
+                toastr.error("{% trans "Team could not be created" %}: " + data['responseJSON']['error'], "{% trans "Error" %}");
+
+        }).done((data) => {
             console.log(data);
-            toastr.error("{% trans "Team could not be created. Please try again or contact an administrator!" %}");
-            setTimeout(function () {
-                $('#add-team-loading-modal').modal('hide');
-            }, 500);
-        }).done(function (data) {
-            toastr.success("{% trans "The team has been created." %}", "{% trans "Success" %}");
-            setTimeout(function () {
-                $('#add-team-loading-modal').modal('hide');
-            }, 500);
+            toastr.success("{% trans "The team has been created" %}.", "{% trans "Success" %}");
             refresh();
+
+        }).always(() => {
+            setTimeout(function () {
+                $('#add-team-loading-modal').modal('hide');
+            }, 500);
         });
     });
 </script>

@@ -1,5 +1,5 @@
 import os
-from caster_dashboard_2.settings import BASE_DIR
+from caster_dashboard_2.settings.base import BASE_DIR
 
 
 def get_current_version():

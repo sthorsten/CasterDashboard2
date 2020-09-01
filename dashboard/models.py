@@ -4,6 +4,7 @@ Main database model definitions
 
 import os
 import logging
+import shutil
 from datetime import datetime
 
 from PIL import Image
@@ -13,7 +14,7 @@ from django.db import models
 from django.db.models.signals import *
 from django.dispatch import receiver
 
-import caster_dashboard_2.settings as django_settings
+import caster_dashboard_2.settings.base as django_settings
 from dashboard.validators import *
 
 logger = logging.getLogger(__name__)
@@ -176,9 +177,8 @@ def team_logo_path(instance, filename):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=22)
+    name = models.CharField(max_length=22, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    has_logo = models.BooleanField(default=False)
     team_logo = models.ImageField(storage=OverwriteStorage(), validators=[validate_image, validate_square_logo],
                                   upload_to=team_logo_path, blank=True, null=True)
 
@@ -218,6 +218,23 @@ def team_post_save(sender, instance, **kwargs):
 
             instance.team_logo = "teams/{0}.png".format(str(instance.id))
             instance.save()
+
+    else:
+        nologo_path = os.path.join(django_settings.MEDIA_ROOT, "teams", "_nologo.png")
+        new_path = os.path.join(django_settings.MEDIA_ROOT, "teams", str(instance.id) + ".png")
+
+        # Remove old file if it exists
+        if os.path.isfile(new_path):
+            logger.info("Removing old team logo file: " + new_path)
+            try:
+                os.remove(new_path)
+            except OSError as e:
+                logger.error("Error removing old team logo file: " + str(e))
+
+        shutil.copy(nologo_path, new_path)
+
+        instance.team_logo = "teams/{0}.png".format(str(instance.id))
+        instance.save()
 
 
 @receiver(pre_delete, sender=Team)

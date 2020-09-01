@@ -1,5 +1,12 @@
+import json
+
+import requests
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from PIL import Image
+from django.utils.translation import gettext as _
 
 from dashboard.models import *
 from overlays.models import *
@@ -57,12 +64,68 @@ class SponsorViewSet(viewsets.ModelViewSet):
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
-        fields = ['id', 'url', 'name', 'has_logo', 'team_logo']
+        fields = ['id', 'url', 'name', 'team_logo']
 
 
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = TeamSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                new_team = serializer.create(validated_data=serializer.validated_data)
+
+                # Download logo from URL if present and no logo upload
+                if not request.data['team_logo'] and request.data['team_logo_url']:
+                    try:
+                        # Download and save file
+                        url = request.data['team_logo_url']
+                        r = requests.get(url, allow_redirects=True)
+                        save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
+                        with open(save_path, 'wb') as logo_file:
+                            logo_file.write(r.content)
+
+                    except requests.RequestException as e:
+                        print(e.messages[0])
+
+                return Response(serializer.validated_data, status=201)
+
+            except ValidationError as e:
+                return Response({"error": e.messages[0]}, status=400)
+
+        else:
+            if serializer.errors['name'][0].code == "unique":
+                return Response(data={"error": _('A team with this name already exists!')}, status=400)
+            return Response(data={"error": serializer.errors}, status=400)
+
+    def partial_update(self, request, *args, **kwargs):
+        team = Team.objects.get(id=request.data.get("id"))
+        serializer = TeamSerializer(team, data=request.data, partial=True)
+        if serializer.is_valid():
+            try:
+                team = serializer.save()
+
+                # Download logo from URL if present and no logo upload
+                if not request.data['team_logo'] and request.data['team_logo_url']:
+                    try:
+                        # Download and save file
+                        url = request.data['team_logo_url']
+                        r = requests.get(url, allow_redirects=True)
+                        save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(team.id) + '.png')
+                        with open(save_path, 'wb') as logo_file:
+                            logo_file.write(r.content)
+
+                    except requests.RequestException as e:
+                        print(e.messages[0])
+
+                return Response({"status": "ok"}, status=200)
+            except ValidationError as e:
+                return Response({"error": e.messages[0]}, status=400)
+
+        else:
+            return Response(data={"error": serializer.errors}, status=400)
 
 
 '''
