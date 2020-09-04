@@ -4,7 +4,7 @@ Main database model definitions
 
 import os
 import logging
-import shutil
+import secrets
 from datetime import datetime
 
 from PIL import Image
@@ -35,6 +35,7 @@ class OverwriteStorage(FileSystemStorage):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    registration_token = models.CharField(max_length=128, blank=True, null=True)
     confirmed = models.BooleanField(default=0)
 
     def __str__(self):
@@ -45,7 +46,8 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         logger.debug("[User: %(user)s] Creating Profile via receiver" % {'user': instance})
-        Profile.objects.create(user=instance)
+        registration_token = secrets.token_hex(64)
+        Profile.objects.create(user=instance, registration_token=registration_token)
 
 
 class Version(models.Model):

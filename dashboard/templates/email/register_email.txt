@@ -1,0 +1,11 @@
+Caster Dashboard Registration
+
+Hello {{ username }}!
+You get this email because you have registered for an account for the R6 Caster Dashboard (https://dev.thorshero.de)
+
+Before you can use your account, you first have to confirm it.
+Please copy the following link to your browser:
+
+https://dev.thorshero.de/register/confirm/{{ user_id }}/{{ token }}
+
+If you did not register for an account, you can ignore this email.

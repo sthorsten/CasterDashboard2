@@ -3,12 +3,17 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.db import DatabaseError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.template import Context
+from django.template.loader import get_template
 from django.utils.translation import gettext as _
 from pip._vendor import requests
-import caster_dashboard_2.settings as django_settings
+
+import caster_dashboard_2
+import caster_dashboard_2.settings.base as django_settings
 
 from dashboard.models import *
 
@@ -55,6 +60,22 @@ def register_form(request):
 
         if user is not None:
             logging.info("[User: %s] New registration" % user)
+
+            # Email confirmation
+            profile = Profile.objects.get(user=user)
+            user_token = profile.registration_token
+            email_text = get_template("email/register_email.txt")
+            email_html = get_template("email/register_email.html")
+            email_context = {'username': user.username, 'user_id': user.id, 'token': user_token}
+            from_email = caster_dashboard_2.settings.local_settings.DEFAULT_FROM_EMAIL
+            send_mail(
+                subject="[Caster Dashboard] Account Registration",
+                from_email=from_email,
+                recipient_list=[user.email],
+                message=email_text.render(email_context),
+                html_message=email_html.render(email_context),
+            )
+
             return redirect('/register/success')
         else:
             logging.error("[User: %s] Registration failed!" % username)

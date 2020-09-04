@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Registration</title>
+
+    <style>
+        body {
+            text-align: center;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            background: #343a40;
+            border: 3px solid #dc3545;
+            border-radius: 0.25rem;
+            padding: 1em;
+        }
+
+        a {
+            color: #007bff;
+        }
+
+        .button {
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Caster Dashboard Registration</h1>
+
+<p>
+    Hello {{ username }}!<br>
+    You get this email because you have registered for an account for the <a href="https://dev.thorshero.de">R6 Caster Dashboard</a>
+</p>
+<p>
+    Before you can use your account, you first have to confirm it.
+</p>
+<p>
+    <a class="button" href="https://dev.thorshero.de/register/confirm/{{ user_id }}/{{ token }}">Confirm Your Account</a>
+</p>
+
+<hr>
+
+<p>
+    <i style="font-size: small">If you did not register for an account, you can ignore this email.</i>
+</p>
+<p>
+    <i style="font-size: small"></i>
+</p>
+
+</body>
+</html>
