@@ -8,6 +8,8 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
+router.register(r'bombspots', BombSpotViewSet)
+
 router.register(r'data/leagues', LeagueViewSet)
 router.register(r'data/seasons', SeasonViewSet)
 router.register(r'data/sponsors', SponsorViewSet)

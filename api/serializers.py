@@ -219,5 +219,17 @@ class OperatorBanSerializer(serializers.ModelSerializer):
 class RoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Round
-        fields = ['round_no', 'bombspot', 'atk_team', 'def_team', 'of_team', 'win_type', 'win_team', 'score_blue', 'score_orange',
+        fields = ['round_no', 'bombspot', 'atk_team', 'def_team', 'of_team', 'win_type', 'win_team', 'score_blue',
+                  'score_orange',
                   'notes']
+
+
+class BombSpotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BombSpot
+        fields = ['id', 'url', 'map', 'floor', 'bomb_spot']
+
+
+class BombSpotViewSet(viewsets.ModelViewSet):
+    queryset = BombSpot.objects.all()
+    serializer_class = BombSpotSerializer
