@@ -205,7 +205,6 @@ def team_post_save(sender, instance, **kwargs):
 
             instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
             instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
-            instance.logo_converted = True
             instance.save()
 
     else:
@@ -214,7 +213,6 @@ def team_post_save(sender, instance, **kwargs):
 
         instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
         instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
-        instance.logo_converted = True
         instance.save()
 
 

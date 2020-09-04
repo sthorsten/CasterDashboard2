@@ -2,6 +2,51 @@
 
 <script>
 
+    let team_blue = {{ match.team_blue.id }};
+    let team_orange = {{ match.team_orange.id }}
+
+        $(document).ready(() => {
+            createCharts();
+            update();
+        });
+
+    function update() {
+        $.getJSON('/api/matches/rounds/{{ match.id }}/{{ map.id }}/', (data) => {
+            console.log(data);
+
+            // Sort data
+            let defWins = 0;
+            let atkWins = 0;
+
+            let ofBlue = 0;
+            let ofOrange = 0;
+
+            let winType1 = 0;
+            let winType2 = 0;
+            let winType3 = 0;
+            let winType4 = 0;
+
+            for (let i = 0; i < data.length; i++) {
+                (data[i]['win_team'] === data[i]['def_team'])
+                    ? defWins++
+                    : atkWins++;
+
+                (team_blue === data[i]['of_team'])
+                    ? ofBlue++
+                    : ofOrange++;
+
+                if (data[i]["win_type"] === 1) winType1++;
+                if (data[i]["win_type"] === 2) winType2++;
+                if (data[i]["win_type"] === 3) winType3++;
+                if (data[i]["win_type"] === 4) winType4++;
+            }
+
+            updateChartData(sideWinChart, [atkWins, defWins], ["{% trans "ATK Wins" %}", "{% trans "DEF Wins" %}"], ['#0870d3', '#ea7516']);
+            updateChartData(openingFragChart, [ofBlue, ofOrange], ["{{ match.team_blue }}", "{{ match.team_orange }}"], ['#0870d3', '#ea7516']);
+            updateChartData(typeWinChart, [winType1, winType2, winType3, winType4], ["{% trans "Kills" %}", "{% trans "Defuser Planted" %}", "{% trans "Counter Defused" %}", "{% trans "Time" %}"])
+        });
+    }
+
     function addRound() {
         let matchID = "{{ match.id }}";
         let mapID = "{{ map.id }}";
@@ -98,6 +143,44 @@
         $(elem).attr("data-state", "active");
         $(elem).removeClass("btn-outline-primary");
         $(elem).addClass("btn-primary");
+    }
+
+    // Chart Handling
+    let sideWinChart;
+    let openingFragChart;
+    let typeWinChart;
+    let bombSpotPickChart;
+
+    let chartOptions = {
+        chart: {
+            type: 'donut',
+            foreColor: '#ffffff'
+        },
+        legend: {
+            position: 'left',
+        },
+        series: [],
+        labels: [
+            '{{ match.team_blue }}', '{{ match.team_orange }}'
+        ],
+        colors: ['#0870d3', '#ea7516']
+    }
+
+    function createCharts() {
+        sideWinChart = new ApexCharts(document.querySelector('#sideWinChart'), chartOptions);
+        sideWinChart.render();
+        openingFragChart = new ApexCharts(document.querySelector('#openingFragChart'), chartOptions);
+        openingFragChart.render();
+        typeWinChart = new ApexCharts(document.querySelector('#typeWinChart'), chartOptions);
+        typeWinChart.render();
+        //bombSpotPickChart = new ApexCharts(document.querySelector('#bombSpotPickChart'), chartOptions);
+        //bombSpotPickChart.render();
+    }
+
+    function updateChartData(chart, series, labels, colors) {
+        (colors === null)
+            ? chart.updateOptions({series: series, labels: labels})
+            : chart.updateOptions({series: series, labels: labels, colors: colors});
     }
 
 </script>

@@ -4,6 +4,9 @@
 
 {% block head %}
     {% include "base/head.html" with page_title="Rounds" %}
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 {% endblock %}
 
 {% block sidebar %}
@@ -159,6 +162,30 @@
 
                     <h5 class="card-title card-title-upper">{% trans "Live Statistics" %}:</h5><br>
                     <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "ATK / DEF Wins" %}</label>
+                            <div id="sideWinChart"></div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "Opening Frags" %}</label>
+                            <div id="openingFragChart"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "Wins By Type" %}</label>
+                            <div id="typeWinChart"></div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "BombSpot Pick Rates" %}</label>
+                            <p><i>Coming Soon</i></p>
+                            <div id="bombSpotPickChart"></div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
