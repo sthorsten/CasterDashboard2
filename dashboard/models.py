@@ -8,6 +8,8 @@ import secrets
 from datetime import datetime
 
 from PIL import Image
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.db import models
@@ -299,8 +301,47 @@ class Match(models.Model):
     score_orange = models.IntegerField(default=0)
     win_team = models.ForeignKey(Team, on_delete=models.CASCADE, blank=True, null=True, related_name="match_win_team")
 
+    def serialize(self):
+        if self.win_team is not None:
+            win_team = self.win_team.name
+        else:
+            win_team = ''
+
+        return {
+            'id': self.id,
+            'season': self.season.name,
+            'league': self.league.name,
+            'title': self.title,
+            'sponsors': None,
+            'subtitle': self.subtitle,
+            'state': self.state.state,
+            'best_of': self.best_of,
+            'team_blue': self.team_blue.name,
+            'team_orange': self.team_orange.name,
+            'score_blue': self.score_blue,
+            'score_orange': self.score_orange,
+            'win_team': win_team,
+        }
+
     def __str__(self):
         return str(self.id)
+
+
+@receiver(post_save, sender=Match)
+def match_post_save(sender, instance, **kwargs):
+    # Send message to Websocket Consumer
+    channel_layer = get_channel_layer()
+    match_data = instance.serialize()
+    data = {'match': match_data}
+
+    for user in instance.user.all():
+        async_to_sync(channel_layer.group_send)(
+            str(user) + "_match_data",
+            {
+                "type": "send_message",
+                "message": data,
+            }
+        )
 
 
 class MapBan(models.Model):

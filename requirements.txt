@@ -27,3 +27,6 @@ six==1.15.0
 snowballstemmer==2.0.0
 sqlparse==0.3.1
 urllib3==1.25.10
+
+pip~=20.2.2
+channels~=2.4.0

@@ -1,5 +1,8 @@
+import json
 import logging
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -57,11 +60,55 @@ def create_user_overlay_state(sender, instance, created, **kwargs):
         OverlayState.objects.create(user=instance)
 
 
+@receiver(post_save, sender=OverlayState)
+def overlay_state_post_save(sender, instance, **kwargs):
+    # Send message to Websocket Consumer
+    channel_layer = get_channel_layer()
+    data = {
+        "start_state": instance.start_state,
+        "ingame_state": instance.ingame_state,
+        "maps_state": instance.maps_state,
+        "opbans_state": instance.opbans_state,
+        "rounds_state": instance.rounds_state,
+        "social_state": instance.social_state,
+        "poll_state": instance.poll_state,
+        "timer_state": instance.timer_state,
+        "ticker_state": instance.ticker_state,
+        "next_match_state": instance.next_match_state,
+    }
+    async_to_sync(channel_layer.group_send)(
+        str(instance.user) + "_overlay_state",
+        {
+            "type": "send_message",
+            "message": data,
+        }
+    )
+
+
 class MatchOverlayData(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True)
     current_map = models.ForeignKey(Map, on_delete=models.SET_NULL, blank=True, null=True)
     current_atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, blank=True, null=True)
+
+    def serialize(self):
+        if self.current_match is not None:
+            current_match = self.current_match.id
+        else:
+            current_match = 0
+
+        if self.current_map is not None:
+            current_map = self.current_map.id
+        else:
+            current_map = 0
+
+        if self.current_atk_team is not None:
+            current_atk_team = self.current_atk_team.id
+        else:
+            current_atk_team = 0
+
+        return {'user': self.user.id, 'current_match': current_match, 'current_map': current_map,
+                'current_atk_team': current_atk_team}
 
     def __str__(self):
         return "MatchOverlayData: " + str(self.user)
@@ -72,6 +119,23 @@ def create_user_match_overlay_data(sender, instance, created, **kwargs):
     if created:
         logger.debug("[User %s] Creating MatchOverlayData via receiver" % instance)
         MatchOverlayData.objects.create(user=instance)
+
+
+@receiver(post_save, sender=MatchOverlayData)
+def match_overlay_data_post_save(sender, instance, **kwargs):
+    # Send message to Websocket Consumer
+    channel_layer = get_channel_layer()
+    match_overlay_data = instance.serialize()
+    match = instance.current_match
+    match_data = match.serialize()
+    data = {'match_overlay_data': match_overlay_data, 'match': match_data}
+    async_to_sync(channel_layer.group_send)(
+        str(instance.user) + "_match_data",
+        {
+            "type": "send_message",
+            "message": data,
+        }
+    )
 
 
 class PollOverlayData(models.Model):

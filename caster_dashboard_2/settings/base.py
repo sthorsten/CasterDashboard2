@@ -6,7 +6,19 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
-WSGI_APPLICATION = 'caster_dashboard_2.wsgi.application'
+# WSGI_APPLICATION = 'caster_dashboard_2.wsgi.application'
+WSGI_APPLICATION = 'caster_dashboard_2.routing.application'
+ASGI_APPLICATION = 'caster_dashboard_2.routing.application'
+
+# Django Channels Redis
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Application definition
 INSTALLED_APPS = [
@@ -18,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'widget_tweaks',
+    'channels',
     'dashboard.apps.DashboardConfig',
     'overlays.apps.OverlaysConfig',
 ]
