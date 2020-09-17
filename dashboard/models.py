@@ -102,12 +102,10 @@ class League(models.Model):
     name = models.CharField(max_length=255)
     is_restricted = models.BooleanField(default=True)
     has_custom_overlay = models.BooleanField(default=False)
-    league_logo = models.ImageField(storage=OverwriteStorage(), upload_to=league_logo_path,
-                                    validators=[validate_image, validate_square_logo], blank=True, null=True)
-    light_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
-    dark_logo = models.ImageField(upload_to="leagues", blank=True, null=True)
 
-    league_logo_validated = False
+    league_logo = models.ImageField(upload_to=league_logo_path, validators=[validate_square_logo], blank=True,
+                                    null=True)
+    league_logo_small = models.ImageField(upload_to=league_logo_path, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -115,35 +113,28 @@ class League(models.Model):
 
 @receiver(pre_save, sender=League)
 def league_pre_save(sender, instance, **kwargs):
-    if not instance.league_logo_validated:
-        instance.full_clean()
+    instance.full_clean()
 
 
 @receiver(post_save, sender=League)
 def league_post_save(sender, instance, **kwargs):
     # Rename file to id
     if instance.league_logo:
-        if not instance.league_logo_validated and not instance.league_logo.name.__contains__(str(instance.id)):
-            old_path = os.path.join(django_settings.MEDIA_ROOT, instance.league_logo.name)
-            new_path = os.path.join(django_settings.MEDIA_ROOT, "leagues", str(instance.id) + ".png")
+        if not instance.league_logo.name.__contains__(str(instance.id) + "_500.webp"):
+            convert_league_logo(instance.id, instance.league_logo.path)
+            os.remove(instance.league_logo.path)
 
-            # Remove old file if it exists
-            if os.path.isfile(new_path):
-                logger.info("Removing old sponsor logo file: " + new_path)
-                try:
-                    os.remove(new_path)
-                except OSError as e:
-                    logger.error("Error removing old sponsor logo file: " + str(e))
-
-            # Convert and save new file
-            image = Image.open(old_path)
-            if image.height > 500 or image.width > 500:
-                converted_image = image.resize((500, 500))
-                converted_image.save(new_path)
-
-            instance.league_logo = "leagues/{0}.png".format(str(instance.id))
-            instance.league_logo_validated = True
+            instance.league_logo = "leagues/%(id)s_500.webp" % ({'id': instance.id})
+            instance.league_logo_small = "leagues/%(id)s_50.webp" % ({'id': instance.id})
             instance.save()
+
+    else:
+        no_logo_path = os.path.join(django_settings.MEDIA_ROOT, "teams", "_nologo.png")
+        convert_league_logo(instance.id, no_logo_path)
+
+        instance.league_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
+        instance.league_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+        instance.save()
 
 
 @receiver(pre_delete, sender=League)

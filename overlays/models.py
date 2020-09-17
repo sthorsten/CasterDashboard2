@@ -127,15 +127,17 @@ def match_overlay_data_post_save(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
     match_overlay_data = instance.serialize()
     match = instance.current_match
-    match_data = match.serialize()
-    data = {'match_overlay_data': match_overlay_data, 'match': match_data}
-    async_to_sync(channel_layer.group_send)(
-        str(instance.user) + "_match_data",
-        {
-            "type": "send_message",
-            "message": data,
-        }
-    )
+
+    if match is not None:
+        match_data = match.serialize()
+        data = {'match_overlay_data': match_overlay_data, 'match': match_data}
+        async_to_sync(channel_layer.group_send)(
+            str(instance.user) + "_match_data",
+            {
+                "type": "send_message",
+                "message": data,
+            }
+        )
 
 
 class PollOverlayData(models.Model):

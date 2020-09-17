@@ -12,6 +12,14 @@ def convert_team_logo(team_id, current_image):
     convert_image(current_image, path_50, 50)
 
 
+def convert_league_logo(league_id, current_image):
+    path_500 = os.path.join(MEDIA_ROOT, "leagues", str(league_id) + "_500.webp")
+    path_50 = os.path.join(MEDIA_ROOT, "leagues", str(league_id) + "_50.webp")
+
+    convert_image(current_image, path_500, 500)
+    convert_image(current_image, path_50, 50)
+
+
 def convert_image(img, dst, size):
     image = Image.open(img)
     converted_image = image.resize((size, size))
