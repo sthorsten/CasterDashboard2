@@ -17,11 +17,14 @@
 
     // Websockets
     const get_data_cmd = JSON.stringify({'command': 'get_state'});
-    const overlaySocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/overlays/state/'
-    )
+    const loc = window.location;
+
+    let overlayStateWsURL = 'ws://' + loc.host + '/ws/overlays/state/';
+    if (loc.protocol === 'https:'){
+        overlayStateWsURL = 'wss://' + loc.host + '/ws/overlays/state/';
+    }
+    console.log("Starting Websocket: " + overlayStateWsURL);
+    const overlaySocket = new WebSocket(overlayStateWsURL);
     overlaySocket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         handleStateChange(data['start_state']);
@@ -31,11 +34,12 @@
     }
     overlaySocket.onopen = () => overlaySocket.send(get_data_cmd);
 
-    const matchDataSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/overlays/match_data/'
-    )
+    let matchDataWsURL = 'ws://' + loc.host + '/ws/overlays/match_data/';
+    if (loc.protocol === 'https:'){
+        matchDataWsURL = 'wss://' + loc.host + '/ws/overlays/match_data/';
+    }
+    console.log("Starting Websocket: " + overlayStateWsURL);
+    const matchDataSocket = new WebSocket(matchDataWsURL);
     matchDataSocket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         handleMatchDataChange(data);
