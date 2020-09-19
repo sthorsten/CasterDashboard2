@@ -12,27 +12,52 @@
 
     // Variables
     let current_match = null;
+    let current_overlay_match = null;
     let current_map = null;
     let score_blue = null;
     let score_orange = null;
     let overlay_state = null;
+    let current_map_pick = null;
+    let titleAnimationTimer = null;
 
     let sponsor_len = {{ sponsors|length }};
     let sponsor_current_order = 0;
 
+    // Websockets
+    const get_data_cmd = JSON.stringify({'command': 'get_state'});
+    const loc = window.location;
+
+    let overlayStateWsURL = 'ws://' + loc.host + '/ws/overlays/state/';
+    if (loc.protocol === 'https:') {
+        overlayStateWsURL = 'wss://' + loc.host + '/ws/overlays/state/';
+    }
+    console.log("Starting Websocket: " + overlayStateWsURL);
+    const overlaySocket = new WebSocket(overlayStateWsURL);
+    overlaySocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        handleStateChange(data['ingame_state']);
+    }
+    overlaySocket.onclose = function (event) {
+        console.error('OverlayState socket closed.');
+    }
+    overlaySocket.onopen = () => overlaySocket.send(get_data_cmd);
+
+    let matchDataWsURL = 'ws://' + loc.host + '/ws/overlays/match_data/';
+    if (loc.protocol === 'https:') {
+        matchDataWsURL = 'wss://' + loc.host + '/ws/overlays/match_data/';
+    }
+    console.log("Starting Websocket: " + overlayStateWsURL);
+    const matchDataSocket = new WebSocket(matchDataWsURL);
+    matchDataSocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        handleMatchDataChange(data);
+    }
+    matchDataSocket.onclose = function (event) {
+        console.error('MatchData socket closed.');
+    }
+    matchDataSocket.onopen = () => matchDataSocket.send(get_data_cmd);
+
     $(document).ready(function () {
-        // Data
-        update();
-        setInterval(update, 1000);
-
-        // Animations
-        {% if current_map_pick_team %}
-            animateTitle();
-            setInterval(function () {
-                animateTitle();
-            }, 19000);
-        {% endif %}
-
         if (sponsor_len >= 2) {
             animateSponsor();
             setInterval(function () {
@@ -41,66 +66,101 @@
         }
     });
 
-    function update() {
+    function handleStateChange(new_state) {
+        console.log(new_state);
+        if (overlay_state === null) {
+            overlay_state = new_state;
+            if (overlay_state) animateIN();
+        } else {
+            if (overlay_state !== new_state) {
+                console.log("Overlay state changed!");
+                overlay_state = new_state;
+                if (overlay_state) {
+                    console.log("Animating IN");
+                    $('#main').removeClass("d-disabled");
+                    animateIN();
+                } else {
+                    console.log("Animating OUT");
+                    animateOUT();
+                    setTimeout(function () {
+                        $('#main').addClass("d-disabled");
+                    }, 2000)
+                }
+            }
+        }
+    }
+
+    function handleMatchDataChange(data) {
+        console.log(data);
         // Current Match
-        $.getJSON("/api/overlay/current_match/{{ overlay_user.id }}/", function (data) {
-            if (current_match === null) current_match = data['current_match'];
-            if (current_match !== data['current_match']) location.reload();
-
-            if (current_map === null) current_map = data['current_map'];
-            if (current_map !== data['current_map']) location.reload();
-        });
-
-        // Match State
-        $.getJSON(`/api/matches/{{ match.id }}/`, function (data) {
-            if (score_blue === null) score_blue = data['score_blue']
-            if (score_orange === null) score_orange = data['score_orange']
-
-            if (score_blue !== data['score_blue']) {
-                score_blue = data['score_blue']
-                if (score_blue < 1) {
-                    $('#score-left-inner-1').removeClass("active");
-                    $('#score-left-inner-2').removeClass("active");
-                    $('#score-left-inner-3').removeClass("active");
-                }
-                if (score_blue >= 1) $('#score-left-inner-1').addClass("active");
-                if (score_blue >= 2) $('#score-left-inner-2').addClass("active");
-                if (score_blue >= 3) $('#score-left-inner-3').addClass("active");
+        if (current_match === null) current_match = data.match.id;
+        if (data.match_overlay_data != null)
+            current_overlay_match = data.match_overlay_data.current_match;
+        if (current_match !== data.match.id) {
+            if (current_overlay_match === data.match.id) {
+                location.reload();
             }
-            if (score_orange !== data['score_orange']) {
-                score_orange = data['score_orange']
-                if (score_orange < 1) {
-                    $('#score-right-inner-1').removeClass("active");
-                    $('#score-right-inner-2').removeClass("active");
-                    $('#score-right-inner-3').removeClass("active");
-                }
-                if (score_orange >= 1) $('#score-right-inner-1').addClass("active");
-                if (score_orange >= 2) $('#score-right-inner-2').addClass("active");
-                if (score_orange >= 3) $('#score-right-inner-3').addClass("active");
-            }
-        })
+        }
 
-        // Overlay State
-        $.getJSON("/api/overlay/overlay_state/{{ overlay_user.id }}/", function (data) {
-            if (overlay_state === null) {
-                overlay_state = data['ingame_state'];
-                if (overlay_state) animateIN();
+        if (score_blue === null) score_blue = data.match.score_blue
+        if (score_orange === null) score_orange = data.match.score_orange
+
+        if (score_blue !== data.match.score_blue || score_orange !== data.match.score_orange) {
+            if (data.match.score_blue === 0 && data.match.score_orange === 0) {
+                score_blue = data.match.score_blue;
+                score_orange = data.match.score_orange;
             } else {
-                if (overlay_state !== data['ingame_state']) {
-                    console.log("state_changed");
-                    overlay_state = data['ingame_state'];
-                    if (overlay_state) {
-                        $('#main').removeClass("d-disabled");
-                        animateIN();
-                    } else {
-                        animateOUT();
-                        setTimeout(function () {
-                            $('#main').addClass("d-disabled");
-                        }, 2000)
+                score_blue = data.match.score_blue;
+                score_orange = data.match.score_orange;
+            }
+        }
+
+        // Update Score UI Elements
+        if (score_blue < 1) {
+            $('#score-left-inner-1').removeClass("active");
+            $('#score-left-inner-2').removeClass("active");
+            $('#score-left-inner-3').removeClass("active");
+        }
+        if (score_blue >= 1) $('#score-left-inner-1').addClass("active");
+        if (score_blue >= 2) $('#score-left-inner-2').addClass("active");
+        if (score_blue >= 3) $('#score-left-inner-3').addClass("active");
+
+        if (score_orange < 1) {
+            $('#score-right-inner-1').removeClass("active");
+            $('#score-right-inner-2').removeClass("active");
+            $('#score-right-inner-3').removeClass("active");
+        }
+        if (score_orange >= 1) $('#score-right-inner-1').addClass("active");
+        if (score_orange >= 2) $('#score-right-inner-2').addClass("active");
+        if (score_orange >= 3) $('#score-right-inner-3').addClass("active");
+
+        if (data.match.best_of >= 2) {
+            let combined_score = score_blue + score_orange;
+
+            if (data.maps != null && data.maps.length > 0) {
+                if (current_map_pick !== data.maps[combined_score].team) {
+                    if (combined_score < data.maps.length) {
+                        current_map_pick = data.maps[combined_score].team;
+
+                        $('#map-pick-logo').attr("src", `/media/teams/${current_map_pick}_50.webp`)
+                        $('#map-pick-logo').removeClass('d-none');
+
+                        if (data.maps[combined_score].type === "decider") {
+                            $('#map-pick-title').html("Decider Map");
+                            $('#map-pick-logo').addClass('d-none');
+                        }
+
+                        if (titleAnimationTimer !== null) {
+                            clearInterval(titleAnimationTimer);
+                        }
+                        animateTitle();
+                        titleAnimationTimer = setInterval(function () {
+                            animateTitle();
+                        }, 19000);
                     }
                 }
             }
-        });
+        }
     }
 
     function animateIN() {

@@ -323,7 +323,14 @@ def match_post_save(sender, instance, **kwargs):
     # Send message to Websocket Consumer
     channel_layer = get_channel_layer()
     match_data = instance.serialize()
-    data = {'match': match_data}
+
+    map_picks = MapBan.objects.filter(match=instance).all()
+    maps = []
+    for m in map_picks:
+        if m.type == "pick" or m.type == "decider":
+            maps.append({'map': m.map.id, 'type': m.type, 'team': m.team.id})
+
+    data = {'match': match_data, 'maps': maps}
 
     for user in instance.user.all():
         async_to_sync(channel_layer.group_send)(

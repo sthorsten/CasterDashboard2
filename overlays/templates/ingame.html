@@ -43,11 +43,10 @@
             {% endif %}
 
             <div id="map-pick" class="title-wrapper-big d-none">
-                <span class="title-big">{% trans "Map Pick" %}</span>
-                {% if current_map_pick_team %}
-                    <img id="map-pick-logo" class="logo-team" src="/media/teams/{{ current_map_pick_team.id }}_50.webp"
-                         alt="">
-                {% endif %}
+                <span id="map-pick-title" class="title-big">{% trans "Map Pick" %}</span>
+                <img id="map-pick-logo" class="logo-team"
+                     src="/media/teams/{{ current_map_pick_team.id }}_50.webp"
+                     alt="">
             </div>
         </div>
 
