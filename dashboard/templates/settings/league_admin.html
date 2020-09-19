@@ -1,0 +1,173 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block head %}
+    {% include "base/head.html" with page_title="League Administration" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "base/sidebar.html" %}
+{% endblock %}
+
+{% block page_title_icon %}
+    <i class="fas fa-2x fa-cog"></i>
+{% endblock %}
+
+{% block page_title_text %}
+    {% trans "League Administration" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active">{% trans "Settings" %}</li>
+    <li class="breadcrumb-item active">{% trans "League Administration" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-lg-4 col-12">
+            <div class="card card-primary card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Select a league" %}</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>
+                                <i>{% trans "Click on a league to see its details and manage it" %}:</i>
+                            </p>
+
+                            {% for l in admin_leagues %}
+                                <button class="btn btn-outline-primary w-100 mb-2">{{ l.name }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-12">
+            <div class="card card-success card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "League Details" %}</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-12 text-center">
+
+                            <img class="profile-user-img img-fluid img-circle mr-2" src="/media/leagues/6_500.webp">
+                            <b>FearNixx</b>
+
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <b>{% trans "League ID" %}</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div>6</div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <b>{% trans "Users" %}</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div>
+                                ThorsHero (Admin)<br>
+                                FearNixx (Admin)<br>
+                                Pr0text (User)<br>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <b>{% trans "Seasons" %}</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div>
+                                Season #1<br>
+                                Season #2<br>
+                                Season #3<br>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <b>{% trans "Sponsors" %}</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div>
+                                FearNixx Gaming<br>
+                                R3VIVE Gaming<br>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <b>{% trans "Custom Overlays" %}</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <div>
+                                Start Overlay<br>
+                                InGame Overlay<br>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-divider mt-3"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-12">
+            <div class="card card-danger card-outline-all mb-3">
+                <div class="card-body bg-gray-800 text-white">
+
+                    <h5 class="card-title card-title-upper">{% trans "Manage League" %}</h5><br>
+                    <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-12">
+
+                            <button class="btn btn-secondary w-100 mb-2">{% trans "Change Logo" %}</button>
+                            <button class="btn btn-secondary w-100 mb-2">{% trans "Manage Users" %}</button>
+                            <button class="btn btn-secondary w-100 mb-2">{% trans "Manage Seaons" %}</button>
+                            <button class="btn btn-secondary w-100 mb-2">{% trans "Manage Sponsors" %}</button>
+                            <button class="btn btn-secondary w-100 mb-2">{% trans "See Matches" %}</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+

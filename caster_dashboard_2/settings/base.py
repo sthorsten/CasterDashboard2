@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'caster_dashboard_2.context_processors.version_context',
+                'caster_dashboard_2.context_processors.profile_context',
             ],
         },
     },

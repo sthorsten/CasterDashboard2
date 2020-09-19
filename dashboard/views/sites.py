@@ -82,6 +82,28 @@ def home(request):
 
 
 '''
+    Settings
+'''
+
+
+@login_required
+def settings_league_admin(request):
+    leagues = League.objects.all()
+    league_groups = LeagueGroup.objects.all()
+    admin_leagues = []
+
+    for lg in league_groups:
+        if lg.user == request.user and lg.rank == 'admin':
+            admin_leagues.append(lg.league)
+
+    template_data = {
+        "admin_leagues": admin_leagues,
+    }
+
+    return render(request, 'settings/league_admin.html', template_data)
+
+
+'''
     Overlays
 '''
 

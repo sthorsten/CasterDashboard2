@@ -6,6 +6,9 @@ urlpatterns = [
     path('', sites.index, name='index'),
     path('home', sites.home, name='home'),
 
+    # Settings
+    path('settings/leagues', sites.settings_league_admin),
+
     # Matches
     path('matches/history', sites.match_history, name='history'),
     path('matches/create', sites.match_create, name='create'),
