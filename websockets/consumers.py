@@ -8,7 +8,14 @@ from overlays.models import OverlayState, MatchOverlayData
 
 class OverlayStateConsumer(WebsocketConsumer):
     def get_state(self, data):
-        overlay_state = OverlayState.objects.get(user=self.user)
+        if (self.user.id is None):
+            if (data['user'] is not None):
+                user = User.objects.get(username=data['user'])
+                overlay_state = OverlayState.objects.get(user=user)
+
+        else:
+            overlay_state = OverlayState.objects.get(user=self.user)
+
         overlay_serializer = OverlayStateSerializer(overlay_state)
         self.send_state_message(overlay_serializer.data)
 
@@ -64,7 +71,13 @@ class OverlayStateConsumer(WebsocketConsumer):
 
 class MatchDataConsumer(WebsocketConsumer):
     def get_state(self, data):
-        match_overlay_data = MatchOverlayData.objects.get(user=self.user)
+        if (self.user.id is None):
+            if (data['user'] is not None):
+                user = User.objects.get(username=data['user'])
+                match_overlay_data = MatchOverlayData.objects.get(user=user)
+        else:
+            match_overlay_data = MatchOverlayData.objects.get(user=self.user)
+
         match_overlay_data = match_overlay_data.serialize()
 
         match = Match.objects.get(id=match_overlay_data['current_match'])

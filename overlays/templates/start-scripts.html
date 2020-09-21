@@ -16,7 +16,7 @@
     let overlay_state = null;
 
     // Websockets
-    const get_data_cmd = JSON.stringify({'command': 'get_state'});
+    const get_data_cmd = JSON.stringify({'command': 'get_state', 'user': '{{ overlay_user }}'});
     const loc = window.location;
 
     let overlayStateWsURL = 'ws://' + loc.host + '/ws/overlays/state/';
