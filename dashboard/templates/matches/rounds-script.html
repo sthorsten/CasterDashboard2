@@ -4,12 +4,14 @@
 
     let map_id = {{ map.id }};
     let team_blue = {{ match.team_blue.id }};
-    let team_orange = {{ match.team_orange.id }}
+    let team_orange = {{ match.team_orange.id }};
+    let bomb_spot = null;
+    let win_type = null;
 
-        $(document).ready(() => {
-            createCharts();
-            update();
-        });
+    $(document).ready(() => {
+        createCharts();
+        update();
+    });
 
     function update() {
 
@@ -100,10 +102,8 @@
     function addRound() {
         let matchID = "{{ match.id }}";
         let mapID = "{{ map.id }}";
-        let bomb_spot = $('#bomb_spot_select').val();
-        let win_type = $('#win_type_select').val();
 
-        if (bomb_spot === "" || win_type === "") {
+        if (bomb_spot == null || win_type == null) {
             toastr.error("{% trans "Please select a bomb spot and a win type first to add a round" %}!");
             return;
         }
@@ -142,6 +142,26 @@
         $.post(postURL, data).always(function () {
             location.reload();
         });
+    }
+
+    function setBombSpot(elem) {
+        bomb_spot = $(elem).attr("data-bombspot-id");
+
+        $('[data-bombspot-id]').removeClass("btn-primary");
+        $('[data-bombspot-id]').addClass("btn-outline-primary");
+
+        $(elem).removeClass("btn-outline-primary");
+        $(elem).addClass("btn-primary");
+    }
+
+    function setWinType(elem) {
+        win_type = $(elem).attr("data-wintype-id");
+
+        $('[data-wintype-id]').removeClass("btn-primary");
+        $('[data-wintype-id]').addClass("btn-outline-primary");
+
+        $(elem).removeClass("btn-outline-primary");
+        $(elem).addClass("btn-primary");
     }
 
     function setWinTeam(elem) {

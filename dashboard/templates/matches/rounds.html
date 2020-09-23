@@ -43,24 +43,22 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label>{% trans "Bomb Spot" %}:</label>
-                            <select id="bomb_spot_select" class="form-control selectpicker w-100"
-                                    data-style="bg-dark-900 text-white border"
-                                    data-live-search="true" title="{% trans "Please select..." %}">
-                                {% for bs in bomb_spots %}
-                                    <option value="{{ bs.id }}">{{ bs.floor }} - {{ bs.bomb_spot }}</option>
-                                {% endfor %}
-                            </select>
+                            {% for bs in bomb_spots %}
+                                <button class="btn btn-outline-primary w-100 mb-2"
+                                        data-bombspot-id="{{ bs.id }}" onclick="setBombSpot(this)">
+                                    {{ bs.floor }} - {{ bs.bomb_spot }}
+                                </button>
+                            {% endfor %}
                         </div>
 
                         <div class="col-lg-6">
                             <label>{% trans "Win Type" %}:</label>
-                            <select id="win_type_select" class="form-control selectpicker w-100"
-                                    data-style="bg-dark-900 text-white border"
-                                    data-live-search="true" title="{% trans "Please select..." %}">
-                                {% for type in win_types %}
-                                    <option value="{{ type.id }}">{% trans type.name %}</option>
-                                {% endfor %}
-                            </select>
+                            {% for type in win_types %}
+                                <button class="btn btn-outline-primary w-100 mb-2"
+                                        data-wintype-id="{{ type.id }}" onclick="setWinType(this)">
+                                    {% trans type.name %}
+                                </button>
+                            {% endfor %}
                         </div>
 
                     </div>
