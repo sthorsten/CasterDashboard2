@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class LeagueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = League
-        fields = ['id', 'url', 'name', 'is_restricted', 'league_logo', 'light_logo', 'dark_logo']
+        fields = ['id', 'url', 'name', 'is_restricted', 'has_custom_overlay', 'league_logo', 'league_logo_small']
 
 
 class LeagueViewSet(viewsets.ModelViewSet):
@@ -39,7 +39,18 @@ class LeagueViewSet(viewsets.ModelViewSet):
     serializer_class = LeagueSerializer
 
 
-class SeasonSerializer(serializers.HyperlinkedModelSerializer):
+class LeagueGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LeagueGroup
+        fields = ['id', 'url', 'user', 'league', 'rank']
+
+
+class LeagueGroupViewSet(viewsets.ModelViewSet):
+    queryset = LeagueGroup.objects.all()
+    serializer_class = LeagueGroupSerializer
+
+
+class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season
         fields = ['id', 'url', 'name', 'league', 'official_season', 'start_date', 'end_date']
@@ -50,7 +61,7 @@ class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
 
 
-class SponsorSerializer(serializers.HyperlinkedModelSerializer):
+class SponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
         fields = ['id', 'url', 'name', 'public', 'sponsor_logo', 'light_logo', 'dark_logo', 'league']

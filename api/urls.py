@@ -11,6 +11,7 @@ router.register(r'users', UserViewSet)
 router.register(r'bombspots', BombSpotViewSet)
 
 router.register(r'data/leagues', LeagueViewSet)
+router.register(r'data/league_groups', LeagueGroupViewSet)
 router.register(r'data/seasons', SeasonViewSet)
 router.register(r'data/sponsors', SponsorViewSet)
 router.register(r'data/teams', TeamViewSet)

@@ -44,7 +44,9 @@
                             </p>
 
                             {% for l in admin_leagues %}
-                                <button class="btn btn-outline-primary w-100 mb-2">{{ l.name }}</button>
+                                <button class="btn btn-outline-primary w-100 mb-2"
+                                        data-league-id="{{ l.id }}"
+                                        onclick="loadLeagueDetails(this)">{{ l.name }}</button>
                             {% endfor %}
                         </div>
                     </div>
@@ -63,8 +65,9 @@
                     <div class="row">
                         <div class="col-12 text-center">
 
-                            <img class="profile-user-img img-fluid img-circle mr-2" src="/media/leagues/6_500.webp">
-                            <b>FearNixx</b>
+                            <img id="league_logo" class="profile-user-img img-fluid img-circle mr-2"
+                                 src="/media/teams/_nologo.png">
+                            <b id="league_name">{% trans "Select a League" %}</b>
 
                         </div>
                     </div>
@@ -76,7 +79,7 @@
                             <b>{% trans "League ID" %}</b>
                         </div>
                         <div class="col-6 text-right">
-                            <div>6</div>
+                            <div id="league_id">-</div>
                         </div>
                     </div>
 
@@ -87,10 +90,8 @@
                             <b>{% trans "Users" %}</b>
                         </div>
                         <div class="col-6 text-right">
-                            <div>
-                                ThorsHero (Admin)<br>
-                                FearNixx (Admin)<br>
-                                Pr0text (User)<br>
+                            <div id="league_users" class="text-capitalize">
+                                -
                             </div>
                         </div>
                     </div>
@@ -102,10 +103,8 @@
                             <b>{% trans "Seasons" %}</b>
                         </div>
                         <div class="col-6 text-right">
-                            <div>
-                                Season #1<br>
-                                Season #2<br>
-                                Season #3<br>
+                            <div id="league_seasons">
+                                -
                             </div>
                         </div>
                     </div>
@@ -117,9 +116,8 @@
                             <b>{% trans "Sponsors" %}</b>
                         </div>
                         <div class="col-6 text-right">
-                            <div>
-                                FearNixx Gaming<br>
-                                R3VIVE Gaming<br>
+                            <div id="league_sponsors">
+                                -
                             </div>
                         </div>
                     </div>
@@ -132,8 +130,7 @@
                         </div>
                         <div class="col-6 text-right">
                             <div>
-                                Start Overlay<br>
-                                InGame Overlay<br>
+                                <i>To Do!</i>
                             </div>
                         </div>
                     </div>
@@ -168,6 +165,7 @@
 
     </div>
 
+    {% include "settings/league_admin_script.html" %}
 
 {% endblock %}
 
