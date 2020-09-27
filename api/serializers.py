@@ -185,7 +185,7 @@ class NextMatchOverlayDataSerializer(serializers.ModelSerializer):
 class MapBanSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapBan
-        fields = ['map', 'type', 'order', 'team']
+        fields = ['match', 'map', 'type', 'order', 'play_order', 'team', 'status']
 
 
 ###

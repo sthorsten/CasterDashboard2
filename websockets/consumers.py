@@ -2,7 +2,7 @@ from channels.generic.websocket import *
 from django.contrib.auth.models import User
 
 from api.serializers import OverlayStateSerializer, MatchSerializer, MatchOverlayDataSerializer
-from dashboard.models import Match, MapPlayOrder, MapBan
+from dashboard.models import Match, MapBan
 from overlays.models import OverlayState, MatchOverlayData
 
 

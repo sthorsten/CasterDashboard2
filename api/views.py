@@ -266,10 +266,12 @@ def map_ban(request, match_id):
         data = []
         for map in map_ban:
             data.append({
+                "match": map.match.id,
                 "map": map.map.name,
                 "map_id": map.map.id,
-                "type": map.type,
+                "type": map.get_type_display(),
                 "order": map.order,
+                "play_order": map.play_order,
                 "team": map.team.name,
                 "team_id": map.team.id,
             })

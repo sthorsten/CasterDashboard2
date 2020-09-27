@@ -343,47 +343,38 @@ def match_post_save(sender, instance, **kwargs):
 
 
 class MapBan(models.Model):
+    TYPE_CHOICES = [
+        (1, "Ban"),
+        (2, "Pick"),
+        (3, "Decider"),
+        (4, "Default Ban")
+    ]
+
+    STATUS_CHOICES = [
+        (1, "Created"),
+        (2, "Playing"),
+        (3, "Finished"),
+        (4, "Unknown")
+    ]
+
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    type = models.CharField(max_length=255)
+    type = models.IntegerField(choices=TYPE_CHOICES)
     order = models.IntegerField(default=1)
+    play_order = models.IntegerField(null=True, blank=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
 
     def __str__(self):
         return str(self.id) + "- Match: " + str(self.match)
 
 
-# Add MapPlayOrder
 @receiver(post_save, sender=MapBan)
 def map_ban_post_save(sender, instance, **kwargs):
     # Set Match state
     match_state = MatchState.objects.get(id=2)
     instance.match.state = match_state
     instance.match.save()
-
-    # Create MapPlayOrder instance
-    if instance.type == "pick" or instance.type == "decider":
-        next_order = len(MapPlayOrder.objects.filter(match=instance.match)) + 1
-        map_play_order = MapPlayOrder(match=instance.match, map=instance.map, order=next_order)
-        map_play_order.save()
-
-
-# Remove MapPlayOrder
-@receiver(pre_delete, sender=MapBan)
-def auto_delete_map_play_order(sender, instance, **kwargs):
-    if instance.type == "pick" or instance.type == "decider":
-        map_play_order = MapPlayOrder.objects.filter(match=instance.match, map=instance.map).first()
-        if map_play_order:
-            map_play_order.delete()
-
-
-class MapPlayOrder(models.Model):
-    match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    order = models.IntegerField(default=1)
-
-    def __str__(self):
-        return str(self.id) + "- Match: " + str(self.match)
 
 
 class MapWins(models.Model):

@@ -86,13 +86,13 @@
 
                         // Set badges
                         let badge = $(`#map_${data[i]['map_id']}_badge`);
-                        if (data[i].type === 'ban') {
+                        if (data[i].type === 'Ban') {
                             badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
                             badge.removeClass("badge-primary");
                             badge.addClass("badge-danger");
 
                             $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                        } else if (data[i].type === 'pick') {
+                        } else if (data[i].type === 'Pick') {
                             badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
                             badge.removeClass("badge-primary");
                             badge.addClass("badge-success");
@@ -102,11 +102,11 @@
                                 nextMap = data[i]['map_id'];
                             }
 
-                        } else if (data[i].type === 'decider') {
+                        } else if (data[i].type === 'Decider') {
                             badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
                             badge.removeClass("badge-primary");
                             badge.addClass("badge-success");
-                        } else if (data[i].type === 'default_ban') {
+                        } else if (data[i].type === 'Default Ban') {
                             badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
                             badge.removeClass("badge-primary");
                             badge.addClass("badge-danger");

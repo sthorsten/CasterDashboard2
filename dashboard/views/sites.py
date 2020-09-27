@@ -275,13 +275,13 @@ def match_maps(request, match_id):
 
     if 4 <= match.state.id <= 7:
         try:
-            next_map_id = MapPlayOrder.objects.get(match=match, order=(match.state.id - 2)).map.id
-        except MapPlayOrder.DoesNotExist:
+            next_map_id = MapBan.objects.get(match=match, play_order=(match.state.id - 2)).map.id
+        except MapBan.DoesNotExist:
             next_map_id = None
     else:
         try:
-            next_map_id = MapPlayOrder.objects.get(match=match, order=1).map.id
-        except MapPlayOrder.DoesNotExist:
+            next_map_id = MapBan.objects.get(match=match, order=1).map.id
+        except MapBan.DoesNotExist:
             next_map_id = None
 
     template_data = {
