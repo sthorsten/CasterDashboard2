@@ -34,8 +34,8 @@
                 </th>
                 {% for r in rounds %}
                     {% if r.win_team == match.team_blue %}
-                        <td id="round{{ r.round_no }}" class="invisible">
-                            <img class="win-icon" src="/static/img/winicons/{{ r.win_type.id }}.png" alt="">
+                        <td id="round{{ r.round_no }}">
+                            <img class="win-icon invisible" src="/static/img/winicons/{{ r.win_type.id }}.png" alt="">
                         </td>
                     {% else %}
                         <td></td>
@@ -49,8 +49,8 @@
                 </th>
                 {% for r in rounds %}
                     {% if r.win_team == match.team_orange %}
-                        <td id="round{{ r.round_no }}" class="invisible">
-                            <img class="logo" src="/static/img/winicons/{{ r.win_type.id }}.png" alt="">
+                        <td id="round{{ r.round_no }}">
+                            <img class="logo invisible" src="/static/img/winicons/{{ r.win_type.id }}.png" alt="">
                         </td>
                     {% else %}
                         <td></td>
