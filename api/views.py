@@ -253,7 +253,6 @@ def update_match_score(request, match_id):
 
         return JsonResponse({"status": "OK"})
 
-
 @csrf_exempt
 def map_ban(request, match_id):
     match = Match.objects.get(id=match_id)

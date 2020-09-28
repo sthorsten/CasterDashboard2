@@ -1,30 +1,16 @@
 {% load i18n %}
+{% csrf_token %}
 
 <script>
+    const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     let ban_data;
     let order = 1;
-    let firstTeam = null;
-    let secondTeam = null;
-    let nextTeam = null;
     let nextMap = null;
 
     $(document).ready(() => {
-        firstTeam = "{{ match.team_blue.id }}";
-        secondTeam = "{{ match.team_orange.id }}";
-
-        if ($('#first_ban_team').val() !== "") {
-            nextTeam = $('#first_ban_team').val();
-        }
-
         update();
     });
-
-    function setFirstBanTeam(elem) {
-        ($(elem).val() === firstTeam)
-            ? nextTeam = firstTeam
-            : nextTeam = secondTeam
-    }
 
     function changeMapPool(elem) {
         let pool = $(elem).val();
@@ -49,75 +35,57 @@
             badge.removeClass("badge-danger badge-success");
             badge.addClass("badge-primary");
             badge.html("{% trans "Not selected yet" %}");
+
+            let badgeTeamText = $(`#map_${i}_team`);
+            badgeTeamText.html("");
         }
 
         // Set log to default
         $('#no_log').removeClass("d-none");
         $('#log').addClass("d-none");
 
-        $.getJSON("/api/matches/map_ban/{{ match.id }}/")
+        $.getJSON("/api/match/{{ match.id }}/maps/")
             .done((data) => {
                     if (data.length === 0) return;
                     ban_data = data;
-
-                    // Set select to first ban team
-                    $("#first_ban_team option").filter(() => {
-                        return this.text === data[0]['team'];
-                    }).attr('selected', true);
-
-                    // Disable selects
-                    $('#first_ban_team').attr("disabled", "disabled");
-                    $('#map_pool_select').attr("disabled", "disabled");
-
-                    if (nextTeam === null) {
-                        nextTeam = firstTeam;
-                    }
 
                     let log = $('#log');
                     let log_content = "";
 
                     for (let i = 0; i < data.length; i++) {
+                        let elem = data[i]
 
                         // Add log entries
-                        data[i]['order'] < 7
-                            ? log_content += `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']} / ${data[i]['team']}</li>`
-                            : log_content += `<li class="text-capitalize text-bold">${data[i]['order']} / ${data[i]['type']} / ${data[i]['map']}</li>`
+                        elem.order < 7
+                            ? log_content += `<li class="text-bold">${elem.order} / ${elem.type_name} / ${elem.map_name} / ${elem.team_name}</li>`
+                            : log_content += `<li class="text-bold">${elem.order} / ${elem.type_name} / ${elem.map_name}</li>`
 
+                        // Set UI elements
+                        let badge = $(`#map_${elem.map}_badge`);
+                        let map_img = $(`#map${elem.map}_img`);
+                        let map_team = $(`#map_${elem.map}_team`);
 
-                        // Set badges
-                        let badge = $(`#map_${data[i]['map_id']}_badge`);
-                        if (data[i].type === 'Ban') {
-                            badge.html(data[i]['order'] + " / {% trans "Ban" %} ");
-                            badge.removeClass("badge-primary");
+                        badge.html(elem.order + " / " + elem.type_name);
+                        badge.removeClass("badge-primary");
+
+                        if (elem.type === 1 || elem.type === 4) {  // type 1 => ban / type 4 => default ban
                             badge.addClass("badge-danger");
+                            map_img.addClass("ban");
+                            map_team.html(elem.team_name);
 
-                            $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                        } else if (data[i].type === 'Pick') {
-                            badge.html(data[i]['order'] + " / {% trans "Pick" %} ");
-                            badge.removeClass("badge-primary");
+                        } else if (elem.type === 2 || elem.type === 3) {  // type 2 => pick / type 3 => decider
                             badge.addClass("badge-success");
-
-                            $(`#map_${data[i]['map_id']}_team`).html(data[i]['team']);
-                            if (nextMap === null) {
-                                nextMap = data[i]['map_id'];
-                            }
-
-                        } else if (data[i].type === 'Decider') {
-                            badge.html(data[i]['order'] + " / {% trans "Decider" %} ");
-                            badge.removeClass("badge-primary");
-                            badge.addClass("badge-success");
-                        } else if (data[i].type === 'Default Ban') {
-                            badge.html(data[i]['order'] + " / {% trans "Default Ban" %} ");
-                            badge.removeClass("badge-primary");
-                            badge.addClass("badge-danger");
+                            map_img.addClass("pick");
+                            map_team.html(elem.team_name);
                         }
+
+                        if (elem.play_order === 1 && elem.status <= 2) {
+                            $('#continue_btn').attr("href", "/dashboard/matches/{{ match.id }}/map/" + elem.map + "/opbans");
+                        }
+
                     }
 
-                    // Set order and next team
                     order = data.length + 1;
-                    (nextTeam !== firstTeam)
-                        ? nextTeam = firstTeam
-                        : nextTeam = secondTeam;
 
                     // Update log
                     log.html(log_content);
@@ -128,122 +96,90 @@
             .fail((data) => {
                 // 404 => No data
                 if (data.status === 404) {
-                    // Set selects to default
-                    $('#first_ban_team').removeAttr("disabled");
+                    // Set select to default
                     $('#map_pool_select').removeAttr("disabled");
 
                     // Reset order and next team
                     order = 1;
-                    nextTeam = firstTeam;
                 }
             });
     }
 
-    function banMap(id) {
-        if (nextTeam == null) {
-            toastr.error("{% trans "Please select the team that starts the ban phase first" %}!")
-            return;
+    function addMap(id, type, team) {
+        let matchID = {{ match.id }};
+        let postURL = `/api/match/maps/`;
+        let postData = null;
+        let typeID = null;
+
+        if (order < 7) {
+            if (type === "ban") {
+                typeID = 1
+            } else if (type === "pick") {
+                typeID = 2
+            }
+        } else if (order === 7) {
+            if (type === "ban") {
+                typeID = 4
+            } else if (type === "pick") {
+                typeID = 3
+            }
         }
-        let matchID = "{{ match.id }}";
-        let postURL = `/api/matches/map_ban/${matchID}/`;
-        let data;
 
-        (order < 7)
-            ? data = `{"map": ${id}, "type": "ban", "order": ${order}, "team": ${nextTeam}}`
-            : data = `{"map": ${id}, "type": "default_ban", "order": ${order}, "team": ${nextTeam}}`;
+        if (order < 7) {
+            postData = {"match": matchID, "map": id, "type": typeID, "team": team}
+        } else {
+            postData = {"match": matchID, "map": id, "type": typeID}
+        }
 
-        console.log(`POST: ${postURL} => ${data}`);
-        $.post(postURL, data)
-            .fail((data) => {
-                console.log(data)
-                toastr.error("{% trans "Map ban failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
-            })
-            .done(() => {
-                toastr.success("{% trans "Map banned" %}.", "{% trans "Success" %}");
-                update();
-            });
-
-
-        //location.reload();
+        console.log(`POST: ${postURL} => ${JSON.stringify(postData)}`);
+        $.ajax({
+            type: "POST",
+            headers: {"X-CSRFToken": csrf_token},
+            mode: 'same-origin',
+            url: postURL,
+            data: postData,
+        }).fail((data) => {
+            console.log(data)
+            toastr.error("{% trans "Failed to add map" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+        }).done(() => {
+            toastr.success("{% trans "Map added" %}.", "{% trans "Success" %}");
+            update();
+        });
     }
 
-    function pickMap(id) {
-        if (nextTeam == null) {
-            toastr.error("{% trans "Please select the team that starts the ban phase first" %}!")
-            return;
-        }
-        let matchID = "{{ match.id }}";
-        let postURL = `/api/matches/map_ban/${matchID}/`;
-        let data;
+    function resetMap() {
+        let lastMapID = ban_data[ban_data.length - 1].id;
+        let deleteURL = "/api/match/maps/" + lastMapID + "/";
 
-        (order < 7)
-            ? data = `{"map": ${id}, "type": "pick", "order": ${order}, "team": ${nextTeam}}`
-            : data = `{"map": ${id}, "type": "decider", "order": ${order}, "team": ${nextTeam}}`;
-
-        console.log(`POST: ${postURL} => ${data}`);
-        $.post(postURL, data)
-            .fail((data) => {
-                console.log(data)
-                toastr.error("{% trans "Map pick failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
-            })
-            .done(() => {
-                // Set continue button
-                let continue_btn = $('#continue_btn');
-                if (continue_btn.attr("data-nextmap") === "0") {
-                    continue_btn.attr("href", `/dashboard/matches/${matchID}/map/${id}/opbans`);
-                    continue_btn.attr("data-nextmap", `${matchID}`);
-                }
-
-                toastr.success("{% trans "Map picked" %}.", "{% trans "Success" %}");
-                update();
-            });
-
-        //location.reload();
-    }
-
-    function resetMap(id) {
-        // Ignore if no maps have been picked or banned
-        if (order === 1) return;
-
-        let last_map_id = ban_data[ban_data.length - 1]['map_id'];
-        if (last_map_id !== id) {
-            toastr.error("{% trans "You can only remove the last map ban or pick" %}.");
-            return;
-        }
-
-        let matchID = "{{ match.id }}";
-        let postURL = `/api/matches/map_ban/${matchID}/`;
-        let data = `{"type": "delete", "map": ${last_map_id}}`;
-
-        console.log(`POST: ${postURL} => ${data}`);
-        $.post(postURL, data)
-            .fail((data) => {
-                console.log(data)
-                toastr.error("{% trans "Map reset failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
-            })
-            .done(() => {
-                // Reset continue btn
-                let continue_btn = $('#continue_btn');
-                continue_btn.removeAttr("href");
-                continue_btn.attr("data-nextmap", "0");
-
-                toastr.success("{% trans "Map reset" %}.", "{% trans "Success" %}");
-                update();
-            });
+        console.log(`DELETE: ${deleteURL}`);
+        $.ajax({
+            type: "DELETE",
+            headers: {"X-CSRFToken": csrf_token},
+            mode: 'same-origin',
+            url: deleteURL,
+        }).fail((data) => {
+            console.log(data)
+            toastr.error("{% trans "Failed to reset map" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+        }).done(() => {
+            update();
+            toastr.success("{% trans "Map reset" %}.", "{% trans "Success" %}");
+        });
     }
 
     function resetAllMaps() {
-        let matchID = "{{ match.id }}";
-        let postURL = `/api/matches/map_ban/${matchID}/`;
-
         for (let i = 0; i < ban_data.length; i++) {
-            let data = `{"type": "delete", "map": ${ban_data[i]['map_id']}}`;
-            console.log(`POST: ${postURL} => ${data}`);
-            $.post(postURL, data)
-                .fail((data) => {
-                    console.log(data)
-                    toastr.error("{% trans "Map reset failed" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
-                });
+            let deleteURL = "/api/match/maps/" + ban_data[i].id + "/";
+
+            console.log(`DELETE: ${deleteURL}`);
+            $.ajax({
+                type: "DELETE",
+                headers: {"X-CSRFToken": csrf_token},
+                mode: 'same-origin',
+                url: deleteURL,
+            }).fail((data) => {
+                console.log(data)
+                toastr.error("{% trans "Failed to reset map" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+            });
         }
 
         setTimeout(() => {

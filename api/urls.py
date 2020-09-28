@@ -18,6 +18,7 @@ router.register(r'data/teams', TeamViewSet)
 
 router.register(r'matches', MatchViewSet)
 router.register(r'matchstate', MatchStateViewSet)
+router.register(r'match/maps', MapBanViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
@@ -33,6 +34,9 @@ urlpatterns = [
     path('overlay/next_match/<int:user_id>/', views.set_next_match),
 
     # Match Data
+    # New
+    path('match/<int:match_id>/maps/', MapBanViewSet.as_view({'get': 'match_maps'})),
+
     path('matches/<int:match_id>/update_score', views.update_match_score),
     path('matches/map_ban/<int:match_id>/', views.map_ban),
     path('matches/map_settings/<int:match_id>/<int:map_id>/', views.map_settings),

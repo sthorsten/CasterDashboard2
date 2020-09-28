@@ -3,6 +3,7 @@ import json
 import requests
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets
+from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from PIL import Image
@@ -183,9 +184,31 @@ class NextMatchOverlayDataSerializer(serializers.ModelSerializer):
 
 
 class MapBanSerializer(serializers.ModelSerializer):
+    map_name = serializers.CharField(source='map.name', read_only=True)
+    type_name = serializers.CharField(source='get_type_display', read_only=True)
+    team_name = serializers.CharField(source='team.name', read_only=True)
+    status_name = serializers.CharField(source='get_status_display', read_only=True)
+
     class Meta:
         model = MapBan
-        fields = ['match', 'map', 'type', 'order', 'play_order', 'team', 'status']
+        fields = '__all__'
+
+
+class MapBanViewSet(viewsets.ModelViewSet):
+    # URL: /api/match/maps
+    queryset = MapBan.objects.all()
+    serializer_class = MapBanSerializer
+
+    # MapBan elements with a specific match id
+    # URL: /api/match/<id>/maps
+    @action(methods=['get'], detail=True)
+    def match_maps(self, request, *args, **kwargs):
+        match_id = int(kwargs['match_id'])
+        queryset = MapBan.objects.filter(match=match_id).all()
+        if not queryset:
+            return Response({"detail": _("Not found.")}, status=404)
+        serializer = MapBanSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 ###

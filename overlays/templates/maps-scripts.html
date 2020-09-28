@@ -49,7 +49,7 @@
         });
 
         // Maps Data
-        $.getJSON("/api/matches/map_ban/{{ match.id }}/", function (data) {
+        $.getJSON("/api/match/{{ match.id }}/maps/", function (data) {
             for (let i = 0; i < data.length; i++) {
                 let order = data[i]['order'];
 
@@ -58,9 +58,9 @@
                 if (active_maps.length <= i) {
                     active_maps.push(container);
                 }
-                if (data[i]['type'] === "Ban" || data[i]['type'] === "Default Ban") {
+                if (data[i]['type'] === 1 || data[i]['type'] === 4) {
                     container.addClass("ban");
-                } else if (data[i]['type'] === "Pick" || data[i]['type'] === "Decider") {
+                } else if (data[i]['type'] === 2 || data[i]['type'] === 3) {
                     container.addClass("pick");
                 }
 
@@ -69,10 +69,10 @@
                 let name = $(`#map${order}-name`);
 
                 // Set values
-                img.attr("src", `/static/img/maps/${data[i]['map_id']}.webp`);
-                name.html(data[i]['map']);
+                img.attr("src", `/static/img/maps/${data[i]['map']}.webp`);
+                name.html(data[i]['map_name']);
                 (order < 7)
-                    ? team.attr("src", `/media/teams/${data[i]['team_id']}_500.webp`)
+                    ? team.attr("src", `/media/teams/${data[i]['team']}_500.webp`)
                     : team.attr("src", '/media/leagues/{{ match.league.id }}_500.webp');
 
             }

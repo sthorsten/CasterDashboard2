@@ -360,8 +360,8 @@ class MapBan(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     type = models.IntegerField(choices=TYPE_CHOICES)
-    order = models.IntegerField(default=1)
-    play_order = models.IntegerField(null=True, blank=True)
+    order = models.IntegerField(default=0)
+    play_order = models.IntegerField(default=0)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=1)
 
@@ -375,6 +375,18 @@ def map_ban_post_save(sender, instance, **kwargs):
     match_state = MatchState.objects.get(id=2)
     instance.match.state = match_state
     instance.match.save()
+
+    # Set Order
+    if instance.order == 0:
+        maps = MapBan.objects.filter(match=instance.match).all()
+        instance.order = len(maps)
+        instance.save()
+
+    # Set Play Order
+    if instance.play_order == 0 and (instance.type == 2 or instance.type == 3):
+        maps = MapBan.objects.filter(match=instance.match, type__in=[2, 3]).all()
+        instance.play_order = len(maps)  # Not len(maps) + 1 because post_save
+        instance.save()
 
 
 class MapWins(models.Model):
