@@ -36,6 +36,7 @@ urlpatterns = [
     # Match Data
     # New
     path('match/<int:match_id>/maps/', MapBanViewSet.as_view({'get': 'match_maps'})),
+    path('match/<int:match_id>/share/', views.share_match),
 
     path('matches/<int:match_id>/update_score', views.update_match_score),
     path('matches/map_ban/<int:match_id>/', views.map_ban),

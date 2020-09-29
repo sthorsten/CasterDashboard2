@@ -253,6 +253,7 @@ def match_create(request):
 
 @login_required
 def match_overview(request, match_id):
+    users = User.objects.all()
     match = Match.objects.filter(id=match_id).first()
     match_users = match.user.all()
     match_sponsors = []
@@ -260,6 +261,7 @@ def match_overview(request, match_id):
         match_sponsors.append(s)
 
     template_data = {
+        'users': users,
         'match': match,
         'match_users': match_users,
         'match_sponsors': match_sponsors,

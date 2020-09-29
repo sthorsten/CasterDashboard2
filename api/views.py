@@ -253,6 +253,7 @@ def update_match_score(request, match_id):
 
         return JsonResponse({"status": "OK"})
 
+
 @csrf_exempt
 def map_ban(request, match_id):
     match = Match.objects.get(id=match_id)
@@ -301,6 +302,24 @@ def map_ban(request, match_id):
             return JsonResponse({"status": "ok"})
         except DatabaseError:
             return JsonResponse({"status": "Database Error"}, status=500)
+
+
+@csrf_exempt
+def share_match(request, match_id):
+    if request.method != 'POST':
+        return Response({"detail": "Method not allowed."}, status=405)
+
+    try:
+        match = Match.objects.get(id=match_id)
+    except Match.DoesNotExist:
+        return Response({"detail": "Not found."}, status=404)
+
+    data = request.POST.getlist('user')
+    for elem in data:
+        new_match_user = User.objects.get(id=elem)
+        match.user.add(new_match_user)
+
+    return Response({"detail": "ok"}, status=200)
 
 
 @csrf_exempt

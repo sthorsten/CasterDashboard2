@@ -202,7 +202,9 @@
                         <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
                     {% endif %}
 
-                    <button class="btn btn-secondary w-100">{% trans "Share Match" %}</button>
+                    <button class="btn btn-secondary w-100" data-toggle="modal" data-target="#share-match-modal">
+                        {% trans "Share Match" %}
+                    </button>
 
                     <div class="card-divider mt-4 mb-4"></div>
 
@@ -214,6 +216,8 @@
 
         </div>
     </div>
+
+    {% include "matches/share-match-modal.html" %}
 
     <script>
         function setMatchToOverlay() {
