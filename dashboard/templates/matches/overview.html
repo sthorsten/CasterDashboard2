@@ -199,7 +199,8 @@
 
                         <div class="card-divider mt-4 mb-4"></div>
 
-                        <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
+                        <a href="/dashboard/matches/{{ match.id }}/details"
+                           class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</a>
                     {% endif %}
 
                     <button class="btn btn-secondary w-100" data-toggle="modal" data-target="#share-match-modal">

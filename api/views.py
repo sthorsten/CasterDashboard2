@@ -592,7 +592,7 @@ def finish_map(request, match_id, map_id):
                 match.save()
                 next_url = "/dashboard/matches/%s" % match.id
             else:
-                next_map = MapPlayOrder.objects.get(match=match, order=(map_win_len + 1))
+                next_map = MapBan.objects.get(match=match, play_order=(map_win_len + 1))
                 match.state = MatchState.objects.get(id=(2 + next_map.order))
                 match.save()
                 next_url = "/dashboard/matches/%s/map/%s/opbans" % (match.id, next_map.map.id)

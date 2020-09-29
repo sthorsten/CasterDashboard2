@@ -13,6 +13,7 @@ urlpatterns = [
     path('matches/history', sites.match_history, name='history'),
     path('matches/create', sites.match_create, name='create'),
     path('matches/<int:match_id>', sites.match_overview, name='match-overview'),
+    path('matches/<int:match_id>/details', sites.match_details, name='match-details'),
     path('matches/<int:match_id>/maps', sites.match_maps, name='match-maps'),
     path('matches/<int:match_id>/map/<int:map_id>/opbans', sites.match_opbans, name='match-opbans'),
     path('matches/<int:match_id>/map/<int:map_id>/rounds', sites.match_rounds, name='match-rounds'),

@@ -271,6 +271,23 @@ def match_overview(request, match_id):
 
 
 @login_required
+def match_details(request, match_id):
+    match = Match.objects.filter(id=match_id).first()
+    map_bans = MapBan.objects.filter(match=match).all().order_by("order")
+    operator_bans = OperatorBans.objects.filter(match=match).all()
+    rounds = Round.objects.filter(match=match).all()
+
+    template_data = {
+        'match': match,
+        'map_bans': map_bans,
+        'operator_bans': operator_bans,
+        'rounds': rounds,
+    }
+
+    return render(request, 'matches/details.html', template_data)
+
+
+@login_required
 def match_maps(request, match_id):
     match = Match.objects.filter(id=match_id).first()
     maps = Map.objects.all()
