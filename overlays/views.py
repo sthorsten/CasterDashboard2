@@ -39,7 +39,7 @@ def ingame(request, user_name):
 
     current_map_order = match.state.id - 2
     if 1 <= current_map_order <= 5:
-        current_map = MapPlayOrder.objects.get(match=match, order=current_map_order).map
+        current_map = MapBan.objects.get(match=match, play_order=current_map_order).map
         current_map_pick_team = MapBan.objects.get(match=match, map=current_map).team
     else:
         current_map_pick_team = None
