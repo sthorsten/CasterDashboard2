@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from dashboard.models import *
 from overlays.models import *
@@ -31,10 +32,13 @@ def ingame(request, user_name):
     match_overlay_data = MatchOverlayData.objects.get(user=user)
     match = match_overlay_data.current_match
 
+    if match is None:
+        messages.error(request, _("Please select a match before accessing the overlay!"))
+        return redirect('/')
+
     sponsors = []
-    if match.sponsors is not None:
-        for s in match.sponsors.all():
-            sponsors.append(s)
+    for s in match.sponsors.all():
+        sponsors.append(s)
 
     overlay_states = OverlayState.objects.get(user=user)
 
