@@ -32,8 +32,9 @@ def ingame(request, user_name):
     match = match_overlay_data.current_match
 
     sponsors = []
-    for s in match.sponsors.all():
-        sponsors.append(s)
+    if match.sponsors is not None:
+        for s in match.sponsors.all():
+            sponsors.append(s)
 
     overlay_states = OverlayState.objects.get(user=user)
 
