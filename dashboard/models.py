@@ -426,8 +426,8 @@ class OperatorBans(models.Model):
 @receiver(post_save, sender=OperatorBans)
 def operator_bans_post_save(sender, instance, **kwargs):
     # Update Match state
-    map_play_order = MapPlayOrder.objects.get(match=instance.match, map=instance.map)
-    new_match_state = MatchState.objects.get(id=(2 + map_play_order.order))
+    map_play_order = MapBan.objects.get(match=instance.match, map=instance.map)
+    new_match_state = MatchState.objects.get(id=(2 + map_play_order.play_order))
     match = instance.match
     match.state = new_match_state
     match.save()
