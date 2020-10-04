@@ -573,11 +573,11 @@ def finish_map(request, match_id, map_id):
             win_team = None
 
         map_win = MapWins(match=match, map=map, win_team=win_team)
-        try:
-            map_win.save()
-            match.save()
-        except DatabaseError:
-            return JsonResponse({"error": "Database Error"}, status=500)
+        current_map_ban = MapBan.objects.get(match=match, map=map)
+        current_map_ban.status = 3  # Set map status to Finished (3)
+        map_win.save()
+        match.save()
+        current_map_ban.save()
 
         # Set Next URL
         map_win_len = len(MapWins.objects.filter(match=match).all())

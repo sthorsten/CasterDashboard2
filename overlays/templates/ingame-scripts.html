@@ -138,26 +138,28 @@
             let combined_score = score_blue + score_orange;
 
             if (data.maps != null && data.maps.length > 0) {
-                if (current_map_pick !== data.maps[combined_score].team) {
-                    if (combined_score < data.maps.length) {
-                        current_map_pick = data.maps[combined_score].team;
-
+                for (let i = 0; i < data.maps.length; i++) {
+                    if (data.maps[i].type === 2 && data.maps[i].status === 2) {
+                        current_map_pick = data.maps[i].team
+                        $('#map-pick-title').html("Map Pick");
+                        $('#map-pick-logo').removeClass("d-none");
                         $('#map-pick-logo').attr("src", `/media/teams/${current_map_pick}_50.webp`)
                         $('#map-pick-logo').removeClass('d-none');
-
-                        if (data.maps[combined_score].type === "decider") {
-                            $('#map-pick-title').html("Decider Map");
-                            $('#map-pick-logo').addClass('d-none');
-                        }
-
-                        if (titleAnimationTimer !== null) {
-                            clearInterval(titleAnimationTimer);
-                        }
-                        animateTitle();
-                        titleAnimationTimer = setInterval(function () {
-                            animateTitle();
-                        }, 19000);
+                    } else if (data.maps[i].type === 3 && data.maps[i].status === 2) {
+                        current_map_pick = 0
+                        $('#map-pick-title').html("Decider Map");
+                        $('#map-pick-logo').addClass('d-none');
                     }
+                }
+
+                if (current_map_pick != null) {
+                    if (titleAnimationTimer !== null) {
+                        clearInterval(titleAnimationTimer);
+                    }
+                    animateTitle();
+                    titleAnimationTimer = setInterval(function () {
+                        animateTitle();
+                    }, 19000);
                 }
             }
         }

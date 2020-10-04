@@ -19,6 +19,7 @@ from django.dispatch import receiver
 import caster_dashboard_2.settings.base as django_settings
 from dashboard.validators import *
 from caster_dashboard_2.helpers.image_handler import *
+from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
 
@@ -321,25 +322,7 @@ class Match(models.Model):
 @receiver(post_save, sender=Match)
 def match_post_save(sender, instance, **kwargs):
     # Send message to Websocket Consumer
-    channel_layer = get_channel_layer()
-    match_data = instance.serialize()
-
-    map_picks = MapBan.objects.filter(match=instance).all()
-    maps = []
-    for m in map_picks:
-        if m.type == "pick" or m.type == "decider":
-            maps.append({'map': m.map.id, 'type': m.type, 'team': m.team.id})
-
-    data = {'match': match_data, 'maps': maps}
-
-    for user in instance.user.all():
-        async_to_sync(channel_layer.group_send)(
-            str(user) + "_match_data",
-            {
-                "type": "send_message",
-                "message": data,
-            }
-        )
+    send_match_data_to_consumers(instance)
 
 
 class MapBan(models.Model):
@@ -431,6 +414,10 @@ def operator_bans_post_save(sender, instance, **kwargs):
     match = instance.match
     match.state = new_match_state
     match.save()
+
+    # Update Map state to Playing (2)
+    map_play_order.status = 2
+    map_play_order.save()
 
 
 class WinType(models.Model):

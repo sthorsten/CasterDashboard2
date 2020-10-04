@@ -83,11 +83,13 @@ class MatchDataConsumer(WebsocketConsumer):
         match = Match.objects.get(id=match_overlay_data['current_match'])
         match_data = match.serialize()
 
-        map_picks = MapBan.objects.filter(match=match).all()
+        map_picks = MapBan.objects.filter(match=match, type__in=[2, 3]).all()
         maps = []
         for m in map_picks:
-            if m.type == "pick" or m.type == "decider":
-                maps.append({'map': m.map.id, 'type': m.type, 'team': m.team.id})
+            if m.type == 2:
+                maps.append({'map': m.map.id, 'type': m.type, 'status': m.status, 'team': m.team.id})
+            else:
+                maps.append({'map': m.map.id, 'type': m.type, 'status': m.status})
 
         data = {'match_overlay_data': match_overlay_data, 'match': match_data, 'maps': maps}
         self.send_match_data_message(data)

@@ -42,11 +42,10 @@ def ingame(request, user_name):
 
     overlay_states = OverlayState.objects.get(user=user)
 
-    current_map_order = match.state.id - 2
-    if 1 <= current_map_order <= 5:
-        current_map = MapBan.objects.get(match=match, play_order=current_map_order).map
+    try:
+        current_map = MapBan.objects.get(match=match, status=2).map
         current_map_pick_team = MapBan.objects.get(match=match, map=current_map).team
-    else:
+    except MapBan.DoesNotExist:
         current_map_pick_team = None
 
     template_data = {
