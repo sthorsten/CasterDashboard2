@@ -1,0 +1,10 @@
+postgres_data
+__pycache__
+media
+static_old
+venv
+docker-compose.yml
+docker-compose-start.sh
+Dockerfile
+settings.py
+frontend/node_modules

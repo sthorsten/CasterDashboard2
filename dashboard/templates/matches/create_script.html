@@ -1,0 +1,40 @@
+{% load i18n %}
+
+<script>
+
+    $('#create-match-form').submit((event) => {
+        event.preventDefault();
+
+        let form = $('#create-match-form');
+        let formData = form.serialize();
+        let postURL = '/api/matches/';
+
+        // Form Validation
+        if (form[0].checkValidity() === false) {
+            toastr.error("{% trans "Please fill in all required fields!" %}", "{% trans "Error" %}");
+            return;
+        }
+        form.addClass('was-validated');
+
+        // Check for dummy match
+        if ($('#new-match-dummy')[0].checked) {
+            formData += "&state=5";
+        }
+
+        $.ajax({
+            url: postURL,
+            data: formData,
+            type: 'POST',
+        }).fail((data) => {
+            console.error(data);
+        }).done((data) => {
+            console.log(data);
+            setTimeout(() => {
+                window.location.replace("/dashboard/matches/" + data.id);
+            }, 500)
+        });
+
+
+    });
+
+</script>

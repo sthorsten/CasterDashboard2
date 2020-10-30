@@ -15,7 +15,7 @@ from pip._vendor import requests
 import caster_dashboard_2
 import caster_dashboard_2.settings.base as django_settings
 
-from dashboard.models import *
+from dashboard.models.models import *
 
 logger = logging.getLogger(__name__)
 

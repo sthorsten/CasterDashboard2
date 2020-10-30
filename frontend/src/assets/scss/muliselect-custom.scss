@@ -1,0 +1,33 @@
+.multiselect, .multiselect__input, .multiselect__single, .multiselect__tags, .multiselect__content-wrapper, .multiselect__content {
+    background: #212529 !important;
+    color: #fff;
+}
+
+.multiselect__placeholder {
+    margin-bottom: 0;
+    padding-top: 0;
+}
+
+.multiselect__input::placeholder {
+    color: #adadad;
+}
+
+.multiselect__single, .multiselect__input {
+    line-height: inherit;
+    padding: 0;
+}
+
+.multiselect__option--selected {
+    background: #495057;
+    color: #fff;
+}
+
+.multiselect__option--disabled {
+    background: #343a40 !important;
+    color: #ced4da !important;
+}
+
+.multiselect__tags {
+    font-size: 16px;
+}
+

@@ -1,6 +1,6 @@
 from django.forms import *
 
-from dashboard.models import Match
+from dashboard.models.models import Match
 
 
 class NewMatchForm(ModelForm):

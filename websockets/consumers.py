@@ -1,9 +1,27 @@
-from channels.generic.websocket import *
+import json
+
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import WebsocketConsumer, SyncConsumer
 from django.contrib.auth.models import User
 
-from api.serializers import OverlayStateSerializer, MatchSerializer, MatchOverlayDataSerializer
-from dashboard.models import Match, MapBan
-from overlays.models import OverlayState, MatchOverlayData
+from dashboard.models.models import Match
+from overlays.models.models import OverlayState, MatchOverlayData
+from overlays.models.serializers import OverlayStateSerializer, MatchOverlayDataSerializer
+from websockets.helper import send_match_data_to_consumers
+
+
+class EchoConsumer(SyncConsumer):
+
+    def websocket_connect(self, event):
+        self.send({
+            "type": "websocket.accept",
+        })
+
+    def websocket_receive(self, event):
+        self.send({
+            "type": "websocket.send",
+            "text": event["text"],
+        })
 
 
 class OverlayStateConsumer(WebsocketConsumer):
@@ -78,35 +96,20 @@ class MatchDataConsumer(WebsocketConsumer):
         else:
             match_overlay_data = MatchOverlayData.objects.get(user=self.user)
 
-        match_overlay_data = match_overlay_data.serialize()
+        match_overlay_data = MatchOverlayDataSerializer(match_overlay_data).data
 
         match = Match.objects.get(id=match_overlay_data['current_match'])
-        match_data = match.serialize()
-
-        map_picks = MapBan.objects.filter(match=match, type__in=[2, 3]).all()
-        maps = []
-        for m in map_picks:
-            if m.type == 2:
-                maps.append({'map': m.map.id, 'type': m.type, 'status': m.status, 'team': m.team.id})
-            else:
-                maps.append({'map': m.map.id, 'type': m.type, 'status': m.status})
-
-        data = {'match_overlay_data': match_overlay_data, 'match': match_data, 'maps': maps}
-        self.send_match_data_message(data)
-
-    def set_state(self, data):
-        print("set_state")
-        pass
+        send_match_data_to_consumers(match)
 
     commands = {
         'get_state': get_state,
-        'set_state': set_state,
     }
 
     def connect(self):
         self.user = self.scope['user']
         self.room_group_name = str(self.user) + '_match_data'
-        print("Websocket connecting to room group " + self.room_group_name)
+
+        print("Websocket connecting on channel " + self.room_group_name)
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,

@@ -1,5 +1,5 @@
 from caster_dashboard_2.version import get_current_version
-from dashboard.models import LeagueGroup
+from dashboard.models.models import LeagueGroup
 
 
 def version_context(request):

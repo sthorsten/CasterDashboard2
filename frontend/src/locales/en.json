@@ -1,0 +1,144 @@
+{
+    "core": {
+        "playday": "Playday",
+        "league": "League | Leagues",
+        "season": "Season | Seasons",
+        "sponsor": "Sponsor | Sponsors",
+        "team": "Team | Teams",
+        "round": "Round | Rounds",
+        "best_of": "Best Of",
+        "team_blue": "Team Blue",
+        "team_orange": "Team Orange",
+        "logo": "Logo"
+    },
+    "generic": {
+        "username": "Username",
+        "password": "Password",
+        "or": "or",
+        "loading": "Loading",
+        "loading_failed": "Loading failed :/",
+        "error": "Error",
+        "success": "Success",
+        "quick_info": "Quick Info",
+        "quick actions": "Quick Actions",
+        "wip": "Work in Progress :/",
+        "actions": "Actions",
+        "browse": "Browse",
+        "internal_server_error": "Internal Server Error",
+        "oops": "Oops..."
+    },
+    "navigation": {
+        "home": "Home",
+        "matches": "Matches",
+        "history": "Match History",
+        "create": "Create a match",
+        "overview": "Match Overview",
+        "details": "Match Details",
+        "maps": "Map Picks & Bans",
+        "overlays": "Overlays",
+        "control_center": "Control Center",
+        "customize": "Customize",
+        "data": "Data",
+        "statistics": "Statistics",
+        "stats_maps": "Map Statistics",
+        "opbans": "Operator Ban Statistics",
+        "stats_rounds": "Round Statistics",
+        "admin": "Administration",
+        "api_access": "API Access",
+        "league_admin": "League Admin",
+        "user_settings": "User Settings",
+        "profile": "Profile & Settings",
+        "log_out": "Log Out"
+    },
+    "login": {
+        "sign_in": "Sign in",
+        "register": "Register a new account",
+        "forgot_password": "I forgot my password",
+        "enter_username": "Please enter your username!",
+        "enter_password": "Please enter your password!",
+        "login_failed": "Login failed",
+        "invalid_credentials": "Invalid credentials!",
+        "login_success": "Login successful",
+        "welcome": "Welcome {user}!"
+    },
+    "home": {
+        "welcome": "Welcome",
+        "greeting": {
+            "line1": "Good to have you back!",
+            "line2": "How are you today?",
+            "line3": "The dashboard is all yours!",
+            "line4": "Let's get the show on the road!",
+            "line5": "You're awesome!"
+        }
+    },
+    "matches": {
+        "history": {
+            "title": "Match History",
+            "loading_matches": "Loading matches...",
+            "loading_matches_failed": "Loading matches failed!",
+            "go_to_match": "Go to match"
+        },
+        "create": {
+            "create_match": "Create a new match",
+            "share_match": "Share match (optional)",
+            "share_match_text": "Select user(s) to share the match with (optional)",
+            "league_select": "Select a league",
+            "league_select_text": "Please select a league!",
+            "season_select": "Select a season",
+            "season_select_text": "Please select a season!",
+            "season_options": {
+                "official": "Official Seasons",
+                "league": "League specific seasons"
+            },
+            "best_of_text": "Please select a best of!",
+            "match_title": "Match title",
+            "match_title_placeholder": "Enter a match title",
+            "match_title_text": "Please enter a match title!",
+            "playday": "Playday (optional)",
+            "playday_placeholder": "Enter a playday / subtitle (optional)",
+            "team_select": "Select a team",
+            "sponsors": "Sponsors (optional)",
+            "sponsors_select": "Select a sponsor (optional)",
+            "create_match_btn": "Create match",
+            "info": {
+                "line1": "To create a new match simply fill out the form.",
+                "line2": "Providing a subtitle / playday and sponsors is optional",
+                "line3": "You can also directly share the match with other users by selecting them here"
+            },
+            "last_match_btn": "Go to last match",
+            "reset_btn": "Reset match data",
+            "match_created": "The match has been created",
+            "match_create_failed": "The match could not be created!"
+        }
+    },
+    "data": {
+        "teams": {
+            "title": "You have access to the following teams",
+            "edit_team": "Edit Team",
+            "change_logo": "Change Logo",
+            "add_new_team_btn": "Add a new team",
+            "loading_teams": "Loading teams...",
+            "loading_teams_failed": "Loading team data failed!",
+            "modal": {
+                "info": {
+                    "line1": "You can create a new team by entering a team name and providing a team logo.",
+                    "line2": "You can either upload a logo yourself or paste in a logo URL below.",
+                    "line3": "The logo can be any image file type and any size as long as it is square.",
+                    "line4": "If a team has no logo or if you don't provide one, a default logo will be used."
+                },
+                "team_name": "Team Name",
+                "team_name_text": "What is the new team called?",
+                "team_name_feedback": "Please enter a team name!",
+                "team_logo": "Team Logo",
+                "logo_upload": "Logo Upload",
+                "logo_upload_text": "Choose a file or drop it here",
+                "logo_upload_text_drop": "Drop file here",
+                "logo_url": "Logo URL",
+                "logo_url_text": "Paste a logo URL here",
+                "add_btn": "Add new team",
+                "team_created": "Team created successfully",
+                "team_create_failed": "Failed to create team!"
+            }
+        }
+    }
+}

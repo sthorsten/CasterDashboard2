@@ -4,8 +4,8 @@ from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.shortcuts import render, get_object_or_404, redirect
 
-from dashboard.models import *
-from overlays.models import *
+from dashboard.models.models import *
+from overlays.models.models import MatchOverlayData, OverlayState, OverlayStyle
 
 
 def start(request, user_name):
@@ -43,9 +43,9 @@ def ingame(request, user_name):
     overlay_states = OverlayState.objects.get(user=user)
 
     try:
-        current_map = MapBan.objects.get(match=match, status=2).map
-        current_map_pick_team = MapBan.objects.get(match=match, map=current_map).team
-    except MapBan.DoesNotExist:
+        current_map = MatchMap.objects.get(match=match, status=2).map
+        current_map_pick_team = MatchMap.objects.get(match=match, map=current_map).team
+    except MatchMap.DoesNotExist:
         current_map_pick_team = None
 
     template_data = {

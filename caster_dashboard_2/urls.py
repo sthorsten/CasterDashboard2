@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.i18n import JavaScriptCatalog
 
 from caster_dashboard_2.settings.base import *
 from dashboard.views import sites, forms
@@ -40,6 +41,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
+
+    url(r'^jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

@@ -1,18 +1,17 @@
 <!-- Page Script -->
 
 {% load i18n %}
+{% csrf_token %}
 
 <script>
-    var current_user_id = {{ user.id }};
+    const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let current_user_id = {{ user.id }};
 
-    $(document).ready(function () {
-
-    });
 
     function toggleState(elem) {
-        var qElem = $(elem);
+        let qElem = $(elem);
 
-        var postURL = "/api/overlay/overlay_state/" + current_user_id + "/"
+        let postURL = "/api/overlay/state/by_user/{{ user.id }}/"
 
         if (qElem.attr("data-state") === "true") {
             qElem.attr("data-state", "false")
@@ -22,10 +21,18 @@
 
             qElem.html("{% trans "off" %}");
 
-            data = '{"' + qElem.attr('data-name') + '": false}';
+            let postData = {};
+            postData[qElem.attr('data-name')] = false;
 
-            console.log("POST: " + postURL + " => " + data);
-            $.post(postURL, data);
+            console.log("POST: " + postURL + " => " + JSON.stringify(postData));
+
+            $.ajax({
+                type: "POST",
+                headers: {"X-CSRFToken": csrf_token},
+                mode: 'same-origin',
+                url: postURL,
+                data: postData,
+            });
 
         } else if (qElem.attr("data-state") === "false") {
             qElem.attr("data-state", "true")
@@ -35,17 +42,25 @@
 
             qElem.html("{% trans "on" %}");
 
-            data = '{"' + qElem.attr('data-name') + '": true}';
+            let postData = {};
+            postData[qElem.attr('data-name')] = true;
 
-            console.log("POST: " + postURL + " => " + data);
-            $.post(postURL, data);
+            console.log("POST: " + postURL + " => " + JSON.stringify(postData));
+
+            $.ajax({
+                type: "POST",
+                headers: {"X-CSRFToken": csrf_token},
+                mode: 'same-origin',
+                url: postURL,
+                data: postData,
+            });
         }
     }
 
     function toggleTimerMode(elem) {
         var qElem = $(elem);
         var value = $("#timerValueInput").val();
-        var postURL = "/api/overlay/timer_overlay_data/" + current_user_id + "/"
+        var postURL = "/api/overlay/timer_data/" + current_user_id + "/"
 
         if (qElem.attr("data-state") === "true") return;
 

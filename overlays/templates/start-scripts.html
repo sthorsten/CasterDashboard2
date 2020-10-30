@@ -20,11 +20,11 @@
     const loc = window.location;
 
     let overlayStateWsURL = 'ws://' + loc.host + '/ws/overlays/state/';
-    if (loc.protocol === 'https:'){
+    if (loc.protocol === 'https:') {
         overlayStateWsURL = 'wss://' + loc.host + '/ws/overlays/state/';
     }
     console.log("Starting Websocket: " + overlayStateWsURL);
-    const overlaySocket = new WebSocket(overlayStateWsURL);
+    let overlaySocket = new WebSocket(overlayStateWsURL);
     overlaySocket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         handleStateChange(data['start_state']);
@@ -35,21 +35,28 @@
     overlaySocket.onopen = () => overlaySocket.send(get_data_cmd);
 
     let matchDataWsURL = 'ws://' + loc.host + '/ws/overlays/match_data/';
-    if (loc.protocol === 'https:'){
+    if (loc.protocol === 'https:') {
         matchDataWsURL = 'wss://' + loc.host + '/ws/overlays/match_data/';
     }
-    console.log("Starting Websocket: " + overlayStateWsURL);
-    const matchDataSocket = new WebSocket(matchDataWsURL);
+    console.log("Starting Websocket: " + matchDataWsURL);
+    let matchDataSocket = new WebSocket(matchDataWsURL, "http");
+
     matchDataSocket.onmessage = function (event) {
         const data = JSON.parse(event.data);
         handleMatchDataChange(data);
     }
+    matchDataSocket.onerror = function (event) {
+        console.error(event);
+    }
     matchDataSocket.onclose = function (event) {
         console.error('MatchData socket closed.');
     }
-    matchDataSocket.onopen = () => matchDataSocket.send(get_data_cmd);
+    matchDataSocket.onopen = function (event) {
+        matchDataSocket.send(get_data_cmd);
+    };
 
     function handleStateChange(new_state) {
+        console.log(new_state);
         if (overlay_state === null) {
             overlay_state = new_state;
             if (overlay_state) animateIN();

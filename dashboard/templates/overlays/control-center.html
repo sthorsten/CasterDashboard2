@@ -237,7 +237,7 @@
                             {% trans "Set Timer Mode" %}
                         </div>
                         <div class="col-3 text-right">
-                            {% if timer_overlay_data.mode == "timer" %}
+                            {% if timer_overlay_data.mode == 2 %}
                                 <button id="timerBtn" class="btn badge badge-success w-100" data-state="true"
                                         data-name="timer" onclick="toggleTimerMode(this)">{% trans "timer mode" %}
                                 </button>
@@ -248,7 +248,7 @@
                             {% endif %}
                         </div>
                         <div class="col-3 text-right">
-                            {% if timer_overlay_data.mode == "clock" %}
+                            {% if timer_overlay_data.mode == 1 %}
                                 <button id="clockBtn" class="btn badge badge-success w-100" data-state="true"
                                         data-name="clock" onclick="toggleTimerMode(this)">{% trans "clock mode" %}
                                 </button>

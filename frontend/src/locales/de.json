@@ -1,0 +1,144 @@
+{
+    "navigation": {
+        "home": "Startseite",
+        "matches": "Matches",
+        "history": "Match Historie",
+        "create": "Neues Match",
+        "overview": "Match Übersicht",
+        "details": "Match Details",
+        "maps": "Map Picks & Bans",
+        "overlays": "Overlays",
+        "control_center": "Control Center",
+        "customize": "Anpassen",
+        "data": "Daten",
+        "statistics": "Statistiken",
+        "stats_maps": "Map Statistiken",
+        "opbans": "Operator Ban Statistiken",
+        "stats_rounds": "Runden Statistiken",
+        "admin": "Administration",
+        "api_access": "API Zugriff",
+        "league_admin": "Liga Admin",
+        "user_settings": "Benutzer Einstellungen",
+        "profile": "Profil & Einstellungen",
+        "log_out": "Abmelden"
+    },
+    "login": {
+        "sign_in": "Anmelden",
+        "register": "Einen neuen Account registrieren",
+        "forgot_password": "Ich habe mein Passwort vergessen",
+        "enter_username": "Bitte gib deinen Benutzernamen ein!",
+        "enter_password": "Bitte gib dein Passwort ein!",
+        "login_failed": "Login fehlgeschlagen",
+        "invalid_credentials": "Ungültige Anmeldedaten!",
+        "login_success": "Login erfolgreich",
+        "welcome": "Willkommen {user}!"
+    },
+    "core": {
+        "league": "Liga | Ligen",
+        "season": "Seaons | Seasons",
+        "sponsor": "Sponsor | Sponsoren",
+        "team": "Team | Teams",
+        "round": "Runde | Runden",
+        "best_of": "Best Of",
+        "team_blue": "Team Blau",
+        "team_orange": "Team Orange",
+        "logo": "Logo",
+        "playday": "Spieltag"
+    },
+    "generic": {
+        "username": "Benutzername",
+        "password": "Passwort",
+        "or": "oder",
+        "loading": "Wird geladen",
+        "error": "Fehler",
+        "success": "Erfolg",
+        "loading_failed": "Laden fehlgeschlagen :/",
+        "quick_info": "Quick Info",
+        "quick actions": "Quick Actions",
+        "wip": "In Arbeit :/",
+        "actions": "Aktionen",
+        "browse": "Durchsuchen",
+        "internal_server_error": "Interner Serverfehler",
+        "oops": "Ups..."
+    },
+    "home": {
+        "welcome": "Willkommen",
+        "greeting": {
+            "line1": "Schön dich wieder zu sehen!",
+            "line2": "Wie geht's dir heute?",
+            "line3": "Das Dashboard steht bereit!",
+            "line4": "Let's get the show on the road!",
+            "line5": "Du bist großartig!"
+        }
+    },
+    "matches": {
+        "history": {
+            "title": "Match Historie",
+            "loading_matches": "Lade Matches...",
+            "loading_matches_failed": "Fehler beim Match laden",
+            "go_to_match": "Zum Match"
+        },
+        "create": {
+            "create_match": "Ein neues Match erstellen",
+            "share_match": "Match teilen (optional)",
+            "share_match_text": "Benutzer auswählen, mit denen das Match geteilt werden soll (optional)",
+            "create_match_btn": "Match Erstellen",
+            "league_select": "Liga auswählen",
+            "league_select_text": "Bitte wähle eine Liga aus!",
+            "season_select": "Season auswählen",
+            "season_select_text": "Bitte wähle eine Season aus!",
+            "best_of_text": "Bitte wähle ein Best Of!",
+            "match_title": "Match Titel",
+            "match_title_placeholder": "Gib einen Match Titel ein",
+            "match_title_text": "Bitte gib einen Match Titel ein!",
+            "playday": "Spieltag (optional)",
+            "playday_placeholder": "Gib einen Spieltag / Untertitel ein (optional)",
+            "team_select": "Ein Team auswählen",
+            "sponsors": "Sponsoren (optional)",
+            "sponsors_select": "Einen Sponsor auswählen (optional)",
+            "season_options": {
+                "official": "Offizielle Seasons",
+                "league": "Liga-spezifische Seasons"
+            },
+            "info": {
+                "line1": "Um ein neues Match zu erstellen fülle einfach das Formular aus.",
+                "line2": "Optional kann ein Untertitel / Spieltag angegeben werden",
+                "line3": "Du kannst ein Match direkt mit anderen Benutzern teilen, indem du sie hier auswählst"
+            },
+            "last_match_btn": "Zum letzen Match",
+            "reset_btn": "Match-Daten zurücksetzen",
+            "match_created": "Das Match wurde erstellt",
+            "match_create_failed": "Das Match konnte nicht erstellt werden!"
+        }
+    },
+    "data": {
+        "teams": {
+            "add_new_team_btn": "Ein neues Team hinzufügen",
+            "title": "Du hast Zugriff auf folgende Teams",
+            "edit_team": "Team Bearbeiten",
+            "change_logo": "Logo Ändern",
+            "loading_teams": "Lade Teams...",
+            "loading_teams_failed": "Teamdaten konnten nicht geladen werden!",
+            "modal": {
+                "info": {
+                    "line1": "Du kannst ein neues Team erstellen indem du einen Teamnamen und ein Team Logo eingibst.",
+                    "line2": "Du kannst entweder ein Logo hochladen oder eine Logo URL unten einfügen.",
+                    "line3": "Das Logo kann in einem beliebigen Bildformat sein, solange es quadratisch ist.",
+                    "line4": "Wenn ein Team kein Logo hat oder du keines angibst, wird ein Standardlogo verwendet."
+                },
+                "team_name": "Team Name",
+                "team_name_text": "Wie heißt das neue Team?",
+                "team_name_feedback": "Bitte gib einen Teamnamen ein!",
+                "team_logo": "Team Logo",
+                "logo_upload": "Logo Hochladen",
+                "logo_upload_text": "Datei auswählen oder hierhin ziehen",
+                "logo_upload_text_drop": "Datei loslassen",
+                "logo_url": "Logo URL",
+                "logo_url_text": "Logo URL hier einfügen",
+                "add_btn": "Neues Team Hinzufügen",
+                "team_created": "Das Team wurde erfolgreich erstellt",
+                "team_create_failed": "Das Team konnte nicht erstellt werden!"
+            }
+        }
+    }
+}

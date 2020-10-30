@@ -44,7 +44,7 @@
         $('#no_log').removeClass("d-none");
         $('#log').addClass("d-none");
 
-        $.getJSON("/api/match/{{ match.id }}/maps/")
+        $.getJSON("/api/matches/{{ match.id }}/maps/")
             .done((data) => {
                     if (data.length === 0) return;
                     ban_data = data;
@@ -57,7 +57,7 @@
 
                         // Add log entries
                         elem.order < 7
-                            ? log_content += `<li class="text-bold">${elem.order} / ${elem.type_name} / ${elem.map_name} / ${elem.team_name}</li>`
+                            ? log_content += `<li class="text-bold">${elem.order} / ${elem.type_name} / ${elem.map_name} / ${elem.choose_team_name}</li>`
                             : log_content += `<li class="text-bold">${elem.order} / ${elem.type_name} / ${elem.map_name}</li>`
 
                         // Set UI elements
@@ -107,7 +107,7 @@
 
     function addMap(id, type, team) {
         let matchID = {{ match.id }};
-        let postURL = `/api/match/maps/`;
+        let postURL = `/api/matches/maps/`;
         let postData = null;
         let typeID = null;
 
@@ -126,7 +126,7 @@
         }
 
         if (order < 7) {
-            postData = {"match": matchID, "map": id, "type": typeID, "team": team}
+            postData = {"match": matchID, "map": id, "type": typeID, "choose_team": team}
         } else {
             postData = {"match": matchID, "map": id, "type": typeID}
         }
@@ -149,7 +149,7 @@
 
     function resetMap() {
         let lastMapID = ban_data[ban_data.length - 1].id;
-        let deleteURL = "/api/match/maps/" + lastMapID + "/";
+        let deleteURL = "/api/matches/maps/" + lastMapID + "/";
 
         console.log(`DELETE: ${deleteURL}`);
         $.ajax({
@@ -168,7 +168,7 @@
 
     function resetAllMaps() {
         for (let i = 0; i < ban_data.length; i++) {
-            let deleteURL = "/api/match/maps/" + ban_data[i].id + "/";
+            let deleteURL = "/api/matches/maps/" + ban_data[i].id + "/";
 
             console.log(`DELETE: ${deleteURL}`);
             $.ajax({

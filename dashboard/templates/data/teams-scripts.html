@@ -14,7 +14,7 @@
     }
 
     function loadTeamData() {
-        $.getJSON("/api/data/teams/", function (data) {
+        $.getJSON("/api/data/team/", function (data) {
             data.sort(compareTeams);
 
             for (let i = 0; i < data.length; i++) {
