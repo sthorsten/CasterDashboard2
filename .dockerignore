@@ -10,6 +10,7 @@ venv
 .dockerignore
 .gitignore
 *.disabled
+*.ignored
 CHANGELOG.md
 docker-compose.yml
 Dockerfile
