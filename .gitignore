@@ -4,4 +4,5 @@ venv/
 __pycache__/
 media/
 logs/*.log
+*.ignored
 caster_dashboard_2/settings/local_settings.py
