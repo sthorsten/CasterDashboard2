@@ -7,7 +7,7 @@ FROM node:lts-alpine as frontend-build
 WORKDIR /app
 
 # Install node dependencies
-COPY ./frontend/package*.json .
+COPY ./frontend/package*.json ./
 RUN npm install
 
 # Copy frontend files and override with production config
