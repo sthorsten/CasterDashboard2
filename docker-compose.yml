@@ -27,7 +27,7 @@ services:
 
 
   web:
-    image: thorshero/caster-dashboard-2:2.0.0-alpha3
+    image: thorshero/caster-dashboard-2:latest
     volumes:
       - ./docker-compose-start.sh:/opt/caster_dashboard_2/start.sh
       - ./settings.py:/opt/caster_dashboard_2/dashboard/settings.py

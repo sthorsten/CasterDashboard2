@@ -57,7 +57,10 @@ class OverlayState(models.Model):
 
 
 @receiver(post_save, sender=OverlayState)
-def overlay_state_post_save(sender, instance, **kwargs):
+def overlay_state_post_save(sender, instance, created, **kwargs):
+    if created:
+        return
+
     # Sends overlay state message to websockets on change
     from overlays.models.serializers import OverlayStateSerializer
 
@@ -85,7 +88,10 @@ class MatchOverlayData(models.Model):
 
 
 @receiver(post_save, sender=MatchOverlayData)
-def match_overlay_data_post_save(sender, instance, **kwargs):
+def match_overlay_data_post_save(sender, instance, created, **kwargs):
+    if created:
+        return
+
     # Send the new match data to websockets on change
     send_match_data_to_consumers(instance.current_match)
 

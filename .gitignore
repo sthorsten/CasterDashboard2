@@ -1,4 +1,5 @@
 .idea/
+assets/*
 venv/
 __pycache__/
 media/
