@@ -20,6 +20,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./assets:/opt/assets/
+      - media_files:/opt/media
     ports:
       - 80:80  
     depends_on:
@@ -32,6 +33,7 @@ services:
       - ./docker-compose-start.sh:/opt/caster_dashboard_2/start.sh
       - ./settings.py:/opt/caster_dashboard_2/dashboard/settings.py
       - ./assets:/opt/caster_dashboard_2/assets
+      - media_files:/opt/caster_dashboard_2/media
     command: sh /opt/caster_dashboard_2/start.sh
     depends_on:
       - db  
@@ -41,3 +43,4 @@ services:
 
 volumes:
   postgres_data:
+  media_files:
