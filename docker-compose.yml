@@ -16,31 +16,30 @@ services:
     
   
   nginx:
-    image: nginx:latest
+    image: thorshero/cd2-nginx:latest
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./assets:/opt/assets/
-      - media_files:/opt/media
+      - asset_files:/opt/static/assets
+      - media_files:/opt/static/media
     ports:
-      - 80:80  
+      - 80:80
     depends_on:
-      - web  
+      - dashboard
 
 
-  web:
+  dashboard:
     image: thorshero/caster-dashboard-2:latest
     volumes:
-      - ./docker-compose-start.sh:/opt/caster_dashboard_2/start.sh
-      - ./settings.py:/opt/caster_dashboard_2/dashboard/settings.py
-      - ./assets:/opt/caster_dashboard_2/assets
+      - asset_files:/opt/caster_dashboard_2/assets
       - media_files:/opt/caster_dashboard_2/media
-    command: sh /opt/caster_dashboard_2/start.sh
+      - ./docker-settings.py:/opt/caster_dashboard_2/dashboard/settings.py
+    command: sh /opt/caster_dashboard_2/docker-compose-start.sh
     depends_on:
-      - db  
+      - db
       - redis
-           
-                
+
+
 
 volumes:
   postgres_data:
+  asset_files:
   media_files:
