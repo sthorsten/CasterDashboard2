@@ -8,6 +8,9 @@ DEBUG = True
 # You can use the get_random_secret_key() function from django.core.management.utils to generate a secret key
 SECRET_KEY = ''
 
+# Set your host(s) here
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 # Email settings
 DEFAULT_FROM_EMAIL = 'mail@example.com'
 EMAIL_SUBJECT_PREFIX = '[Caster Dashboard] '
