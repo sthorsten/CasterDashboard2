@@ -1,5 +1,6 @@
 module.exports = {
     assetsDir: 'assets',
+    filenameHashing: false,
     pluginOptions: {
         resolve: {
             alias: {
