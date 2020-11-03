@@ -2,6 +2,7 @@
 assets/*
 venv/
 __pycache__/
+frontend/dist
 media/
 logs/*.log
 *.ignored
