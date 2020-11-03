@@ -15,7 +15,7 @@
                                 <validation-provider name="username" :rules="{ required: true }" v-slot="validationContext">
                                     <b-form-group class="mb-3">
                                         <b-input-group>
-                                            <b-form-input id="username" v-model="username" :placeholder="$t('core.username')"
+                                            <b-form-input id="username" v-model="username" :placeholder="$t('generic.username')"
                                                           aria-describedby="username-feedback" :state="getValidationState(validationContext)">
                                             </b-form-input>
                                             <b-input-group-append>
@@ -33,7 +33,7 @@
                                 <validation-provider name="password" :rules="{ required: true }" v-slot="validationContext">
                                     <b-form-group class="mb-3">
                                         <b-input-group>
-                                            <b-form-input v-model="password" type="password" :placeholder="$t('core.password')"
+                                            <b-form-input v-model="password" type="password" :placeholder="$t('generic.password')"
                                                           aria-describedby="password-feedback" :state="getValidationState(validationContext)">
                                             </b-form-input>
                                             <b-input-group-append>
@@ -59,7 +59,7 @@
                         </validation-observer>
 
                         <div class="social-auth-links text-center mb-3">
-                            <p class="text-uppercase">- {{ $t('core.or')}} -</p>
+                            <p class="text-uppercase">- {{ $t('generic.or')}} -</p>
                         </div>
                         <!-- /.social-auth-links -->
 

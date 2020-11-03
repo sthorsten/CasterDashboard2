@@ -72,6 +72,13 @@ const store = new Vuex.Store({
         user: null,
         loggedIn: false
     },
+    getters: {
+        authHeader: state => {
+            return {
+                headers: {"Authorization": "Token " + state.userToken}
+            }
+        }
+    },
     mutations: {
         setUserToken(state, userToken) {
             state.userToken = userToken

@@ -193,6 +193,7 @@ class OperatorBansViewSet(viewsets.ModelViewSet):
 class RoundViewSet(viewsets.ModelViewSet):
     queryset = Round.objects.all()
     serializer_class = RoundSerializer
+    filterset_fields = ['match', 'map']
 
 
 # Overlay Views

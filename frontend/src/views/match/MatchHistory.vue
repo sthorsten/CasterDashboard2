@@ -1,7 +1,7 @@
 <template>
-    <BaseLayout :title="$t('navigation.history')" title_icon="fas fa-history" :bc_path="bc_path">
+    <BaseLayout :title="$t('navigation.history')" title_icon="fas fa-history" :bc_path="bcPath">
 
-        <template v-if="loading_status === 'loaded'">
+        <template v-if="loadingStatus === 'loaded'">
 
             <CustomCard color="primary" outline divider :title="$t('navigation.history')">
                 <template #card-body>
@@ -9,7 +9,7 @@
                     <b-row class="text-center">
                         <b-col cols="12">
                             <b-table id="match_table" table-variant="dark" small striped sort-icon-left responsive :items="matches" :fields="fields"
-                                     :per-page="per_page" :current-page="current_page" sort-by="id" sort-desc>
+                                     :per-page="perPage" :current-page="currentPage" sort-by="id" sort-desc>
 
                                 <template #cell(button)="data">
                                     <router-link :to="{name: 'Match Overview', params: {id: data.item.id}}">
@@ -23,7 +23,7 @@
                         </b-col>
 
                         <b-col cols="12">
-                            <b-pagination v-model="current_page" :total-rows="total_rows" :per-page="per_page" aria-controls="match_table"
+                            <b-pagination v-model="currentPage" :total-rows="total_rows" :per-page="perPage" aria-controls="match_table"
                                           align="center"/>
                         </b-col>
                     </b-row>
@@ -34,8 +34,8 @@
         </template>
 
         <!-- Loading overlay -->
-        <template v-if="loading_status === 'loading'">
-            <CustomCard color="secondary" outline divider :title="$t('core.loading')">
+        <template v-if="loadingStatus === 'loading'">
+            <CustomCard color="secondary" outline divider :title="$t('generic.loading')">
                 <template #card-body>
                     <StatusOverlay type="loading" :text="$t('matches.history.loading_matches')"></StatusOverlay>
                 </template>
@@ -43,8 +43,8 @@
         </template>
 
         <!-- Error overlay -->
-        <template v-if="loading_status === 'error'">
-            <CustomCard color="danger" outline divider :title="$t('core.error')">
+        <template v-if="loadingStatus === 'error'">
+            <CustomCard color="danger" outline divider :title="$t('generic.error')">
                 <template #card-body>
                     <StatusOverlay type="icon" icon="fas fa-exclamation-triangle fa-2x"
                                    :text="$t('matches.history.loading_matches_failed')"></StatusOverlay>
@@ -100,10 +100,10 @@ export default {
             ],
             matches: [],
 
-            per_page: 10,
-            current_page: 1,
-            loading_status: "loading",
-            bc_path: ["Dashboard", "Matches", "History"]
+            perPage: 10,
+            currentPage: 1,
+            loadingStatus: "loading",
+            bcPath: ["Dashboard", "Matches", "History"]
         }
     },
     computed: {
@@ -113,17 +113,14 @@ export default {
     },
     methods: {
         getMatches() {
-            axios.get(this.$store.state.backendURL + "/api/match/?user=" + this.$store.state.user.id, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.get(`${this.$store.state.backendURL}/api/match/?user=${this.$store.state.user.id}`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response)
                 this.matches = response.data
-                this.loading_status = 'loaded'
+                this.loadingStatus = 'loaded'
             }).catch((error) => {
                 console.log(error.response)
-                this.loading_status = 'error'
+                this.loadingStatus = 'error'
             })
         }
     },

@@ -1,15 +1,17 @@
 <template>
-    <BaseLayout title="Map Pick & Bans" title_icon="fas fa-map" :bc_path="bc_path">
+    <BaseLayout :title="$t('navigation.maps')" title_icon="fas fa-map" :bc_path="bcPath">
 
-        <template v-if="loading_status === 'loaded'">
+        <template v-if="loadingStatus === 'loaded'">
 
-            <b-row v-if="maps_locked">
+            <b-row v-if="mapsLocked">
 
                 <b-col>
                     <b-alert variant="info" show>
                         <span class="font-italic">
-                            <i class="fa fas fa-info-circle"></i>
-                            One or more maps are already being played or finished. You <b>can not</b> make any changes to the maps anymore.
+                            <i class="fa fas fa-info-circle mr-1"></i>
+                            <i18n path="matches.maps.locked_info_text">
+                                <b>{{ $t('matches.maps.locked_info_text_bold') }}</b>
+                            </i18n>
                         </span>
                     </b-alert>
                 </b-col>
@@ -20,39 +22,39 @@
 
                 <!-- Settings -->
                 <b-col md="5">
-                    <CustomCard color="danger" outline divider title="Settings & Controls">
+                    <CustomCard color="danger" outline divider :title="$t('matches.maps.settings')">
                         <template #card-body>
 
-                            <b-form-group label="Select a map pool:">
-                                <multiselect id="map-pool" v-model="map_pool_selected" :options="map_pools" track_by="id" label="name"/>
+                            <b-form-group :label="$t('matches.maps.select_map_pool')">
+                                <multiselect id="map-pool" v-model="mapPoolSelected" :options="mapPools" track_by="id" label="name"/>
                             </b-form-group>
 
                             <hr class="divider">
 
-                            <b-btn variant="secondary" class="btn-block" :disabled="maps_locked" @click="removeLastMap">
-                                <b-spinner v-if="loading_small === 'remove-last-map'" variant="light" small/>
+                            <b-btn variant="secondary" class="btn-block" :disabled="mapsLocked || matchMaps.length === 0" @click="removeLastMap">
+                                <b-spinner v-if="loadingSmall === 'remove-last-map'" variant="light" small/>
                                 <span v-else>
-                                    Remove last map
+                                    {{ $t('matches.maps.remove_last_map') }}
                                 </span>
                             </b-btn>
 
-                            <b-btn variant="danger" class="btn-block" :disabled="maps_locked" @click="removeAllMaps">
-                                <b-spinner v-if="loading_small === 'remove-all-maps'" variant="light" small/>
+                            <b-btn variant="danger" class="btn-block" :disabled="mapsLocked || matchMaps.length === 0" @click="removeAllMaps">
+                                <b-spinner v-if="loadingSmall === 'remove-all-maps'" variant="light" small/>
                                 <span v-else>
-                                    Remove all maps
+                                    {{ $t('matches.maps.remove_all_maps') }}
                                 </span>
                             </b-btn>
 
-                            <template v-if="next_map">
-                                <router-link :to="{name: 'Operator Bans', params:{match_id: match.id, map_id: next_map.map}}">
+                            <template v-if="nextMap">
+                                <router-link :to="{name: 'Operator Bans', params:{match_id: match.id, map_id: nextMap.map}}">
                                     <b-btn variant="primary" class="btn-block mt-2">
-                                        Continue to operator bans
+                                        {{ $t('matches.maps.continue') }}
                                     </b-btn>
                                 </router-link>
                             </template>
                             <template v-else>
-                                <b-btn variant="primary" class="btn-block mt-2" :disabled="!next_map">
-                                    Continue to operator bans
+                                <b-btn variant="primary" class="btn-block mt-2" :disabled="!nextMap">
+                                    {{ $t('matches.maps.continue') }}
                                 </b-btn>
                             </template>
 
@@ -63,12 +65,12 @@
                     <CustomCard color="success" outline divider title="Log">
                         <template #card-body>
 
-                            <span v-if="match_maps.length === 0" class="font-italic">
-                                The map picks & bans will be shown here once you select a map!
+                            <span v-if="matchMaps.length === 0" class="font-italic">
+                               {{ $t('matches.maps.log_placeholder') }}
                             </span>
 
                             <ul>
-                                <li v-for="map in match_maps" :key="map.id">
+                                <li v-for="map in matchMaps" :key="map.id">
 
                                     <!-- Default ban -->
                                     <template v-if="map.type === 4">
@@ -107,14 +109,14 @@
 
                 <!-- Maps -->
                 <b-col md="7">
-                    <CustomCard color="primary" outline divider title="Map Picks & Bans">
+                    <CustomCard color="primary" outline divider :title="$t('navigation.maps')">
                         <template #card-body>
 
                             <!-- Headers -->
                             <b-row class="text-center mb-3">
 
                                 <b-col cols="2">
-                                    <i class="text-bold">Image</i>
+                                    <i class="text-bold">{{ $t('generic.image') }}</i>
                                 </b-col>
 
                                 <b-col cols="3">
@@ -122,7 +124,7 @@
                                 </b-col>
 
                                 <b-col cols="4">
-                                    <i class="text-bold">Map</i>
+                                    <i class="text-bold">{{ $tc('core.map') }}</i>
                                 </b-col>
 
                                 <b-col cols="3">
@@ -135,30 +137,30 @@
 
                             <!-- Content -->
                             <div v-for="map in maps" :key="map.id">
-                                <div v-if="map_pool_selected.maps.includes(map.id)">
+                                <div v-if="mapPoolSelected.maps.includes(map.id)">
                                     <b-row align-v="center" class="text-center">
 
                                         <!-- Image -->
                                         <b-col cols="2" class="align-items-center">
-                                            <img class="w-100" :src="map_img_urls[map.id - 1]" alt="-">
+                                            <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
                                         </b-col>
 
                                         <!-- Buttons left -->
                                         <b-col cols="3">
                                             <b-btn variant="danger" class="btn-block mb-0"
-                                                   :disabled="maps_locked" @click="selectMap(map.id, 'ban', match.team_blue)">
-                                                <b-spinner v-if="loading_small === map.id + '-ban-' + match.team_blue"
+                                                   :disabled="mapsLocked || matchMaps.length === 7" @click="selectMap(map.id, 'ban', match.team_blue)">
+                                                <b-spinner v-if="loadingSmall === map.id + '-ban-' + match.team_blue"
                                                            variant="light" small/>
                                                 <span v-else>
-                                                    Ban Map
+                                                    {{ $t('matches.maps.ban_map') }}
                                                 </span>
                                             </b-btn>
                                             <b-btn variant="success" class="btn-block mt-1"
-                                                   :disabled="maps_locked" @click="selectMap(map.id, 'pick', match.team_blue)">
-                                                <b-spinner v-if="loading_small === map.id + '-pick-' + match.team_blue"
+                                                   :disabled="mapsLocked || matchMaps.length === 7" @click="selectMap(map.id, 'pick', match.team_blue)">
+                                                <b-spinner v-if="loadingSmall === map.id + '-pick-' + match.team_blue"
                                                            variant="light" small/>
                                                 <span v-else>
-                                                    Pick Map
+                                                    {{ $t('matches.maps.pick_map') }}
                                                 </span>
                                             </b-btn>
                                         </b-col>
@@ -166,59 +168,61 @@
                                         <!-- Data -->
                                         <b-col cols="4">
                                             <span class="text-bold">{{ map.name }}</span><br>
-                                            <template v-if="match_map_filtered[map.id - 1]">
+                                            <template v-if="matchMapFiltered[map.id - 1]">
 
-                                                <template v-if="match_map_filtered[map.id - 1].type === 1">
+                                                <template v-if="matchMapFiltered[map.id - 1].type === 1">
                                                     <b-badge pill variant="danger">
                                                         Banned
                                                     </b-badge>
                                                     <br>
                                                     <span class="font-italic">
-                                                        {{ match_map_filtered[map.id - 1].choose_team_name }}
+                                                        {{ matchMapFiltered[map.id - 1].choose_team_name }}
                                                     </span>
                                                 </template>
-                                                <template v-if="match_map_filtered[map.id - 1].type === 2">
+                                                <template v-if="matchMapFiltered[map.id - 1].type === 2">
                                                     <b-badge pill variant="success">
                                                         Picked
                                                     </b-badge>
                                                     <br>
                                                     <span class="font-italic">
-                                                        {{ match_map_filtered[map.id - 1].choose_team_name }}
+                                                        {{ matchMapFiltered[map.id - 1].choose_team_name }}
                                                     </span>
                                                 </template>
-                                                <template v-if="match_map_filtered[map.id - 1].type === 3">
+                                                <template v-if="matchMapFiltered[map.id - 1].type === 3">
                                                     <b-badge pill variant="success">
-                                                        Decider Map
+                                                        {{ $t('matches.maps.decider_map') }}
                                                     </b-badge>
                                                 </template>
-                                                <template v-if="match_map_filtered[map.id - 1].type === 4">
+                                                <template v-if="matchMapFiltered[map.id - 1].type === 4">
                                                     <b-badge pill variant="danger">
-                                                        Default ban
+                                                        {{ $t('matches.maps.default_ban') }}
                                                     </b-badge>
                                                 </template>
 
                                             </template>
                                             <template v-else>
-                                                <b-badge pill variant="secondary">Not selected yet</b-badge>
+                                                <b-badge pill variant="secondary">
+                                                    {{ $t('matches.maps.not_selected') }}
+                                                </b-badge>
                                             </template>
                                         </b-col>
 
                                         <!-- Buttons right -->
                                         <b-col cols="3">
                                             <b-btn variant="danger" class="btn-block mb-0"
-                                                   :disabled="maps_locked" @click="selectMap(map.id, 'ban', match.team_orange)">
-                                                <b-spinner v-if="loading_small === map.id + '-ban-' + match.team_orange"
+                                                   :disabled="mapsLocked || matchMaps.length === 7" @click="selectMap(map.id, 'ban', match.team_orange)">
+                                                <b-spinner v-if="loadingSmall === map.id + '-ban-' + match.team_orange"
                                                            variant="light" small/>
                                                 <span v-else>
-                                                    Ban Map
+                                                    {{ $t('matches.maps.ban_map') }}
                                                 </span>
                                             </b-btn>
                                             <b-btn variant="success" class="btn-block mt-1"
-                                                   :disabled="maps_locked" @click="selectMap(map.id, 'pick', match.team_orange)">
-                                                <b-spinner v-if="loading_small === map.id + '-pick-' + match.team_orange"
+                                                   :disabled="mapsLocked || matchMaps.length === 7" @click="selectMap(map.id, 'pick', match.team_orange)">
+                                                <b-spinner v-if="loadingSmall === map.id + '-pick-' + match.team_orange"
                                                            variant="light" small/>
                                                 <span v-else>
-                                                    Pick Map
+                                                    {{ $t('matches.maps.pick_map') }}
                                                 </span>
                                             </b-btn>
                                         </b-col>
@@ -238,20 +242,20 @@
         </template>
 
         <!-- Loading overlay -->
-        <template v-if="loading_status === 'loading'">
-            <CustomCard color="secondary" outline divider title="Loading">
+        <template v-if="loadingStatus === 'loading'">
+            <CustomCard color="secondary" outline divider :title="$t('generic.loading')">
                 <template #card-body>
-                    <StatusOverlay type="loading" text="Loading..."></StatusOverlay>
+                    <StatusOverlay type="loading" :text="$t('generic.loading')"></StatusOverlay>
                 </template>
             </CustomCard>
         </template>
 
         <!-- Error overlay -->
-        <template v-if="loading_status === 'error'">
-            <CustomCard color="danger" outline divider title="Error">
+        <template v-if="loadingStatus === 'error'">
+            <CustomCard color="danger" outline divider :title="$t('generic.error')">
                 <template #card-body>
                     <StatusOverlay type="icon" icon="fas fa-exclamation-triangle fa-2x"
-                                   text="Loading failed!"></StatusOverlay>
+                                   :text="$t('generic.loading_failed')"></StatusOverlay>
                 </template>
             </CustomCard>
         </template>
@@ -269,85 +273,80 @@ export default {
     name: "Maps",
     data() {
         return {
-            map_pool_selected: null,
+            mapPoolSelected: null,
 
-            map_pools: [],
+            mapPools: [],
             maps: [],
-            match_maps: [],
+            matchMaps: [],
             match: null,
 
-            loading_small: "",
+            loadingSmall: "",
 
-            reset_all_counter: 0,
-            map_pool_loaded: false,
-            maps_loaded: false,
-            match_maps_loaded: false,
-            match_loaded: false,
-            loading_status: 'loading',
-            bc_path: ["Dashboard", "Matches", this.$route.params.id, "Map Picks & Bans"]
+            resetAllCounter: 0,
+            mapPoolLoaded: false,
+            mapsLoaded: false,
+            matchMapsLoaded: false,
+            matchLoaded: false,
+            loadingStatus: 'loading',
+            bcPath: ["Dashboard", "Matches", this.$route.params.id, this.$t('navigation.maps')]
         }
     },
     computed: {
-        map_img_urls() {
+        mapImgURLs() {
             let urls = []
             this.maps.forEach(e => {
                 urls.push(require('@/assets/img/maps/' + e.id + ".webp"))
             })
             return urls
         },
-        match_map_filtered() {
+        matchMapFiltered() {
             let filtered_data = []
-            this.match_maps.forEach(m => {
+            this.matchMaps.forEach(m => {
                 filtered_data[m.map - 1] = m
             })
             return filtered_data
         },
-        next_map() {
-            let play_maps = this.match_maps.filter(m => m.play_order > 0 && m.status < 3)
+        nextMap() {
+            let play_maps = this.matchMaps.filter(m => m.play_order > 0 && m.status < 3)
             console.log("play_maps ", play_maps)
             return play_maps[0]
         },
-        maps_locked() {
-            let locked_maps = this.match_maps.filter(m => m.status > 1)
+        mapsLocked() {
+            let locked_maps = this.matchMaps.filter(m => m.status > 1)
             return locked_maps.length > 0
         },
-        load_complete() {
-            return this.map_pool_loaded && this.maps_loaded && this.match_maps_loaded && this.match_loaded
+        loadComplete() {
+            return this.mapPoolLoaded && this.mapsLoaded && this.matchMapsLoaded && this.matchLoaded
         }
     },
     watch: {
-        load_complete: function (newState) {
-            if (newState) this.loading_status = 'loaded'
-            else this.loading_status = 'loading'
+        loadComplete: function (newState) {
+            if (newState) this.loadingStatus = 'loaded'
+            else this.loadingStatus = 'loading'
         },
-        reset_all_counter: function (newState) {
+        resetAllCounter: function (newState) {
             if (newState === 0) {
                 console.log("Remove all complete")
-                this.$toast.success("All maps have been removed", "Success")
+                this.$toast.success(this.$t('matches.maps.toasts.maps_removed'), this.$t('generic.success'))
                 this.getMatchMaps()
             }
         }
     },
     methods: {
         selectMap(map, type, team) {
-            if (this.match_maps.length >= 7) {
-                this.$toast.warning("You can not select more then 7 maps!")
-                return
-            }
-
-            let duplicates = this.match_maps.filter(m => m.map === map)
+            let duplicates = this.matchMaps.filter(m => m.map === map)
             console.log(duplicates)
             if (duplicates.length > 0) {
-                this.$toast.warning("You already selected that map!")
+                this.$toast.warning(this.$t('matches.maps.toasts.map_already_selected'))
                 return
             }
 
-            this.loading_small = map + "-" + type + "-" + team
-            console.log(this.loading_small)
+            this.loadingSmall = map + "-" + type + "-" + team
+            console.log(this.loadingSmall)
 
             let data = {}
             let typeID = 0
-            if (this.match_maps.length < 6) {
+            if (this.matchMaps.length < 6) {
                 typeID = type === "ban" ? 1 : 2
                 data = {
                     match: this.match.id,
@@ -364,122 +363,97 @@ export default {
                 }
             }
 
-            axios.post(this.$store.state.backendURL + "/api/matches/maps/", data, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then(() => {
+            axios.post(`${this.$store.state.backendURL}/api/matches/maps/`, data, this.$store.getters.authHeader
+            ).then(() => {
                 this.getMatchMaps()
-                this.$toast.success("Map Added", "Success", {timeout: 2000})
+                this.$toast.success(this.$t('matches.maps.toasts.map_added'), this.$t('generic.success'), {timeout: 2000})
             }).catch((error) => {
                 console.log(error.response)
-                this.$toast.error("Failed to add map ;(", "Error")
+                this.$toast.error(this.$t('matches.maps.toasts.map_added_failed'), this.$t('generic.error'))
             })
         },
 
         removeLastMap() {
-            if (this.match_maps.length === 0) {
-                this.$toast.warning("There is nothing to remove!")
-                return
-            }
+            this.loadingSmall = "remove-last-map"
+            let last_map_id = this.matchMaps.filter(m => m.order === this.matchMaps.length)[0].id
 
-            this.loading_small = "remove-last-map"
-            let last_map_id = this.match_maps.filter(m => m.order === this.match_maps.length)[0].id
-            axios.delete(this.$store.state.backendURL + "/api/matches/maps/" + last_map_id, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then(() => {
+            axios.delete(`${this.$store.state.backendURL}/api/matches/maps/${last_map_id}/`, this.$store.getters.authHeader
+            ).then(() => {
                 this.getMatchMaps()
-                this.$toast.success("Map removed", "Success", {timeout: 2000})
+                this.$toast.success(this.$t('matches.maps.toasts.map_removed'), this.$t('generic.success'), {timeout: 2000})
 
             }).catch((error) => {
                 console.log(error.response)
-                this.$toast.error("Failed to remove map ;(", "Error")
+                this.$toast.error(this.$t('matches.maps.toasts.map_removed_failed'), this.$t('generic.error'))
             })
         },
 
         removeAllMaps() {
-            if (this.match_maps.length === 0) {
-                this.$toast.warning("There is nothing to remove!")
-                return
-            }
+            this.loadingSmall = "remove-all-maps"
+            this.resetAllCounter = this.matchMaps.length
+            console.log("Removing " + this.resetAllCounter + " maps...")
 
-            this.loading_small = "remove-all-maps"
-            this.reset_all_counter = this.match_maps.length
-            console.log("Removing " + this.reset_all_counter + " maps...")
-
-            this.match_maps.forEach(m => {
-                axios.delete(this.$store.state.backendURL + "/api/matches/maps/" + m.id, {
-                    headers: {
-                        "Authorization": "Token " + this.$store.state.userToken
-                    }
-                }).then(() => {
-                    this.reset_all_counter--
+            this.matchMaps.forEach(m => {
+                axios.delete(`${this.$store.state.backendURL}/api/matches/maps/${m.id}/`, this.$store.getters.authHeader
+                ).then(() => {
+                    this.resetAllCounter--
                 }).catch((error) => {
                     console.log(error.response)
-                    this.$toast.error("Failed to remove map ;(", "Error")
+                    this.$toast.error(this.$t('matches.maps.toasts.map_removed_failed'), this.$t('generic.error'))
                 })
             })
         },
 
         getMapPools() {
-            axios.get(this.$store.state.backendURL + "/api/core/map_pool/", {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.get(`${this.$store.state.backendURL}/api/core/map_pool/`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
-                this.map_pools = response.data
-                this.map_pool_selected = this.map_pools.filter(e => e.name === "Competitive")[0]
-                this.map_pool_loaded = true
+                this.mapPools = response.data
+                this.mapPoolSelected = this.mapPools.filter(e => e.name === "Competitive")[0]
+                this.mapPoolLoaded = true
             })
         },
+
         getMaps() {
-            axios.get(this.$store.state.backendURL + "/api/core/map/", {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.get(`${this.$store.state.backendURL}/api/core/map/`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
                 this.maps = response.data
-                this.maps_loaded = true
+                this.mapsLoaded = true
             })
         },
+
         getMatchMaps() {
-            axios.get(this.$store.state.backendURL + "/api/matches/maps/?match=" + this.$route.params.id, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.get(`${this.$store.state.backendURL}/api/matches/maps/?match=${this.$route.params.id}`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
-                this.match_maps = response.data
-                this.match_maps_loaded = true
+                this.matchMaps = response.data
+                this.matchMapsLoaded = true
             }).catch((error) => {
                 console.log(error)
-                this.loading_status = 'error'
+                this.loadingStatus = 'error'
             }).then(() => {
-                this.loading_small = ""
+                this.loadingSmall = ""
             })
         },
-        getMatch() {
-            axios.get(this.$store.state.backendURL + "/api/match/" + this.$route.params.id, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+
+        getMatchData() {
+            axios.get(`${this.$store.state.backendURL}/api/match/${this.$route.params.id}`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
                 this.match = response.data
-                this.match_loaded = true
+                this.matchLoaded = true
             })
         }
     },
+
     created() {
         this.getMapPools()
         this.getMaps()
         this.getMatchMaps()
-        this.getMatch()
+        this.getMatchData()
     },
+
     components: {
         BaseLayout, CustomCard, StatusOverlay
     }
