@@ -133,9 +133,46 @@ def match_post_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=MatchMap)
 def match_maps_post_save(sender, instance, **kwargs):
-    # Set Match state to "Map Ban"
-    instance.match.state = 2
-    instance.match.save()
+    # Set MatchMap state to Finished (3)
+    if instance.status == 2:
+        # Match finished
+
+        # Regular win: 7-X or X-7 with X < 6 // Overtime win: 8-X or X-8
+        if (instance.score_blue >= 7 and instance.score_orange < 6) \
+                or (instance.score_orange >= 7 and instance.score_blue < 6) \
+                or instance.score_blue >= 8 or instance.score_orange >= 8:
+
+            # Overtime win
+            if instance.score_blue == 8 or instance.score_orange == 8:
+                instance.win_type = 3
+            # Regular win
+            else:
+                instance.win_type = 2
+
+            instance.status = 3
+            instance.save()
+
+            if instance.score_blue > instance.score_orange:
+                instance.match.score_blue = instance.match.score_blue + 1
+                instance.match.save()
+            else:
+                instance.match.score_orange = instance.match.score_orange + 1
+                instance.match.save()
+
+            return
+
+        # Draw
+        if instance.score_blue == 6 and instance.score_orange == 6:
+            instance.win_type = 4
+            instance.status = 3
+            instance.save()
+            return
+
+
+    # Set Match state to Map Ban (2)
+    if instance.match.state <= 1:
+        instance.match.state = 2
+        instance.match.save()
 
     # Set Order
     if instance.order == 0:
@@ -152,13 +189,13 @@ def match_maps_post_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=OperatorBans)
 def operator_bans_post_save(sender, instance, **kwargs):
-    # Update Match state to MapBan (2)
-    map_play_order = MatchMap.objects.get(match=instance.match, map=instance.map)
-    new_match_state = 2
-    match = instance.match
-    match.state = new_match_state
-    match.save()
+    # Set Match state to Playing (3)
+    if instance.match.state <= 2:
+        instance.match.state = 3
+        instance.match.save()
 
-    # Update Map state to Playing (2)
-    map_play_order.status = 2
-    map_play_order.save()
+    # Set MatchMap state to Playing (2)
+    match_map = MatchMap.objects.get(match=instance.match, map=instance.map)
+    if match_map and match_map.status <= 1:
+        match_map.status = 2
+        match_map.save()

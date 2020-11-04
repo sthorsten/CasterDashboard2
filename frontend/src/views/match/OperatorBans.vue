@@ -2,6 +2,20 @@
     <BaseLayout :title="$t('navigation.op_bans')" title_icon="fas fa-users-slash" :bc_path="bcPath">
 
         <template v-if="loadingStatus === 'loaded'">
+
+            <b-row v-if="mapLocked">
+                <b-col>
+                    <b-alert variant="info" show>
+                        <span class="font-italic">
+                            <i class="fa fas fa-info-circle mr-1"></i>
+                            <i18n path="matches.op_bans.locked_info_text">
+                                <b>{{ $t('matches.op_bans.locked_info_text_bold') }}</b>
+                            </i18n>
+                        </span>
+                    </b-alert>
+                </b-col>
+            </b-row>
+
             <b-row>
                 <b-col lg="6">
 
@@ -19,13 +33,13 @@
 
                                         <b-col xl="6">
                                             <template v-if="atkTeam === matchData.team_blue">
-                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="opBans.length > 0">
+                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="opBans.length > 0 || mapLocked">
                                                     {{ matchData.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0"
-                                                       :disabled="opBans.length > 0"
+                                                       :disabled="opBans.length > 0 || mapLocked"
                                                        @click="setATKTeam(matchData.team_blue)">
                                                     {{ matchData.team_blue_name }}
                                                     <b-spinner v-if="loadingSmall === 'atk-' + matchData.team_blue" variant="light" small/>
@@ -35,13 +49,13 @@
 
                                         <b-col xl="6">
                                             <template v-if="atkTeam === matchData.team_orange">
-                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="opBans.length > 0">
+                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="opBans.length > 0 || mapLocked">
                                                     {{ matchData.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0"
-                                                       :disabled="opBans.length > 0"
+                                                       :disabled="opBans.length > 0 || mapLocked"
                                                        @click="setATKTeam(matchData.team_orange)">
                                                     {{ matchData.team_orange_name }}
                                                     <b-spinner v-if="loadingSmall === 'atk-' + matchData.team_orange" variant="light" small/>
@@ -63,12 +77,12 @@
                                         <b-col xl="6">
 
                                             <template v-if="otAtkTeam === matchData.team_blue">
-                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
+                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked">
                                                     {{ matchData.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
-                                                <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0"
+                                                <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
                                                        @click="setOTATKTeam(matchData.team_blue)">
                                                     {{ matchData.team_blue_name }}
                                                     <b-spinner v-if="loadingSmall === 'ot-atk-' + matchData.team_blue" variant="light" small/>
@@ -80,12 +94,12 @@
                                         <b-col xl="6">
 
                                             <template v-if="otAtkTeam === matchData.team_orange">
-                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
+                                                <b-btn variant="primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked">
                                                     {{ matchData.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
-                                                <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0"
+                                                <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
                                                        @click="setOTATKTeam(matchData.team_orange)">
                                                     {{ matchData.team_orange_name }}
                                                     <b-spinner v-if="loadingSmall === 'ot-atk-' + matchData.team_orange" variant="light" small/>
@@ -115,7 +129,7 @@
 
                                 <b-col cols="4" md="6" xl="8">
                                     <b-btn variant="primary" class="btn-block h-100"
-                                           :disabled="opBans.length > 0"
+                                           :disabled="opBans.length > 0 || mapLocked"
                                            @click="swapTeams">
                                         <i class="fa fas fa-long-arrow-alt-left"></i>
                                         {{ $t('matches.op_bans.swap_teams') }}
@@ -203,7 +217,7 @@
                             <b-row>
 
                                 <b-col lg="6">
-                                    <b-btn variant="danger" class="btn-block" :disabled="opBans.length === 0"
+                                    <b-btn variant="danger" class="btn-block" :disabled="opBans.length === 0 || mapLocked"
                                            @click="removeLastOperatorBan">
                                         {{ $t('matches.op_bans.remove_last_op_ban') }}
                                         <b-spinner v-if="loadingSmall === 'remove-last-opban'" variant="light" small/>
@@ -212,7 +226,7 @@
 
 
                                 <b-col lg="6" class="mt-2 mt-lg-0">
-                                    <b-btn variant="danger" class="btn-block" :disabled="opBans.length === 0"
+                                    <b-btn variant="danger" class="btn-block" :disabled="opBans.length === 0 || mapLocked"
                                            @click="removeAllOperatorsBans">
                                         {{ $t('matches.op_bans.remove_all_op_bans') }}
                                         <b-spinner v-if="loadingSmall === 'remove-all-opBans'" variant="light" small/>
@@ -261,7 +275,7 @@
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="secondary" class="btn-block mb-2 text-left"
-                                                       :disabled="atkOpsBanned || !atkTeam"
+                                                       :disabled="atkOpsBanned || !atkTeam || mapLocked"
                                                        @click="banOperator(op.id)">
                                                     <img :src="operatorImgUrls[op.id - 1]" style="height: 25px; width: 25px;">
                                                     {{ op.name }}
@@ -289,7 +303,7 @@
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="secondary" class="btn-block mb-2 text-left"
-                                                       :disabled="allOperatorsBanned || !atkTeam"
+                                                       :disabled="allOperatorsBanned || !atkTeam || mapLocked"
                                                        @click="banOperator(op.id)">
                                                     <img :src="operatorImgUrls[op.id - 1]" style="height: 25px; width: 25px;">
                                                     {{ op.name }}
@@ -400,6 +414,10 @@ export default {
                 urls.push(require('@/assets/img/operators/' + o.id + ".svg"))
             })
             return urls
+        },
+
+        mapLocked(){
+            return this.matchMap.status === 3
         },
 
         loadFinished() {

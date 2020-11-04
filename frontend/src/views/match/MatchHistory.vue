@@ -62,7 +62,7 @@ import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
 
 export default {
-    name: "ControlCenter",
+    name: "MatchHistory",
     data() {
         return {
             fields: [

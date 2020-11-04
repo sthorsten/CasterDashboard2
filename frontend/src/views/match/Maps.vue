@@ -4,7 +4,6 @@
         <template v-if="loadingStatus === 'loaded'">
 
             <b-row v-if="mapsLocked">
-
                 <b-col>
                     <b-alert variant="info" show>
                         <span class="font-italic">
@@ -15,7 +14,6 @@
                         </span>
                     </b-alert>
                 </b-col>
-
             </b-row>
 
             <b-row>

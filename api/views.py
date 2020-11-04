@@ -65,6 +65,7 @@ class MapPoolViewSet(viewsets.ReadOnlyModelViewSet):
 class BombSpotViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = BombSpot.objects.all()
     serializer_class = BombSpotSerializer
+    filterset_fields = ['map']
 
 
 class OperatorViewSet(viewsets.ReadOnlyModelViewSet):
@@ -195,8 +196,61 @@ class RoundViewSet(viewsets.ModelViewSet):
     serializer_class = RoundSerializer
     filterset_fields = ['match', 'map']
 
+    def create(self, request):
+        data = request.data
+        # Validate data
+        if not data.get('match') or not data.get('map') or not data.get('win_type') or not data.get(
+                'bomb_spot') or not data.get('win_team'):
+            return Response({"required_fields": ["match", "map", "bomb_spot", "win_type", "win_team"]}, status=400)
 
-# Overlay Views
+        # Get Match related data
+        rounds = Round.objects.filter(match=data.get('match'), map=data.get('map')).order_by('-round_no').all()
+        match_map = MatchMap.objects.get(match=data.get('match'), map=data.get('map'))
+        match_data = Match.objects.get(id=data.get('match'))
+
+        # Round ID and Score
+        if rounds and len(rounds) > 0:
+            last_round = rounds[0]
+            next_round_no = len(rounds) + 1
+            score_blue = last_round.score_blue
+            score_orange = last_round.score_orange
+        else:
+            next_round_no = 1
+            score_blue = 0
+            score_orange = 0
+
+        if data.get('win_team') == match_data.team_blue.id:
+            score_blue += 1
+        else:
+            score_orange += 1
+
+        # Team constellation
+        atk_team = match_map.atk_team
+        if match_map.atk_team == match_data.team_blue:
+            def_team = match_data.team_orange
+        else:
+            def_team = match_data.team_blue
+
+        if next_round_no > 6:
+            tmp = atk_team
+            atk_team = def_team
+            def_team = tmp
+
+        serializer = RoundSerializer(
+            data={'match': data.get('match'), 'map': data.get('map'), 'round_no': next_round_no,
+                  'bomb_spot': data.get('bomb_spot'), 'atk_team': atk_team.id, 'def_team': def_team.id,
+                  'of_team': data.get('of_team'), 'win_type': data.get('win_type'),
+                  'win_team': data.get('win_team'), 'score_blue': score_blue, 'score_orange': score_orange,
+                  'notes': data.get('notes')})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+
+        return Response({"detail": "Invalid Data"}, status=400)
+
+    # Overlay Views
+
 
 class OverlayStyleViewSet(viewsets.ModelViewSet):
     queryset = OverlayStyle.objects.all()

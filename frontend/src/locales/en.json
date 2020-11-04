@@ -11,7 +11,8 @@
         "best_of": "Best Of",
         "team_blue": "Team Blue",
         "team_orange": "Team Orange",
-        "logo": "Logo"
+        "logo": "Logo",
+        "score": "Score"
     },
     "generic": {
         "user": "User | Users",
@@ -169,6 +170,8 @@
             }
         },
         "op_bans": {
+            "locked_info_text": "This map is finished. You {0} make any changes to it anymore.",
+            "locked_info_text_bold": "can not",
             "atk_team": "ATK Team",
             "ot_atk_team": "Overtime ATK Team (optional)",
             "swap_teams": "Swap Teams",
@@ -190,6 +193,46 @@
                 "opban_added": "Operator Ban Added",
                 "opban_added_failed": "Failed to add operator ban :/"
             }
+        },
+        "rounds": {
+            "round_control": "Round Controls",
+            "bomb_spot": "Bomb Spot",
+            "win_type": "Win Type",
+            "win_type_names": {
+                "kills": "Kills",
+                "defuser_planted": "Defuser Planted",
+                "defuser_disabled": "Defuser Disabled",
+                "time": "Time"
+            },
+            "win_team": "Win Team",
+            "of_team": "Opening Frag Team (optional):",
+            "opening_frag": "Opening Frag",
+            "notes": "Notes",
+            "notes_text": "What happend during the last round?\nYou can also leave this field blank!",
+            "add_round": "Add round",
+            "remove_round": "Remove last round",
+            "finish_map": "Finish Map",
+            "finish_map_confirm_1": "Are you sure you want to finish this map?",
+            "finish_map_confirm_2": "This action can not be undone!",
+            "finish_map_failed": "Failed to finish map :/",
+            "live_stats": "Live Statistics",
+            "live_stats_placeholder": "Add a round to see some live statistics!",
+            "round_details": "Round Details",
+            "toasts": {
+                "bomb_spot_missing": "Please select a bomb spot!",
+                "win_type_missing": "Please select a win type!",
+                "win_team_missing": "Please select a win team!",
+                "round_added": "Round added",
+                "round_added_failed": "Failed to add round :/",
+                "round_removed": "Round removed",
+                "round_removed_failed": "Failed to remove round :/"
+            },
+            "atk_def_wins": "ATK / DEF wins",
+            "opening_frags": "Opening frags",
+            "type_wins": "Wins by type",
+            "bomb_spot_picks": "Bomb spot pick rates",
+            "match_finished": "Map & Match Finished",
+            "map_finished": "Map Finished"
         }
     },
     "data": {

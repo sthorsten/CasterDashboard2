@@ -47,7 +47,8 @@
         "logo": "Logo",
         "playday": "Spieltag",
         "title": "Titel",
-        "map": "Karte | Karten"
+        "map": "Karte | Karten",
+        "score": "Spielstand"
     },
     "generic": {
         "username": "Benutzername",
@@ -189,7 +190,49 @@
                 "teams_swapped_failed": "Fehler beim Tauschen der Teams :/",
                 "opban_added": "Operator Ban hinzugefügt",
                 "opban_added_failed": "Operator Ban konnte nicht hinzugefügt werden :/"
-            }
+            },
+            "locked_info_text": "Diese Map ist abgeschlossen. Du {0} Änderungen mehr daran vornehmen.",
+            "locked_info_text_bold": "kannst keine"
+        },
+        "rounds": {
+            "round_control": "Runden Steuerung",
+            "bomb_spot": "Bomb Spot",
+            "win_type": "Win Typ",
+            "win_type_names": {
+                "kills": "Kills",
+                "defuser_planted": "Defuser Planted",
+                "defuser_disabled": "Defuser Deaktiviert",
+                "time": "Zeit"
+            },
+            "win_team": "Sieger-Team",
+            "of_team": "Opening Frag Team (optional):",
+            "opening_frag": "Opening Frag",
+            "notes": "Notizen",
+            "notes_text": "Was ist in der letzten Runde passiert?\nDu kannst dieses Feld auch leer lassen!",
+            "add_round": "Runde Hinzufügen",
+            "remove_round": "Letzte Runde entfernen",
+            "finish_map": "Map Abschließen",
+            "finish_map_confirm_1": "Bist du dir sicher, dass du diese Map abschließen möchtest?",
+            "finish_map_confirm_2": "Diese Aktion kann nicht rückgängig gemacht werden!",
+            "finish_map_failed": "Fehler beim Abschließen der Map :/",
+            "live_stats": "Live Statistiken",
+            "live_stats_placeholder": "Füge eine Runde hinzu, um Live Statistiken zu sehen!",
+            "round_details": "Runden-Details",
+            "toasts": {
+                "bomb_spot_missing": "Bitte wähle einen Bomb Spot aus!",
+                "win_type_missing": "Bitte wähle einen Sieg-Typen aus",
+                "win_team_missing": "Bitte wähle ein Sieger-Team aus!",
+                "round_added": "Runde hinzugefügt",
+                "round_added_failed": "Fehler beim Hinzufügen der Runde :/",
+                "round_removed": "Runde entfernt",
+                "round_removed_failed": "Fehler beim Entfernen der Runde :/"
+            },
+            "atk_def_wins": "ATK / DEF Siege",
+            "opening_frags": "Opening Frags",
+            "type_wins": "Siege nach Typ",
+            "bomb_spot_picks": "Bomb Spot Pick Raten",
+            "match_finished": "Map & Match abgeschlossen",
+            "map_finished": "Map abgeschlossen"
         }
     },
     "data": {

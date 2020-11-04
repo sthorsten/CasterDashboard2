@@ -5,6 +5,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VueSweetalert2 from "vue-sweetalert2";
 import VueIziToast from "vue-izitoast";
 import Multiselect from 'vue-multiselect'
+import VueApexCharts from "vue-apexcharts";
 import VueCookies from 'vue-cookies'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -49,12 +50,14 @@ const iziToastOptions = {
 Vue.use(BootstrapVue)
 Vue.use(VueSweetalert2)
 Vue.use(VueIziToast, iziToastOptions);
+Vue.use(VueApexCharts)
 Vue.use(VueCookies)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 
 Vue.component('multiselect', Multiselect)
+Vue.component('apexchart', VueApexCharts)
 
 // Combined style
 import "@/assets/scss/index.scss"
