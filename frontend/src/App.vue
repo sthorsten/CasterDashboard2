@@ -13,6 +13,10 @@ export default {
         }
     },
     created() {
+        // Skip Login redirect for all overlays
+        if (this.$route.name === "Start Overlay"){
+            return
+        }
         if (!this.loggedIn && this.$route.name !== "Login") {
             this.$router.push({name: "Login"})
         }

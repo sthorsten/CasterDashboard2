@@ -1,0 +1,54 @@
+@import "base";
+
+// Theme Variable Overrides
+$left-bg: linear-gradient(90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+$right-bg: linear-gradient(-90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+$score-active-bg: #eb1521;
+
+div {
+  &.main-bg {
+    background-image: url("/static/css/FearNixx.png");
+    background-size: contain;
+    background-position-x: 1450px;
+    background-repeat: no-repeat;
+  }
+
+  &.main {
+    grid-template-columns: 531fr 868px 521fr !important;
+  }
+
+  &.container-left, &.container-right {
+    display: flex !important;
+  }
+
+  &.container-title, &.container-sponsor {
+    width: auto !important;
+  }
+
+  &.container-center {
+    background: transparent !important;
+  }
+
+  &.container-logo {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  &.score-left, &.score-right {
+    background: #111 !important;
+  }
+}
+
+span {
+  &.team-name, &.title {
+    font-size: 32px !important;
+  }
+
+  &.title-sm {
+    font-size: 20px !important;
+  }
+}
+
+
+@import "ingame";
+

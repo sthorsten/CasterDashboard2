@@ -442,13 +442,16 @@ export default {
 
         canBeFinished() {
             let lastRound = this.roundData.filter(r => r.round_no === this.roundData.length)[0]
-            return (lastRound.score_blue >= 7 && lastRound.score_orange < 6) // Regular blue win
-                    || (lastRound.score_orange >= 7 && lastRound.score_blue < 6) // Regular orange win
-                    || (lastRound.score_blue === 6 && lastRound.score_orange === 6) // Draw
-                    || (lastRound.score_blue >= 8 || lastRound.score_orange >= 8); // Overtime win
+            if (lastRound) {
+                return (lastRound.score_blue >= 7 && lastRound.score_orange < 6) // Regular blue win
+                        || (lastRound.score_orange >= 7 && lastRound.score_blue < 6) // Regular orange win
+                        || (lastRound.score_blue === 6 && lastRound.score_orange === 6) // Draw
+                        || (lastRound.score_blue >= 8 || lastRound.score_orange >= 8); // Overtime win
+            }
+            return false
         },
 
-        mapLocked(){
+        mapLocked() {
             return this.matchMap.status === 3
         },
 
@@ -560,7 +563,7 @@ export default {
                 if (value) {
                     let lastRound = this.roundData.filter(r => r.round_no === this.roundData.length)[0]
                     let winTeam = null
-                    if (lastRound.score_blue !== lastRound.score_orange){
+                    if (lastRound.score_blue !== lastRound.score_orange) {
                         winTeam = lastRound.win_team
                     }
 

@@ -15,6 +15,7 @@ import MatchOverview from "@/views/match/MatchOverview";
 import Maps from "@/views/match/Maps";
 import OperatorBans from "@/views/match/OperatorBans";
 import Rounds from "@/views/match/Rounds";
+import StartOverlay from "@/views/overlays/StartOverlay";
 
 Vue.use(VueRouter)
 
@@ -76,6 +77,11 @@ const routes = [
         path: '/dashboard/overlays/customize',
         name: "Customize",
         component: Customize
+    },
+    {
+        path: '/overlays/:username/start',
+        name: "Start Overlay",
+        component: StartOverlay
     },
 
     // Data

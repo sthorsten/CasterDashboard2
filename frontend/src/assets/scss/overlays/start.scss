@@ -1,0 +1,107 @@
+// Imports
+@import "base";
+@import "animations";
+
+/*
+  Start SCSS
+ */
+
+// Theme Variables
+$left-bg: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211, 0.8) 80%) !default;
+$center-bg: $dark-gray !default;
+$right-bg: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%) !default;
+$text-col: #fff !default;
+$center-text-col: #fff !default;
+$team-left-col: $text-col !default;
+$team-right-col: $text-col !default;
+
+div {
+  height: 100%;
+  width: 100%;
+
+  &.main-bg {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 210px;
+    width: 1500px !important;
+    height: 80px !important;
+  }
+
+  &.main {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: 210px;
+    display: grid;
+    grid-template-columns: 680px 140px 680px;
+    width: 1500px !important;
+    height: 80px !important;
+    border-radius: 10px;
+  }
+
+  &.container-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    background: $left-bg;
+  }
+
+  &.container-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background: $right-bg;
+  }
+
+  &.container-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: $center-bg;
+  }
+}
+
+img {
+  &.logo {
+    height: 70px;
+    width: 70px;
+
+    &-team {
+      @extend .logo;
+      margin-left: 7px;
+      margin-right: 7px;
+    }
+  }
+}
+
+span {
+  text-transform: uppercase;
+  color: $text-col;
+  font-size: 56px;
+
+  &.center-text {
+    margin-top: -4px;
+    color: $center-text-col;
+  }
+
+  &.team-name-text {
+    margin-top: -4px;
+    margin-left: 7px;
+    margin-right: 7px;
+
+    &-left {
+      @extend .team-name-text;
+      margin-right: 14px;
+      color: $team-left-col;
+    }
+
+
+    &-right {
+      @extend .team-name-text;
+      margin-left: 14px;
+      color: $team-right-col;
+    }
+  }
+}

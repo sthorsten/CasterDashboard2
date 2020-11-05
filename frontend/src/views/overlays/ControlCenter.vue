@@ -1,5 +1,9 @@
 <template>
-    <BaseLayout :title="$t('navigation.control_center')" title_icon="fas fa-desktop" :bc_path="bc_path"></BaseLayout>
+    <BaseLayout :title="$t('navigation.control_center')" title_icon="fas fa-desktop" :bc_path="bc_path">
+
+
+
+    </BaseLayout>
 </template>
 
 <script>
@@ -14,6 +18,9 @@ export default {
     },
     components: {
         BaseLayout
+    },
+    created() {
+
     }
 }
 </script>

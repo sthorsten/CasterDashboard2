@@ -7,6 +7,8 @@ This file contains all receivers to perform certain tasks before / after saving 
 import os
 import logging
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
@@ -129,6 +131,19 @@ def team_pre_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=Match)
 def match_post_save(sender, instance, **kwargs):
     send_match_data_to_consumers(instance)
+
+    # Send match to websockets on change
+    from dashboard.models.serializers import MatchSerializer
+    serialized_data = MatchSerializer(instance)
+    channel_layer = get_channel_layer()
+    for user in instance.user.all():
+        async_to_sync(channel_layer.group_send)(
+            "match_data_" + user.username,
+            {
+                'type': 'send_to_client',
+                'data': serialized_data.data
+            }
+        )
 
 
 @receiver(post_save, sender=MatchMap)

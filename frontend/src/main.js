@@ -76,6 +76,12 @@ const store = new Vuex.Store({
         loggedIn: false
     },
     getters: {
+        websocketURL: state => {
+            if (state.backendURL.startsWith("http://")){
+                return "ws://" + state.backendURL.substr(7)
+            }
+            return "ws://" + state.backendURL
+        },
         authHeader: state => {
             return {
                 headers: {"Authorization": "Token " + state.userToken}
