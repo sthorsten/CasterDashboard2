@@ -15,6 +15,8 @@ import MatchOverview from "@/views/match/MatchOverview";
 import Maps from "@/views/match/Maps";
 import OperatorBans from "@/views/match/OperatorBans";
 import Rounds from "@/views/match/Rounds";
+import OverlayControlCenter from "@/views/popouts/OverlayControlCenter";
+import StartOverlay from "@/views/overlays/StartOverlay";
 
 Vue.use(VueRouter)
 
@@ -23,14 +25,14 @@ const routes = [
         path: '/',
         redirect: {name: "Home"},
         beforeEnter: (to, from, next) => {
-        const { uri } = to.query;
-        if (uri != null && uri != '/') {
-            next(false);
-            router.push(uri);
-        } else {
-            next();
+            const {uri} = to.query;
+            if (uri != null && uri != '/') {
+                next(false);
+                router.push(uri);
+            } else {
+                next();
+            }
         }
-    }
     },
     {
         path: '/login',
@@ -86,6 +88,11 @@ const routes = [
         name: "Customize",
         component: Customize
     },
+    {
+        path: '/overlays/:username/start',
+        name: "Start Overlay",
+        component: StartOverlay
+    },
 
     // Data
     {
@@ -107,6 +114,13 @@ const routes = [
         path: '/dashboard/data/teams',
         name: 'Teams',
         component: Teams
+    },
+
+    // Popouts
+    {
+        path: '/popout/overlay-control-center',
+        name: 'Overlay Control Center Popout',
+        component: OverlayControlCenter
     }
 ]
 

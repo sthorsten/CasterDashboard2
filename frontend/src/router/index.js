@@ -16,6 +16,7 @@ import Maps from "@/views/match/Maps";
 import OperatorBans from "@/views/match/OperatorBans";
 import Rounds from "@/views/match/Rounds";
 import StartOverlay from "@/views/overlays/StartOverlay";
+import OverlayControlCenter from "@/views/popouts/OverlayControlCenter";
 
 Vue.use(VueRouter)
 
@@ -104,6 +105,13 @@ const routes = [
         path: '/dashboard/data/teams',
         name: 'Teams',
         component: Teams
+    },
+
+    // Popouts
+    {
+        path: '/popout/overlay-control-center',
+        name: 'Overlay Control Center Popout',
+        component: OverlayControlCenter
     }
 ]
 

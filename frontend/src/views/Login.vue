@@ -8,7 +8,7 @@
                 <!-- /.login-logo -->
                 <div class="card">
                     <div class="card-body login-card-body">
-                        <p class="login-box-msg">{{ $t('login.sign_in')}}</p>
+                        <p class="login-box-msg">{{ $t('login.sign_in') }}</p>
 
                         <validation-observer ref="observer" v-slot="{ handleSubmit }">
                             <b-form @submit.stop.prevent="handleSubmit(onSubmit)" novalidate>
@@ -51,7 +51,7 @@
                                 <div class="row">
                                     <!-- /.col -->
                                     <div class="col-12">
-                                        <b-button type="submit" variant="primary" class="btn-block">{{ $t('login.sign_in')}}</b-button>
+                                        <b-button type="submit" variant="primary" class="btn-block">{{ $t('login.sign_in') }}</b-button>
                                     </div>
                                     <!-- /.col -->
                                 </div>
@@ -59,15 +59,15 @@
                         </validation-observer>
 
                         <div class="social-auth-links text-center mb-3">
-                            <p class="text-uppercase">- {{ $t('generic.or')}} -</p>
+                            <p class="text-uppercase">- {{ $t('generic.or') }} -</p>
                         </div>
                         <!-- /.social-auth-links -->
 
                         <p class="mb-1 text-center">
-                            <a href="#">{{ $t('login.forgot_password')}}</a>
+                            <a href="#">{{ $t('login.forgot_password') }}</a>
                         </p>
                         <p class="mb-0 text-center">
-                            <a href="/register/" class="text-center">{{ $t('login.register')}}</a>
+                            <a href="/register/" class="text-center">{{ $t('login.register') }}</a>
                         </p>
                     </div>
                     <!-- /.login-card-body -->
@@ -119,7 +119,11 @@ export default {
             }).then((response) => {
                 this.$store.commit('setUser', response.data)
                 this.$store.commit('setLoggedIn', true)
-                this.$router.push({name: "Home"})
+
+                if (this.$route.query.next)
+                    this.$router.push(this.$route.query.next)
+                else
+                    this.$router.push({name: "Home"})
                 this.$toast.success(this.$t('login.welcome', {user: response.data.username}), this.$t('login.login_success'))
             })
         },

@@ -32,7 +32,10 @@
         "oops": "Oops...",
         "state": "State",
         "image": "Image",
-        "settings": "Settings"
+        "settings": "Settings",
+        "on": "on",
+        "off": "off",
+        "popout": "Popout"
     },
     "navigation": {
         "home": "Home",
@@ -68,7 +71,8 @@
         "login_failed": "Login failed",
         "invalid_credentials": "Invalid credentials!",
         "login_success": "Login successful",
-        "welcome": "Welcome {user}!"
+        "welcome": "Welcome {user}!",
+        "login_required": "Please log in first!"
     },
     "home": {
         "welcome": "Welcome",
@@ -78,6 +82,14 @@
             "line3": "The dashboard is all yours!",
             "line4": "Let's get the show on the road!",
             "line5": "You're awesome!"
+        }
+    },
+    "overlays": {
+        "control_center": {
+            "overlay_controls": "Overlay Controls",
+            "game_overlays": "Game Overlays",
+            "other_overlays": "Other Overlays",
+            "overlay_actions": "Overlay Actions"
         }
     },
     "matches": {

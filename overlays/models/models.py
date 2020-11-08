@@ -61,6 +61,18 @@ def overlay_state_post_save(sender, instance, created, **kwargs):
     if created:
         return
 
+    from overlays.models.serializers import OverlayStateSerializer
+    data = OverlayStateSerializer(instance).data
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "overlay_state_" + instance.user.username,
+        {
+            'type': 'send_to_client',
+            'data': data
+        }
+    )
+
+    """ OLD
     # Sends overlay state message to websockets on change
     from overlays.models.serializers import OverlayStateSerializer
 
@@ -73,6 +85,7 @@ def overlay_state_post_save(sender, instance, created, **kwargs):
             "message": data,
         }
     )
+    """
 
 
 class MatchOverlayData(models.Model):

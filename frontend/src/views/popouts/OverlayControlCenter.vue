@@ -1,12 +1,12 @@
 <template>
-    <BaseLayout :title="$t('navigation.control_center')" title_icon="fas fa-desktop" :bc_path="bcPath">
 
+    <div class="min-vh-100 min-vw-100 bg-dark pt-2">
         <template v-if="overlayStateWebsocketStatus === 'connected'">
 
-            <b-row>
+            <b-row class="m-0">
 
                 <!-- Overlay Controls -->
-                <b-col lg="6">
+                <b-col cols="12">
 
                     <CustomCard color="primary" outline divider :title="$t('overlays.control_center.overlay_controls')">
                         <template #card-body>
@@ -125,36 +125,9 @@
                                 </b-tbody>
                             </b-table-simple>
 
-                            <hr class="divider">
-
-                            <b-row>
-                                <b-col align="center">
-                                    <router-link :to="{name: 'Overlay Control Center Popout'}" target="_blank">
-                                        <b-btn variant="secondary" class="pl-4 pr-4">
-                                            {{ $t('generic.popout') }}
-                                            <i class="fa fas fa-external-link-alt"></i>
-                                        </b-btn>
-                                    </router-link>
-                                </b-col>
-                            </b-row>
-
                         </template>
                     </CustomCard>
                 </b-col>
-
-                <!-- Overlay Actions -->
-                <b-col lg="6">
-
-                    <CustomCard color="danger" outline divider :title="$t('overlays.control_center.overlay_actions')">
-                        <template #card-body>
-
-                            <i>Coming Soon</i>
-
-                        </template>
-                    </CustomCard>
-
-                </b-col>
-
             </b-row>
         </template>
 
@@ -167,17 +140,17 @@
             </CustomCard>
         </template>
 
-    </BaseLayout>
+    </div>
+
 </template>
 
 <script>
-import BaseLayout from "@/components/layout/BaseLayout";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
 import axios from 'axios';
 
 export default {
-    name: "ControlCenter",
+    name: "OverlayControlCenterPopout",
     data() {
         return {
             overlayState: null,
@@ -225,7 +198,7 @@ export default {
         this.connectOverlayStateWebsocket()
     },
     components: {
-        BaseLayout, CustomCard, StatusOverlay
+        CustomCard, StatusOverlay
     },
 }
 </script>

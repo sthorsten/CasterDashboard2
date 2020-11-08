@@ -260,7 +260,9 @@ class OverlayStyleViewSet(viewsets.ModelViewSet):
 class OverlayStateViewSet(viewsets.ModelViewSet):
     queryset = OverlayState.objects.all()
     serializer_class = OverlayStateSerializer
+    filterset_fields = ['user']
 
+    # // Deprecated
     # OverlayState elements with a specific user id
     # URL: /api/overlay/state/by_user/<id>/
     @action(methods=['get'], detail=True)

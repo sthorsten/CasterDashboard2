@@ -18,7 +18,8 @@ export default {
             return
         }
         if (!this.loggedIn && this.$route.name !== "Login") {
-            this.$router.push({name: "Login"})
+            this.$toast.warning(this.$t('login.login_required'))
+            this.$router.push({name: "Login", query: {"next": this.$route.fullPath}})
         }
     }
 }
