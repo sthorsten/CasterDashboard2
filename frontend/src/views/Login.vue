@@ -1,5 +1,8 @@
 <template>
     <div class="hold-transition login-page">
+
+        <vue-headful :title="$t('navigation.login') + ' - Caster Dashboard'"/>
+
         <b-overlay :show="loginLoading" variant="dark" :opacity=0.9 class="text-white">
             <div class="login-box">
                 <div class="login-logo">

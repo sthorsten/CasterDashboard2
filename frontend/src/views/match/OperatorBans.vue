@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.op_bans')" title_icon="fas fa-users-slash" :bc_path="bcPath">
 
+        <vue-headful :title="$t('navigation.op_bans') + ' - Caster Dashboard'"/>
+
         <template v-if="loadingStatus === 'loaded'">
 
             <b-row v-if="mapLocked">

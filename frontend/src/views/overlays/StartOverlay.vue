@@ -1,6 +1,8 @@
 <template>
 
     <div>
+        <vue-headful :title="$t('overlays.start') + ' - Caster Dashboard'"/>
+
         <div class="main-bg"></div>
         <transition name="fade" @after-enter="centerTextAnimated = true; leftAnimated = true; rightAnimated = true" @after-leave="reAnimate">
             <div v-if="animated" class="main" style="animation-delay: 0.5s; animation-duration: 0.5s">

@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.create')" title_icon="fas fa-plus" :bc_path="bc_path" class="text-white">
 
+        <vue-headful :title="$t('navigation.create') + ' - Caster Dashboard'"/>
+
         <b-row>
 
             <!-- Create match form -->

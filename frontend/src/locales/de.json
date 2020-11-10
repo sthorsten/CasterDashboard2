@@ -22,7 +22,8 @@
         "log_out": "Abmelden",
         "op_bans": "Operator Bans",
         "rounds": "Runden",
-        "stats_op_bans": "Operator Ban Statistiken"
+        "stats_op_bans": "Operator Ban Statistiken",
+        "login": "Login"
     },
     "login": {
         "sign_in": "Anmelden",
@@ -33,7 +34,8 @@
         "login_failed": "Login fehlgeschlagen",
         "invalid_credentials": "Ungültige Anmeldedaten!",
         "login_success": "Login erfolgreich",
-        "welcome": "Willkommen {user}!"
+        "welcome": "Willkommen {user}!",
+        "login_required": "Bitte logge dich zuerst ein!"
     },
     "core": {
         "league": "Liga | Ligen",
@@ -68,7 +70,10 @@
         "user": "Benutzer",
         "state": "Status",
         "image": "Bild",
-        "settings": "Einstellungen"
+        "settings": "Einstellungen",
+        "on": "an",
+        "off": "aus",
+        "popout": "Popout"
     },
     "home": {
         "welcome": "Willkommen",
@@ -263,6 +268,15 @@
                 "team_created": "Das Team wurde erfolgreich erstellt",
                 "team_create_failed": "Das Team konnte nicht erstellt werden!"
             }
+        }
+    },
+    "overlays": {
+        "start": "Start Overlay",
+        "control_center": {
+            "overlay_controls": "Overlay Steuerung",
+            "game_overlays": "Spiel Overlays",
+            "other_overlays": "Weitere Overlays",
+            "overlay_actions": "Overlay Aktionen"
         }
     }
 }

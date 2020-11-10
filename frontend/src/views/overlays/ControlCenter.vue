@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.control_center')" title_icon="fas fa-desktop" :bc_path="bcPath">
 
+        <vue-headful :title="$t('navigation.control_center') + ' - Caster Dashboard'"/>
+
         <template v-if="overlayStateWebsocketStatus === 'connected'">
 
             <b-row>

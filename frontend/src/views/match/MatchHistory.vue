@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.history')" title_icon="fas fa-history" :bc_path="bcPath">
 
+        <vue-headful :title="$t('navigation.history') + ' - Caster Dashboard'"/>
+
         <template v-if="loadingStatus === 'loaded'">
 
             <CustomCard color="primary" outline divider :title="$t('navigation.history')">

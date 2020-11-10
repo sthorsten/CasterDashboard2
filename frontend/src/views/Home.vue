@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.home')" title_icon="fas fa-home" :bc_path="bc_path">
 
+        <vue-headful :title="$t('navigation.home') + ' - Caster Dashboard'"/>
+
         <!-- Greeting -->
         <b-row>
             <b-col>

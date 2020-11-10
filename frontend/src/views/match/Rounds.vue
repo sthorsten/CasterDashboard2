@@ -1,5 +1,7 @@
 <template>
-    <BaseLayout title="Rounds" title_icon="fas fa-list-ol" :bc_path="bcPath">
+    <BaseLayout :title="$t('navigation.rounds')" title_icon="fas fa-list-ol" :bc_path="bcPath">
+
+        <vue-headful :title="$t('navigation.rounds') + ' - Caster Dashboard'"/>
 
         <template v-if="loadingStatus === 'loaded'">
 

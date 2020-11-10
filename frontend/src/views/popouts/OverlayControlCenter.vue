@@ -1,6 +1,9 @@
 <template>
 
     <div class="min-vh-100 min-vw-100 bg-dark pt-2">
+
+        <vue-headful :title="$t('navigation.control_center') + ' - Caster Dashboard'"/>
+
         <template v-if="overlayStateWebsocketStatus === 'connected'">
 
             <b-row class="m-0">

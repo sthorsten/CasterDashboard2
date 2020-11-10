@@ -38,6 +38,7 @@
         "popout": "Popout"
     },
     "navigation": {
+        "login": "Login",
         "home": "Home",
         "matches": "Matches",
         "history": "Match History",
@@ -85,6 +86,7 @@
         }
     },
     "overlays": {
+        "start": "Start Overlay",
         "control_center": {
             "overlay_controls": "Overlay Controls",
             "game_overlays": "Game Overlays",

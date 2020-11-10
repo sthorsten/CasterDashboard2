@@ -7,6 +7,7 @@ import VueIziToast from "vue-izitoast";
 import Multiselect from 'vue-multiselect'
 import VueApexCharts from "vue-apexcharts";
 import VueCookies from 'vue-cookies'
+import vueHeadful from 'vue-headful';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
@@ -56,6 +57,7 @@ Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 
+Vue.component('vue-headful', vueHeadful)
 Vue.component('multiselect', Multiselect)
 Vue.component('apexchart', VueApexCharts)
 

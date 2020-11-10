@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$tc('core.team', 2)" title_icon="fas fa-users" :bc_path="bc_path" class="text-white">
 
+        <vue-headful :title="$tc('core.team', 2) + ' - Caster Dashboard'"/>
+
         <!-- Show content once team data is loaded -->
         <template v-if="team_data_loading_status === 'loaded'">
 

@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.overview')" title_icon="fas fa-gamepad" :bc_path="bcPath">
 
+        <vue-headful :title="$t('navigation.overview') + ' - Caster Dashboard'"/>
+
         <b-row>
 
             <!-- Match Details -->

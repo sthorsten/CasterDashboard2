@@ -1,5 +1,9 @@
 <template>
-    <BaseLayout :title="$t('navigation.customize')" title_icon="fas fa-palette" :bc_path="bc_path"></BaseLayout>
+    <BaseLayout :title="$t('navigation.customize')" title_icon="fas fa-palette" :bc_path="bc_path">
+
+        <vue-headful :title="$t('navigation.customize') + ' - Caster Dashboard'"/>
+
+    </BaseLayout>
 </template>
 
 <script>
