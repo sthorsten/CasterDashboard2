@@ -257,6 +257,7 @@ class RoundViewSet(viewsets.ModelViewSet):
 class OverlayStyleViewSet(viewsets.ModelViewSet):
     queryset = OverlayStyle.objects.all()
     serializer_class = OverlayStyleSerializer
+    filterset_fields = ['user']
 
 
 class OverlayStateViewSet(viewsets.ModelViewSet):

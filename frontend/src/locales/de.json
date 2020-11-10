@@ -73,7 +73,9 @@
         "settings": "Einstellungen",
         "on": "an",
         "off": "aus",
-        "popout": "Popout"
+        "popout": "Popout",
+        "copy_to_clipboard": "URL in die Zwischenablage kopieren",
+        "open_in_new_tab": "In neuem Tab öffnen"
     },
     "home": {
         "welcome": "Willkommen",
@@ -277,6 +279,26 @@
             "game_overlays": "Spiel Overlays",
             "other_overlays": "Weitere Overlays",
             "overlay_actions": "Overlay Aktionen"
+        },
+        "ingame": "Ingame Overlay",
+        "maps": "Maps Overlay",
+        "opbans": "Operator Bans Overlay",
+        "rounds": "Runden Overlay",
+        "customize": {
+            "select_overlay": "Overlay auswählen",
+            "customize_overlay": "Overlay anpassen",
+            "preview": "Overlay Vorschau",
+            "overlay_links": "Overlay Links",
+            "default_styles": "Standard Styles",
+            "custom_styles": "Benutzerdefinierte Styles",
+            "select_first": "Wähle zuerst ein Overlay und einen Style aus",
+            "default": "Standard (blau / orange)",
+            "light": "Light",
+            "dark": "Dark",
+            "toasts": {
+                "overlay_updated": "Overlay Style angepasst"
+            },
+            "drag_to_obs": "Zieh mich nach OBS"
         }
     }
 }

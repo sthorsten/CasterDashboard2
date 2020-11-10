@@ -8,6 +8,7 @@ import Multiselect from 'vue-multiselect'
 import VueApexCharts from "vue-apexcharts";
 import VueCookies from 'vue-cookies'
 import vueHeadful from 'vue-headful';
+import Clipboard from 'v-clipboard';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
@@ -53,6 +54,7 @@ Vue.use(VueSweetalert2)
 Vue.use(VueIziToast, iziToastOptions);
 Vue.use(VueApexCharts)
 Vue.use(VueCookies)
+Vue.use(Clipboard)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -73,6 +75,7 @@ const vuexStorage = new VuexPersistence({
 const store = new Vuex.Store({
     state: {
         version: "Version 0.0.0",
+        frontendURL: "http://localhost:8080",
         backendURL: "http://localhost:8000",
         userToken: "",
         user: null,
