@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 import requests
 from django.conf import settings as django_settings
@@ -14,9 +15,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from pip._vendor import requests
 from rest_framework import viewsets, filters
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.filter import SeasonFilter
 from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
@@ -312,6 +314,12 @@ class TimerOverlayDataViewSet(viewsets.ModelViewSet):
 class TickerOverlayDataViewSet(viewsets.ModelViewSet):
     queryset = TickerOverlayData.objects.all()
     serializer_class = TickerOverlayDataSerializer
+
+
+@api_view(['GET'])
+def version(request):
+    current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
+    return Response({'version': current_version})
 
 
 # Other views

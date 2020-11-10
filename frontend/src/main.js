@@ -72,6 +72,7 @@ const vuexStorage = new VuexPersistence({
 
 const store = new Vuex.Store({
     state: {
+        version: "Version 0.0.0",
         backendURL: "http://localhost:8000",
         userToken: "",
         user: null,
@@ -99,6 +100,9 @@ const store = new Vuex.Store({
         },
         setLoggedIn(state, logInStatus) {
             state.loggedIn = logInStatus
+        },
+        setVersion(state, version){
+            state.version = version
         }
     },
     plugins: [vuexStorage.plugin]

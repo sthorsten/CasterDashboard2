@@ -48,6 +48,8 @@ urlpatterns = [
     path('matches/<int:match_id>/maps/', MatchMapViewSet.as_view({'get': 'match_maps'})),
     path('matches/<int:match_id>/share/', views.share_match),
 
+    path(r'version/', views.version)
+
     # Old
     # TODO: Refactor!
     # path('matches/<int:match_id>/update_score', views.update_match_score),
