@@ -1,6 +1,8 @@
 <template>
 
     <div>
+        <vue-headful :title="$t('overlays.ingame') + ' - Caster Dashboard'"/>
+
         <div class="main-bg invisible"></div>
         <transition enter-active-class="fadeInDown" leave-active-class="fadeOutUp" @after-enter="animatedLeft = true; animatedRight = true;"
                     @after-leave="reAnimate">
@@ -318,7 +320,7 @@ export default {
                 setTimeout(this.connectMatchDataWebsocket, 5000)
             }
         },
-        connecOverlayStateWebsocket() {
+        connectOverlayStateWebsocket() {
             this.overlayStateWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/overlay_state/${this.user}/`)
             this.overlayStateWebSocket.onopen = function () {
                 console.log("OverlayState websocket connected.")
@@ -330,7 +332,7 @@ export default {
             }
             this.overlayStateWebSocket.onclose = () => {
                 console.warn("Lost websocket connection. Trying to reconnect (5s.)")
-                setTimeout(this.connecOverlayStateWebsocket, 5000)
+                setTimeout(this.connectOverlayStateWebsocket, 5000)
             }
         },
     },
@@ -338,7 +340,7 @@ export default {
         this.loadStyle()
         this.connectMatchDataWebsocket()
         this.connectMatchMapWebsocket()
-        this.connecOverlayStateWebsocket()
+        this.connectOverlayStateWebsocket()
     },
     components: {}
 }

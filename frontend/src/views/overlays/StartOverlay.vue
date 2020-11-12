@@ -5,7 +5,7 @@
 
         <div class="main-bg"></div>
         <transition name="fade" @after-enter="centerTextAnimated = true; leftAnimated = true; rightAnimated = true" @after-leave="reAnimate">
-            <div v-if="animated" class="main" style="animation-delay: 0.5s; animation-duration: 0.5s">
+            <div v-if="animated && overlayState && overlayState.start_state" class="main" style="animation-delay: 0.5s; animation-duration: 0.5s">
 
 
                 <div class="container-left" style="background: transparent">
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 require('vue2-animate/dist/vue2-animate.min.css')
 
 export default {
@@ -56,9 +58,10 @@ export default {
     data() {
         return {
             matchDataWebSocket: null,
-            overlayStatusWebSocket: null,
+            overlayStateWebSocket: null,
 
             matchData: null,
+            overlayState: null,
 
             animated: false,
             centerTextAnimated: false,
@@ -67,6 +70,9 @@ export default {
         }
     },
     computed: {
+        user() {
+            return this.$route.path.split('/')[2]
+        },
         centerText() {
             if (this.matchData) {
                 if (this.matchData.score_blue === 0 && this.matchData.score_orange === 0) return "- vs -"
@@ -83,7 +89,7 @@ export default {
     },
     watch: {
         matchData: function (newState, oldState) {
-            if (oldState != null){
+            if (oldState != null) {
                 if (oldState.id === newState.id && oldState.score_blue === newState.score_blue && oldState.score_orange === newState.score_orange)
                     return
             }
@@ -99,9 +105,24 @@ export default {
                 this.rightAnimated = false
             }
         },
+        loadStyle() {
+            // Get user id
+            axios.get(`${this.$store.state.backendURL}/api/user/?username=${this.user}`, this.$store.getters.authHeader
+            ).then((response) => {
+                this.userID = response.data[0].id
+
+                // Get user style
+                axios.get(`${this.$store.state.backendURL}/api/overlay/style/?user=${this.userID}`, this.$store.getters.authHeader
+                ).then((response) => {
+                    console.log(response.data[0])
+                    import(`@/assets/scss/overlays/start-${response.data[0].start_style}.scss`);
+                })
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
         connectMatchDataWebsocket() {
-            let user = this.$route.path.split('/')[2]
-            this.matchDataWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/match_data/${user}/`)
+            this.matchDataWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/match_data/${this.user}/`)
             this.matchDataWebSocket.onopen = function () {
                 console.log("MatchData websocket connected.")
                 this.send(JSON.stringify({"command": "get_match_data"}))
@@ -115,14 +136,33 @@ export default {
                 setTimeout(this.connectMatchDataWebsocket, 5000)
             }
         },
+        connectOverlayStateWebsocket() {
+            this.overlayStateWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/overlay_state/${this.user}/`)
+            this.overlayStateWebSocket.onopen = function () {
+                console.log("OverlayState websocket connected.")
+                this.send(JSON.stringify({"command": "get_overlay_state"}))
+            }
+            this.overlayStateWebSocket.onmessage = (e) => {
+                console.log(e)
+                this.overlayState = JSON.parse(e.data)
+            }
+            this.overlayStateWebSocket.onclose = () => {
+                console.warn("Lost websocket connection. Trying to reconnect (5s.)")
+                setTimeout(this.connectOverlayStateWebsocket, 5000)
+            }
+        },
     },
     created() {
+        this.loadStyle()
         this.connectMatchDataWebsocket()
+        this.connectOverlayStateWebsocket()
     },
     components: {}
 }
 </script>
 
 <style scoped lang="scss">
-@import "~@/assets/scss/overlays/start.scss";
+* {
+    line-height: 1 !important;
+}
 </style>
