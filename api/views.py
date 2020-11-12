@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filterset_fields = ['username']
 
     def retrieve(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current':

@@ -174,15 +174,12 @@ def match_maps_post_save(sender, instance, **kwargs):
                 instance.match.score_orange = instance.match.score_orange + 1
                 instance.match.save()
 
-            return
-
         # Draw
-        if instance.score_blue == 6 and instance.score_orange == 6:
+        elif instance.score_blue == 6 and instance.score_orange == 6:
             instance.win_type = 4
             instance.status = 3
             instance.save()
             return
-
 
     # Set Match state to Map Ban (2)
     if instance.match.state <= 1:
@@ -200,6 +197,20 @@ def match_maps_post_save(sender, instance, **kwargs):
         maps = MatchMap.objects.filter(match=instance.match, type__in=[2, 3]).all()
         instance.play_order = len(maps)  # Not len(maps) + 1 because post_save
         instance.save()
+
+    # Send data to websockets on change
+    print("!!!")
+    from dashboard.models.serializers import MatchMapSerializer
+    serialized_data = MatchMapSerializer(instance)
+    channel_layer = get_channel_layer()
+    for user in instance.match.user.all():
+        async_to_sync(channel_layer.group_send)(
+            "match_map_" + user.username,
+            {
+                'type': 'send_to_client',
+                'data': serialized_data.data
+            }
+        )
 
 
 @receiver(post_save, sender=OperatorBans)
