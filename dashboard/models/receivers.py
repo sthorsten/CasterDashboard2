@@ -9,13 +9,13 @@ import logging
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
 from django.dispatch import receiver
 
 from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, convert_sponsor_logo
 from caster_dashboard_2.settings import base as django_settings
 
-from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans
+from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round
 from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
@@ -225,3 +225,35 @@ def operator_bans_post_save(sender, instance, **kwargs):
     if match_map and match_map.status <= 1:
         match_map.status = 2
         match_map.save()
+
+
+@receiver(post_save, sender=Round)
+def round_post_save(sender, instance, **kwargs):
+    # Send match to websockets on change
+    from dashboard.models.serializers import RoundSerializer
+    rounds = Round.objects.filter(match=instance.match, map=instance.map).all()
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "round_data_" + str(instance.match.id) + "_" + str(instance.map.id),
+        {
+            'type': 'send_to_client',
+            'data': RoundSerializer(rounds, many=True).data
+        }
+    )
+
+
+@receiver(post_delete, sender=Round)
+def round_post_delete(sender, instance, **kwargs):
+    # Send match to websockets on change
+    from dashboard.models.serializers import RoundSerializer
+    rounds = Round.objects.filter(match=instance.match, map=instance.map).all()
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "round_data_" + str(instance.match.id) + "_" + str(instance.map.id),
+        {
+            'type': 'send_to_client',
+            'data': RoundSerializer(rounds, many=True).data
+        }
+    )

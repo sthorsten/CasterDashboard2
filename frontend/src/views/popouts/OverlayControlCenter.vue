@@ -151,15 +151,13 @@
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
 import axios from 'axios';
+import {OverlayStateWebsocket} from "@/mixins/OverlayStateWebsocket";
 
 export default {
     name: "OverlayControlCenterPopout",
+    mixins: [OverlayStateWebsocket],
     data() {
         return {
-            overlayState: null,
-
-            overlayStateWebsocket: null,
-            overlayStateWebsocketStatus: "none",
             bcPath: ["Dashboard", "Overlays", "Control Center"]
         }
     },
@@ -175,30 +173,6 @@ export default {
         updateOverlayState() {
             axios.put(`${this.$store.state.backendURL}/api/overlay/state/${this.$store.state.user.id}/`, this.overlayState, this.$store.getters.authHeader)
         },
-        connectOverlayStateWebsocket() {
-            this.overlayStateWebsocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/overlay_state/${this.$store.state.user.username}/`)
-            this.overlayStateWebsocket.onopen = () => {
-                console.log("OverlayState websocket connected.")
-                this.overlayStateWebsocket.send(JSON.stringify({"command": "get_overlay_state"}))
-
-                if (this.overlayStateWebsocketStatus === "reconnecting") {
-                    this.$toast.success("Server connection restored.")
-                }
-                this.overlayStateWebsocketStatus = "connected"
-            }
-            this.overlayStateWebsocket.onmessage = (e) => {
-                this.overlayState = JSON.parse(e.data)
-            }
-            this.overlayStateWebsocket.onclose = () => {
-                console.warn("Lost websocket connection. Trying to reconnect (5s.)")
-                this.overlayStateWebsocketStatus = "reconnecting"
-                this.$toast.warning("Lost connection to server. Trying to reconnect...", "Warning")
-                setTimeout(this.connectOverlayStateWebsocket, 5000)
-            }
-        }
-    },
-    created() {
-        this.connectOverlayStateWebsocket()
     },
     components: {
         CustomCard, StatusOverlay

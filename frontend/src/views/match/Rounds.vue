@@ -5,6 +5,16 @@
 
         <template v-if="loadingStatus === 'loaded'">
 
+            <b-row v-if="websocketConnectionLost">
+                <b-col>
+                    <b-alert variant="warning" fade show>
+                        <span><i class="fa fas fa-exclamation-triangle"></i> Lost connection to server! Trying to reconnect
+                            <b-spinner small></b-spinner>
+                        </span>
+                    </b-alert>
+                </b-col>
+            </b-row>
+
             <b-row v-if="mapLocked">
                 <b-col>
                     <b-alert variant="info" show>
@@ -308,9 +318,13 @@ import BaseLayout from "@/components/layout/BaseLayout";
 import axios from "axios";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
+import {RoundDataWebsocketInGame} from "@/mixins/RoundDataWebsocketInGame";
+import {MatchDataWebsocketInGame} from "@/mixins/MatchDataWebsocketInGame";
+import {MatchMapWebsocketInGame} from "@/mixins/MatchMapWebsocketInGame";
 
 export default {
     name: "Rounds",
+    mixins: [MatchDataWebsocketInGame, MatchMapWebsocketInGame, RoundDataWebsocketInGame],
 
     data() {
         return {
@@ -320,10 +334,7 @@ export default {
             ofTeam: null,
             notes: null,
 
-            matchData: null,
-            matchMap: null,
-            bombSpots: [],
-            roundData: [],
+            bombSpots: null,
             winTypes: [
                 {id: 1, name: this.$t('matches.rounds.win_type_names.kills')},
                 {id: 2, name: this.$t('matches.rounds.win_type_names.defuser_planted')},
@@ -377,17 +388,17 @@ export default {
                 }
             ],
 
-            matchDataLoaded: false,
-            matchMapLoaded: false,
             bombSpotsLoaded: false,
-            roundDataLoaded: false,
-
             loadingSmall: "",
             loadingStatus: "loading"
         }
     },
 
     computed: {
+        user() {
+            return this.$store.state.user.username
+        },
+
         sideWinData() {
             let atkWins = this.roundData.filter(r => r.win_team === r.atk_team).length
             let defWins = this.roundData.length - atkWins
@@ -457,12 +468,20 @@ export default {
             return this.matchMap.status === 3
         },
 
+        matchDataLoadComplete() {
+            return this.matchData !== null && this.matchMap !== null
+        },
+
         loadComplete() {
-            return this.matchDataLoaded && this.matchMapLoaded && this.bombSpotsLoaded && this.roundDataLoaded
+            return this.matchDataLoadComplete && this.bombSpotsLoaded && this.roundData !== null
+        },
+
+        websocketConnectionLost() {
+            return this.matchDataWebsocketStatus === "reconnecting" || this.matchMapWebsocketStatus === "reconnecting" || this.roundDataWebsocketStatus === "reconnecting"
         },
 
         bcPath() {
-            if (this.matchDataLoaded && this.matchMapLoaded) {
+            if (this.matchDataLoadComplete) {
                 return ["Dashboard", "Matches", this.$route.params.match_id,
                     this.matchMap.map_name + " (Map " + this.matchMap.play_order + "/" + this.matchData.best_of + ")",
                     "Rounds"]
@@ -473,6 +492,9 @@ export default {
     },
 
     watch: {
+        matchDataLoadComplete: function (newState) {
+            if (newState) this.connectRoundDataWebsocket()
+        },
         loadComplete: function (newState) {
             if (newState) this.loadingStatus = "loaded"
         }
@@ -501,14 +523,17 @@ export default {
             // Validate input
             if (!this.selectedBombSpot) {
                 this.$toast.warning(this.$t('matches.rounds.toasts.bomb_spot_missing'))
+                this.loadingSmall = ""
                 return;
             }
             if (!this.selectedWinType) {
                 this.$toast.warning(this.$t('matches.rounds.toasts.win_type_missing'))
+                this.loadingSmall = ""
                 return;
             }
             if (!this.winTeam) {
                 this.$toast.warning(this.$t('matches.rounds.toasts.win_team_missing'))
+                this.loadingSmall = ""
                 return;
             }
 
@@ -532,10 +557,11 @@ export default {
             ).then((response) => {
                 console.log(response.data)
                 this.resetRoundData()
-                this.getRounds()
                 this.$toast.success(this.$t('matches.rounds.toasts.round_added'), this.$t('generic.success'), {timeout: 2000})
+                this.loadingSmall = ""
             }).catch(() => {
                 this.$toast.error(this.$t('matches.rounds.toasts.round_added_failed'), this.$t('generic.error'))
+                this.loadingSmall = ""
             })
 
         },
@@ -547,9 +573,10 @@ export default {
             axios.delete(`${this.$store.state.backendURL}/api/matches/round/${lastRound.id}/`, this.$store.getters.authHeader
             ).then(() => {
                 this.$toast.success(this.$t('matches.rounds.toasts.round_removed'), this.$t('generic.success'))
-                this.getRounds()
+                this.loadingSmall = ""
             }).catch(() => {
                 this.$toast.success(this.$t('matches.rounds.toasts.round_removed_failed'), this.$t('generic.error'))
+                this.loadingSmall = ""
             })
         },
 
@@ -634,24 +661,6 @@ export default {
             return bomb_spot.floor + " - " + bomb_spot.name
         },
 
-        getMatchData() {
-            axios.get(`${this.$store.state.backendURL}/api/match/${this.$route.params.match_id}`, this.$store.getters.authHeader
-            ).then((response) => {
-                console.log(response.data)
-                this.matchData = response.data
-                this.matchDataLoaded = true
-            })
-        },
-
-        getMatchMap() {
-            axios.get(`${this.$store.state.backendURL}/api/matches/maps/?match=${this.$route.params.match_id}&map=${this.$route.params.map_id}`, this.$store.getters.authHeader
-            ).then((response) => {
-                console.log(response.data)
-                this.matchMap = response.data[0]
-                this.matchMapLoaded = true
-            })
-        },
-
         getBombSpots() {
             axios.get(`${this.$store.state.backendURL}/api/core/bomb_spot/?map=${this.$route.params.map_id}`, this.$store.getters.authHeader
             ).then((response) => {
@@ -663,21 +672,9 @@ export default {
             })
         },
 
-        getRounds() {
-            axios.get(`${this.$store.state.backendURL}/api/matches/round/?match=${this.$route.params.match_id}&map=${this.$route.params.map_id}`, this.$store.getters.authHeader
-            ).then((response) => {
-                console.log(response.data)
-                this.roundData = response.data
-                this.roundDataLoaded = true
-                this.loadingSmall = ""
-            })
-        },
     },
     created() {
-        this.getMatchData()
-        this.getMatchMap()
         this.getBombSpots()
-        this.getRounds()
     },
 
     components: {

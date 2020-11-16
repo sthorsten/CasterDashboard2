@@ -1,5 +1,3 @@
-import json
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
@@ -89,6 +87,55 @@ class MatchMapConsumer2(JsonWebsocketConsumer):
                 {
                     'type': 'send_to_client',
                     'data': MatchMapSerializer(match_map).data
+                }
+            )
+
+    # Send from group to client
+    def send_to_client(self, event):
+        self.send_json(event['data'])
+
+
+class RoundDataConsumer2(JsonWebsocketConsumer):
+
+    # Connect new client
+    def connect(self):
+        # Get room group
+        self.group_name = 'round_data_' + self.scope['url_route']['kwargs']['match'] + "_" + \
+                          self.scope['url_route']['kwargs']['map']
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        self.accept()
+
+    # Disconnect client
+    def disconnect(self, code):
+        # Leave group
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
+
+    # Receive from client and send to group
+    def receive_json(self, content, **kwargs):
+        from dashboard.models.models import Round
+        from dashboard.models.serializers import RoundSerializer
+
+        # Send data on request
+        if content.get('command') == 'get_round_data':
+            try:
+                match_id = int(self.scope['url_route']['kwargs']['match'])
+                map_id = int(self.scope['url_route']['kwargs']['map'])
+            except ValueError as e:
+                return
+
+            rounds = Round.objects.filter(match=match_id, map=map_id).all()
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.group_name,
+                {
+                    'type': 'send_to_client',
+                    'data': RoundSerializer(rounds, many=True).data
                 }
             )
 

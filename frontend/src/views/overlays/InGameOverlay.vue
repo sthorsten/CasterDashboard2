@@ -134,22 +134,18 @@
 
 <script>
 import axios from "axios"
+import {OverlayStateWebsocketInGame} from "@/mixins/OverlayStateWebsocketInGame";
+import {MatchDataWebsocketInGame} from "@/mixins/MatchDataWebsocketInGame";
+import {MatchMapWebsocketInGame} from "@/mixins/MatchMapWebsocketInGame";
+import {RoundDataWebsocketInGame} from "@/mixins/RoundDataWebsocketInGame";
 
 require('vue2-animate/dist/vue2-animate.min.css')
 
 export default {
     name: "InGameOverlay",
+    mixins: [OverlayStateWebsocketInGame, MatchDataWebsocketInGame, MatchMapWebsocketInGame, RoundDataWebsocketInGame],
     data() {
         return {
-            items: [{id: 1, text: "1"}, {id: 2, text: "2"}, {id: 3, text: "3"}],
-            matchDataWebSocket: null,
-            matchMapWebSocket: null,
-            overlayStateWebSocket: null,
-
-            matchData: null,
-            matchMap: null,
-            overlayState: null,
-
             titleAnimated: false,
             mapPickAnimated: false,
 
@@ -183,6 +179,9 @@ export default {
         orangeLogoURL() {
             return `${this.$store.state.backendURL}/media/teams/${this.matchData.team_orange}_500.webp`
         },
+        matchDataLoaded() {
+            return (this.matchData !== null && this.matchMap !== null)
+        }
     },
     watch: {
         matchData: function (newState, oldState) {
@@ -192,7 +191,7 @@ export default {
 
                 if (oldState.id !== newState.id) {
                     this.matchMap = null
-                    this.matchMapWebSocket.send(JSON.stringify({"command": "get_match_map"}))
+                    this.matchMapWebsocket.send(JSON.stringify({"command": "get_match_map"}))
                 }
 
                 this.reAnimate()
@@ -202,6 +201,9 @@ export default {
         },
         matchMap: function () {
             this.animateTitle()
+        },
+        matchDataLoaded: function(newState){
+            if (newState) this.connectRoundDataWebsocket()
         }
     },
     methods: {
@@ -290,59 +292,10 @@ export default {
                 console.log(error)
             })
         },
-        connectMatchMapWebsocket() {
-            this.matchMapWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/match_map/${this.user}/`)
-            this.matchMapWebSocket.onopen = function () {
-                console.log("MatchMap websocket connected.")
-                this.send(JSON.stringify({"command": "get_match_map"}))
-            }
-            this.matchMapWebSocket.onmessage = (e) => {
-                console.log(e)
-                this.matchMap = JSON.parse(e.data)
-            }
-            this.matchMapWebSocket.onclose = () => {
-                console.warn("Lost websocket connection. Trying to reconnect (5s.)")
-                setTimeout(this.connectMatchDataWebsocket, 5000)
-            }
-        },
-        connectMatchDataWebsocket() {
-            this.matchDataWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/match_data/${this.user}/`)
-            this.matchDataWebSocket.onopen = function () {
-                console.log("MatchData websocket connected.")
-                this.send(JSON.stringify({"command": "get_match_data"}))
-            }
-            this.matchDataWebSocket.onmessage = (e) => {
-                console.log(e)
-                this.matchData = JSON.parse(e.data)
-            }
-            this.matchDataWebSocket.onclose = () => {
-                console.warn("Lost websocket connection. Trying to reconnect (5s.)")
-                setTimeout(this.connectMatchDataWebsocket, 5000)
-            }
-        },
-        connectOverlayStateWebsocket() {
-            this.overlayStateWebSocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/overlay_state/${this.user}/`)
-            this.overlayStateWebSocket.onopen = function () {
-                console.log("OverlayState websocket connected.")
-                this.send(JSON.stringify({"command": "get_overlay_state"}))
-            }
-            this.overlayStateWebSocket.onmessage = (e) => {
-                console.log(e)
-                this.overlayState = JSON.parse(e.data)
-            }
-            this.overlayStateWebSocket.onclose = () => {
-                console.warn("Lost websocket connection. Trying to reconnect (5s.)")
-                setTimeout(this.connectOverlayStateWebsocket, 5000)
-            }
-        },
     },
     created() {
         this.loadStyle()
-        this.connectMatchDataWebsocket()
-        this.connectMatchMapWebsocket()
-        this.connectOverlayStateWebsocket()
     },
-    components: {}
 }
 </script>
 
