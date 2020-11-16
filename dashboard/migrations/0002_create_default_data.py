@@ -1,9 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import migrations
 
-import dashboard.models.models
-
-
 class Migration(migrations.Migration):
 
     def create_maps(apps, schema_editor):
