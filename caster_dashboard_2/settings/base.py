@@ -73,6 +73,14 @@ TEMPLATES = [
     },
 ]
 
+# Password Hashing
+
+PASSWORD_HASHERS = [
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher', #temporary until release of Django 3.2
+    #'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
+]
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
