@@ -199,16 +199,25 @@ def match_maps_post_save(sender, instance, **kwargs):
         instance.save()
 
     # Send data to websockets on change
-    print("!!!")
     from dashboard.models.serializers import MatchMapSerializer
-    serialized_data = MatchMapSerializer(instance)
+    serialized_data = MatchMapSerializer(instance).data # Single matchMap
+    all_map_data = MatchMap.objects.filter(match=instance.match).all() # All matchMaps
+    all_map_data_serialized = MatchMapSerializer(all_map_data, many=True).data
+
     channel_layer = get_channel_layer()
     for user in instance.match.user.all():
         async_to_sync(channel_layer.group_send)(
             "match_map_" + user.username,
             {
                 'type': 'send_to_client',
-                'data': serialized_data.data
+                'data': serialized_data
+            }
+        )
+        async_to_sync(channel_layer.group_send)(
+            "map_data_" + user.username,
+            {
+                'type': 'send_to_client',
+                'data': all_map_data_serialized
             }
         )
 

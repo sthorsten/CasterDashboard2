@@ -46,6 +46,52 @@ class MatchDataConsumer2(JsonWebsocketConsumer):
         self.send_json(event['data'])
 
 
+class MapDataConsumer2(JsonWebsocketConsumer):
+
+    # Connect new client
+    def connect(self):
+        # Get room group
+        self.group_name = 'map_data_' + self.scope['url_route']['kwargs']['user']
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+        self.accept()
+
+    # Disconnect client
+    def disconnect(self, code):
+        # Leave group
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name,
+            self.channel_name
+        )
+
+    # Receive from client and send to group
+    def receive_json(self, content, **kwargs):
+        from django.contrib.auth.models import User
+        from overlays.models.models import MatchOverlayData
+        from dashboard.models.serializers import MatchMapSerializer
+        from dashboard.models.models import MatchMap
+
+        # Send data on request
+        if content.get('command') == 'get_map_data':
+            user_id = User.objects.get(username=self.scope['url_route']['kwargs']['user']).id
+            match = MatchOverlayData.objects.get(user=user_id).current_match
+            match_maps = MatchMap.objects.filter(match=match.id).all()
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.group_name,
+                {
+                    'type': 'send_to_client',
+                    'data': MatchMapSerializer(match_maps, many=True).data
+                }
+            )
+
+    # Send from group to client
+    def send_to_client(self, event):
+        self.send_json(event['data'])
+
+
 class MatchMapConsumer2(JsonWebsocketConsumer):
 
     # Connect new client
