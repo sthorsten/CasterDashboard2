@@ -6,7 +6,7 @@
         <div class="main-bg"></div>
         <transition name="fade" @after-enter="centerTextAnimated = true; leftAnimated = true; rightAnimated = true" @after-leave="reAnimate">
             <div v-if="animated && overlayState && overlayState.start_state" class="main" style="animation-delay: 0.5s; animation-duration: 0.5s">
-                
+
                 <div class="container-left" style="background: transparent">
                     <transition name="custom-scale-right" enter-active-class="anim_scaleInRight">
                         <div v-if="leftAnimated" class="container-left">

@@ -143,15 +143,23 @@
 
                                         <!-- Image -->
                                         <b-col cols="2" class="align-items-center">
-                                            <template v-if="matchMapFiltered[map.id - 1].type === 2 || matchMapFiltered[map.id - 1].type === 3">
-                                                <div class="img-container pick">
-                                                    <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
-                                                </div>
-                                            </template>
-                                            <template v-else-if="matchMapFiltered[map.id - 1].type === 1 || matchMapFiltered[map.id - 1].type === 4">
-                                                <div class="img-container ban">
-                                                    <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
-                                                </div>
+                                            <template v-if="matchMapFiltered[map.id - 1] != null">
+                                                <template v-if="matchMapFiltered[map.id - 1].type=== 2 || matchMapFiltered[map.id - 1].type=== 3">
+                                                    <div class="img-container pick">
+                                                        <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    </div>
+                                                </template>
+                                                <template
+                                                        v-else-if="matchMapFiltered[map.id - 1].type === 1 || matchMapFiltered[map.id - 1].type === 4">
+                                                    <div class="img-container ban">
+                                                        <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    </div>
+                                                </template>
+                                                <template v-else>
+                                                    <div class="img-container">
+                                                        <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    </div>
+                                                </template>
                                             </template>
                                             <template v-else>
                                                 <div class="img-container">
@@ -387,10 +395,10 @@ export default {
 
             axios.post(`${this.$store.state.backendURL}/api/matches/maps/`, data, this.$store.getters.authHeader
             ).then(() => {
-                this.getMatchMaps()
                 this.$toast.success(this.$t('matches.maps.toasts.map_added'), this.$t('generic.success'), {timeout: 2000})
+                this.loadingSmall = ""
             }).catch((error) => {
-                console.log(error.response)
+                console.error(error.response)
                 this.$toast.error(this.$t('matches.maps.toasts.map_added_failed'), this.$t('generic.error'))
             })
         },
@@ -401,9 +409,8 @@ export default {
 
             axios.delete(`${this.$store.state.backendURL}/api/matches/maps/${last_map_id}/`, this.$store.getters.authHeader
             ).then(() => {
-                this.getMatchMaps()
                 this.$toast.success(this.$t('matches.maps.toasts.map_removed'), this.$t('generic.success'), {timeout: 2000})
-
+                this.loadingSmall = ""
             }).catch((error) => {
                 console.log(error.response)
                 this.$toast.error(this.$t('matches.maps.toasts.map_removed_failed'), this.$t('generic.error'))
@@ -419,6 +426,7 @@ export default {
                 axios.delete(`${this.$store.state.backendURL}/api/matches/maps/${m.id}/`, this.$store.getters.authHeader
                 ).then(() => {
                     this.resetAllCounter--
+                    this.loadingSmall = ""
                 }).catch((error) => {
                     console.log(error.response)
                     this.$toast.error(this.$t('matches.maps.toasts.map_removed_failed'), this.$t('generic.error'))
@@ -476,6 +484,7 @@ export default {
     border-radius: 5px;
     box-shadow: 0 0 2px 0 green;
 }
+
 img {
     border-radius: 5px;
 }

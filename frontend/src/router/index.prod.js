@@ -17,6 +17,8 @@ import OperatorBans from "@/views/match/OperatorBans";
 import Rounds from "@/views/match/Rounds";
 import OverlayControlCenter from "@/views/popouts/OverlayControlCenter";
 import StartOverlay from "@/views/overlays/StartOverlay";
+import InGameOverlay from "@/views/overlays/InGameOverlay";
+import MapsOverlay from "@/views/overlays/MapsOverlay";
 
 Vue.use(VueRouter)
 
@@ -92,6 +94,16 @@ const routes = [
         path: '/overlays/:username/start',
         name: "Start Overlay",
         component: StartOverlay
+    },
+    {
+        path: '/overlays/:username/maps',
+        name: "Maps Overlay",
+        component: MapsOverlay
+    },
+    {
+        path: '/overlays/:username/ingame',
+        name: "InGame Overlay",
+        component: InGameOverlay
     },
 
     // Data
