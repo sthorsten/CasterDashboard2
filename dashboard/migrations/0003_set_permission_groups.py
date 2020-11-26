@@ -83,5 +83,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(create_user_groups),
+        # Disabled temporarily
+        # migrations.RunPython(create_user_groups),
     ]

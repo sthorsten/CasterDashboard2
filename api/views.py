@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from pip._vendor import requests
 from rest_framework import viewsets, filters
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -323,6 +323,7 @@ class TickerOverlayDataViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def version(request):
     current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
     return Response({'version': current_version})

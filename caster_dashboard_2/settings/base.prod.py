@@ -80,10 +80,15 @@ TEMPLATES = [
     },
 ]
 
+PASSWORD_HASHERS = [
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',  # temporary until release of Django 3.2
+    # 'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
+]
+
 # Password validation
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -137,7 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    os.path.join(BASE_DIR, "frontend", "dist")
+    # os.path.join(BASE_DIR, "frontend", "dist")
 ]
 
 MEDIA_URL = '/media/'
