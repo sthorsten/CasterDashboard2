@@ -134,10 +134,10 @@
 
 <script>
 import axios from "axios"
-import {OverlayStateWebsocketInGame} from "@/mixins/OverlayStateWebsocketInGame";
-import {MatchDataWebsocketInGame} from "@/mixins/MatchDataWebsocketInGame";
-import {MatchMapWebsocketInGame} from "@/mixins/MatchMapWebsocketInGame";
-import {RoundDataWebsocketInGame} from "@/mixins/RoundDataWebsocketInGame";
+import {OverlayStateWebsocketInGame} from "@/mixins/websocket/OverlayStateWebsocketInGame";
+import {MatchDataWebsocketInGame} from "@/mixins/websocket/MatchDataWebsocketInGame";
+import {MatchMapWebsocketInGame} from "@/mixins/websocket/MatchMapWebsocketInGame";
+import {RoundDataWebsocketInGame} from "@/mixins/websocket/RoundDataWebsocketInGame";
 
 require('vue2-animate/dist/vue2-animate.min.css')
 

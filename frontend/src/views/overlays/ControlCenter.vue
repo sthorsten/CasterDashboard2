@@ -177,7 +177,7 @@ import BaseLayout from "@/components/layout/BaseLayout";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
 import axios from 'axios';
-import {OverlayStateWebsocket} from "@/mixins/OverlayStateWebsocket";
+import {OverlayStateWebsocket} from "@/mixins/websocket/OverlayStateWebsocket";
 
 export default {
     name: "ControlCenter",

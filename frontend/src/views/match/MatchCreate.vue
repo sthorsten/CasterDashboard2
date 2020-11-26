@@ -5,7 +5,7 @@
 
         <b-row>
 
-            <!-- Create match form -->
+            <!-- Create matchMaps form -->
             <b-col md="8">
 
                 <!-- Show content once team data is loaded -->
@@ -16,7 +16,7 @@
                             <validation-observer ref="observer" v-slot="{ handleSubmit }">
                                 <b-form @submit.stop.prevent="handleSubmit(onSubmit)" novalidate>
 
-                                    <!-- First row - User / Share match -->
+                                    <!-- First row - User / Share matchMaps -->
                                     <b-row>
 
                                         <b-col>
@@ -125,7 +125,7 @@
 
                                         <!-- Match Subtitle / Playday -->
                                         <b-col lg="6">
-                                            <b-form-group class="mb-3" :label="$t('matches.create.playday')" label-for="match-playday-name">
+                                            <b-form-group class="mb-3" :label="$t('matches.create.playday')" label-for="matchMaps-playday-name">
                                                 <b-input-group>
                                                     <b-form-input id="match-title-name" v-model="match_playday"
                                                                   :placeholder="$t('matches.create.playday_placeholder')"/>

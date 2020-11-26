@@ -318,9 +318,9 @@ import BaseLayout from "@/components/layout/BaseLayout";
 import axios from "axios";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
-import {RoundDataWebsocketInGame} from "@/mixins/RoundDataWebsocketInGame";
-import {MatchDataWebsocketInGame} from "@/mixins/MatchDataWebsocketInGame";
-import {MatchMapWebsocketInGame} from "@/mixins/MatchMapWebsocketInGame";
+import {RoundDataWebsocketInGame} from "@/mixins/websocket/RoundDataWebsocketInGame";
+import {MatchDataWebsocketInGame} from "@/mixins/websocket/MatchDataWebsocketInGame";
+import {MatchMapWebsocketInGame} from "@/mixins/websocket/MatchMapWebsocketInGame";
 
 export default {
     name: "Rounds",
@@ -626,7 +626,7 @@ export default {
                             }
 
                             if (nextURL === "overview") {
-                                // Redirect to match overview
+                                // Redirect to matchMaps overview
                                 this.$toast.info(this.$t('matches.rounds.match_finished'))
                                 this.$router.push({name: "Match Overview", params: {id: this.matchData.id}})
 

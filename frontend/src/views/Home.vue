@@ -15,7 +15,7 @@
 
         <b-row>
 
-            <!-- Current match -->
+            <!-- Current matchMaps -->
             <b-col cols="12" sm="6" lg="3">
 
             </b-col>

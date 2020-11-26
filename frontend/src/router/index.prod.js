@@ -19,6 +19,7 @@ import OverlayControlCenter from "@/views/popouts/OverlayControlCenter";
 import StartOverlay from "@/views/overlays/StartOverlay";
 import InGameOverlay from "@/views/overlays/InGameOverlay";
 import MapsOverlay from "@/views/overlays/MapsOverlay";
+import MatchDetails from "@/views/match/MatchDetails";
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,11 @@ const routes = [
         path: '/dashboard/matches/:id/overview',
         name: "Match Overview",
         component: MatchOverview
+    },
+    {
+        path: '/dashboard/matches/:id/details',
+        name: "Match Details",
+        component: MatchDetails
     },
     {
         path: '/dashboard/matches/:id/maps',

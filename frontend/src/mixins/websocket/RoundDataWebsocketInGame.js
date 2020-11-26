@@ -1,5 +1,5 @@
 /**
- * Creates and handles a websocket connection to the backend to retrieve realtime information about all rounds in the current match and map
+ * Creates and handles a websocket connection to the backend to retrieve realtime information about all rounds in the current matchMaps and map
  */
 
 export const RoundDataWebsocketInGame = {

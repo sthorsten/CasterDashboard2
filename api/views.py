@@ -17,6 +17,7 @@ from pip._vendor import requests
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action, api_view
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -39,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filterset_fields = ['username']
@@ -174,7 +176,7 @@ class MatchViewSet(viewsets.ModelViewSet):
 class MatchMapViewSet(viewsets.ModelViewSet):
     queryset = MatchMap.objects.all()
     serializer_class = MatchMapSerializer
-    filterset_fields = ['match', 'map']
+    filterset_fields = ['match', 'map', 'status']
 
     # MapBan elements with a specific match id
     # URL: /api/match/<id>/maps
@@ -262,6 +264,7 @@ class OverlayStyleViewSet(viewsets.ModelViewSet):
 
 
 class OverlayStateViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = OverlayState.objects.all()
     serializer_class = OverlayStateSerializer
     filterset_fields = ['user']
@@ -293,6 +296,7 @@ class OverlayStateViewSet(viewsets.ModelViewSet):
 
 
 class MatchOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = MatchOverlayData.objects.all()
     serializer_class = MatchOverlayDataSerializer
     filterset_fields = ['user']

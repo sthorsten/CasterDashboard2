@@ -49,8 +49,8 @@
 
 <script>
 import axios from "axios";
-import {MatchDataWebsocketInGame} from "@/mixins/MatchDataWebsocketInGame";
-import {OverlayStateWebsocketInGame} from "@/mixins/OverlayStateWebsocketInGame";
+import {MatchDataWebsocketInGame} from "@/mixins/websocket/MatchDataWebsocketInGame";
+import {OverlayStateWebsocketInGame} from "@/mixins/websocket/OverlayStateWebsocketInGame";
 
 require('vue2-animate/dist/vue2-animate.min.css')
 

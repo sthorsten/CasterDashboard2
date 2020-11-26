@@ -23,6 +23,7 @@
         "loading_failed": "Loading failed :/",
         "error": "Error",
         "success": "Success",
+        "info": "Info",
         "quick_info": "Quick Info",
         "quick actions": "Quick Actions",
         "wip": "Work in Progress :/",
@@ -37,7 +38,13 @@
         "off": "off",
         "popout": "Popout",
         "copy_to_clipboard": "Copy URL to clipboard",
-        "open_in_new_tab": "Open in a new tab"
+        "open_in_new_tab": "Open in a new tab",
+        "warning": "Warning",
+        "contact_admin": "Please try again later or contact an administrator!"
+    },
+    "websocket": {
+        "connection_lost": "Lost connection to the server. Trying to reconnect...",
+        "error": "Failed to establish a connection to the server!"
     },
     "navigation": {
         "login": "Login",
@@ -63,7 +70,8 @@
         "league_admin": "League Admin",
         "user_settings": "User Settings",
         "profile": "Profile & Settings",
-        "log_out": "Log Out"
+        "log_out": "Log Out",
+        "match_details": "Match Details"
     },
     "login": {
         "sign_in": "Sign in",

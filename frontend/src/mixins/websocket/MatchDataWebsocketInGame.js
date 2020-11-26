@@ -1,5 +1,5 @@
 /**
- * Creates and handles a websocket connection to the backend to retrieve realtime information about the current match
+ * Creates and handles a websocket connection to the backend to retrieve realtime information about the current matchMaps
  */
 
 export const MatchDataWebsocketInGame = {
