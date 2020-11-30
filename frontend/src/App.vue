@@ -25,10 +25,12 @@ export default {
         }
 
         // Get Version
-        axios.get(`${this.$store.state.backendURL}/api/version/`, this.$store.getters.authHeader
-        ).then((response) => {
-            this.$store.commit('setVersion', response.data.version)
-        })
+        if (this.loggedIn) {
+            axios.get(`${this.$store.state.backendURL}/api/version/`, this.$store.getters.authHeader
+            ).then((response) => {
+                this.$store.commit('setVersion', response.data.version)
+            })
+        }
     }
 }
 </script>

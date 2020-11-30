@@ -12,6 +12,17 @@ WSGI_APPLICATION = 'caster_dashboard_2.routing.application'
 
 ASGI_APPLICATION = 'caster_dashboard_2.routing.application'
 
+# Django Channels Redis
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -170,12 +181,15 @@ REST_FRAMEWORK = {
 
 CSRF_TRUSTED_ORIGINS = [
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    # Internal docker network
+    'dashboard'
 ]
 
-# CORS Headers
-
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1',
-    'http://localhost',
+# CORS Allowed Origins
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^(https?:\/\/localhost):(\d*)",
+    r"^(https?:\/\/127.0.0.1):(\d*)",
+    # Internal docker network
+    r"^(https?:\/\/dashboard):(\d*)",
 ]

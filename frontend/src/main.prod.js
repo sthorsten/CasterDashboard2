@@ -74,11 +74,25 @@ const vuexStorage = new VuexPersistence({
 
 const store = new Vuex.Store({
     state: {
-        backendURL: "",
-        frontendURL: "",
+        version: "Version 0.0.0",
+        frontendURL: "http://localhost",
+        backendURL: "http://localhost",
         userToken: "",
         user: null,
         loggedIn: false
+    },
+    getters: {
+        websocketURL: state => {
+            if (state.backendURL.startsWith("http://")){
+                return "ws://" + state.backendURL.substr(7)
+            }
+            return "wss://" + state.backendURL
+        },
+        authHeader: state => {
+            return {
+                headers: {"Authorization": "Token " + state.userToken}
+            }
+        }
     },
     mutations: {
         setUserToken(state, userToken) {
@@ -89,6 +103,9 @@ const store = new Vuex.Store({
         },
         setLoggedIn(state, logInStatus) {
             state.loggedIn = logInStatus
+        },
+        setVersion(state, version){
+            state.version = version
         }
     },
     plugins: [vuexStorage.plugin]

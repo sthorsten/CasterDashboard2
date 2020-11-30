@@ -86,7 +86,7 @@ const store = new Vuex.Store({
             if (state.backendURL.startsWith("http://")){
                 return "ws://" + state.backendURL.substr(7)
             }
-            return "ws://" + state.backendURL
+            return "wss://" + state.backendURL
         },
         authHeader: state => {
             return {

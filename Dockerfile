@@ -16,7 +16,7 @@ COPY ./frontend/vue.config.prod.js ./vue.config.js
 COPY ./frontend/src/main.prod.js ./src/main.js
 COPY ./frontend/src/router/index.prod.js ./src/router/index.js
 
-RUN npm run build
+RUN npm run build -- --mode development
 
 # Move asset files
 RUN mv ./dist/assets/* ./dist

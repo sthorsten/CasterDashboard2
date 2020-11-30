@@ -144,8 +144,10 @@ CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1'
 ]
 
-# CORS Headers
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8080',
-    'http://localhost:8080'
+# CORS Allowed Origins
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^(https?:\/\/localhost):(\d*)",
+    r"^(https?:\/\/127.0.0.1):(\d*)",
+    # Internal docker network
+    r"^(https?:\/\/dashboard):(\d*)",
 ]
