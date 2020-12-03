@@ -86,7 +86,7 @@ const store = new Vuex.Store({
             if (state.backendURL.startsWith("http://")){
                 return "ws://" + state.backendURL.substr(7)
             }
-            return "wss://" + state.backendURL
+            return "wss://" + state.backendURL.substr(8)
         },
         authHeader: state => {
             return {
@@ -106,6 +106,10 @@ const store = new Vuex.Store({
         },
         setVersion(state, version){
             state.version = version
+        },
+        setURL(state, url){
+          state.frontendURL = url;
+          state.backendURL = url; // Assuming identical in docker environment
         }
     },
     plugins: [vuexStorage.plugin]

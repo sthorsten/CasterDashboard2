@@ -15,6 +15,9 @@ export default {
         }
     },
     created() {
+        // Set Frontend & Backend URL
+        this.$store.commit('setURL', window.location.origin)
+
         // Skip Login redirect for all overlays
         if (this.$route.name === "Start Overlay") {
             return
