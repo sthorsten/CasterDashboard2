@@ -6,6 +6,8 @@ from websockets.new_consumers import *
 websocket_urlpatterns = [
     re_path(r'ws/match/(?P<id>\w+)/$', MatchConsumer.as_asgi()),
     re_path(r'ws/matches/(?P<id>\w+)/maps/$', MatchMapAllConsumer.as_asgi()),
+    re_path(r'ws/matches/(?P<match_id>\w+)/map/(?P<map_id>\w+)/$', MatchMapSingleConsumer.as_asgi()),
+
 
     re_path(r'ws/match_data/(?P<user>\w+)/$', MatchDataConsumer2.as_asgi()),
     re_path(r'ws/map_data/(?P<user>\w+)/$', MapDataConsumer2.as_asgi()),

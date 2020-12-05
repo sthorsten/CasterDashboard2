@@ -15,7 +15,7 @@ export const RoundDataWebsocketInGame = {
     methods: {
         connectRoundDataWebsocket() {
             // Create websocket connection
-            this.roundDataWebsocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/round_data/${this.matchData.id}/${this.matchMap.map}/`)
+            this.roundDataWebsocket = new WebSocket(`${this.$store.getters.websocketURL}/ws/round_data/${this.match.id}/${this.matchMap.map}/`)
 
             this.roundDataWebsocket.onopen = () => {
                 console.info("RoundData websocket connected.")

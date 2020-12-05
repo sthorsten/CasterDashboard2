@@ -117,7 +117,7 @@
                                 </b-col>
 
                                 <b-col cols="3">
-                                    <i class="text-bold">{{ matchMaps.team_blue_name }}</i>
+                                    <i class="text-bold">{{ match.team_blue_name }}</i>
                                 </b-col>
 
                                 <b-col cols="4">
@@ -125,7 +125,7 @@
                                 </b-col>
 
                                 <b-col cols="3">
-                                    <i class="text-bold">{{ matchMaps.team_orange_name }}</i>
+                                    <i class="text-bold">{{ match.team_orange_name }}</i>
                                 </b-col>
 
                             </b-row>
@@ -346,7 +346,6 @@ export default {
             if (newState === 0) {
                 console.log("Remove all complete")
                 this.$toast.success(this.$t('matches.maps.toasts.maps_removed'), this.$t('generic.success'))
-                this.getMatchMaps()
             }
         }
     },

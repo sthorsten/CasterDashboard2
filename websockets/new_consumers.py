@@ -123,7 +123,54 @@ class MatchMapAllConsumer(JsonWebsocketConsumer):
 
 
 class MatchMapSingleConsumer(JsonWebsocketConsumer):
-    pass
+    """ Provides match map data for a single map over a websocket connection given a match and a map id
+        URL: /ws/matches/<id>/map/<id>/
+    """
+
+    def connect(self):
+        self.accept()
+
+        # Set match and map id
+        try:
+            self.match_id = int(self.scope['url_route']['kwargs']['match_id'])
+            self.map_id = int(self.scope['url_route']['kwargs']['map_id'])
+        except ValueError:
+            # Close connection if the provided match id is not a valid number
+            self.send_json(
+                {"status": "Rejected", "reason": "Invalid match or map id!"})
+            self.close(code=4000)
+            return
+
+        # Local import to prevent circular imports
+        from dashboard.models.models import MatchMap
+        from dashboard.models.serializers import MatchMapSerializer
+
+        # Get Match maps
+        matchMap = MatchMap.objects.get(match=self.match_id, map=self.map_id)
+
+        # Set channels group name
+        self.group_name = f"matches_{str(self.match_id)}_map_{str(self.map_id)}"
+
+        # Add group django channels
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+
+        # Send match maps back to connecting client
+        self.send_json(MatchMapSerializer(matchMap).data)
+
+    def disconnect(self, code):
+        # Leave channels group
+        if hasattr(self, 'group_name'):
+            async_to_sync(self.channel_layer.group_discard)(
+                self.group_name,
+                self.channel_name
+            )
+
+    def send_to_client(self, event):
+        # Relay message from group to client
+        self.send_json(event['data'])
 
 
 """

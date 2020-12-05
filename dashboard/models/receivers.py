@@ -200,52 +200,50 @@ def match_maps_post_save(sender, instance, **kwargs):
 
     # Send data to websockets on change
     from dashboard.models.serializers import MatchMapSerializer
-    serialized_data = MatchMapSerializer(instance).data  # Single matchMap
-    all_map_data = MatchMap.objects.filter(match=instance.match).all()  # All matchMaps
-    all_map_data_serialized = MatchMapSerializer(all_map_data, many=True).data
-
     channel_layer = get_channel_layer()
-    for user in instance.match.user.all():
-        async_to_sync(channel_layer.group_send)(
-            "match_map_" + user.username,
-            {
-                'type': 'send_to_client',
-                'data': serialized_data
-            }
-        )
-        async_to_sync(channel_layer.group_send)(
-            "map_data_" + user.username,
-            {
-                'type': 'send_to_client',
-                'data': all_map_data_serialized
-            }
-        )
+
+    # MatchMapsAll
+    matchMaps = MatchMap.objects.filter(match=instance.match)
+    group_name = f"matches_{str(instance.match.id)}_maps"
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(matchMaps, many=True).data
+        }
+    )
+
+    # MatchMapSingle
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}"
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(instance).data
+        }
+    )
 
 
 @receiver(post_delete, sender=MatchMap)
 def match_maps_post_delete(sender, instance, **kwargs):
     # Send data to websockets on change
     from dashboard.models.serializers import MatchMapSerializer
-    serialized_data = MatchMapSerializer(instance).data  # Single matchMap
-    all_map_data = MatchMap.objects.filter(match=instance.match).all()  # All matchMaps
-    all_map_data_serialized = MatchMapSerializer(all_map_data, many=True).data
-
     channel_layer = get_channel_layer()
-    for user in instance.match.user.all():
-        async_to_sync(channel_layer.group_send)(
-            "match_map_" + user.username,
-            {
-                'type': 'send_to_client',
-                'data': serialized_data
-            }
-        )
-        async_to_sync(channel_layer.group_send)(
-            "map_data_" + user.username,
-            {
-                'type': 'send_to_client',
-                'data': all_map_data_serialized
-            }
-        )
+
+    # Get Match maps
+    matchMaps = MatchMap.objects.filter(match=instance.match)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_maps"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(matchMaps, many=True).data
+        }
+    )
 
 
 @receiver(post_save, sender=OperatorBans)

@@ -91,29 +91,29 @@
 
                                     <b-row>
                                         <b-col xl="6">
-                                            <template v-if="winTeam === matchData.team_blue">
+                                            <template v-if="winTeam === match.team_blue">
                                                 <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
-                                                    {{ matchData.team_blue_name }}
+                                                    {{ match.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
-                                                       @click="selectWinTeam(matchData.team_blue)">
-                                                    {{ matchData.team_blue_name }}
+                                                       @click="selectWinTeam(match.team_blue)">
+                                                    {{ match.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                         </b-col>
 
                                         <b-col xl="6">
-                                            <template v-if="winTeam === matchData.team_orange">
+                                            <template v-if="winTeam === match.team_orange">
                                                 <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
-                                                    {{ matchData.team_orange_name }}
+                                                    {{ match.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
-                                                       @click="selectWinTeam(matchData.team_orange)">
-                                                    {{ matchData.team_orange_name }}
+                                                       @click="selectWinTeam(match.team_orange)">
+                                                    {{ match.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                         </b-col>
@@ -128,29 +128,29 @@
 
                                     <b-row>
                                         <b-col xl="6">
-                                            <template v-if="ofTeam === matchData.team_blue">
+                                            <template v-if="ofTeam === match.team_blue">
                                                 <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
-                                                    {{ matchData.team_blue_name }}
+                                                    {{ match.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
-                                                       @click="selectOFTeam(matchData.team_blue)">
-                                                    {{ matchData.team_blue_name }}
+                                                       @click="selectOFTeam(match.team_blue)">
+                                                    {{ match.team_blue_name }}
                                                 </b-btn>
                                             </template>
                                         </b-col>
 
                                         <b-col xl="6">
-                                            <template v-if="ofTeam === matchData.team_orange">
+                                            <template v-if="ofTeam === match.team_orange">
                                                 <b-btn variant="primary" class="btn-block mb-2 mb-xl-0">
-                                                    {{ matchData.team_orange_name }}
+                                                    {{ match.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                             <template v-else>
                                                 <b-btn variant="outline-primary" class="btn-block mb-2 mb-xl-0" :disabled="mapLocked"
-                                                       @click="selectOFTeam(matchData.team_orange)">
-                                                    {{ matchData.team_orange_name }}
+                                                       @click="selectOFTeam(match.team_orange)">
+                                                    {{ match.team_orange_name }}
                                                 </b-btn>
                                             </template>
                                         </b-col>
@@ -319,12 +319,12 @@ import axios from "axios";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
 import {RoundDataWebsocketInGame} from "@/mixins/websocket/RoundDataWebsocketInGame";
-import {MatchDataWebsocketInGame} from "@/mixins/websocket/MatchDataWebsocketInGame";
-import {MatchMapWebsocketInGame} from "@/mixins/websocket/MatchMapWebsocketInGame";
+import {MatchWebsocket} from "@/mixins/websocket/MatchWebsocket";
+import {MatchMapSingleWebsocket} from "@/mixins/websocket/MatchMapSingleWebsocket";
 
 export default {
     name: "Rounds",
-    mixins: [MatchDataWebsocketInGame, MatchMapWebsocketInGame, RoundDataWebsocketInGame],
+    mixins: [MatchWebsocket, MatchMapSingleWebsocket, RoundDataWebsocketInGame],
 
     data() {
         return {
@@ -395,6 +395,14 @@ export default {
     },
 
     computed: {
+        matchID() {
+            return this.$route.params.match_id
+        },
+
+        mapID() {
+            return this.$route.params.map_id
+        },
+
         user() {
             return this.$store.state.user.username
         },
@@ -406,8 +414,8 @@ export default {
         },
 
         ofData() {
-            let ofBlue = this.roundData.filter(r => r.of_team === this.matchData.team_blue).length
-            let ofOrange = this.roundData.filter(r => r.of_team === this.matchData.team_orange).length
+            let ofBlue = this.roundData.filter(r => r.of_team === this.match.team_blue).length
+            let ofOrange = this.roundData.filter(r => r.of_team === this.match.team_orange).length
             return [ofBlue, ofOrange]
         },
 
@@ -435,7 +443,7 @@ export default {
 
         ofDataOptions() {
             let options = Object.assign({}, this.chartOptions)
-            options['labels'] = [this.matchData.team_blue_name, this.matchData.team_orange_name]
+            options['labels'] = [this.match.team_blue_name, this.match.team_orange_name]
             return options
         },
 
@@ -468,22 +476,22 @@ export default {
             return this.matchMap.status === 3
         },
 
-        matchDataLoadComplete() {
-            return this.matchData !== null && this.matchMap !== null
+        matchLoadComplete() {
+            return this.match !== null && this.matchMap !== null
         },
 
         loadComplete() {
-            return this.matchDataLoadComplete && this.bombSpotsLoaded && this.roundData !== null
+            return this.matchLoadComplete && this.bombSpotsLoaded && this.roundData !== null
         },
 
         websocketConnectionLost() {
-            return this.matchDataWebsocketStatus === "reconnecting" || this.matchMapWebsocketStatus === "reconnecting" || this.roundDataWebsocketStatus === "reconnecting"
+            return this.matchWebsocketStatus === "reconnecting" || this.matchMapWebsocketStatus === "reconnecting" || this.roundDataWebsocketStatus === "reconnecting"
         },
 
         bcPath() {
-            if (this.matchDataLoadComplete) {
+            if (this.matchLoadComplete) {
                 return ["Dashboard", "Matches", this.$route.params.match_id,
-                    this.matchMap.map_name + " (Map " + this.matchMap.play_order + "/" + this.matchData.best_of + ")",
+                    this.matchMap.map_name + " (Map " + this.matchMap.play_order + "/" + this.match.best_of + ")",
                     "Rounds"]
             } else {
                 return ["Dashboard", "Matches", this.$route.params.match_id, this.$route.params.map_id, "Rounds"]
@@ -492,7 +500,7 @@ export default {
     },
 
     watch: {
-        matchDataLoadComplete: function (newState) {
+        matchLoadComplete: function (newState) {
             if (newState) this.connectRoundDataWebsocket()
         },
         loadComplete: function (newState) {
@@ -542,7 +550,7 @@ export default {
             if (this.notes) notes = this.notes.replace("\n", "\\n")
 
             let data = {
-                match: this.matchData.id,
+                match: this.match.id,
                 map: this.matchMap.map,
                 bomb_spot: this.selectedBombSpot.id,
                 win_type: this.selectedWinType.id,
@@ -628,7 +636,7 @@ export default {
                             if (nextURL === "overview") {
                                 // Redirect to matchMaps overview
                                 this.$toast.info(this.$t('matches.rounds.match_finished'))
-                                this.$router.push({name: "Match Overview", params: {id: this.matchData.id}})
+                                this.$router.push({name: "Match Overview", params: {id: this.match.id}})
 
                             } else if (nextURL === "nextMap") {
                                 // Redirect to next map
@@ -636,7 +644,7 @@ export default {
                                 ).then((response) => {
                                     this.$toast.info(this.$t('matches.rounds.map_finished'))
                                     let next_map_id = response.data.filter(m => (m.play_order === this.matchMap.play_order + 1))[0].map
-                                    this.$router.push({name: "Operator Bans", params: {match_id: this.matchData.id, map_id: next_map_id}})
+                                    this.$router.push({name: "Operator Bans", params: {match_id: this.match.id, map_id: next_map_id}})
                                 })
                             }
                         })
@@ -675,6 +683,8 @@ export default {
     },
     created() {
         this.getBombSpots()
+        this.connectMatchWebsocket()
+        this.connectMatchMapSingleWebsocket()
     },
 
     components: {
