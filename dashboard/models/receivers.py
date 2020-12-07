@@ -262,13 +262,19 @@ def operator_bans_post_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Round)
 def round_post_save(sender, instance, **kwargs):
-    # Send match to websockets on change
+    # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
-    rounds = Round.objects.filter(match=instance.match, map=instance.map).all()
-
     channel_layer = get_channel_layer()
+
+    # Get Match maps
+    rounds = Round.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_rounds"
+
+    # Send match maps to client(s)
     async_to_sync(channel_layer.group_send)(
-        "round_data_" + str(instance.match.id) + "_" + str(instance.map.id),
+        group_name,
         {
             'type': 'send_to_client',
             'data': RoundSerializer(rounds, many=True).data
@@ -278,13 +284,19 @@ def round_post_save(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Round)
 def round_post_delete(sender, instance, **kwargs):
-    # Send match to websockets on change
+    # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
-    rounds = Round.objects.filter(match=instance.match, map=instance.map).all()
-
     channel_layer = get_channel_layer()
+
+    # Get Match maps
+    rounds = Round.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_rounds"
+
+    # Send match maps to client(s)
     async_to_sync(channel_layer.group_send)(
-        "round_data_" + str(instance.match.id) + "_" + str(instance.map.id),
+        group_name,
         {
             'type': 'send_to_client',
             'data': RoundSerializer(rounds, many=True).data

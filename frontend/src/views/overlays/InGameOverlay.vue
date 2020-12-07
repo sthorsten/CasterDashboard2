@@ -137,13 +137,12 @@ import axios from "axios"
 import {OverlayStateWebsocketInGame} from "@/mixins/websocket/OverlayStateWebsocketInGame";
 import {MatchDataWebsocketInGame} from "@/mixins/websocket/MatchDataWebsocketInGame";
 import {MatchMapWebsocketInGame} from "@/mixins/websocket/MatchMapWebsocketInGame";
-import {RoundDataWebsocketInGame} from "@/mixins/websocket/RoundDataWebsocketInGame";
 
 require('vue2-animate/dist/vue2-animate.min.css')
 
 export default {
     name: "InGameOverlay",
-    mixins: [OverlayStateWebsocketInGame, MatchDataWebsocketInGame, MatchMapWebsocketInGame, RoundDataWebsocketInGame],
+    mixins: [OverlayStateWebsocketInGame, MatchDataWebsocketInGame, MatchMapWebsocketInGame],
     data() {
         return {
             titleAnimated: false,

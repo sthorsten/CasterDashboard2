@@ -185,7 +185,7 @@
 
                                 <b-col lg="6">
                                     <b-btn variant="danger" class="btn-block"
-                                           @click="removeLastRound" :disabled="roundData.length === 0 || mapLocked">
+                                           @click="removeLastRound" :disabled="rounds.length === 0 || mapLocked">
                                         {{ $t('matches.rounds.remove_round') }}
                                         <b-spinner v-if="loadingSmall === 'removeRound'" variant="light" small/>
                                     </b-btn>
@@ -208,7 +208,7 @@
                 <b-col lg="6" order="2" order-lg="1">
                     <CustomCard color="success" outline divider :title="$t('matches.rounds.live_stats')">
                         <template #card-body>
-                            <b-row v-if="roundData.length > 0" class="text-center">
+                            <b-row v-if="rounds.length > 0" class="text-center">
 
                                 <b-col cols="12" md="6" lg="12" xl="6" class="mb-2">
                                     <label>{{ $t('matches.rounds.atk_def_wins') }}</label>
@@ -259,7 +259,7 @@
                     <CustomCard color="warning" outline divider :title="$t('matches.rounds.round_details')">
                         <template #card-body>
 
-                            <b-table table-variant="dark" small striped sort-icon-left responsive :items="roundData" :fields="roundTableFields"
+                            <b-table table-variant="dark" small striped sort-icon-left responsive :items="rounds" :fields="roundTableFields"
                                      sort-by="round_no">
 
                                 <template #cell(bomb_spot)="data">
@@ -318,13 +318,13 @@ import BaseLayout from "@/components/layout/BaseLayout";
 import axios from "axios";
 import CustomCard from "@/components/elements/CustomCard";
 import StatusOverlay from "@/components/elements/StatusOverlay";
-import {RoundDataWebsocketInGame} from "@/mixins/websocket/RoundDataWebsocketInGame";
 import {MatchWebsocket} from "@/mixins/websocket/MatchWebsocket";
 import {MatchMapSingleWebsocket} from "@/mixins/websocket/MatchMapSingleWebsocket";
+import {RoundWebsocket} from "@/mixins/websocket/RoundWebsocket";
 
 export default {
     name: "Rounds",
-    mixins: [MatchWebsocket, MatchMapSingleWebsocket, RoundDataWebsocketInGame],
+    mixins: [MatchWebsocket, MatchMapSingleWebsocket, RoundWebsocket],
 
     data() {
         return {
@@ -408,30 +408,30 @@ export default {
         },
 
         sideWinData() {
-            let atkWins = this.roundData.filter(r => r.win_team === r.atk_team).length
-            let defWins = this.roundData.length - atkWins
+            let atkWins = this.rounds.filter(r => r.win_team === r.atk_team).length
+            let defWins = this.rounds.length - atkWins
             return [atkWins, defWins]
         },
 
         ofData() {
-            let ofBlue = this.roundData.filter(r => r.of_team === this.match.team_blue).length
-            let ofOrange = this.roundData.filter(r => r.of_team === this.match.team_orange).length
+            let ofBlue = this.rounds.filter(r => r.of_team === this.match.team_blue).length
+            let ofOrange = this.rounds.filter(r => r.of_team === this.match.team_orange).length
             return [ofBlue, ofOrange]
         },
 
         typeWinData() {
             let typeData = [0, 0, 0, 0]
-            this.roundData.forEach((r) => {
+            this.rounds.forEach((r) => {
                 typeData[r.win_type - 1]++
             })
             return typeData;
         },
 
         bombSpotPickData() {
-            let bs1 = this.roundData.filter(r => r.bomb_spot === this.bombSpots[0].id).length
-            let bs2 = this.roundData.filter(r => r.bomb_spot === this.bombSpots[1].id).length
-            let bs3 = this.roundData.filter(r => r.bomb_spot === this.bombSpots[2].id).length
-            let bs4 = this.roundData.filter(r => r.bomb_spot === this.bombSpots[3].id).length
+            let bs1 = this.rounds.filter(r => r.bomb_spot === this.bombSpots[0].id).length
+            let bs2 = this.rounds.filter(r => r.bomb_spot === this.bombSpots[1].id).length
+            let bs3 = this.rounds.filter(r => r.bomb_spot === this.bombSpots[2].id).length
+            let bs4 = this.rounds.filter(r => r.bomb_spot === this.bombSpots[3].id).length
             return [bs1, bs2, bs3, bs4]
         },
 
@@ -462,7 +462,7 @@ export default {
         },
 
         canBeFinished() {
-            let lastRound = this.roundData.filter(r => r.round_no === this.roundData.length)[0]
+            let lastRound = this.rounds.filter(r => r.round_no === this.rounds.length)[0]
             if (lastRound) {
                 return (lastRound.score_blue >= 7 && lastRound.score_orange < 6) // Regular blue win
                         || (lastRound.score_orange >= 7 && lastRound.score_blue < 6) // Regular orange win
@@ -481,11 +481,11 @@ export default {
         },
 
         loadComplete() {
-            return this.matchLoadComplete && this.bombSpotsLoaded && this.roundData !== null
+            return this.matchLoadComplete && this.bombSpotsLoaded && this.rounds !== null
         },
 
         websocketConnectionLost() {
-            return this.matchWebsocketStatus === "reconnecting" || this.matchMapWebsocketStatus === "reconnecting" || this.roundDataWebsocketStatus === "reconnecting"
+            return this.matchWebsocketStatus === "reconnecting" || this.matchMapWebsocketStatus === "reconnecting" || this.roundsWebsocketStatus === "reconnecting"
         },
 
         bcPath() {
@@ -500,9 +500,6 @@ export default {
     },
 
     watch: {
-        matchLoadComplete: function (newState) {
-            if (newState) this.connectRoundDataWebsocket()
-        },
         loadComplete: function (newState) {
             if (newState) this.loadingStatus = "loaded"
         }
@@ -576,7 +573,7 @@ export default {
 
         removeLastRound() {
             this.loadingSmall = "removeRound"
-            let lastRound = this.roundData.filter(r => r.round_no === this.roundData.length)[0]
+            let lastRound = this.rounds.filter(r => r.round_no === this.rounds.length)[0]
 
             axios.delete(`${this.$store.state.backendURL}/api/matches/round/${lastRound.id}/`, this.$store.getters.authHeader
             ).then(() => {
@@ -598,7 +595,7 @@ export default {
                 footerBgVariant: "dark"
             }).then(value => {
                 if (value) {
-                    let lastRound = this.roundData.filter(r => r.round_no === this.roundData.length)[0]
+                    let lastRound = this.rounds.filter(r => r.round_no === this.rounds.length)[0]
                     let winTeam = null
                     if (lastRound.score_blue !== lastRound.score_orange) {
                         winTeam = lastRound.win_team
@@ -634,7 +631,7 @@ export default {
                             }
 
                             if (nextURL === "overview") {
-                                // Redirect to matchMaps overview
+                                // Redirect to rounds overview
                                 this.$toast.info(this.$t('matches.rounds.match_finished'))
                                 this.$router.push({name: "Match Overview", params: {id: this.match.id}})
 
@@ -685,6 +682,7 @@ export default {
         this.getBombSpots()
         this.connectMatchWebsocket()
         this.connectMatchMapSingleWebsocket()
+        this.connectRoundWebsocket()
     },
 
     components: {
