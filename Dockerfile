@@ -41,7 +41,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Copy frontend files
-COPY --from=frontend-build /app/dist ./assets
+COPY --from=frontend-build /app/dist ./frontend_assets
 
 # Copy overrides
 COPY ./caster_dashboard_2/settings/base.prod.py ./caster_dashboard_2/settings/base.py
