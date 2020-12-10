@@ -7,6 +7,7 @@ websocket_urlpatterns = [
     re_path(r'ws/match/(?P<id>\w+)/$', MatchConsumer.as_asgi()),
     re_path(r'ws/matches/(?P<id>\w+)/maps/$', MatchMapAllConsumer.as_asgi()),
     re_path(r'ws/matches/(?P<match_id>\w+)/map/(?P<map_id>\w+)/$', MatchMapSingleConsumer.as_asgi()),
+    re_path(r'ws/matches/(?P<match_id>\w+)/map/(?P<map_id>\w+)/opbans/$', OpBansConsumer.as_asgi()),
     re_path(r'ws/matches/(?P<match_id>\w+)/map/(?P<map_id>\w+)/rounds/$', RoundConsumer.as_asgi()),
 
 

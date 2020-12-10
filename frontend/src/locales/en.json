@@ -40,7 +40,8 @@
         "copy_to_clipboard": "Copy URL to clipboard",
         "open_in_new_tab": "Open in a new tab",
         "warning": "Warning",
-        "contact_admin": "Please try again later or contact an administrator!"
+        "contact_admin": "Please try again later or contact an administrator!",
+        "no_data": "No data."
     },
     "websocket": {
         "connection_lost": "Lost connection to the server. Trying to reconnect...",
@@ -277,6 +278,11 @@
             "bomb_spot_picks": "Bomb spot pick rates",
             "match_finished": "Map & Match Finished",
             "map_finished": "Map Finished"
+        },
+        "details": {
+            "not_played_yet": "This map isn't being played yet!",
+            "map_details": "Map Details",
+            "ot_atk_team": "Overtime ATK Team"
         }
     },
     "data": {

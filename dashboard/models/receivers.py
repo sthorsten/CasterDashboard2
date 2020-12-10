@@ -259,6 +259,47 @@ def operator_bans_post_save(sender, instance, **kwargs):
         match_map.status = 2
         match_map.save()
 
+    # Send data to websockets on change
+    from dashboard.models.serializers import OperatorBanSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': OperatorBanSerializer(opbans, many=True).data
+        }
+    )
+
+
+@receiver(post_delete, sender=OperatorBans)
+def operator_bans_post_delete(sender, instance, **kwargs):
+    # Send data to websockets on change
+    from dashboard.models.serializers import OperatorBanSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': OperatorBanSerializer(opbans, many=True).data
+        }
+    )
+
 
 @receiver(post_save, sender=Round)
 def round_post_save(sender, instance, **kwargs):
