@@ -20,6 +20,7 @@ import StartOverlay from "@/views/overlays/StartOverlay";
 import InGameOverlay from "@/views/overlays/InGameOverlay";
 import MapsOverlay from "@/views/overlays/MapsOverlay";
 import MatchDetails from "@/views/match/MatchDetails";
+import Profile from "@/views/Profile";
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const routes = [
         path: '/dashboard/home',
         name: 'Home',
         component: Home
+    },
+    {
+        path: '/dashboard/profile/:username',
+        name: "Profile",
+        component: Profile
     },
 
     // Matches

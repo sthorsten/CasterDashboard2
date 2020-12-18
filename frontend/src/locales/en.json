@@ -18,6 +18,7 @@
         "user": "User | Users",
         "username": "Username",
         "password": "Password",
+        "profile": "Profile",
         "or": "or",
         "loading": "Loading",
         "loading_failed": "Loading failed :/",
@@ -42,6 +43,25 @@
         "warning": "Warning",
         "contact_admin": "Please try again later or contact an administrator!",
         "no_data": "No data."
+    },
+    "profile": {
+        "user_data": "User Data",
+        "user_settings": "User Settings",
+        "email": "Email",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "change_password": "Change Password",
+        "current_password": "Current Password",
+        "current_password_text": "Enter your current password",
+        "new_password": "New Password",
+        "new_password_text": "Enter a new password",
+        "new_password_confirm": "Confirm new password",
+        "new_password_confirm_text": "Enter your new password again",
+        "current_password_invalid":  "Please enter your current password!",
+        "new_password_invalid": "Please enter a new password",
+        "new_password_confirm_invalid": "Please confirm your new password",
+        "password_change_success": "Your password has been changed successfully!",
+        "password_change_error": "Your password could not be changed :/"
     },
     "websocket": {
         "connection_lost": "Lost connection to the server. Trying to reconnect...",

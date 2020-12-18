@@ -5,6 +5,7 @@ from pathlib import Path
 import requests
 from django.conf import settings as django_settings
 from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -327,6 +328,29 @@ class TickerOverlayDataViewSet(viewsets.ModelViewSet):
 def version(request):
     current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
     return Response({'version': current_version})
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def change_password(request):
+    if not request.method == 'POST':
+        return Response({'status': "Method Not Allowed"}, status=405)
+
+    # Check input data
+    data = request.data
+    if not data.get('username') or not data.get('current_password') or not data.get('new_password'):
+        return Response({'status': "Invalid Data"}, status=400)
+
+    # Check current password
+    user = authenticate(username=data['username'], password=data['current_password'])
+    if not user:
+        return Response({'status': "Invalid current password"}, status=400)
+
+    # Set new password
+    user.set_password(data['new_password'])
+    user.save()
+
+    return Response({'status': "ok"}, status=200)
 
 
 # Other views

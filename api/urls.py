@@ -48,7 +48,9 @@ urlpatterns = [
     path('matches/<int:match_id>/maps/', MatchMapViewSet.as_view({'get': 'match_maps'})),
     path('matches/<int:match_id>/share/', views.share_match),
 
-    path(r'version/', views.version)
+    path(r'version/', views.version),
+    path(r'users/change-password/', views.change_password)
+
 
     # Old
     # TODO: Refactor!
