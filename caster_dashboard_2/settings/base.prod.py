@@ -5,6 +5,7 @@
 """
 
 import os
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -21,7 +22,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
 
 # Application definition
 
@@ -167,7 +167,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
 
     'DEFAULT_PERMISSION_CLASSES': [
@@ -178,6 +179,13 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ]
 
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'UPDATE_LAST_LOGIN': True,
+    'AUTH_HEADER_TYPES': ('Bearer', 'Token',)
 }
 
 CSRF_TRUSTED_ORIGINS = [
@@ -194,3 +202,67 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     # Internal docker network
     r"^(https?:\/\/dashboard):(\d*)",
 ]
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s.%(msecs)03d] %(levelname)s [%(name)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+
+        # File Handlers
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'when': 'midnight',
+            'backupCount': 30,
+            'formatter': 'verbose',
+        },
+
+        'dashboard_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'dashboard.log'),
+            'when': 'midnight',
+            'backupCount': 30,
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'django_file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'caster_dashboard_2': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'dashboard': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'overlays': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'api': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'websockets': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        }
+    },
+}
