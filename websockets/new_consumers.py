@@ -1,3 +1,5 @@
+import logging
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
@@ -11,6 +13,8 @@ from channels.generic.websocket import JsonWebsocketConsumer
     Custom websocket status codes:
     4000: REJECTED => Connection was closed by the server due to an invalid request - as in HTTP 400 (Bad request)
 """
+
+logger = logging.getLogger(__name__)
 
 
 class MatchConsumer(JsonWebsocketConsumer):
@@ -67,6 +71,7 @@ class MatchConsumer(JsonWebsocketConsumer):
             )
 
     def send_to_client(self, event):
+        logger.info(f"Sending match data to websocket clients: {self.group_name}")
         # Relay message from group to client
         self.send_json(event['data'])
 
@@ -118,6 +123,7 @@ class MatchMapAllConsumer(JsonWebsocketConsumer):
             )
 
     def send_to_client(self, event):
+        logger.info(f"Sending match map all data to websocket clients: {self.group_name}")
         # Relay message from group to client
         self.send_json(event['data'])
 
@@ -169,6 +175,7 @@ class MatchMapSingleConsumer(JsonWebsocketConsumer):
             )
 
     def send_to_client(self, event):
+        logger.info(f"Sending match map single data to websocket clients: {self.group_name}")
         # Relay message from group to client
         self.send_json(event['data'])
 
@@ -223,6 +230,7 @@ class OpBansConsumer(JsonWebsocketConsumer):
 
     # Send from group to client
     def send_to_client(self, event):
+        logger.info(f"Sending operator ban data to websocket clients: {self.group_name}")
         # Relay message from group to client
         self.send_json(event['data'])
 
@@ -277,6 +285,7 @@ class RoundConsumer(JsonWebsocketConsumer):
 
     # Send from group to client
     def send_to_client(self, event):
+        logger.info(f"Sending round data to websocket clients: {self.group_name}")
         # Relay message from group to client
         self.send_json(event['data'])
 
