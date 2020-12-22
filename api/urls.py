@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 from rest_framework.authtoken import views as rest_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from api import views
 from api.views import *
@@ -38,6 +39,10 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
+    # SimpleJWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # Overlays
     path('overlay/state/by_user/<int:user_id>/',
          OverlayStateViewSet.as_view({'get': 'get_by_user', 'post': 'post_by_user'})),
@@ -47,6 +52,10 @@ urlpatterns = [
     # Additional URLs
     path('matches/<int:match_id>/maps/', MatchMapViewSet.as_view({'get': 'match_maps'})),
     path('matches/<int:match_id>/share/', views.share_match),
+
+    path(r'version/', views.version),
+    path(r'users/change-password/', views.change_password)
+
 
     # Old
     # TODO: Refactor!

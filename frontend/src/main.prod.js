@@ -5,7 +5,10 @@ import BootstrapVue from 'bootstrap-vue'
 import VueSweetalert2 from "vue-sweetalert2";
 import VueIziToast from "vue-izitoast";
 import Multiselect from 'vue-multiselect'
+import VueApexCharts from "vue-apexcharts";
 import VueCookies from 'vue-cookies'
+import vueHeadful from 'vue-headful';
+import Clipboard from 'v-clipboard';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
@@ -49,12 +52,16 @@ const iziToastOptions = {
 Vue.use(BootstrapVue)
 Vue.use(VueSweetalert2)
 Vue.use(VueIziToast, iziToastOptions);
+Vue.use(VueApexCharts)
 Vue.use(VueCookies)
+Vue.use(Clipboard)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 
+Vue.component('vue-headful', vueHeadful)
 Vue.component('multiselect', Multiselect)
+Vue.component('apexchart', VueApexCharts)
 
 // Combined style
 import "@/assets/scss/index.scss"
@@ -67,10 +74,25 @@ const vuexStorage = new VuexPersistence({
 
 const store = new Vuex.Store({
     state: {
-        backendURL: "",
+        version: "Version 0.0.0",
+        frontendURL: "http://localhost",
+        backendURL: "http://localhost",
         userToken: "",
         user: null,
         loggedIn: false
+    },
+    getters: {
+        websocketURL: state => {
+            if (state.backendURL.startsWith("http://")){
+                return "ws://" + state.backendURL.substr(7)
+            }
+            return "wss://" + state.backendURL.substr(8)
+        },
+        authHeader: state => {
+            return {
+                headers: {"Authorization": "Token " + state.userToken}
+            }
+        }
     },
     mutations: {
         setUserToken(state, userToken) {
@@ -81,6 +103,13 @@ const store = new Vuex.Store({
         },
         setLoggedIn(state, logInStatus) {
             state.loggedIn = logInStatus
+        },
+        setVersion(state, version){
+            state.version = version
+        },
+        setURL(state, url){
+          state.frontendURL = url;
+          state.backendURL = url; // Assuming identical in docker environment
         }
     },
     plugins: [vuexStorage.plugin]

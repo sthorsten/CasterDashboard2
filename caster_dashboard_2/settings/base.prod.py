@@ -4,109 +4,68 @@
 
 """
 
-
-
 import os
-
-
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
-
-
 
 WSGI_APPLICATION = 'caster_dashboard_2.routing.application'
 
 ASGI_APPLICATION = 'caster_dashboard_2.routing.application'
 
-
+# Django Channels Redis
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.admin',
-
     'django.contrib.auth',
-
     'django.contrib.contenttypes',
-
     'django.contrib.sessions',
-
     'django.contrib.messages',
-
     'django.contrib.staticfiles',
-
     'rest_framework',
-
     'rest_framework.authtoken',
-
     'django_filters',
-
     'widget_tweaks',
-
     'channels',
-
     'corsheaders',
-
     'dashboard.apps.DashboardConfig',
-
     'overlays.apps.OverlaysConfig',
-
 ]
-
-
 
 MIDDLEWARE = [
-
     'django.middleware.security.SecurityMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
-
     'django.middleware.locale.LocaleMiddleware',
-
     'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.common.CommonMiddleware',
-
     'django.middleware.csrf.CsrfViewMiddleware',
-
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-
     'django.contrib.messages.middleware.MessageMiddleware',
-
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
-
-
 
 # Database config
 
 DATABASES = {
-
     'default': {
-
         'ENGINE': 'django.db.backends.postgresql',
-
         'NAME': 'caster_dashboard_2',
-
         'USER': 'caster_dashboard_2',
-
         'PASSWORD': 'caster_dashboard_2',
-
         'HOST': 'db',
-
         'PORT': '5432',
-
     }
-
 }
-
-
-
-
 
 # URL configuration
 
@@ -114,125 +73,75 @@ ROOT_URLCONF = 'caster_dashboard_2.urls'
 
 LOGIN_URL = '/login'
 
-
-
 TEMPLATES = [
-
     {
-
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
-        'DIRS': [os.path.join(BASE_DIR, 'frontend/dist')]
-
-        ,
-
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/dist')],
         'APP_DIRS': True,
-
         'OPTIONS': {
-
             'context_processors': [
-
                 'django.template.context_processors.debug',
-
                 'django.template.context_processors.request',
-
                 'django.contrib.auth.context_processors.auth',
-
                 'django.contrib.messages.context_processors.messages',
-
                 'caster_dashboard_2.context_processors.version_context',
-
                 'caster_dashboard_2.context_processors.profile_context',
-
             ],
-
         },
-
     },
-
 ]
 
-
+PASSWORD_HASHERS = [
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',  # temporary until release of Django 3.2
+    # 'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
+]
 
 # Password validation
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
-
-
 AUTH_PASSWORD_VALIDATORS = [
-
     {
-
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-
     },
 
     {
-
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-
     },
 
     {
-
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-
     },
 
     {
-
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-
     },
-
 ]
-
-
 
 # Internationalization
 
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 
-
 LANGUAGE_CODE = 'en-us'
-
-
 
 TIME_ZONE = 'Europe/Berlin'
 
-
-
 USE_I18N = True
-
-
 
 USE_L10N = True
 
-
-
 USE_TZ = True
 
-
-
 LOCALE_PATHS = (
-
     os.path.join(BASE_DIR, 'locale'),
-
 )
-
-
 
 LANGUAGES = (
-
     ('en', 'English'),
-
     ('de', 'German'),
-
 )
-
-
 
 # Static settings
 
@@ -243,67 +152,117 @@ STATIC_URL = '/assets/'
 STATIC_ROOT = os.path.join(BASE_DIR, "assets")
 
 STATICFILES_DIRS = [
-
     os.path.join(BASE_DIR, "static"),
-
-    os.path.join(BASE_DIR, "frontend", "dist")
-
+    os.path.join(BASE_DIR, "frontend_assets")
+    # os.path.join(BASE_DIR, "frontend", "dist")
 ]
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-
-
 # Django REST framework
 
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-
         'rest_framework.authentication.TokenAuthentication',
-
-        'rest_framework.authentication.SessionAuthentication'
-
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
 
     'DEFAULT_PERMISSION_CLASSES': [
-
         'rest_framework.permissions.IsAuthenticated'
-
     ],
 
     'DEFAULT_FILTER_BACKENDS': [
-
         'django_filters.rest_framework.DjangoFilterBackend'
-
     ]
 
 }
 
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'UPDATE_LAST_LOGIN': True,
+    'AUTH_HEADER_TYPES': ('Bearer', 'Token',)
+}
 
 CSRF_TRUSTED_ORIGINS = [
-
     'localhost',
-
-    '127.0.0.1'
-
+    '127.0.0.1',
+    # Internal docker network
+    'dashboard'
 ]
 
-
-
-# CORS Headers
-
-CORS_ALLOWED_ORIGINS = [
-
-    'http://127.0.0.1',
-
-    'http://localhost',
-
-    'http://127.0.0.1:8080',
-
-    'http://localhost:8080'
-
+# CORS Allowed Origins
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^(https?:\/\/localhost):(\d*)",
+    r"^(https?:\/\/127.0.0.1):(\d*)",
+    # Internal docker network
+    r"^(https?:\/\/dashboard):(\d*)",
 ]
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s.%(msecs)03d] %(levelname)s [%(name)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+
+        # File Handlers
+        'django_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'when': 'midnight',
+            'backupCount': 30,
+            'formatter': 'verbose',
+        },
+
+        'dashboard_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'dashboard.log'),
+            'when': 'midnight',
+            'backupCount': 30,
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'django_file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'caster_dashboard_2': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'dashboard': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'overlays': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'api': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        },
+        'websockets': {
+            'handlers': ['console', 'dashboard_file'],
+            'level': 'DEBUG',
+        }
+    },
+}

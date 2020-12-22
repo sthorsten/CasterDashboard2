@@ -196,7 +196,7 @@ div.map-container {
   padding: 15px 20px;
   margin-left: -5px;
   display: grid;
-  background: #222;
+  background: #222222;
 }
 div.map-container > .img-container {
   border: 3px solid #111;

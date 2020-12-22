@@ -1,5 +1,5 @@
 <template>
-    <BaseLayout :title="title" title_icon="fas fa-icon" :bc_path="bc_path"></BaseLayout>
+    <BaseLayout :title="title" title_icon="fas fa-icon" :bc_path="bcPath"></BaseLayout>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
     name: "Name",
     data() {
         return {
-            bc_path: ["Dashboard", "Category", "Name"]
+            bcPath: ["Dashboard", "Category", "Name"]
         }
     },
     components: {

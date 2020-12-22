@@ -1,6 +1,8 @@
 <template>
     <BaseLayout :title="$t('navigation.home')" title_icon="fas fa-home" :bc_path="bc_path">
 
+        <vue-headful :title="$t('navigation.home') + ' - Caster Dashboard'"/>
+
         <!-- Greeting -->
         <b-row>
             <b-col>
@@ -13,7 +15,7 @@
 
         <b-row>
 
-            <!-- Current match -->
+            <!-- Current matchMaps -->
             <b-col cols="12" sm="6" lg="3">
 
             </b-col>

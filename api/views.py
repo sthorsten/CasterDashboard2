@@ -1,9 +1,11 @@
 import logging
 import os
+from pathlib import Path
 
 import requests
 from django.conf import settings as django_settings
 from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -14,9 +16,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from pip._vendor import requests
 from rest_framework import viewsets, filters
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.filter import SeasonFilter
 from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
@@ -37,8 +41,10 @@ logger = logging.getLogger(__name__)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filterset_fields = ['username']
 
     def retrieve(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current':
@@ -65,6 +71,7 @@ class MapPoolViewSet(viewsets.ReadOnlyModelViewSet):
 class BombSpotViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = BombSpot.objects.all()
     serializer_class = BombSpotSerializer
+    filterset_fields = ['map']
 
 
 class OperatorViewSet(viewsets.ReadOnlyModelViewSet):
@@ -170,7 +177,7 @@ class MatchViewSet(viewsets.ModelViewSet):
 class MatchMapViewSet(viewsets.ModelViewSet):
     queryset = MatchMap.objects.all()
     serializer_class = MatchMapSerializer
-    filterset_fields = ['match', 'map']
+    filterset_fields = ['match', 'map', 'status']
 
     # MapBan elements with a specific match id
     # URL: /api/match/<id>/maps
@@ -193,19 +200,77 @@ class OperatorBansViewSet(viewsets.ModelViewSet):
 class RoundViewSet(viewsets.ModelViewSet):
     queryset = Round.objects.all()
     serializer_class = RoundSerializer
+    filterset_fields = ['match', 'map']
 
+    def create(self, request):
+        data = request.data
+        # Validate data
+        if not data.get('match') or not data.get('map') or not data.get('win_type') or not data.get(
+                'bomb_spot') or not data.get('win_team'):
+            return Response({"required_fields": ["match", "map", "bomb_spot", "win_type", "win_team"]}, status=400)
 
-# Overlay Views
+        # Get Match related data
+        rounds = Round.objects.filter(match=data.get('match'), map=data.get('map')).order_by('-round_no').all()
+        match_map = MatchMap.objects.get(match=data.get('match'), map=data.get('map'))
+        match_data = Match.objects.get(id=data.get('match'))
+
+        # Round ID and Score
+        if rounds and len(rounds) > 0:
+            last_round = rounds[0]
+            next_round_no = len(rounds) + 1
+            score_blue = last_round.score_blue
+            score_orange = last_round.score_orange
+        else:
+            next_round_no = 1
+            score_blue = 0
+            score_orange = 0
+
+        if data.get('win_team') == match_data.team_blue.id:
+            score_blue += 1
+        else:
+            score_orange += 1
+
+        # Team constellation
+        atk_team = match_map.atk_team
+        if match_map.atk_team == match_data.team_blue:
+            def_team = match_data.team_orange
+        else:
+            def_team = match_data.team_blue
+
+        if next_round_no > 6:
+            tmp = atk_team
+            atk_team = def_team
+            def_team = tmp
+
+        serializer = RoundSerializer(
+            data={'match': data.get('match'), 'map': data.get('map'), 'round_no': next_round_no,
+                  'bomb_spot': data.get('bomb_spot'), 'atk_team': atk_team.id, 'def_team': def_team.id,
+                  'of_team': data.get('of_team'), 'win_type': data.get('win_type'),
+                  'win_team': data.get('win_team'), 'score_blue': score_blue, 'score_orange': score_orange,
+                  'notes': data.get('notes')})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+
+        return Response({"detail": "Invalid Data"}, status=400)
+
+    # Overlay Views
+
 
 class OverlayStyleViewSet(viewsets.ModelViewSet):
     queryset = OverlayStyle.objects.all()
     serializer_class = OverlayStyleSerializer
+    filterset_fields = ['user']
 
 
 class OverlayStateViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = OverlayState.objects.all()
     serializer_class = OverlayStateSerializer
+    filterset_fields = ['user']
 
+    # // Deprecated
     # OverlayState elements with a specific user id
     # URL: /api/overlay/state/by_user/<id>/
     @action(methods=['get'], detail=True)
@@ -232,6 +297,7 @@ class OverlayStateViewSet(viewsets.ModelViewSet):
 
 
 class MatchOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = MatchOverlayData.objects.all()
     serializer_class = MatchOverlayDataSerializer
     filterset_fields = ['user']
@@ -255,6 +321,36 @@ class TimerOverlayDataViewSet(viewsets.ModelViewSet):
 class TickerOverlayDataViewSet(viewsets.ModelViewSet):
     queryset = TickerOverlayData.objects.all()
     serializer_class = TickerOverlayDataSerializer
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def version(request):
+    current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
+    return Response({'version': current_version})
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def change_password(request):
+    if not request.method == 'POST':
+        return Response({'status': "Method Not Allowed"}, status=405)
+
+    # Check input data
+    data = request.data
+    if not data.get('username') or not data.get('current_password') or not data.get('new_password'):
+        return Response({'status': "Invalid Data"}, status=400)
+
+    # Check current password
+    user = authenticate(username=data['username'], password=data['current_password'])
+    if not user:
+        return Response({'status': "Invalid current password"}, status=400)
+
+    # Set new password
+    user.set_password(data['new_password'])
+    user.save()
+
+    return Response({'status': "ok"}, status=200)
 
 
 # Other views

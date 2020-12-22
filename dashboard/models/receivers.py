@@ -7,13 +7,15 @@ This file contains all receivers to perform certain tasks before / after saving 
 import os
 import logging
 
-from django.db.models.signals import post_save, pre_delete, pre_save
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
 from django.dispatch import receiver
 
 from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, convert_sponsor_logo
 from caster_dashboard_2.settings import base as django_settings
 
-from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans
+from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round
 from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
@@ -130,12 +132,59 @@ def team_pre_delete(sender, instance, **kwargs):
 def match_post_save(sender, instance, **kwargs):
     send_match_data_to_consumers(instance)
 
+    # Send match to websockets on change
+    from dashboard.models.serializers import MatchSerializer
+    serialized_data = MatchSerializer(instance)
+    channel_layer = get_channel_layer()
+    for user in instance.user.all():
+        async_to_sync(channel_layer.group_send)(
+            "match_data_" + user.username,
+            {
+                'type': 'send_to_client',
+                'data': serialized_data.data
+            }
+        )
+
 
 @receiver(post_save, sender=MatchMap)
 def match_maps_post_save(sender, instance, **kwargs):
-    # Set Match state to "Map Ban"
-    instance.match.state = 2
-    instance.match.save()
+    # Set MatchMap state to Finished (3)
+    if instance.status == 2:
+        # Match finished
+
+        # Regular win: 7-X or X-7 with X < 6 // Overtime win: 8-X or X-8
+        if (instance.score_blue >= 7 and instance.score_orange < 6) \
+                or (instance.score_orange >= 7 and instance.score_blue < 6) \
+                or instance.score_blue >= 8 or instance.score_orange >= 8:
+
+            # Overtime win
+            if instance.score_blue == 8 or instance.score_orange == 8:
+                instance.win_type = 3
+            # Regular win
+            else:
+                instance.win_type = 2
+
+            instance.status = 3
+            instance.save()
+
+            if instance.score_blue > instance.score_orange:
+                instance.match.score_blue = instance.match.score_blue + 1
+                instance.match.save()
+            else:
+                instance.match.score_orange = instance.match.score_orange + 1
+                instance.match.save()
+
+        # Draw
+        elif instance.score_blue == 6 and instance.score_orange == 6:
+            instance.win_type = 4
+            instance.status = 3
+            instance.save()
+            return
+
+    # Set Match state to Map Ban (2)
+    if instance.match.state <= 1:
+        instance.match.state = 2
+        instance.match.save()
 
     # Set Order
     if instance.order == 0:
@@ -149,16 +198,148 @@ def match_maps_post_save(sender, instance, **kwargs):
         instance.play_order = len(maps)  # Not len(maps) + 1 because post_save
         instance.save()
 
+    # Send data to websockets on change
+    from dashboard.models.serializers import MatchMapSerializer
+    channel_layer = get_channel_layer()
+
+    # MatchMapsAll
+    matchMaps = MatchMap.objects.filter(match=instance.match)
+    group_name = f"matches_{str(instance.match.id)}_maps"
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(matchMaps, many=True).data
+        }
+    )
+
+    # MatchMapSingle
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}"
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(instance).data
+        }
+    )
+
+
+@receiver(post_delete, sender=MatchMap)
+def match_maps_post_delete(sender, instance, **kwargs):
+    # Send data to websockets on change
+    from dashboard.models.serializers import MatchMapSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    matchMaps = MatchMap.objects.filter(match=instance.match)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_maps"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchMapSerializer(matchMaps, many=True).data
+        }
+    )
+
 
 @receiver(post_save, sender=OperatorBans)
 def operator_bans_post_save(sender, instance, **kwargs):
-    # Update Match state to MapBan (2)
-    map_play_order = MatchMap.objects.get(match=instance.match, map=instance.map)
-    new_match_state = 2
-    match = instance.match
-    match.state = new_match_state
-    match.save()
+    # Set Match state to Playing (3)
+    if instance.match.state <= 2:
+        instance.match.state = 3
+        instance.match.save()
 
-    # Update Map state to Playing (2)
-    map_play_order.status = 2
-    map_play_order.save()
+    # Set MatchMap state to Playing (2)
+    match_map = MatchMap.objects.get(match=instance.match, map=instance.map)
+    if match_map and match_map.status <= 1:
+        match_map.status = 2
+        match_map.save()
+
+    # Send data to websockets on change
+    from dashboard.models.serializers import OperatorBanSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': OperatorBanSerializer(opbans, many=True).data
+        }
+    )
+
+
+@receiver(post_delete, sender=OperatorBans)
+def operator_bans_post_delete(sender, instance, **kwargs):
+    # Send data to websockets on change
+    from dashboard.models.serializers import OperatorBanSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': OperatorBanSerializer(opbans, many=True).data
+        }
+    )
+
+
+@receiver(post_save, sender=Round)
+def round_post_save(sender, instance, **kwargs):
+    # Send data to websockets on change
+    from dashboard.models.serializers import RoundSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    rounds = Round.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_rounds"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': RoundSerializer(rounds, many=True).data
+        }
+    )
+
+
+@receiver(post_delete, sender=Round)
+def round_post_delete(sender, instance, **kwargs):
+    # Send data to websockets on change
+    from dashboard.models.serializers import RoundSerializer
+    channel_layer = get_channel_layer()
+
+    # Get Match maps
+    rounds = Round.objects.filter(match=instance.match, map=instance.map)
+
+    # Set channels group name
+    group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_rounds"
+
+    # Send match maps to client(s)
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': RoundSerializer(rounds, many=True).data
+        }
+    )

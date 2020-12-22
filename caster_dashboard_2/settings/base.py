@@ -3,6 +3,7 @@
 """
 
 import os
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.thorshero.de']
@@ -73,6 +74,14 @@ TEMPLATES = [
     },
 ]
 
+# Password Hashing
+
+PASSWORD_HASHERS = [
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher', #temporary until release of Django 3.2
+    #'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
+]
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -121,7 +130,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -131,13 +141,22 @@ REST_FRAMEWORK = {
     ]
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'UPDATE_LAST_LOGIN': True,
+    'AUTH_HEADER_TYPES': ('Bearer', 'Token',)
+}
+
 CSRF_TRUSTED_ORIGINS = [
     'localhost',
     '127.0.0.1'
 ]
 
-# CORS Headers
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8080',
-    'http://localhost:8080'
+# CORS Allowed Origins
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^(https?:\/\/localhost):(\d*)",
+    r"^(https?:\/\/127.0.0.1):(\d*)",
+    # Internal docker network
+    r"^(https?:\/\/dashboard):(\d*)",
 ]

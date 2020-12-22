@@ -1,95 +1,98 @@
 <template>
-    <BaseLayout title="Match Overview" title_icon="fas fa-gamepad" :bc_path="bc_path">
+    <BaseLayout :title="$t('navigation.overview')" title_icon="fas fa-gamepad" :bc_path="bcPath">
+
+        <vue-headful :title="$t('navigation.overview') + ' - Caster Dashboard'"/>
 
         <b-row>
 
             <!-- Match Details -->
             <b-col md="6">
 
-                <template v-if="loading_status === 'loaded'">
-                    <CustomCard color="primary" outline divider title="Match Info">
+                <template v-if="loadingStatus === 'loaded'">
+                    <CustomCard color="primary" outline divider :title="$t('matches.overview.match_info')">
                         <template #card-body>
 
                             <b-table-simple table-variant="dark" striped small responsive>
 
                                 <b-tbody>
                                     <b-tr class="bg-primary">
-                                        <b-th colspan="2">Base Information</b-th>
+                                        <b-th colspan="2">{{ $t('matches.overview.base_info') }}</b-th>
                                     </b-tr>
 
                                     <b-tr>
                                         <b-th class="text-bold">ID</b-th>
-                                        <b-td class="text-right">{{ match_data.id }}</b-td>
+                                        <b-td class="text-right">{{ matchData.id }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Users</b-th>
-                                        <b-td class="text-right">{{ match_data.user_name.join(", ") }}</b-td>
+                                        <b-th class="text-bold">{{ $tc('generic.user', matchData.user.length) }}</b-th>
+                                        <b-td class="text-right">{{ matchData.user_name.join(", ") }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Title</b-th>
-                                        <b-td class="text-right">{{ match_data.title }}</b-td>
+                                        <b-th class="text-bold">{{ $t('core.title') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.title }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Playday</b-th>
-                                        <b-td class="text-right">{{ match_data.subtitle }}</b-td>
+                                        <b-th class="text-bold">{{ $t('core.playday') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.subtitle }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Best Of</b-th>
-                                        <b-td class="text-right">{{ match_data.best_of }}</b-td>
+                                        <b-th class="text-bold">{{ $t('core.best_of') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.best_of }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">State</b-th>
-                                        <b-td class="text-right">{{ match_data.state_name }}</b-td>
+                                        <b-th class="text-bold">{{ $t('generic.state') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.state_name }}</b-td>
                                     </b-tr>
 
                                     <b-tr class="bg-primary">
-                                        <b-th colspan="2">Match Details</b-th>
+                                        <b-th colspan="2">{{ $t('matches.overview.match_details') }}</b-th>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">League</b-th>
-                                        <b-td class="text-right">{{ match_data.league_name }}</b-td>
+                                        <b-th class="text-bold">{{ $tc('core.league') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.league_name }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Season</b-th>
-                                        <b-td class="text-right">{{ match_data.season_name }}</b-td>
+                                        <b-th class="text-bold">{{ $tc('core.season') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.season_name }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Team Blue</b-th>
-                                        <b-td class="text-right">{{ match_data.team_blue_name }}</b-td>
+                                        <b-th class="text-bold">{{ $t('core.team_blue') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.team_blue_name }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Team Orange</b-th>
-                                        <b-td class="text-right">{{ match_data.team_orange_name }}</b-td>
+                                        <b-th class="text-bold">{{ $t('core.team_orange') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.team_orange_name }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Sponsors</b-th>
-                                        <b-td class="text-right">
-                                            {{ match_data.sponsors_name.join(", ") }}
+                                        <b-th class="text-bold">{{ $tc('core.sponsor', matchData.sponsors.length) }}</b-th>
+                                        <b-td v-if="matchData.sponsors.length > 0" class="text-right">
+                                            {{ matchData.sponsors_name.join(", ") }}
                                         </b-td>
+                                        <b-td v-else class="text-right">-</b-td>
                                     </b-tr>
 
                                     <b-tr class="bg-primary">
-                                        <b-th colspan="2">Match Results</b-th>
+                                        <b-th colspan="2">{{ $t('matches.overview.match_results') }}</b-th>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Current Score</b-th>
-                                        <b-td class="text-right">{{ match_data.score_blue }} - {{ match_data.score_orange }}</b-td>
+                                        <b-th class="text-bold">{{ $t('matches.overview.current_score') }}</b-th>
+                                        <b-td class="text-right">{{ matchData.score_blue }} - {{ matchData.score_orange }}</b-td>
                                     </b-tr>
 
                                     <b-tr>
-                                        <b-th class="text-bold">Win Team</b-th>
-                                        <b-td v-if="match_data.win_team_name" class="text-right">{{ match_data.win_team_name }}</b-td>
+                                        <b-th class="text-bold">{{ $t('matches.overview.win_team') }}</b-th>
+                                        <b-td v-if="matchData.win_team_name" class="text-right">{{ matchData.win_team_name }}</b-td>
                                         <b-td v-else class="text-right">-</b-td>
                                     </b-tr>
 
@@ -102,20 +105,20 @@
                 </template>
 
                 <!-- Loading overlay -->
-                <template v-if="loading_status === 'loading'">
-                    <CustomCard color="secondary" outline divider title="Loading">
+                <template v-if="loadingStatus === 'loading'">
+                    <CustomCard color="secondary" outline divider :title="$t('generic.loading')">
                         <template #card-body>
-                            <StatusOverlay type="loading" text="Loading..."></StatusOverlay>
+                            <StatusOverlay type="loading" :text="$t('generic.loading')"></StatusOverlay>
                         </template>
                     </CustomCard>
                 </template>
 
                 <!-- Error overlay -->
-                <template v-if="loading_status === 'error'">
-                    <CustomCard color="danger" outline divider title="Error">
+                <template v-if="loadingStatus === 'error'">
+                    <CustomCard color="danger" outline divider :title="$t('generic.error')">
                         <template #card-body>
                             <StatusOverlay type="icon" icon="fas fa-exclamation-triangle fa-2x"
-                                           text="Loading failed!"></StatusOverlay>
+                                           :text="$t('generic.loading_failed')"></StatusOverlay>
                         </template>
                     </CustomCard>
                 </template>
@@ -125,19 +128,21 @@
             <!-- Match actions -->
             <b-col md="6">
 
-                <CustomCard color="success" outline divider title="Match actions">
+                <CustomCard color="success" outline divider :title="$t('matches.overview.actions.title')">
                     <template #card-body>
 
                         <b-row>
 
                             <b-col cols="12" class="mb-2">
-                                <b-btn variant="success" class="btn-block" @click="setMatchToOverlay">Set current match to overlays</b-btn>
+                                <b-btn variant="success" class="btn-block" @click="setMatchToOverlay">
+                                    {{ $t('matches.overview.actions.set_overlay') }}
+                                </b-btn>
                             </b-col>
 
                             <b-col cols="12">
                                 <router-link :to="{name: 'Map Picks & Bans', params: {id: $route.params.id}}">
                                     <b-btn variant="success" class="btn-block">
-                                        Continue to Map Picks & Bans
+                                        {{ $t('matches.overview.actions.continue') }}
                                     </b-btn>
                                 </router-link>
                             </b-col>
@@ -149,11 +154,17 @@
                         <b-row>
 
                             <b-col cols="12" class="mb-2">
-                                <b-btn variant="secondary" class="btn-block">Show match details</b-btn>
+                                <router-link :to="{name: 'Match Details', params: {id: $route.params.id}}">
+                                    <b-btn variant="secondary" class="btn-block">
+                                        {{ $t('matches.overview.actions.show_details') }}
+                                    </b-btn>
+                                </router-link>
                             </b-col>
 
                             <b-col cols="12">
-                                <b-btn variant="secondary" class="btn-block">Share match</b-btn>
+                                <b-btn variant="secondary" class="btn-block">
+                                    {{ $t('matches.overview.actions.share') }}
+                                </b-btn>
                             </b-col>
 
                         </b-row>
@@ -163,11 +174,15 @@
                         <b-row>
 
                             <b-col cols="12" class="mb-2">
-                                <b-btn variant="danger" class="btn-block">Edit match details</b-btn>
+                                <b-btn variant="danger" class="btn-block">
+                                    {{ $t('matches.overview.actions.edit') }}
+                                </b-btn>
                             </b-col>
 
                             <b-col cols="12">
-                                <b-btn variant="danger" class="btn-block">Delete match</b-btn>
+                                <b-btn variant="danger" class="btn-block">
+                                    {{ $t('matches.overview.actions.delete') }}
+                                </b-btn>
                             </b-col>
 
                         </b-row>
@@ -192,10 +207,9 @@ export default {
     name: "MatchOverview",
     data() {
         return {
-            match_data: {},
-
-            loading_status: 'loading',
-            bc_path: ["Dashboard", "Matches", this.$route.params.id, "Overview"]
+            matchData: {},
+            loadingStatus: 'loading',
+            bcPath: ["Dashboard", "Matches", this.$route.params.id, "Overview"]
         }
     },
     methods: {
@@ -205,27 +219,21 @@ export default {
                 "current_match": this.$route.params.id
             }
 
-            axios.put(this.$store.state.backendURL + "/api/overlay/match_data/" + this.$store.state.user.id + "/", data, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.put(`${this.$store.state.backendURL}/api/overlay/match_data/${this.$store.state.user.id}/`, data, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
-                this.$toast.success("The match has been set to the overlays!")
+                this.$toast.success(this.$t('matches.overview.toasts.overlay_success'))
             }).catch((error) => {
                 console.log(error.response)
-                this.$toast.error("Failed to set match to the overlays :(")
+                this.$toast.error(this.$t('matches.overview.toasts.overlay_failed'))
             })
         },
         getMatchData() {
-            axios.get(this.$store.state.backendURL + "/api/match/" + this.$route.params.id, {
-                headers: {
-                    "Authorization": "Token " + this.$store.state.userToken
-                }
-            }).then((response) => {
+            axios.get(`${this.$store.state.backendURL}/api/match/${this.$route.params.id}`, this.$store.getters.authHeader
+            ).then((response) => {
                 console.log(response.data)
-                this.match_data = response.data
-                this.loading_status = 'loaded'
+                this.matchData = response.data
+                this.loadingStatus = 'loaded'
             })
         },
     },

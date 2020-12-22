@@ -111,7 +111,7 @@
             <!-- OpBans -->
             <b-nav-item to="#" class="nav-link">
                 <i class="nav-icon fas fa-user-alt-slash"></i>
-                {{ $t('navigation.opbans') }}
+                {{ $t('navigation.stats_op_bans') }}
             </b-nav-item>
 
             <!-- Rounds -->

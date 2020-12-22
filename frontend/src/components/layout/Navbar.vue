@@ -58,7 +58,7 @@
                         <i class="fa fas fa-user-cog"></i>
                         {{ $t('navigation.user_settings') }}
                     </b-dd-header>
-                    <b-dd-item class="text-center">
+                    <b-dd-item class="text-center" :to="{name: 'Profile', params:{'username': this.$store.state.user.username}}">
                         {{ $t('navigation.profile') }}
                     </b-dd-item>
                     <b-dd-item class="text-center" @click="logoutUser">

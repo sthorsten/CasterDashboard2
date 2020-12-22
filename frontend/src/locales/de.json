@@ -13,14 +13,17 @@
         "data": "Daten",
         "statistics": "Statistiken",
         "stats_maps": "Map Statistiken",
-        "opbans": "Operator Ban Statistiken",
         "stats_rounds": "Runden Statistiken",
         "admin": "Administration",
         "api_access": "API Zugriff",
         "league_admin": "Liga Admin",
         "user_settings": "Benutzer Einstellungen",
         "profile": "Profil & Einstellungen",
-        "log_out": "Abmelden"
+        "log_out": "Abmelden",
+        "op_bans": "Operator Bans",
+        "rounds": "Runden",
+        "stats_op_bans": "Operator Ban Statistiken",
+        "login": "Login"
     },
     "login": {
         "sign_in": "Anmelden",
@@ -31,11 +34,12 @@
         "login_failed": "Login fehlgeschlagen",
         "invalid_credentials": "Ungültige Anmeldedaten!",
         "login_success": "Login erfolgreich",
-        "welcome": "Willkommen {user}!"
+        "welcome": "Willkommen {user}!",
+        "login_required": "Bitte logge dich zuerst ein!"
     },
     "core": {
         "league": "Liga | Ligen",
-        "season": "Seaons | Seasons",
+        "season": "Season | Seasons",
         "sponsor": "Sponsor | Sponsoren",
         "team": "Team | Teams",
         "round": "Runde | Runden",
@@ -43,7 +47,10 @@
         "team_blue": "Team Blau",
         "team_orange": "Team Orange",
         "logo": "Logo",
-        "playday": "Spieltag"
+        "playday": "Spieltag",
+        "title": "Titel",
+        "map": "Karte | Karten",
+        "score": "Spielstand"
     },
     "generic": {
         "username": "Benutzername",
@@ -59,7 +66,16 @@
         "actions": "Aktionen",
         "browse": "Durchsuchen",
         "internal_server_error": "Interner Serverfehler",
-        "oops": "Ups..."
+        "oops": "Ups...",
+        "user": "Benutzer",
+        "state": "Status",
+        "image": "Bild",
+        "settings": "Einstellungen",
+        "on": "an",
+        "off": "aus",
+        "popout": "Popout",
+        "copy_to_clipboard": "URL in die Zwischenablage kopieren",
+        "open_in_new_tab": "In neuem Tab öffnen"
     },
     "home": {
         "welcome": "Willkommen",
@@ -109,6 +125,121 @@
             "reset_btn": "Match-Daten zurücksetzen",
             "match_created": "Das Match wurde erstellt",
             "match_create_failed": "Das Match konnte nicht erstellt werden!"
+        },
+        "overview": {
+            "match_info": "Match Info",
+            "base_info": "Basis-Informationen",
+            "match_details": "Match Details",
+            "match_results": "Match-Ergebnisse",
+            "current_score": "Aktueller Spielstand",
+            "win_team": "Sieger-Team",
+            "actions": {
+                "title": "Match Aktionen",
+                "set_overlay": "Aktuelles Match in die Overlays übernehmen",
+                "continue": "Weiter zu den Map Picks & Bans",
+                "show_details": "Match-Details anzeigen",
+                "share": "Match Teilen",
+                "edit": "Match Bearbeiten",
+                "delete": "Match Löschen"
+            },
+            "toasts": {
+                "overlay_success": "Das Match wurde in die Overlays übernommen!",
+                "overlay_failed": "Das Match konnte nicht in die Overlays übernommen werden :("
+            }
+        },
+        "maps": {
+            "locked_info_text": "Ein oder mehrere Maps werden schon gespielt oder sind abgeschlossen. Du {0} Änderungen an den Maps mehr vornehmen.",
+            "locked_info_text_bold": "kannst keine",
+            "settings": "Einstellungen & Steuerung",
+            "select_map_pool": "Map Pool auswählen:",
+            "remove_last_map": "Letzte Map Entfernen",
+            "remove_all_maps": "Alle Maps Entfernen",
+            "continue": "Weiter zu den Operator Bans",
+            "log_placeholder": "Die Map Picks & Bans werden hier angezeigt, sobald du eine Map auswählst!",
+            "log": "Log",
+            "ban": "Ban",
+            "banned": "Gebannt",
+            "picked": "Gepicked",
+            "pick": "Pick",
+            "decider": "Decider",
+            "decider_map": "Decider Map",
+            "default_ban": "Default Ban",
+            "ban_map": "Map Bannen",
+            "pick_map": "Map Picken",
+            "not_selected": "Noch Nicht Ausgewählt",
+            "toasts": {
+                "map_removed": "Map Entfernt",
+                "maps_removed": "Alle Maps wurden entfernt",
+                "map_already_selected": "Du hast diese Map bereits ausgewählt!",
+                "map_added": "Map Hinzugefügt",
+                "map_added_failed": "Map konnte nicht hinzugefügt werden :/",
+                "map_removed_failed": "Map konnte nicht entfernt werden :/"
+            }
+        },
+        "op_bans": {
+            "atk_team": "ATK Team",
+            "ot_atk_team": "Overtime ATK Team (optional)",
+            "swap_teams": "Teams Tauschen",
+            "current_op_bans": "Aktuelle Operator Bans:",
+            "not_selected": "Nicht ausgewählt",
+            "remove_last_op_ban": "Letzten Operator Ban entfernen",
+            "remove_all_op_bans": "Alle Operator Bans entfernen",
+            "continue": "Weiter zu den Runden",
+            "ban_operators": "Operator Bannen",
+            "atk_ops": "ATK Operators",
+            "def_ops": "DEF Operators",
+            "toasts": {
+                "all_opbans_removed": "Alle Operator Bans wurden entfernt",
+                "all_opbans_removed_failed": "Operator Bans konnten nicht entfernt werden :/",
+                "opban_removed": "Operator Ban entfernt",
+                "opban_removed_failed": "Operator Ban konnte nicht entfernt werden :/",
+                "teams_swapped": "Team getauscht!",
+                "teams_swapped_failed": "Fehler beim Tauschen der Teams :/",
+                "opban_added": "Operator Ban hinzugefügt",
+                "opban_added_failed": "Operator Ban konnte nicht hinzugefügt werden :/"
+            },
+            "locked_info_text": "Diese Map ist abgeschlossen. Du {0} Änderungen mehr daran vornehmen.",
+            "locked_info_text_bold": "kannst keine"
+        },
+        "rounds": {
+            "round_control": "Runden Steuerung",
+            "bomb_spot": "Bomb Spot",
+            "win_type": "Win Typ",
+            "win_type_names": {
+                "kills": "Kills",
+                "defuser_planted": "Defuser Planted",
+                "defuser_disabled": "Defuser Deaktiviert",
+                "time": "Zeit"
+            },
+            "win_team": "Sieger-Team",
+            "of_team": "Opening Frag Team (optional):",
+            "opening_frag": "Opening Frag",
+            "notes": "Notizen",
+            "notes_text": "Was ist in der letzten Runde passiert?\nDu kannst dieses Feld auch leer lassen!",
+            "add_round": "Runde Hinzufügen",
+            "remove_round": "Letzte Runde entfernen",
+            "finish_map": "Map Abschließen",
+            "finish_map_confirm_1": "Bist du dir sicher, dass du diese Map abschließen möchtest?",
+            "finish_map_confirm_2": "Diese Aktion kann nicht rückgängig gemacht werden!",
+            "finish_map_failed": "Fehler beim Abschließen der Map :/",
+            "live_stats": "Live Statistiken",
+            "live_stats_placeholder": "Füge eine Runde hinzu, um Live Statistiken zu sehen!",
+            "round_details": "Runden-Details",
+            "toasts": {
+                "bomb_spot_missing": "Bitte wähle einen Bomb Spot aus!",
+                "win_type_missing": "Bitte wähle einen Sieg-Typen aus",
+                "win_team_missing": "Bitte wähle ein Sieger-Team aus!",
+                "round_added": "Runde hinzugefügt",
+                "round_added_failed": "Fehler beim Hinzufügen der Runde :/",
+                "round_removed": "Runde entfernt",
+                "round_removed_failed": "Fehler beim Entfernen der Runde :/"
+            },
+            "atk_def_wins": "ATK / DEF Siege",
+            "opening_frags": "Opening Frags",
+            "type_wins": "Siege nach Typ",
+            "bomb_spot_picks": "Bomb Spot Pick Raten",
+            "match_finished": "Map & Match abgeschlossen",
+            "map_finished": "Map abgeschlossen"
         }
     },
     "data": {
@@ -139,6 +270,35 @@
                 "team_created": "Das Team wurde erfolgreich erstellt",
                 "team_create_failed": "Das Team konnte nicht erstellt werden!"
             }
+        }
+    },
+    "overlays": {
+        "start": "Start Overlay",
+        "control_center": {
+            "overlay_controls": "Overlay Steuerung",
+            "game_overlays": "Spiel Overlays",
+            "other_overlays": "Weitere Overlays",
+            "overlay_actions": "Overlay Aktionen"
+        },
+        "ingame": "Ingame Overlay",
+        "maps": "Maps Overlay",
+        "opbans": "Operator Bans Overlay",
+        "rounds": "Runden Overlay",
+        "customize": {
+            "select_overlay": "Overlay auswählen",
+            "customize_overlay": "Overlay anpassen",
+            "preview": "Overlay Vorschau",
+            "overlay_links": "Overlay Links",
+            "default_styles": "Standard Styles",
+            "custom_styles": "Benutzerdefinierte Styles",
+            "select_first": "Wähle zuerst ein Overlay und einen Style aus",
+            "default": "Standard (blau / orange)",
+            "light": "Light",
+            "dark": "Dark",
+            "toasts": {
+                "overlay_updated": "Overlay Style angepasst"
+            },
+            "drag_to_obs": "Zieh mich nach OBS"
         }
     }
 }

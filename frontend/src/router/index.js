@@ -15,6 +15,12 @@ import MatchOverview from "@/views/match/MatchOverview";
 import Maps from "@/views/match/Maps";
 import OperatorBans from "@/views/match/OperatorBans";
 import Rounds from "@/views/match/Rounds";
+import StartOverlay from "@/views/overlays/StartOverlay";
+import OverlayControlCenter from "@/views/popouts/OverlayControlCenter";
+import InGameOverlay from "@/views/overlays/InGameOverlay";
+import MapsOverlay from "@/views/overlays/MapsOverlay";
+import MatchDetails from "@/views/match/MatchDetails";
+import Profile from "@/views/Profile";
 
 Vue.use(VueRouter)
 
@@ -33,6 +39,11 @@ const routes = [
         name: 'Home',
         component: Home
     },
+    {
+        path: '/dashboard/profile/:username',
+        name: "Profile",
+        component: Profile
+    },
 
     // Matches
     {
@@ -49,6 +60,11 @@ const routes = [
         path: '/dashboard/matches/:id/overview',
         name: "Match Overview",
         component: MatchOverview
+    },
+    {
+        path: '/dashboard/matches/:id/details',
+        name: "Match Details",
+        component: MatchDetails
     },
     {
         path: '/dashboard/matches/:id/maps',
@@ -77,6 +93,21 @@ const routes = [
         name: "Customize",
         component: Customize
     },
+    {
+        path: '/overlays/:username/start',
+        name: "Start Overlay",
+        component: StartOverlay
+    },
+    {
+        path: '/overlays/:username/maps',
+        name: "Maps Overlay",
+        component: MapsOverlay
+    },
+    {
+        path: '/overlays/:username/ingame',
+        name: "InGame Overlay",
+        component: InGameOverlay
+    },
 
     // Data
     {
@@ -98,6 +129,13 @@ const routes = [
         path: '/dashboard/data/teams',
         name: 'Teams',
         component: Teams
+    },
+
+    // Popouts
+    {
+        path: '/popout/overlay-control-center',
+        name: 'Overlay Control Center Popout',
+        component: OverlayControlCenter
     }
 ]
 

@@ -1,5 +1,9 @@
 <template>
-    <BaseLayout :title="$tc('core.league', 2)" title_icon="fas fa-trophy" :bc_path="bc_path"></BaseLayout>
+    <BaseLayout :title="$tc('core.league', 2)" title_icon="fas fa-trophy" :bc_path="bc_path">
+
+        <vue-headful :title="$tc('core.league', 2) + ' - Caster Dashboard'"/>
+
+    </BaseLayout>
 </template>
 
 <script>

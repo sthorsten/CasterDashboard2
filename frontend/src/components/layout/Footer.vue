@@ -4,7 +4,7 @@
             <a href="#">{{ $t('terms') }}</a>
             - <a href="#">{{ $t('privacy') }}</a>
             - powered by <a href="#">Open Source</a> -
-            Version <b>2.0.0-vue-01</b>
+            Version <b>{{ $store.state.version }}</b>
         </div>
         Copyright &copy; 2020 Thorsten "ThorsHero" Schmitt - <a
             href="https://www.thorshero.de" target="_blank">www.thorshero.de</a>

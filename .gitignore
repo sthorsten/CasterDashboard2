@@ -1,6 +1,11 @@
 .idea/
+assets/*
 venv/
+venv-linux/
 __pycache__/
+frontend/dist
 media/
 logs/*.log
+*.ignored
 caster_dashboard_2/settings/local_settings.py
+caster_dashboard_2/settings/local_settings_linux.py
