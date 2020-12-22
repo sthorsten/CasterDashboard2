@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=caster_dashboard_2
+      - POSTGRES_PASSWORD=caster_dashboard_2
+      - POSTGRES_DB=caster_dashboard_2
+      
+
+  redis:
+    image: redis:alpine
+    
+  
+  nginx:
+    image: thorshero/cd2-nginx:latest
+    volumes:
+      - asset_files:/opt/static/assets
+      - media_files:/opt/static/media
+    ports:
+      - 80:80
+    depends_on:
+      - dashboard
+
+
+  dashboard:
+    image: thorshero/caster-dashboard-2:latest
+    volumes:
+      - asset_files:/opt/caster_dashboard_2/assets
+      - media_files:/opt/caster_dashboard_2/media
+      - ./docker-settings.py:/opt/caster_dashboard_2/dashboard/settings.py
+    command: sh /opt/caster_dashboard_2/docker-compose-start.sh
+    depends_on:
+      - db
+      - redis
+
+
+
+volumes:
+  postgres_data:
+  asset_files:
+  media_files:

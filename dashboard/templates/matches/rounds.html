@@ -4,6 +4,9 @@
 
 {% block head %}
     {% include "base/head.html" with page_title="Rounds" %}
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 {% endblock %}
 
 {% block sidebar %}
@@ -40,24 +43,22 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <label>{% trans "Bomb Spot" %}:</label>
-                            <select id="bomb_spot_select" class="form-control selectpicker w-100"
-                                    data-style="bg-dark-900 text-white border"
-                                    data-live-search="true" title="{% trans "Please select..." %}">
-                                {% for bs in bomb_spots %}
-                                    <option value="{{ bs.id }}">{{ bs.floor }} - {{ bs.bomb_spot }}</option>
-                                {% endfor %}
-                            </select>
+                            {% for bs in bomb_spots %}
+                                <button class="btn btn-outline-primary w-100 mb-2"
+                                        data-bombspot-id="{{ bs.id }}" onclick="setBombSpot(this)">
+                                    {{ bs.floor }} - {{ bs.bomb_spot }}
+                                </button>
+                            {% endfor %}
                         </div>
 
                         <div class="col-lg-6">
                             <label>{% trans "Win Type" %}:</label>
-                            <select id="win_type_select" class="form-control selectpicker w-100"
-                                    data-style="bg-dark-900 text-white border"
-                                    data-live-search="true" title="{% trans "Please select..." %}">
-                                {% for type in win_types %}
-                                    <option value="{{ type.id }}">{% trans type.name %}</option>
-                                {% endfor %}
-                            </select>
+                            {% for type in win_types %}
+                                <button class="btn btn-outline-primary w-100 mb-2"
+                                        data-wintype-id="{{ type.id }}" onclick="setWinType(this)">
+                                    {% trans type.name %}
+                                </button>
+                            {% endfor %}
                         </div>
 
                     </div>
@@ -159,6 +160,29 @@
 
                     <h5 class="card-title card-title-upper">{% trans "Live Statistics" %}:</h5><br>
                     <div class="card-divider"></div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "ATK / DEF Wins" %}</label>
+                            <div id="sideWinChart"></div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "Opening Frags" %}</label>
+                            <div id="openingFragChart"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <label>{% trans "Wins By Type" %}</label>
+                            <div id="typeWinChart"></div>
+                        </div>
+                        <div class="col-lg-6 col-12 mt-2">
+                            <label>{% trans "BombSpot Pick Rates" %}</label>
+                            <div id="bombSpotPickChart"></div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

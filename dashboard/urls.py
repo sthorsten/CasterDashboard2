@@ -6,10 +6,14 @@ urlpatterns = [
     path('', sites.index, name='index'),
     path('home', sites.home, name='home'),
 
+    # Settings
+    path('settings/leagues', sites.settings_league_admin),
+
     # Matches
     path('matches/history', sites.match_history, name='history'),
     path('matches/create', sites.match_create, name='create'),
     path('matches/<int:match_id>', sites.match_overview, name='match-overview'),
+    path('matches/<int:match_id>/details', sites.match_details, name='match-details'),
     path('matches/<int:match_id>/maps', sites.match_maps, name='match-maps'),
     path('matches/<int:match_id>/map/<int:map_id>/opbans', sites.match_opbans, name='match-opbans'),
     path('matches/<int:match_id>/map/<int:map_id>/rounds', sites.match_rounds, name='match-rounds'),
@@ -31,5 +35,8 @@ urlpatterns = [
     path('data/teams/new', forms.new_team_form),
     path('data/teams/edit', forms.edit_team_form),
     path('matches/create/new', forms.new_match_form),
+
+    # Vue
+    path('data/teams-vue', sites.teams_vue),
 
 ]

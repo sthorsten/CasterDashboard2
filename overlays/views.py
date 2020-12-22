@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
-from dashboard.models import *
-from overlays.models import *
+from dashboard.models.models import *
+from overlays.models.models import MatchOverlayData, OverlayState, OverlayStyle
 
 
 def start(request, user_name):
@@ -31,17 +32,20 @@ def ingame(request, user_name):
     match_overlay_data = MatchOverlayData.objects.get(user=user)
     match = match_overlay_data.current_match
 
+    if match is None:
+        messages.error(request, _("Please select a match before accessing the overlay!"))
+        return redirect('/')
+
     sponsors = []
     for s in match.sponsors.all():
         sponsors.append(s)
 
     overlay_states = OverlayState.objects.get(user=user)
 
-    current_map_order = match.state.id - 2
-    if 1 <= current_map_order <= 5:
-        current_map = MapPlayOrder.objects.get(match=match, order=current_map_order).map
-        current_map_pick_team = MapBan.objects.get(match=match, map=current_map).team
-    else:
+    try:
+        current_map = MatchMap.objects.get(match=match, status=2).map
+        current_map_pick_team = MatchMap.objects.get(match=match, map=current_map).team
+    except MatchMap.DoesNotExist:
         current_map_pick_team = None
 
     template_data = {

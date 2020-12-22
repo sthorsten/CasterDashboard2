@@ -49,26 +49,6 @@
                             </tr>
                             </thead>
                             <tbody id="team_list_tbody">
-                            <!--
-                            {% for t in teams %}
-                                <tr>
-                                    <td>{{ t.id }}</td>
-                                    <td>{{ t.name }}</td>
-                                    {% if t.has_logo %}
-                                        <td>
-                                            <img src="/media/teams/{{ t.id }}.png" alt="-"
-                                                 style="height: 30px; width: 30px;">
-                                        </td>
-                                    {% else %}
-                                        <td>{% trans "-" %}</td>
-                                    {% endif %}
-                                    <td>
-                                        <button class="btn btn-sm btn-warning" data-teamid="{{ t.id }}"
-                                                onclick="editTeam(this)">{% trans "Change Logo" %}</button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            -->
                             </tbody>
                         </table>
                     </div>

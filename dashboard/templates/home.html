@@ -83,19 +83,6 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-8 mb-2">
-                            {% trans "Social Overlay" %}
-                        </div>
-                        <div class="col-4 text-right">
-                            {% if social_count == 1 %}
-                                <span class="badge badge-pill badge-primary">{{ social_count }} {% trans "entry" %}</span>
-                            {% else %}
-                                <span class="badge badge-pill badge-primary">{{ social_count }} {% trans "entries" %}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -128,7 +115,7 @@
                             {% if current_match %}
                                 <span class="badge badge-pill badge-danger">{{ current_match.team_blue }}</span>
                             {% else %}
-                                <span class="badge badge-pill badge-danger">{% trans "No Match" %}</span>
+                                <span class="badge badge-pill badge-danger">{% trans "No Team" %}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -141,20 +128,7 @@
                             {% if current_match %}
                                 <span class="badge badge-pill badge-danger">{{ current_match.team_orange }}</span>
                             {% else %}
-                                <span class="badge badge-pill badge-danger">{% trans "No Match" %}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-8 mb-2">
-                            {% trans "Current Map" %}
-                        </div>
-                        <div class="col-4 text-right">
-                            {% if match_overlay_data.current_map %}
-                                <span class="badge badge-pill badge-danger">{{ match_overlay_data.current_map }}</span>
-                            {% else %}
-                                <span class="badge badge-pill badge-danger">{% trans "No Map" %}</span>
+                                <span class="badge badge-pill badge-danger">{% trans "No Team" %}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -208,7 +182,7 @@
         <div class="col-md-6 col-xl-4">
             <div class="small-box bg-primary">
                 <div class="inner">
-                    <h3>{{ league_count }}</h3>
+                    <h3>{{ team_count }}</h3>
 
                     <p>{% trans "Teams Added" %}</p>
                 </div>

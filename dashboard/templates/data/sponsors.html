@@ -57,7 +57,7 @@
                                         <td>-</td>
                                         <td class="text-capitalize">{% trans "yes" %}</td>
                                         <td>
-                                            <img src="/media/sponsors/{{ s.id }}.png" alt="-" style="height: 30px;">
+                                            <img src="/media/{{ s.sponsor_logo }}" alt="-" style="height: 30px;">
                                         </td>
                                     </tr>
                                 {% else %}
@@ -70,7 +70,7 @@
                                                     <td>{{ s.league }}</td>
                                                     <td class="text-capitalize">{% trans "no" %}</td>
                                                     <td>
-                                                        <img src="/media/sponsors/{{ s.id }}.png" alt="-"
+                                                        <img src="/media/{{ s.sponsor_logo }}" alt="-"
                                                              style="height: 30px;">
                                                     </td>
                                                 </tr>

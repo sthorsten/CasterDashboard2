@@ -42,6 +42,7 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>{% trans "Logo" %}</th>
                                 <th>{% trans "League" %}</th>
                                 <th>{% trans "Private League" %}?</th>
                                 <th>{% trans "Private League Role" %}</th>
@@ -54,17 +55,25 @@
                                         {% if lg.league == l and lg.user == user %}
                                             <tr>
                                                 <td>{{ l.id }}</td>
+                                                <td>
+                                                    <img src="/media/{{ l.league_logo_small }}" alt="-"
+                                                         style="height: 30px; width: 30px;">
+                                                </td>
                                                 <td>{{ l.name }}</td>
-                                                <td>{% trans "yes" %}</td>
-                                                <td class="text-capitalize">{{ lg.rank }}</td>
+                                                <td>{% trans "Yes" %}</td>
+                                                <td class="text-capitalize">{{ lg.get_rank_display }}</td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
                                     <tr>
                                         <td>{{ l.id }}</td>
+                                        <td>
+                                            <img src="/media/{{ l.league_logo_small }}" alt="-"
+                                                 style="height: 30px; width: 30px;">
+                                        </td>
                                         <td>{{ l.name }}</td>
-                                        <td>{% trans "no" %}</td>
+                                        <td>{% trans "No" %}</td>
                                         <td>-</td>
                                     </tr>
                                 {% endif %}

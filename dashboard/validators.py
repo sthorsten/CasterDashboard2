@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models.fields.files import ImageFieldFile
 from django.utils.translation import gettext_lazy as _
 
 
@@ -26,15 +27,7 @@ def validate_image(image):
 
 
 def validate_square_logo(image):
-    if not image:
-        return
-
-    if isinstance(image, InMemoryUploadedFile):
-        return
-
-    try:
-        image_file = image.file
-    except FileNotFoundError:
+    if not isinstance(image, ImageFieldFile):
         return
 
     if image.height != image.width:

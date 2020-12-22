@@ -49,15 +49,22 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right border-0 shadow"
                     aria-labelledby="user-menu">
-                    {% if user.is_staff %}
+                    {% if user.is_staff or is_league_admin %}
                         <li class="dropdown-header">{% trans "Administration" %}</li>
-                        <li>
-                            <a href="/admin" target="_blank"
-                               class="dropdown-item text-center">{% trans "Django Admin" %}</a>
-                        </li>
+                        {% if user.is_staff %}
+                            <li>
+                                <a href="/admin" target="_blank"
+                                   class="dropdown-item text-center">{% trans "Django Admin" %}</a>
+                            </li>
+                        {% endif %}
+                        {% if is_league_admin %}
+                            <li>
+                                <a href="/dashboard/settings/leagues"
+                                   class="dropdown-item text-center">{% trans "League Administration" %}</a>
+                            </li>
+                        {% endif %}
                         <li class="dropdown-divider"></li>
                     {% endif %}
-
 
                     <li class="dropdown-header">{% trans "User" %}</li>
                     <li>

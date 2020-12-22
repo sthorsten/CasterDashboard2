@@ -1,6 +1,9 @@
 {% load i18n %}
+{% csrf_token %}
 
 <script>
+
+    const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     let next_ban_order = 0;
     let atk_team = 0;
@@ -8,8 +11,12 @@
 
     $(document).ready(function () {
         next_ban_order = {{ operator_bans|length }} +1;
-        atk_team = {{ map_settings.atk_team.id }};
-        {% if map_settings.atk_team == match.team_blue %}
+        {% if current_match_map.atk_team is not None %}
+            atk_team = {{ current_match_map.atk_team.id }};
+        {% else %}
+            atk_team = null;
+        {% endif %}
+        {% if current_match_map.atk_team == match.team_blue %}
             def_team = {{ match.team_orange.id }};
         {% else %}
             def_team = {{ match.team_blue.id }}
@@ -40,27 +47,49 @@
     });
 
     function setATKTeam(elem) {
-        let matchID = "{{ match.id }}";
-        let mapID = "{{ map.id }}";
-        let postURL = `/api/matches/map_settings/${matchID}/${mapID}/`;
+        let matchMapID = {{ current_match_map.id }};
+        let matchID = {{ current_match_map.match.id }};
+        let mapID = {{ current_match_map.map.id }};
+        let type = {{ current_match_map.type }};
+        let postURL = `/api/matches/maps/${matchMapID}/`;
         let atk_team = $(elem).attr("data-value");
-        let data = `{"atk_team": ${atk_team}}`
+        let postData = {"type": type, "match": matchID, "map": mapID, "atk_team": atk_team};
 
-        console.log(`POST: ${postURL} => ${data}`);
-        $.post(postURL, data).always(function () {
+        console.log(`POST: ${postURL} => ` + JSON.stringify(postData));
+        $.ajax({
+            type: "PUT",
+            headers: {"X-CSRFToken": csrf_token},
+            mode: 'same-origin',
+            url: postURL,
+            data: postData,
+        }).fail((data) => {
+            console.log(data)
+            toastr.error("{% trans "Failed to setup ATK team" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+        }).done(() => {
             location.reload();
         });
     }
 
     function setOTATKTeam(elem) {
-        let matchID = "{{ match.id }}";
-        let mapID = "{{ map.id }}";
-        let postURL = `/api/matches/map_settings/${matchID}/${mapID}/`;
-        let atk_team = $(elem).attr("data-value");
-        let data = `{"ot_atk_team": ${atk_team}}`
+        let matchMapID = {{ current_match_map.id }};
+        let matchID = {{ current_match_map.match.id }};
+        let mapID = {{ current_match_map.map.id }};
+        let type = {{ current_match_map.type }};
+        let postURL = `/api/matches/maps/${matchMapID}/`;
+        let ot_atk_team = $(elem).attr("data-value");
+        let postData = {"type": type, "match": matchID, "map": mapID, "ot_atk_team": ot_atk_team};
 
-        console.log(`POST: ${postURL} => ${data}`);
-        $.post(postURL, data).always(function () {
+        console.log(`POST: ${postURL} => ` + JSON.stringify(postData));
+        $.ajax({
+            type: "PUT",
+            headers: {"X-CSRFToken": csrf_token},
+            mode: 'same-origin',
+            url: postURL,
+            data: postData,
+        }).fail((data) => {
+            console.log(data)
+            toastr.error("{% trans "Failed to setup OT ATK team" %}. {% trans "Please try again or contact an administrator" %}!", "{% trans "Error" %}");
+        }).done(() => {
             location.reload();
         });
     }

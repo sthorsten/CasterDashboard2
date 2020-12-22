@@ -73,13 +73,13 @@
         // Round Icons (1.8+ s.)
         for (let i = 1; i <= round_count; i++) {
             setTimeout(function () {
-                $('#round' + i).removeClass("invisible");
-                $('#round' + i).addClass("animate__animated animate__faster animate__zoomIn");
-            }, 1800 + ((i - 1) * 500));
+                $('#round' + i + '> img').removeClass("invisible");
+                $('#round' + i + '> img').addClass("animate__animated animate__faster animate__zoomIn");
+            }, 1800 + ((i - 1) * 250));
 
             setTimeout(function () {
-                $('#round' + i).removeClass("animate__animated animate__faster animate__zoomIn");
-            }, 2500 + ((i - 1) * 500))
+                $('#round' + i + '> img').removeClass("animate__animated animate__faster animate__zoomIn");
+            }, 2500 + ((i - 1) * 250))
         }
 
         // Remove animation classes

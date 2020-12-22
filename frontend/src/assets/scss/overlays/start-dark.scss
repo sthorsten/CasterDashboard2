@@ -1,0 +1,13 @@
+@import "base";
+
+// Theme Variable Overrides
+$left-bg: linear-gradient(0.25turn, transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0.8) 60%);
+$right-bg: linear-gradient(0.75turn, transparent, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.75) 40%, rgba(0, 0, 0, 0.8) 60%);
+$text-col: #fff;
+$center-text-col: #fff;
+$team-left-col: rgb(8, 112, 211);
+$team-right-col: rgb(234, 117, 22);
+$center-bg: #000;
+
+
+@import "start";

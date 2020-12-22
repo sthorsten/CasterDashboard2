@@ -50,10 +50,10 @@
                             {% trans "Match State" %}
                         </div>
                         <div class="col-6 text-right text-capitalize">
-                            {% if match.state.id == 10 %}
-                                <b class="text-danger">{{ match.state }}</b>
+                            {% if match.state == 5 %}
+                                <b class="text-danger">{{ match.get_state_display }}</b>
                             {% else %}
-                                <b>{{ match.state }}</b>
+                                <b>{{ match.get_state_display }}</b>
                             {% endif %}
                         </div>
                     </div>
@@ -182,7 +182,7 @@
 
                     <button class="btn btn-primary w-100 mb-2"
                             onclick="setMatchToOverlay()">{% trans "Set Match to Overlays" %}</button>
-                    {% if match.state.id == 10 %}
+                    {% if match.state == 5 %}
                         <button class="btn btn-primary w-100 disabled" disabled="disabled">
                             {% trans "Continue to Map Picks & Bans" %} ({% trans "disabled" %})
                         </button>
@@ -199,10 +199,13 @@
 
                         <div class="card-divider mt-4 mb-4"></div>
 
-                        <button class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</button>
+                        <a href="/dashboard/matches/{{ match.id }}/details"
+                           class="btn btn-secondary w-100 mb-2">{% trans "Show Match Details" %}</a>
                     {% endif %}
 
-                    <button class="btn btn-secondary w-100">{% trans "Share Match" %}</button>
+                    <button class="btn btn-secondary w-100" data-toggle="modal" data-target="#share-match-modal">
+                        {% trans "Share Match" %}
+                    </button>
 
                     <div class="card-divider mt-4 mb-4"></div>
 
@@ -215,15 +218,34 @@
         </div>
     </div>
 
-    <script>
-        function setMatchToOverlay() {
-            var matchID = "{{ match.id }}";
-            var postURL = "/api/overlay/current_match/" + {{ user.id }} +"/";
-            var data = `{"current_match": ${matchID}, "current_map": ${null}, "current_atk_team": ${null}}`;
+    {% include "matches/share-match-modal.html" %}
 
-            console.log(`POST: ${postURL} => ${data}`);
-            $.post(postURL, data)
-            toastr.success("{% trans "Overlays updated to current match" %}");
+    {% csrf_token %}
+
+    <script>
+        const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        function setMatchToOverlay() {
+            let matchID = "{{ match.id }}";
+            let postURL = "/api/overlay/match_data/{{ user.id }}/";
+            let postData = {"user": {{ user.id }}, "current_match": matchID};
+            //let postData = `{"user": {{ user.id }}, "current_match": ${matchID}}`;
+
+            console.log(`PUT: ${postURL} => ` + JSON.stringify(postData));
+
+            $.ajax({
+                type: "PUT",
+                headers: {"X-CSRFToken": csrf_token},
+                mode: 'same-origin',
+                url: postURL,
+                data: postData,
+            }).done(() => {
+                toastr.success("{% trans "Overlays updated to current match" %}");
+            }).fail((data) => {
+                toastr.error("{% trans "Failed to set current match to overlay" %}!");
+            });
+
+
         }
     </script>
 

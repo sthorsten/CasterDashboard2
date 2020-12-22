@@ -1,17 +1,18 @@
 import logging
 
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.template import loader
 from django.contrib import auth
 from django.contrib import messages
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 
 from dashboard.forms import NewMatchForm
-from dashboard.models import *
-from overlays.models import *
+from dashboard.models.models import Map, BombSpot, Operator, League, LeagueGroup, Season, Sponsor, Team, Match, \
+    MatchMap, OperatorBans, Round
+
+from overlays.models.models import OverlayStyle, OverlayState, MatchOverlayData, SocialOverlayData, TimerOverlayData
 
 logger = logging.getLogger(__name__)
 
@@ -41,8 +42,8 @@ def register(request):
     return render(request, 'login/register.html')
 
 
-def register_success(requset):
-    return render(requset, 'login/register-success.html')
+def register_success(request):
+    return render(request, 'login/register-success.html')
 
 
 def logout_view(request):
@@ -55,20 +56,21 @@ def logout_view(request):
 
 @login_required
 def home(request):
-    league_count = len(League.objects.all())
+    team_count = len(Team.objects.all())
     match_count = len(Match.objects.all())
     round_count = len(Round.objects.all())
     social_count = len(SocialOverlayData.objects.filter(user=request.user).all())
     personal_match_count = len(Match.objects.filter(user=request.user).all())
 
-    match_overlay_data = MatchOverlayData.objects.filter(user=request.user).first()
+    match_overlay_data = MatchOverlayData.objects.get(user=request.user)
+
     if match_overlay_data.current_match:
-        current_match = Match.objects.filter(id=match_overlay_data.current_match.id).first()
+        current_match = Match.objects.get(id=match_overlay_data.current_match.id)
     else:
         current_match = None
 
     template_data = {
-        'league_count': league_count,
+        'team_count': team_count,
         'match_count': match_count,
         'round_count': round_count,
         'social_count': social_count,
@@ -82,20 +84,41 @@ def home(request):
 
 
 '''
+    Settings
+'''
+
+
+@login_required
+def settings_league_admin(request):
+    league_groups = LeagueGroup.objects.all()
+    admin_leagues = []
+
+    for lg in league_groups:
+        if lg.user == request.user and lg.rank == 'admin':
+            admin_leagues.append(lg.league)
+
+    template_data = {
+        "admin_leagues": admin_leagues,
+    }
+
+    return render(request, 'settings/league_admin.html', template_data)
+
+
+'''
     Overlays
 '''
 
 
 @login_required
 def overlay_control_center(request):
-    overlay_styles = OverlayStyle.objects.filter(user=request.user).first()
-    overlay_states = OverlayState.objects.filter(user=request.user).first()
-    timer_overlay_data = TimerOverlayData.objects.filter(user=request.user).first()
+    overlay_styles = OverlayStyle.objects.get(user=request.user)
+    overlay_states = OverlayState.objects.get(user=request.user)
+    timer_overlay_data = TimerOverlayData.objects.get(user=request.user)
     # Last 10 Matches
     matches = Match.objects.filter(user=request.user).order_by("-id").all()[:10]
-    match_overlay_data = MatchOverlayData.objects.filter(user=request.user).first()
+    match_overlay_data = MatchOverlayData.objects.get(user=request.user)
     if match_overlay_data.current_match:
-        current_match = Match.objects.filter(id=match_overlay_data.current_match.id).first()
+        current_match = Match.objects.get(id=match_overlay_data.current_match.id)
     else:
         current_match = None
 
@@ -113,7 +136,7 @@ def overlay_control_center(request):
 
 @login_required
 def popout_overlay_toggles(request):
-    overlay_states = OverlayState.objects.filter(user=request.user).first()
+    overlay_states = OverlayState.objects.get(user=request.user)
 
     template_data = {
         'overlay_states': overlay_states,
@@ -231,13 +254,15 @@ def match_create(request):
 
 @login_required
 def match_overview(request, match_id):
-    match = Match.objects.filter(id=match_id).first()
+    users = User.objects.all()
+    match = Match.objects.get(id=match_id)
     match_users = match.user.all()
     match_sponsors = []
     for s in match.sponsors.all():
         match_sponsors.append(s)
 
     template_data = {
+        'users': users,
         'match': match,
         'match_users': match_users,
         'match_sponsors': match_sponsors,
@@ -247,19 +272,36 @@ def match_overview(request, match_id):
 
 
 @login_required
+def match_details(request, match_id):
+    match = Match.objects.get(id=match_id)
+    map_bans = MatchMap.objects.filter(match=match).all().order_by("order")
+    operator_bans = OperatorBans.objects.filter(match=match).all()
+    rounds = Round.objects.filter(match=match).all()
+
+    template_data = {
+        'match': match,
+        'map_bans': map_bans,
+        'operator_bans': operator_bans,
+        'rounds': rounds,
+    }
+
+    return render(request, 'matches/details.html', template_data)
+
+
+@login_required
 def match_maps(request, match_id):
-    match = Match.objects.filter(id=match_id).first()
+    match = Match.objects.get(id=match_id)
     maps = Map.objects.all()
 
-    if 4 <= match.state.id <= 7:
+    if match.state == 3 or match.state == 4:
         try:
-            next_map_id = MapPlayOrder.objects.get(match=match, order=(match.state.id - 2)).map.id
-        except MapPlayOrder.DoesNotExist:
+            next_map_id = MatchMap.objects.get(match=match, status=2).map.id
+        except MatchMap.DoesNotExist:
             next_map_id = None
     else:
         try:
-            next_map_id = MapPlayOrder.objects.get(match=match, order=1).map.id
-        except MapPlayOrder.DoesNotExist:
+            next_map_id = MatchMap.objects.get(match=match, play_order=1).map.id
+        except MatchMap.DoesNotExist:
             next_map_id = None
 
     template_data = {
@@ -273,9 +315,9 @@ def match_maps(request, match_id):
 
 @login_required
 def match_opbans(request, match_id, map_id):
-    match = Match.objects.filter(id=match_id).first()
-    map = Map.objects.filter(id=map_id).first()
-    map_settings = MapSettings.objects.filter(match=match, map=map).first()
+    match = Match.objects.get(id=match_id)
+    map = Map.objects.get(id=map_id)
+    current_match_map = MatchMap.objects.get(match=match_id, map=map_id)
     atk_ops = Operator.objects.filter(side="ATK").order_by('name')
     def_ops = Operator.objects.filter(side="DEF").order_by('name')
     operator_ban_query = OperatorBans.objects.filter(match_id=match.id, map_id=map.id).all()
@@ -284,15 +326,10 @@ def match_opbans(request, match_id, map_id):
     for op in operator_ban_query:
         operator_bans.append(op)
 
-    # Add MapSettings entry if not present
-    if not map_settings:
-        map_settings = MapSettings(match=match, map=map, atk_team=match.team_blue, ot_atk_team=match.team_blue)
-        map_settings.save()
-
     template_data = {
         'match': match,
         'map': map,
-        'map_settings': map_settings,
+        'current_match_map': current_match_map,
         'atk_ops': atk_ops,
         'def_ops': def_ops,
         'operator_bans': operator_bans,
@@ -303,18 +340,22 @@ def match_opbans(request, match_id, map_id):
 
 @login_required
 def match_rounds(request, match_id, map_id):
-    match = Match.objects.filter(id=match_id).first()
-    map = Map.objects.filter(id=map_id).first()
+    match = Match.objects.get(id=match_id)
+    map = Map.objects.get(id=map_id)
     bomb_spots = BombSpot.objects.filter(map=map).all()
-    win_types = WinType.objects.all()
     rounds = Round.objects.filter(match=match, map=map).all()
 
     template_data = {
         'match': match,
         'map': map,
         'bomb_spots': bomb_spots,
-        'win_types': win_types,
         'rounds': rounds,
     }
 
     return render(request, 'matches/rounds.html', template_data)
+
+
+# Vue
+
+def teams_vue(request):
+    return render(request, 'data/teams-vue.html')

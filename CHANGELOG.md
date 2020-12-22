@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-alpha3] - 2020-12-22
+
+### Notes
+- This release is not ready for production!
+
+### Added
+- New Frontend Framework: VueJS
+- The dashboard is now available as a Docker image
+- Various Django Rest Framwork API endpoints to go along with the new frontend
+- Various Websocket endpoints to get realtime updates in the new frontend
+
+### Changed
+- Complete refactoring of various components of the project
+- Added more information and screenshots to the [README](README.md)
+
+### Deprecated
+- Django Views, with the exception of Django Rest Framework under /api, will be removed soon
+
+### Removed
+- Old Django Migrations
+
+### Security
+- Changed password hashing algorithm to argon2id
+
+
+
 ## [2.0.0-alpha2] - 2020-08-26
 
 ### Added
@@ -32,6 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (New) Repository initialized
 - Readme, Changelog and License added and updated
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha2...HEAD
-[2.0.0-alpha2]: https://github.com/olivierlacan/keep-a-changelog/releases/tag/v2.0.0-alpha2
-[2.0.0-alpha1]: https://github.com/olivierlacan/keep-a-changelog/releases/tag/v2.0.0-alpha1
+
+
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha3...HEAD
+[2.0.0-alpha3]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha3
+[2.0.0-alpha2]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha2
+[2.0.0-alpha1]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha1
+
