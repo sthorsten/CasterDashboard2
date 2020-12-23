@@ -99,12 +99,19 @@ export default {
         },
         getUserToken() {
             this.loginLoading = true
-            axios.post(this.$store.state.backendURL + '/api/api-token-auth/', {
+            axios.post(this.$store.state.backendURL + '/api/token/', {
                 username: this.username,
                 password: this.password
             }).then((response) => {
-                this.$store.commit('setUserToken', response.data.token)
-                this.logInUser(response.data.token)
+                this.$store.commit('setUserToken', response.data.access)
+                this.$store.commit('setUserRefreshToken', response.data.refresh)
+
+                // Set date until token is valid (12 hrs)
+                let date = new Date(Date.now());
+                date.setHours(date.getHours() + 12)
+                this.$store.commit('setLoginValidUntil', date)
+
+                this.logInUser(response.data.access)
             }).catch((error) => {
                 if (error.response.status === 400) {
                     this.$toast.error(this.$t('login.invalid_credentials'), this.$t('login.login_failed'))
@@ -117,7 +124,7 @@ export default {
             this.loginLoading = true;
             axios.get(this.$store.state.backendURL + '/api/user/current/', {
                 headers: {
-                    "Authorization": "Token " + token
+                    "Authorization": "Bearer " + token
                 }
             }).then((response) => {
                 this.$store.commit('setUser', response.data)

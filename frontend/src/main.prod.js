@@ -78,6 +78,8 @@ const store = new Vuex.Store({
         frontendURL: "http://localhost",
         backendURL: "http://localhost",
         userToken: "",
+        userRefreshToken: "",
+        tokenValidUntil: null,
         user: null,
         loggedIn: false
     },
@@ -90,7 +92,7 @@ const store = new Vuex.Store({
         },
         authHeader: state => {
             return {
-                headers: {"Authorization": "Token " + state.userToken}
+                headers: {"Authorization": "Bearer " + state.userToken}
             }
         }
     },
