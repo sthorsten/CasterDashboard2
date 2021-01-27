@@ -13,7 +13,7 @@ from django.db.models.signals import post_save, pre_delete, pre_save, post_delet
 from django.dispatch import receiver
 
 from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, convert_sponsor_logo
-from caster_dashboard_2.settings import base as django_settings
+from caster_dashboard_2 import settings as django_settings
 
 from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round
 from websockets.helper import send_match_data_to_consumers

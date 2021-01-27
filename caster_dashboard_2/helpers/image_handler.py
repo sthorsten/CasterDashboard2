@@ -1,6 +1,6 @@
 import os
 from PIL import Image, ImageOps
-from caster_dashboard_2.settings.base import MEDIA_ROOT
+from caster_dashboard_2.settings import MEDIA_ROOT
 from caster_dashboard_2.errors.ImageErrors import *
 
 

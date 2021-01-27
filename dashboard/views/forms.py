@@ -13,7 +13,7 @@ from django.utils.translation import gettext as _
 from pip._vendor import requests
 
 import caster_dashboard_2
-import caster_dashboard_2.settings.base as django_settings
+import caster_dashboard_2.settings as django_settings
 
 from dashboard.models.models import *
 

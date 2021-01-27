@@ -27,6 +27,28 @@ class Profile(models.Model):
         return str(self.user)
 
 
+class Notification(models.Model):
+    # Global notifications and alerts for all users
+
+    TYPE_CHOICES = [
+        (1, 'Information'),
+        (2, 'Success'),
+        (3, 'Warning'),
+        (4, 'Danger')
+    ]
+
+    name = models.CharField(max_length=255)
+    type = models.IntegerField(choices=TYPE_CHOICES, default=1)
+    show = models.BooleanField(default=True)
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    valid_until = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Map(models.Model):
     # Represents a map in Rainbow Six Siege
 

@@ -5,11 +5,13 @@ from rest_framework.authtoken import views as rest_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from api import views
+from api.tokens import CustomTokenObtainPairView
 from api.views import *
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet)
 router.register(r'profile', ProfileViewSet)
+router.register(r'notification', NotificationViewSet)
 
 router.register(r'core/map', MapViewSet)
 router.register(r'core/map_pool', MapPoolViewSet)
@@ -40,7 +42,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # SimpleJWT
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Overlays
