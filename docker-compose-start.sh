@@ -1,4 +1,7 @@
 #!/bin/bash
-python3 manage.py migrate --settings=dashboard.settings
-python3 manage.py collectstatic --settings=dashboard.settings --noinput --clear
-daphne -b 0.0.0.0 -p 8000 dashboard.asgi:application
+mkdir /backend/logs
+touch /backend/logs/django.log
+touch /backend/logs/dashboard.log
+python3 manage.py migrate
+python3 manage.py collectstatic --noinput --clear
+daphne -b 0.0.0.0 -p 8000 caster_dashboard_2.asgi:application

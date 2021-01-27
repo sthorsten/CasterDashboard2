@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:12.0-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=caster_dashboard_2
       - POSTGRES_PASSWORD=caster_dashboard_2
@@ -20,6 +20,7 @@ services:
     volumes:
       - asset_files:/opt/static/assets
       - media_files:/opt/static/media
+      - frontend_files:/opt/static/frontend
     ports:
       - 80:80
     depends_on:
@@ -29,17 +30,29 @@ services:
   dashboard:
     image: thorshero/caster-dashboard-2:latest
     volumes:
-      - asset_files:/opt/caster_dashboard_2/assets
-      - media_files:/opt/caster_dashboard_2/media
-      - ./docker-settings.py:/opt/caster_dashboard_2/dashboard/settings.py
-    command: sh /opt/caster_dashboard_2/docker-compose-start.sh
+      - asset_files:/backend/assets
+      - media_files:/backend/media
+      - frontend_files:/frontend
+    command: sh /backend/docker-compose-start.sh
+    environment:
+      # Generate one with Django's built-in get_random_secret_key() function from django.core.management.utils
+      - SECRET_KEY=enter-your-secret-key-here
+      # Set your domain(s) here
+      - ALLOWED_HOSTS=example.com, cast.example.com
+      # Set your email server settings here
+      - EMAIL_ADDRESS=mail@example.com
+      - EMAIL_HOST=mail.example.com
+      - EMAIL_PORT=587
+      - EMAIL_USERNAME=example_user
+      - EMAIL_PASSWORD=example_password
+      - EMAIL_USE_TLS=true
     depends_on:
       - db
       - redis
-
 
 
 volumes:
   postgres_data:
   asset_files:
   media_files:
+  frontend_files:

@@ -24,10 +24,10 @@ from rest_framework.views import APIView
 
 from api.filter import SeasonFilter
 from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
-    Sponsor, Team, Match, OperatorBans, Round
+    Sponsor, Team, Match, OperatorBans, Round, Notification
 from dashboard.models.serializers import OperatorBanSerializer, RoundSerializer, UserSerializer, ProfileSerializer, \
     MapSerializer, MapPoolSerializer, BombSpotSerializer, OperatorSerializer, LeagueSerializer, LeagueGroupSerializer, \
-    SeasonSerializer, SponsorSerializer, TeamSerializer, MatchSerializer, MatchMapSerializer
+    SeasonSerializer, SponsorSerializer, TeamSerializer, MatchSerializer, MatchMapSerializer, NotificationSerializer
 from overlays.models import *
 from overlays.models.models import MatchOverlayData, OverlayStyle, OverlayState, PollOverlayData, SocialOverlayData, \
     TimerOverlayData, TickerOverlayData
@@ -55,6 +55,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    filterset_fields = ['type', 'show']
 
 
 class MapViewSet(viewsets.ReadOnlyModelViewSet):

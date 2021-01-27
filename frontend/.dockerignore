@@ -1,6 +1,7 @@
-.idea/
-dist/
-node_modules/
+.idea
+_old-vue-src
 .dockerignore
+.editorconfig
+.env
 .gitignore
-Dockerfile
+yarn.lock

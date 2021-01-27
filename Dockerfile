@@ -4,22 +4,18 @@
 
 FROM node:lts-alpine as frontend-build
 
-WORKDIR /app
+WORKDIR /frontend
 
 # Install node dependencies
-COPY ./frontend/package*.json ./
-RUN npm install
+COPY ./frontend/package.json ./
+RUN yarn install
 
-# Copy frontend files and override with production config
+# Copy frontend files and set docker .env file
 COPY ./frontend .
-COPY ./frontend/vue.config.prod.js ./vue.config.js
-COPY ./frontend/src/main.prod.js ./src/main.js
-COPY ./frontend/src/router/index.prod.js ./src/router/index.js
+COPY ./frontend/.env.docker ./.env
 
-RUN npm run build -- --mode development
-
-# Move asset files
-RUN mv ./dist/assets/* ./dist
+# Generate static nuxt site
+RUN yarn generate
 
 ###########
 # Backend #
@@ -27,7 +23,7 @@ RUN mv ./dist/assets/* ./dist
 
 FROM python:3.8-alpine
 
-WORKDIR /opt/caster_dashboard_2
+WORKDIR /backend
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -41,8 +37,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Copy frontend files
-COPY --from=frontend-build /app/dist ./frontend_assets
+COPY --from=frontend-build /frontend/dist /frontend
 
-# Copy overrides
-COPY ./caster_dashboard_2/settings/base.prod.py ./caster_dashboard_2/settings/base.py
-#COPY ./docker-settings.py ./dashboard/settings.py => Needs to be loaded externally
+# Copy environment file
+COPY .env.docker ./.env

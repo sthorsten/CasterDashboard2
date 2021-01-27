@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import JavaScriptCatalog
 
-from caster_dashboard_2.settings.base import *
+from caster_dashboard_2.settings import *
 from dashboard.views import sites, forms
 
 urlpatterns = [

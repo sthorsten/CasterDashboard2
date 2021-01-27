@@ -14,6 +14,16 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'confirmed')
 
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'show', 'title')
+    readonly_fields = ('id', 'created',)
+    fieldsets = [
+        (_("Base Information"), {'fields': ['id', 'name', 'type', 'show']}),
+        (_("Content"), {'fields': ['title', 'text']}),
+        (_("Meta"), {'fields': ['created', 'valid_until']})
+    ]
+
+
 class BombSpotAdmin(admin.ModelAdmin):
     list_display = ('name', 'map', 'floor')
 
@@ -99,6 +109,7 @@ class RoundAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Notification, NotificationAdmin)
 admin.site.register(Map)
 admin.site.register(MapPool)
 admin.site.register(BombSpot, BombSpotAdmin)
