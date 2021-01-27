@@ -46,11 +46,13 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 
 The dashboard is available as a [Docker Image](https://hub.docker.com/r/thorshero/caster-dashboard-2).
 
-To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit it to your needs. You may want to change the default nginx port from `80:80` to something like `8000:80`.
+To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit it to your needs. The parts that need to be edited are documented by comments.
 
-Additionally, download the [docker-settings.py](docker-settings.py) which contains host-specific settings, such as the `SECRET_KEY` which you have to set manually. You can use `get_random_secret_key()` function from the python package `django.core.management.utils` to generate a secret key. Next, add your host to the `ALLOWED_HOSTS` section of the settings file. Finally, setup an email address which is needed for users to be able to register for the dashboard.
+You **must** set a secret key for your Django instance in the `environment` section of the `dashboard` service. You can for example use the`get_random_secret_key()` function from the python package `django.core.management.utils` to generate one.
 
-That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.com>/admin` and login with the default username `admin` and password `caster_dashboard_2`.
+Additionally, add your the domain on which the dashboard will be accessed to the `ALLOWED_HOSTS` (you can skip that if you only run the dashboard locally). Finally, add your email address and it's server settings which is needed for users to be able to register for the dashboard (*Note: The registration is not implemented yet!*).
+
+That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`. You may want to create users manually from there.
 
 
 
