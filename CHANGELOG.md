@@ -6,6 +6,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-alpha4] - 2021-01-27
+
+### Notes
+
+- This release is not ready for production!
+
+### Added
+
+- New Nuxt Frontend (WIP)
+- Notifications for all users on the home page, controllable via the Django admin panel
+- Environment files for Django and Nuxt for easier configuration
+
+### Changed
+
+- Internal Docker workings: Added new Nuxt frontend in static mode
+- Internal Docker settings to work with the new environment files
+
+### Deprecated
+
+- Various parts in the Django backend - will be removed step by step
+- "Old" Vue frontend (being converted to Nuxt, WIP)
+
+### Removed
+
+- Some static files left in the Django project
+- Django Landing page app (Will be handled by the new frontend and never got implemented)
+
+
+
 ## [2.0.0-alpha3] - 2020-12-22
 
 ### Notes
@@ -47,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Duplicate league entries showing on the league, season and sponsors page (Closed #1)
-- Minor bugs (see commits 6ef992e7e14ae5177b34dc1a2261811b042697d3 e59c8549160e30947fc7465b9e1701d78b2a4848 ddaa3c87a5961efa5697f6e6fe768d2b12abfab1)
+- Minor bugs (see commits [6ef992e](https://github.com/sthorsten/CasterDashboard2/commit/6ef992e7e14ae5177b34dc1a2261811b042697d3), [e59c854](https://github.com/sthorsten/CasterDashboard2/commit/e59c8549160e30947fc7465b9e1701d78b2a4848) and [ddaa3c8](https://github.com/sthorsten/CasterDashboard2/commit/ddaa3c87a5961efa5697f6e6fe768d2b12abfab1))
 
 
 
@@ -60,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha3...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha4...HEAD
+[2.0.0-alpha4]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha4
 [2.0.0-alpha3]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha3
 [2.0.0-alpha2]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha2
 [2.0.0-alpha1]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha1
