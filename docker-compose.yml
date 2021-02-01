@@ -16,7 +16,7 @@ services:
     
   
   nginx: # Reverse proxy
-    image: docker.pkg.github.com/sthorsten/CasterDashboard2/nginx:latest
+    image: docker.pkg.github.com/sthorsten/casterdashboard2/nginx:latest
     volumes:
       - asset_files:/opt/static/assets
       - media_files:/opt/static/media
@@ -28,20 +28,20 @@ services:
 
 
   frontend: # Nuxt frontend
-    image: docker.pkg.github.com/sthorsten/CasterDashboard2/frontend:latest
+    image: docker.pkg.github.com/sthorsten/casterdashboard2/frontend:latest
     command: yarn run start
     environment:
       - NUXT_HOST=0.0.0.0
 
 
   backend: # Django backend
-    image: docker.pkg.github.com/sthorsten/CasterDashboard2/backend:latest
+    image: docker.pkg.github.com/sthorsten/casterdashboard2/backend:latest
     volumes:
       - asset_files:/backend/assets
       - media_files:/backend/media
     command: sh /backend/docker-compose-start.sh
     environment:
-      - SECRET_KEY=ffo6d2mr7o8w82jcmrm500f6esyonn82hckxigconl
+      - SECRET_KEY=<your-secret-key>
       - DB_HOST=db
       - EMAIL_ADDRESS=mail@example.com
       - EMAIL_HOST=mail.example.com
