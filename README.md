@@ -1,7 +1,7 @@
 # R6 Caster Dashboard
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/thorshero/caster-dashboard-2)
+![Docker](https://github.com/sthorsten/CasterDashboard2/workflows/Docker/badge.svg)
 [![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE.md)
 
 

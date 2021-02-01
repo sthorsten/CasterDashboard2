@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Notes
+
+- This release is not ready for production yet!
+
+### Added
+
+- New Operator Ban page
+- Docker images as Github Docker packages
+- Build number to VERSION
+
+### Changed
+
+- The program now consists of 3 docker images: `frontend`, `backend` and `nginx`
+
+### Removed
+
+- Old Docker Hub images
+
+
+
 ## [2.0.0-alpha4] - 2021-01-27
 
 ### Notes
