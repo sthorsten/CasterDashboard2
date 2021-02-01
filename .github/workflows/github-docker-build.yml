@@ -56,9 +56,11 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME_FRONTEND
+        working-directory: ./frontend
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        working-directory: ./frontend
 
       - name: Push image
         run: |
@@ -75,6 +77,7 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME_FRONTEND $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+        working-directory: ./frontend
 
   build_nginx:
     runs-on: ubuntu-latest
@@ -85,9 +88,11 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME_NGINX
+        working-directory: ./docker-nginx
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        working-directory: ./docker-nginx
 
       - name: Push image
         run: |
@@ -104,3 +109,4 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME_NGINX $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+        working-directory: ./docker-nginx
