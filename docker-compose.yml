@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  db: # Postgres Database
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -11,35 +11,38 @@ services:
       - POSTGRES_DB=caster_dashboard_2
       
 
-  redis:
+  redis: # Redis for Websocket connections
     image: redis:alpine
     
   
-  nginx:
-    image: thorshero/cd2-nginx:latest
+  nginx: # Reverse proxy
+    image: docker.pkg.github.com/sthorsten/CasterDashboard2/nginx:latest
     volumes:
       - asset_files:/opt/static/assets
       - media_files:/opt/static/media
-      - frontend_files:/opt/static/frontend
     ports:
       - 80:80
     depends_on:
-      - dashboard
+      - frontend
+      - backend
 
 
-  dashboard:
-    image: thorshero/caster-dashboard-2:latest
+  frontend: # Nuxt frontend
+    image: docker.pkg.github.com/sthorsten/CasterDashboard2/frontend:latest
+    command: yarn run start
+    environment:
+      - NUXT_HOST=0.0.0.0
+
+
+  backend: # Django backend
+    image: docker.pkg.github.com/sthorsten/CasterDashboard2/backend:latest
     volumes:
       - asset_files:/backend/assets
       - media_files:/backend/media
-      - frontend_files:/frontend
     command: sh /backend/docker-compose-start.sh
     environment:
-      # Generate one with Django's built-in get_random_secret_key() function from django.core.management.utils
-      - SECRET_KEY=enter-your-secret-key-here
-      # Set your domain(s) here
-      - ALLOWED_HOSTS=example.com, cast.example.com
-      # Set your email server settings here
+      - SECRET_KEY=ffo6d2mr7o8w82jcmrm500f6esyonn82hckxigconl
+      - DB_HOST=db
       - EMAIL_ADDRESS=mail@example.com
       - EMAIL_HOST=mail.example.com
       - EMAIL_PORT=587
@@ -55,4 +58,3 @@ volumes:
   postgres_data:
   asset_files:
   media_files:
-  frontend_files:

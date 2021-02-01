@@ -1,7 +1,10 @@
 .idea
+.nuxt
 _old-vue-src
+
 .dockerignore
 .editorconfig
-.env
+.env*
 .gitignore
+Dockerfile
 yarn.lock

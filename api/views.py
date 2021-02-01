@@ -83,6 +83,7 @@ class BombSpotViewSet(viewsets.ReadOnlyModelViewSet):
 class OperatorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Operator.objects.all()
     serializer_class = OperatorSerializer
+    filterset_fields = ['side']
 
 
 class LeagueViewSet(viewsets.ReadOnlyModelViewSet):

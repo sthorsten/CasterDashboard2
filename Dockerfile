@@ -2,20 +2,20 @@
 # Frontend #
 ############
 
-FROM node:lts-alpine as frontend-build
+#FROM node:lts-alpine as frontend-build
 
-WORKDIR /frontend
+#WORKDIR /frontend
 
 # Install node dependencies
-COPY ./frontend/package.json ./
-RUN yarn install
+#COPY ./frontend/package.json ./
+#RUN yarn install
 
 # Copy frontend files and set docker .env file
-COPY ./frontend .
-COPY ./frontend/.env.docker ./.env
+#COPY ./frontend .
+#COPY ./frontend/.env.docker ./.env
 
 # Generate static nuxt site
-RUN yarn generate
+#RUN yarn generate -- --devtools
 
 ###########
 # Backend #
@@ -37,7 +37,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Copy frontend files
-COPY --from=frontend-build /frontend/dist /frontend
+#COPY --from=frontend-build /frontend/dist /frontend
 
 # Copy environment file
 COPY .env.docker ./.env

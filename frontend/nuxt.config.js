@@ -1,10 +1,6 @@
 export default {
     // Target (https://go.nuxtjs.dev/config-target)
-    target: 'static',
-
-    generate: {
-        devtools: true
-    },
+    target: 'server',
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
@@ -34,16 +30,10 @@ export default {
     // Auto import components (https://go.nuxtjs.dev/config-components)
     components: true,
 
-    env: {
-        baseURL: process.env.BASE_URL,
-        browserBaseURL: process.env.BROWSER_BASE_URL,
-        websocketBaseURL: process.env.WEBSOCKET_BASE_URL,
-    },
-
     publicRuntimeConfig: {
-        baseURL: process.env.BASE_URL,
-        browserBaseURL: process.env.BROWSER_BASE_URL,
-        websocketBaseURL: process.env.WEBSOCKET_BASE_URL,
+        baseURL: process.env.BASE_URL || "" ,
+        browserBaseURL: process.env.BROWSER_BASE_URL || "",
+        websocketBaseURL: process.env.WEBSOCKET_BASE_URL || "",
     },
 
     // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
@@ -106,6 +96,7 @@ export default {
         ],
         vueI18n: {
             fallbackLocale: 'en',
+            silentFallbackWarn: true,
             dateTimeFormats: {
                 'en': {
                     short: {

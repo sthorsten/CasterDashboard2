@@ -254,6 +254,10 @@
             "atk_ops": "ATK Operators",
             "def_ops": "DEF Operators",
             "toasts": {
+                "atk_team_set": "The ATK team has been set",
+                "atk_team_set_failed": "The ATK team could not be set :/",
+                "ot_atk_team_set": "The Overtime ATK team has been set",
+                "ot_atk_team_set_failed": "The Overtime ATK team could not be set :/",
                 "all_opbans_removed": "All operator bans have been removed",
                 "all_opbans_removed_failed": "Failed to remove operator bans :/",
                 "opban_removed": "Operator Ban Removed",

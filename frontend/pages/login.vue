@@ -94,6 +94,7 @@ export default {
     },
 
     mounted() {
+        console.log(this.$config.baseURL)
         // Redirect if already logged in
         if (this.$auth.loggedIn){
             this.loginRedirect()
