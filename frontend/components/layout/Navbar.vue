@@ -48,10 +48,10 @@
                             <i class="fa fas fa-wrench"></i>
                             {{ $t('navigation.admin') }}
                         </b-dd-header>
-                        <b-dd-item class="text-center" :href="this.$config.baseURL + '/admin'" target="_blank">
+                        <b-dd-item class="text-center" :href="'/admin'" target="_blank">
                             Django Admin
                         </b-dd-item>
-                        <b-dd-item class="text-center" :href="this.$config.baseURL + '/api'" target="_blank">
+                        <b-dd-item class="text-center" :href="'/api'" target="_blank">
                             {{ $t('navigation.api_access') }}
                         </b-dd-item>
                         <b-dd-item class="text-center" to="/dashboard/settings/league-admin">

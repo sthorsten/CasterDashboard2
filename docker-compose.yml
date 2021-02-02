@@ -43,6 +43,7 @@ services:
     environment:
       - SECRET_KEY=<your-secret-key>
       - DB_HOST=db
+      - ALLOWED_HOSTS=example.com
       - EMAIL_ADDRESS=mail@example.com
       - EMAIL_HOST=mail.example.com
       - EMAIL_PORT=587
