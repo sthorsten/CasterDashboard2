@@ -103,8 +103,19 @@ export default {
 
     methods: {
         loginRedirect(){
-            if (this.$route.query.next) {
-                this.$router.push(this.$route.query.next)
+            // Get redirect from auth cookie
+            let cookies = document.cookie.split("; ")
+            let cookiesFormatted = []
+            cookies.forEach(c => {
+                let cookiesSeparated = c.split("=")
+                cookiesFormatted[cookiesSeparated[0]] = cookiesSeparated[1]
+            })
+
+            // Redirect to last url or home
+            let redirectURL = decodeURIComponent(cookiesFormatted["auth.redirect"])
+            console.log(redirectURL)
+            if (redirectURL && redirectURL !== "/") {
+                this.$router.push(redirectURL)
             } else {
                 this.$router.push("/dashboard/home")
             }
