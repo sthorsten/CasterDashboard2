@@ -477,45 +477,68 @@ class MatchMapConsumer3(JsonWebsocketConsumer):
         self.send_json(event['data'])
 
 
-class OverlayStateConsumer2(JsonWebsocketConsumer):
+class OverlayStateConsumer(JsonWebsocketConsumer):
+    """ Provides match data over a websocket connection given a match id
 
-    # Connect new client
+        URL: /ws/overlays/state/<user_id>/
+    """
+
     def connect(self):
-        # Get room group
-        self.group_name = 'overlay_state_' + self.scope['url_route']['kwargs']['user']
-        async_to_sync(self.channel_layer.group_add)(
-            self.group_name,
-            self.channel_name
-        )
         self.accept()
 
-    # Disconnect client
-    def disconnect(self, code):
-        # Leave group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.group_name,
-            self.channel_name
-        )
+        # Set id
+        try:
+            self.user_id = int(self.scope['url_route']['kwargs']['user_id'])
+        except ValueError:
+            # Close connection if the provided match id is not a valid number
+            self.send_json(
+                {"status": "Rejected", "reason": f"Invalid user id: '{self.scope['url_route']['kwargs']['user_id']}'"})
+            self.close(code=4000)
+            return
 
-    # Receive from client and send to group
-    def receive_json(self, content, **kwargs):
+        # Local import to prevent circular imports
         from django.contrib.auth.models import User
         from overlays.models.models import OverlayState
         from overlays.models.serializers import OverlayStateSerializer
 
-        # Send data on request
-        if content.get('command') == 'get_overlay_state':
-            user_id = User.objects.get(username=self.scope['url_route']['kwargs']['user']).id
-            overlay_state = OverlayState.objects.get(user=user_id)
+        # Set match
+        try:
+            user = User.objects.get(id=self.user_id)
+            overlay_state = OverlayState.objects.get(user=user)
+        except User.DoesNotExist:
+            # Close connection if the user with the specified id does not exists
+            self.send_json(
+                {"status": "Rejected", "reason": f"User not found: {self.user_id}"})
+            self.close(code=4000)
+            return
+        except OverlayState.DoesNotExist:
+            # Close connection if the OverlayState with the specified id does not exists
+            self.send_json(
+                {"status": "Rejected", "reason": f"OverlayState not found: {self.user_id}"})
+            self.close(code=4000)
+            return
 
-            async_to_sync(self.channel_layer.group_send)(
+        # Set channels group name
+        self.group_name = 'overlay_state_' + str(self.user_id)
+
+        # Add group django channels
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+
+        # Send match data back to connecting client
+        self.send_json(OverlayStateSerializer(overlay_state).data)
+
+    def disconnect(self, code):
+        # Leave channels group
+        if hasattr(self, 'group_name'):
+            async_to_sync(self.channel_layer.group_discard)(
                 self.group_name,
-                {
-                    'type': 'send_to_client',
-                    'data': OverlayStateSerializer(overlay_state).data
-                }
+                self.channel_name
             )
 
-    # Send from group to client
     def send_to_client(self, event):
+        logger.info(f"Sending match data to websocket clients: {self.group_name}")
+        # Relay message from group to client
         self.send_json(event['data'])
