@@ -25,6 +25,7 @@ export default {
         {src: '~/plugins/vuelidate', ssr: true},
         {src: '~/plugins/vue-select', ssr: false},
         {src: '~/plugins/vue-izitoast', ssr: false},
+        {src: '~/plugins/vue-apexcharts', ssr: false},
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
