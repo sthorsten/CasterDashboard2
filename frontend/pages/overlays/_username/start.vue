@@ -1,12 +1,18 @@
 <template>
     <div v-if="!$fetchState.pending">
 
-        <div class="main-bg"></div>
+        <!-- Background -->
+        <transition appear enter-active-class="animate__animated animate__fadeIn"
+                    leave-active-class="animate__animated animate__fadeOut">
+            <div v-if="animMain" class="main-bg"></div>
+        </transition>
 
+        <!-- Main container -->
         <transition appear enter-active-class="animate__animated animate__fadeIn"
                     leave-active-class="animate__animated animate__fadeOut">
             <div v-if="animMain" class="main">
 
+                <!-- Team Blue -->
                 <div class="container-left">
                     <transition appear enter-active-class="animate__animated animate__fadeIn">
                         <img v-if="animLogos" :src="`${$config.baseURL}/media/teams/${match.team_blue}_500.webp`"
@@ -17,6 +23,7 @@
                     </transition>
                 </div>
 
+                <!-- Score -->
                 <div class="container-center">
                     <transition appear enter-active-class="animate__animated animate__zoomIn anim_0-5s">
                         <span v-if="animText && match.score_blue === 0 && match.score_orange === 0" class="center-text">
@@ -29,6 +36,7 @@
                     </transition>
                 </div>
 
+                <!-- Team Orange -->
                 <div class="container-right">
                     <transition appear enter-active-class="anim_scaleInLeft">
                         <span v-if="animText" class="team-name-text-right">{{ match.team_orange_name }}</span>
@@ -67,10 +75,12 @@ export default {
     },
 
     head() {
+        // ToDo: Add custom theme handling
         let style = "default"
 
         return {
             title: this.$t("overlays.start") + " - Caster Dashboard",
+            // Dynamically load theme css
             link: [
                 {
                     rel: "stylesheet",
@@ -84,7 +94,7 @@ export default {
         username() {
             return this.$route.params.username
         },
-        userID(){
+        userID() {
             return this.currentUser.id
         }
     },
@@ -114,10 +124,8 @@ export default {
         }
     },
 
-    mounted() {
-    },
-
     async fetch() {
+        // Load data
         await this.getCurrentUserMatch()
         this.matchID = this.currentUserMatch.id
         await this.connectMatchSingleWebsocket()
@@ -132,9 +140,6 @@ export default {
         MatchSingleWebsocket,
         OverlayStateWebsocket
     ],
-
-    components: {}
-
 }
 </script>
 

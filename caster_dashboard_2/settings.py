@@ -266,6 +266,8 @@ ALLOWED_HOSTS = [
 ALLOWED_HOSTS = ALLOWED_HOSTS + env('ALLOWED_HOSTS', cast=[str])
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
+print(CSRF_TRUSTED_ORIGINS)
+
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^(https?:\/\/localhost):(\d*)",
     r"^(https?:\/\/127.0.0.1):(\d*)",
