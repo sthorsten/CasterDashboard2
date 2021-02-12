@@ -268,7 +268,7 @@ export default {
             deep: true,
             handler() {
                 if (this.activeSponsor !== -1 && this.animSponsor !== -1 && this.match.sponsors.length > 1) {
-                    if (this.animSponsor >= (this.match.sponsors.length - 1)){
+                    if (this.animSponsor >= (this.match.sponsors.length - 1)) {
                         this.animSponsorTimeout1 = setTimeout(() => this.animSponsor = -1, 9400)
                         this.animSponsorTimeout2 = setTimeout(() => {
                             this.activeSponsor = this.match.sponsors[0]
@@ -300,7 +300,8 @@ export default {
             this.activeSponsor = this.match.sponsors[0]
         }
 
-        this.animMain = true
+        // Start Animation
+        if (this.overlayState.ingame_state) this.animMain = true
     },
 
     mixins: [
