@@ -21,6 +21,7 @@
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
     "nuxt-i18n": "^6.18.0",
+    "v-clipboard": "^2.2.3",
     "vue-apexcharts": "^1.6.0",
     "vue-izitoast": "^1.2.1",
     "vue-select": "^3.11.2",

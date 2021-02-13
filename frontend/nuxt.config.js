@@ -26,6 +26,7 @@ export default {
         {src: '~/plugins/vue-select', ssr: false},
         {src: '~/plugins/vue-izitoast', ssr: false},
         {src: '~/plugins/vue-apexcharts', ssr: false},
+        {src: '~/plugins/vue-clipboard', ssr: false},
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)

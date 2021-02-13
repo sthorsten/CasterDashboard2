@@ -1,7 +1,22 @@
 <template>
     <div>
 
-        <b-row v-if="$fetchState.pending"></b-row>
+        <b-row v-if="$fetchState.pending">
+            <b-col cols="12" md="6">
+                <CustomCard color="primary" outline divider :title="$t('overlays.control_center.overlay_controls')">
+                    <template #card-body>
+                        <b-skeleton-table :columns="1" :rows="8"></b-skeleton-table>
+                    </template>
+                </CustomCard>
+            </b-col>
+            <b-col cols="12" md="6">
+                <CustomCard color="primary" outline divider :title="$t('overlays.control_center.overlay_actions')">
+                    <template #card-body>
+                        <b-skeleton-table :columns="1" :rows="8"></b-skeleton-table>
+                    </template>
+                </CustomCard>
+            </b-col>
+        </b-row>
 
         <b-row v-if="!$fetchState.pending">
 
