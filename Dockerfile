@@ -36,8 +36,5 @@ RUN pip install -r requirements.txt
 # Copy all project files
 COPY . .
 
-# Copy frontend static assets
-COPY --from=frontend-build /frontend/dist /frontend
-
 # Copy environment file
 COPY .env.docker ./.env
