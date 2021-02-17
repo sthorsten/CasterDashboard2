@@ -15,7 +15,7 @@
                 <!-- Team Blue -->
                 <div class="container-left">
                     <transition appear enter-active-class="animate__animated animate__fadeIn">
-                        <img v-if="animLogos" :src="`${$config.baseURL}/media/teams/${match.team_blue}_500.webp`"
+                        <img v-if="animLogos" :src="getTeamLogoURL(match.team_blue)"
                              class="logo-team" alt="">
                     </transition>
                     <transition appear enter-active-class="anim_scaleInRight">
@@ -42,7 +42,7 @@
                         <span v-if="animText" class="team-name-text-right">{{ match.team_orange_name }}</span>
                     </transition>
                     <transition appear enter-active-class="animate__animated animate__fadeIn">
-                        <img v-if="animLogos" :src="`${$config.baseURL}/media/teams/${match.team_orange}_500.webp`"
+                        <img v-if="animLogos" :src="getTeamLogoURL(match.team_orange)"
                              class="logo-team" alt="">
                     </transition>
                 </div>
@@ -84,7 +84,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/css/overlays/start-${style}.css`
+                    href: `/assets/css/overlays/start-${style}.css`
                 }
             ]
         }
@@ -121,6 +121,13 @@ export default {
                     setTimeout(() => this.animText = true, 1000)
                 }
             }
+        }
+    },
+
+    methods: {
+        getTeamLogoURL(id){
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
+            return `/media/teams/${id}_500.webp`
         }
     },
 

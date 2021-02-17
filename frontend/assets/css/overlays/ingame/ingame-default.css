@@ -3,7 +3,7 @@
  */
 @font-face {
   font-family: "ScoutCond Bold";
-  src: url("/fonts/ScoutCond-Bold.woff") format("woff");
+  src: url("/assets/fonts/ScoutCond-Bold.woff") format("woff");
 }
 * {
   margin: 0;

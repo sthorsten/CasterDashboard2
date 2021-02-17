@@ -42,7 +42,7 @@
                                      class="title-wrapper-big">
                                     <span class="title-big">Map Pick</span>
                                     <img class="logo-team"
-                                         :src="`${$config.baseURL}/media/teams/${currentMap.choose_team}_500.webp`"
+                                         :src="getTeamLogoURL(currentMap.choose_team)"
                                          alt="">
                                 </div>
                             </transition>
@@ -53,7 +53,7 @@
                     <transition appear enter-active-class="anim_scaleInRight anim_0-5s">
                         <div v-if="animText" class="container-team-left">
                             <img class="logo-team"
-                                 :src="`${$config.baseURL}/media/teams/${match.team_blue}_500.webp`"
+                                 :src="getTeamLogoURL(match.team_blue)"
                                  alt="">
                             <span class="team-name-text-left">{{ match.team_blue_name }}</span>
                         </div>
@@ -133,7 +133,7 @@
                     <transition appear enter-active-class="anim_scaleInLeft anim_0-5s">
                         <div v-if="animText" class="container-team-right">
                             <span class="team-name-text-right">{{ match.team_orange_name }}</span>
-                            <img class="logo-team" :src="`${$config.baseURL}/media/teams/${match.team_orange}_500.webp`"
+                            <img class="logo-team" :src="getTeamLogoURL(match.team_orange)"
                                  alt="">
                         </div>
                     </transition>
@@ -143,7 +143,7 @@
                                     enter-active-class="animate__animated animate__fadeIn anim_0-5s"
                                     leave-active-class="animate__animated animate__fadeOut anim_0-5s">
                             <img v-if="animSponsor !== -1 && activeSponsor !== -1"
-                                 :src="`${$config.baseURL}/media/sponsors/${activeSponsor}_100.webp`" alt=""
+                                 :src="getSponsorLogoURL(activeSponsor)" alt=""
                                  class="sponsor">
                         </transition>
                     </div>
@@ -196,7 +196,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/css/overlays/ingame-${style}.css`
+                    href: `/assets/css/overlays/ingame-${style}.css`
                 }
             ]
         }
@@ -284,6 +284,17 @@ export default {
                     }
                 }
             }
+        }
+    },
+
+    methods: {
+        getTeamLogoURL(id){
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
+            return `/media/teams/${id}_500.webp`
+        },
+        getSponsorLogoURL(id){
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/sponsors/${id}_100.webp`
+            return `/media/sponsors/${id}_100.webp`
         }
     },
 

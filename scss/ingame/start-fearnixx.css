@@ -27,7 +27,7 @@ body {
 }
 
 div.main-bg {
-  background-image: url("/static/css/FearNixx.png");
+  background-image: url("/static/old/css/FearNixx.png");
   background-size: contain;
   background-position-x: 42%;
   background-repeat: no-repeat;

@@ -13,7 +13,7 @@
         <b-input-group-append>
             <b-input-group-text class="bg-primary">
                 <a href="#"
-                   v-clipboard="`${$config.browserBaseURL}/overlays/${$auth.user.username}/${url}`"
+                   v-clipboard="`${baseLink}/overlays/${$auth.user.username}/${url}`"
                    v-b-popover.hover.top="$t('generic.copy_to_clipboard')">
                     <i class="fa fas fa-clipboard"></i>
                 </a>
@@ -44,6 +44,12 @@ export default {
     props: {
         title: String,
         url: String,
+    },
+    computed:{
+        baseLink(){
+            if (this.$config.browserBaseURL) return this.config.baseURL
+            return location.host
+        }
     }
 }
 </script>

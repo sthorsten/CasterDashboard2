@@ -3,7 +3,7 @@
  */
 @font-face {
   font-family: "ScoutCond Bold";
-  src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
+  src: url("/assets/fonts/ScoutCond-Bold.woff") format("woff");
 }
 * {
   margin: 0;
@@ -17,64 +17,7 @@ body {
   font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
 }
 
-.d-none {
-  display: none !important;
-}
-
-.invisible {
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-div.main-bg {
-  background-image: url("/static/css/FearNixx.png");
-  background-size: contain;
-  background-position-x: 1450px;
-  background-repeat: no-repeat;
-}
-div.main {
-  grid-template-columns: 531fr 868px 521fr !important;
-}
-div.container-left, div.container-right {
-  display: flex !important;
-}
-div.container-title, div.container-sponsor {
-  width: auto !important;
-}
-div.container-center {
-  background: transparent !important;
-}
-div.container-logo {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-div.score-left, div.score-right {
-  background: #111 !important;
-}
-
-span.team-name, span.title, span.title-sm, span.title-big {
-  font-size: 32px !important;
-}
-span.title-sm {
-  font-size: 20px !important;
-}
-
-/*
-  Base SCSS
- */
-@font-face {
-  font-family: "ScoutCond Bold";
-  src: url("/static/fonts/ScoutCond-Bold.woff") format("woff");
-}
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow: hidden;
-  width: 1920px;
-  height: 100%;
+span {
   font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
 }
 
@@ -90,12 +33,40 @@ body {
 /*
   Animations SCSS
  */
+.anim_0-5s {
+  animation-duration: 0.5s !important;
+}
+
+.anim_1s {
+  animation-duration: 1s !important;
+}
+
+.anim_2s {
+  animation-duration: 2s !important;
+}
+
+.anim_delay_0-5s {
+  animation-delay: 0.5s !important;
+}
+
+.anim_delay_1s {
+  animation-delay: 1s !important;
+}
+
+.anim_delay_2s {
+  animation-delay: 2s !important;
+}
+
 .anim_scaleInRight {
   animation: scaleInRight 0.5s;
 }
 
 .anim_scaleInLeft {
   animation: scaleInLeft 0.5s;
+}
+
+.anim_scaleInUp {
+  animation: scaleInUp 0.5s;
 }
 
 .anim_reverse {
@@ -206,6 +177,34 @@ body {
     transform-origin: right;
   }
 }
+@-webkit-keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
+@keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
 /*
   InGame SCSS
  */
@@ -229,12 +228,12 @@ div.main {
 div.container-left {
   display: grid;
   grid-template-columns: 300px 1fr;
-  background: linear-gradient(90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+  background: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211, 0.8) 80%);
 }
 div.container-right {
   display: grid;
   grid-template-columns: 1fr 300px;
-  background: linear-gradient(-90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+  background: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%);
 }
 div.container-center {
   display: grid;
@@ -296,8 +295,8 @@ div.score {
   background: #555;
 }
 div.score.active {
-  background: #eb1521;
-  box-shadow: 0px 0px 2px 0px #eb1521;
+  background: yellow;
+  box-shadow: 0px 0px 2px 0px yellow;
 }
 
 img.logo, img.logo-team {
@@ -331,10 +330,11 @@ span.title-sm {
   line-height: 24px;
 }
 span.team-name-text, span.team-name-text-right, span.team-name-text-left {
-  margin-top: -4px;
+  margin-top: -16px;
   margin-left: 7px;
   margin-right: 7px;
   font-size: 40px;
+  height: 48px;
 }
 span.team-name-text-left {
   margin-right: 14px;
@@ -343,4 +343,4 @@ span.team-name-text-right {
   margin-left: 14px;
 }
 
-/*# sourceMappingURL=ingame-fearnixx-lol.css.map */
+/*# sourceMappingURL=ingame-default.css.map */

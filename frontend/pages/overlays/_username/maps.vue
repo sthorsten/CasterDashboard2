@@ -11,8 +11,8 @@
                         <div v-if="animMap >= index" class="img-container">
                             <img class="map" :src="require('~/assets/img/maps/' + map.map + '.webp')" alt="">
                             <img v-if="map.type !== 3 && map.type !== 4" class="team"
-                                 :src="`${$config.baseURL}/media/teams/${map.choose_team}_500.webp`" alt="">
-                            <img v-else class="team" :src="`${$config.baseURL}/media/leagues/${match.league}_500.webp`"
+                                 :src="getTeamLogoURL(map.choose_team)" alt="">
+                            <img v-else class="team" :src="getLeagueLogoURL(match.league)"
                                  alt="">
                         </div>
                     </transition>
@@ -60,7 +60,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/css/overlays/maps-${style}.css`
+                    href: `/assets/css/overlays/maps-${style}.css`
                 }
             ]
         }
@@ -116,6 +116,16 @@ export default {
                 return "map-container pick"
             }
             return "map-container"
+        },
+
+        getTeamLogoURL(id){
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
+            return `/media/teams/${id}_500.webp`
+        },
+
+        getLeagueLogoURL(id){
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/leagues/${id}_500.webp`
+            return `/media/leagues/${id}_500.webp`
         }
     },
 
