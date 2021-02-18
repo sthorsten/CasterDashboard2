@@ -1,7 +1,10 @@
 <template>
     <div v-if="!$fetchState.pending">
 
-        <div class="main-bg"></div>
+        <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s"
+                    leave-active-class="animate__animated animate__slideOutUp">
+            <div v-if="animText" class="main-bg"></div>
+        </transition>
 
         <transition appear enter-active-class="animate__animated animate__slideInDown anim_0-5s"
                     leave-active-class="animate__animated animate__slideOutUp">
@@ -159,6 +162,7 @@
 <script>
 
 import {CurrentUserMatch} from "~/mixins/axios/CurrentUserMatch";
+import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {MatchMapAllWebsocket} from "~/mixins/websocket/MatchMapAllWebsocket";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
@@ -187,8 +191,12 @@ export default {
     },
 
     head() {
-        // ToDo: Add custom theme handling
-        let style = "default"
+        let styleCSS = ""
+        if (this.overlayStyle && this.overlayStyle.ingame_style){
+            styleCSS = this.overlayStyle.ingame_style
+        } else {
+            styleCSS = "default"
+        }
 
         return {
             title: this.$t("overlays.ingame") + " - Caster Dashboard",
@@ -196,8 +204,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/ingame-${style}.css`
-                    //href: `/css/overlays/ingame-${style}.css` // dev only
+                    href: `/assets/css/overlays/ingame-${styleCSS}.css`
+                    //href: `/css/overlays/ingame-${styleCSS}.css` // dev only
                 }
             ]
         }
@@ -289,7 +297,7 @@ export default {
     },
 
     methods: {
-        getTeamLogoURL(id){
+        getTeamLogoURL(id) {
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
             return `/media/teams/${id}_500.webp`
         },
@@ -297,7 +305,7 @@ export default {
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/leagues/${id}_500.webp`
             return `/media/leagues/${id}_500.webp`
         },
-        getSponsorLogoURL(id){
+        getSponsorLogoURL(id) {
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/sponsors/${id}_100.webp`
             return `/media/sponsors/${id}_100.webp`
         }
@@ -306,6 +314,8 @@ export default {
     async fetch() {
         // Load data
         await this.getCurrentUserMatch()
+        await this.getOverlayStyle()
+
         this.matchID = this.currentUserMatch.id
         await this.connectMatchSingleWebsocket()
         await this.connectMatchMapAllWebsocket()
@@ -322,6 +332,7 @@ export default {
 
     mixins: [
         CurrentUserMatch,
+        OverlayStyle,
         MatchSingleWebsocket,
         MatchMapAllWebsocket,
         OverlayStateWebsocket

@@ -139,6 +139,7 @@
             "overlay_links": "Overlay Links",
             "default_styles": "Default Styles",
             "custom_styles": "Custom Styles",
+            "no_custom_style": "You don't have access to any custom styles...",
             "select_first": "Select an overlay and a style first",
             "default": "Default (blue / orange)",
             "light": "Light",

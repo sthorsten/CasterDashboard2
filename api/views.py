@@ -270,13 +270,14 @@ class RoundViewSet(viewsets.ModelViewSet):
 
 
 class OverlayStyleViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = OverlayStyle.objects.all()
     serializer_class = OverlayStyleSerializer
     filterset_fields = ['user']
 
 
 class OverlayStateViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = OverlayState.objects.all()
     serializer_class = OverlayStateSerializer
     filterset_fields = ['user']

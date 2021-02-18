@@ -112,11 +112,23 @@
 
                                 <b-row>
                                     <b-col cols="12">
-                                        <label>{{ $t('overlays.customize.custom_styles') }}</label>
+                                        <label> {{ $t('overlays.customize.custom_styles') }} </label>
                                     </b-col>
-                                    <b-col cols="4">
-                                        <b-btn variant="outline-primary" class="btn-block" disabled>
-                                            FearNixx
+                                    <b-col v-if="customLeagueStyles.length === 0">
+                                        <i>{{ $t('overlays.customize.no_custom_style') }}</i>
+                                    </b-col>
+                                    <b-col v-for="(league, index) in customLeagueStyles" :key="league.id" cols="4">
+                                        <b-btn v-if="selectedOverlayStyle === league.name.toLowerCase()"
+                                               @click="setOverlayStyle(league.name.toLowerCase())"
+                                               :disabled="!selectedOverlay"
+                                               variant="primary" class="btn-block">
+                                            {{ league.name }}
+                                        </b-btn>
+                                        <b-btn v-else
+                                               @click="setOverlayStyle(league.name.toLowerCase())"
+                                               :disabled="!selectedOverlay"
+                                               variant="outline-primary" class="btn-block">
+                                            {{ league.name }}
                                         </b-btn>
                                     </b-col>
                                 </b-row>
@@ -136,7 +148,7 @@
 
                         <b-img v-if="selectedOverlay && selectedOverlayStyle"
                                fluid class="w-100"
-                               :src="require(`~/assets/img/screenshots/${selectedOverlay}-${selectedOverlayStyle}.png`)">
+                               :src="getStyleScreenshot(selectedOverlay, selectedOverlayStyle)" alt="Screenshot not available :/">
                         </b-img>
                         <span v-else class="font-italic">
                                 {{ $t('overlays.customize.select_first') }}
@@ -193,6 +205,8 @@
 import CustomCard from "~/components/CustomCard";
 import OverlayLink from "~/components/OverlayLink";
 import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
+import {LeagueGroups} from "~/mixins/axios/LeagueGroups";
+import {LeagueData} from "~/mixins/axios/LeagueData";
 
 export default {
     name: "OverlayCustomize",
@@ -214,6 +228,16 @@ export default {
             if (this.overlayStyle) return this.overlayStyle[`${this.selectedOverlay}_style`]
             return null
         },
+        customLeagueStyles() {
+            let leaguesWithCustomStyle = this.leagues.filter(l => l.has_custom_overlay === true)
+            let customStyles = []
+            for (const group of this.leagueGroups) {
+                for (const league of leaguesWithCustomStyle) {
+                    if (group.league === league.id) customStyles.push(league)
+                }
+            }
+            return customStyles
+        }
     },
 
     methods: {
@@ -224,6 +248,13 @@ export default {
                 this.$toast.success(this.$t('overlays.customize.toasts.overlay_updated'), this.$t('generic.success'))
                 this.$fetch()
             })
+        },
+        getStyleScreenshot(overlay, style){
+            try {
+                return require(`~/assets/img/screenshots/${overlay}-${style.toLowerCase()}.png`)
+            } catch (e){
+                return  ""
+            }
         }
     },
 
@@ -235,10 +266,14 @@ export default {
 
     async fetch() {
         await this.getOverlayStyle()
+        await this.getLeagueGroups()
+        await this.getLeagueData()
     },
 
     mixins: [
-        OverlayStyle
+        OverlayStyle,
+        LeagueGroups,
+        LeagueData
     ],
 
     components: {

@@ -1,0 +1,22 @@
+@import "../base";
+@import "../animations";
+
+// Variables
+$left-bg: #fff;
+$center-bg: #cecece;
+$right-bg: #fff;
+$score-left-bg: #cecece;
+$score-right-bg: #cecece;
+$score-active-bg: #ee5700;
+$text-col: #1c0100 !default;
+
+@import "ingame";
+
+div.main-bg {
+    background-image: url("/assets/img/FireLeagueInGame.svg");
+    //background-image: url("/img/FireLeagueInGame.svg"); //dev only
+    background-size: 1920px;
+    height: 6px !important;
+    top: 48px !important;
+    background-repeat: no-repeat;
+}
