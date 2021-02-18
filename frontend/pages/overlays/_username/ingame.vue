@@ -93,7 +93,7 @@
                     <div class="container-logo">
                         <transition appear enter-active-class="animate__animated animate__zoomIn anim_0-5s">
                             <img v-if="animText" class="logo"
-                                 :src="`${$config.baseURL}/media/leagues/${match.league}_500.webp`" alt="">
+                                 :src="getLeagueLogoURL(match.league)" alt="">
                         </transition>
                     </div>
 
@@ -292,6 +292,10 @@ export default {
         getTeamLogoURL(id){
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
             return `/media/teams/${id}_500.webp`
+        },
+        getLeagueLogoURL(id) {
+            if (this.$config.baseURL) return `${this.$config.baseURL}/media/leagues/${id}_500.webp`
+            return `/media/leagues/${id}_500.webp`
         },
         getSponsorLogoURL(id){
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/sponsors/${id}_100.webp`
