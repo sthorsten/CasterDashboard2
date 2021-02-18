@@ -259,16 +259,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'dashboard'
+    'backend',
+    'frontend'
 ]
 
 ALLOWED_HOSTS = ALLOWED_HOSTS + env('ALLOWED_HOSTS', cast=[str])
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
+print(CSRF_TRUSTED_ORIGINS)
+
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^(https?:\/\/localhost):(\d*)",
     r"^(https?:\/\/127.0.0.1):(\d*)",
-    r"^(https?:\/\/dashboard):(\d*)",
+    r"^(https?:\/\/backend):(\d*)",
+    r"^(https?:\/\/frontend):(\d*)",
 ]
 
 # Add entries from ALLOWED_HOSTS to CORS_ALLOWED_ORIGIN_REGEXES

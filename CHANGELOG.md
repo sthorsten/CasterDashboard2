@@ -6,6 +6,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+--
+
+## [2.0.0-alpha5] - 2021-02-18
+
+### Notes
+
+- This release is not ready for production yet!
+
+### Added
+
+#### Dashboard pages
+
+- Operator Bans
+- Rounds
+- Overlay Control Center
+- Overlay Customization
+  
+#### Overlays
+- Start Overlay
+- Maps Overlay
+- InGame Overlay
+  
+#### Other additions
+- Added Docker images to the Github Container Registry
+- Added automated docker builds via Github actions 
+- Added overlay customization (InGame Overlay only, WIP)
+- Added some more websockets
+
+### Changed
+
+- The program now consists of 3 docker images: `frontend`, `backend` and `nginx`
+
+### Fixed
+- Various docker-related things
+- Websocket backend connections (e.g. Django ASGI)
+- nginx reverse proxy config
+
+### Removed
+
+- Old Docker Hub images
+
+
+
 ## [2.0.0-alpha4] - 2021-01-27
 
 ### Notes
@@ -88,8 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha4...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha5...HEAD
+[2.0.0-alpha5]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha5
 [2.0.0-alpha4]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha4
 [2.0.0-alpha3]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha3
 [2.0.0-alpha2]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha2

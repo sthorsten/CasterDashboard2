@@ -1,15 +1,15 @@
 # R6 Caster Dashboard
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/thorshero/caster-dashboard-2)
-[![License](https://img.shields.io/badge/license-GNU_AGPLv3-blue)](LICENSE.md)
-
+![Docker](https://github.com/sthorsten/CasterDashboard2/workflows/Docker/badge.svg)
+[![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
 
 ## Description
 
 This is the repository for the new Rainbow Six Siege Caster Dashboard.
 The dashboard aims to help Casters with production by providing easy-to-use and modular Overlays and control via a web dashboard.
+
 
 ## Features
 
@@ -23,13 +23,13 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 - Create, view and edit Teams (and their logos)
 - No need to add teams every time you want to cast or produce a match
 
-### League Administration*
+### League Administration
 
 - Manage your league
 - Add and edit sponsors
 - Grant or revoke other users access to your league
 
-### Statistics*
+### Statistics
 
 - Map pick, ban and win rates
 - BombSpot pick and win rates
@@ -40,7 +40,6 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 - Show your social media tags, create polls and more*
 - Leagues can easily get custom overlay styles
 
-**Coming Soon!*
 
 ## Installation
 
@@ -55,15 +54,9 @@ Additionally, add your the domain on which the dashboard will be accessed to the
 That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`. You may want to create users manually from there.
 
 
-
 ## Screenshots
 
-| ![](screenshots/create_match.png)           | ![](screenshots/match_overview.png)    |
-| ------------------------------------------- | -------------------------------------- |
-| ![](screenshots/map_pick_and_ban.png)       | ![](screenshots/rounds.png)            |
-| ![](screenshots/overlay_control_center.png) | ![](screenshots/overlay_customize.png) |
-
-
+*Coming soon...*
 
 
 ## Contributing
@@ -83,8 +76,8 @@ If you want to help to translate the Caster Dashboard, feel free to join the [tr
 
 ## Changelog
 
-Current Version: 2.0.0-alpha3
+Current Version: 2.0.0-alpha5
 
-**Note:** This release is not yet ready for production!
+**Note:** This release is not ready for production yet!
 
 See the full [Changelog](CHANGELOG.md) for further information.

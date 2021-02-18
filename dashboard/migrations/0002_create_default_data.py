@@ -164,6 +164,7 @@ class Migration(migrations.Migration):
         Operator.objects.create(name='Ace', side='ATK')
         Operator.objects.create(name='Melusi', side='DEF')
         Operator.objects.create(name='Zero', side='ATK')
+        Operator.objects.create(name='Aruni', side='DEF')
 
     def create_default_admin_user(apps, schema_editor):
         # Create default admin user

@@ -74,6 +74,6 @@ export default {
 </style>
 
 <style lang="scss">
-@import "assets/css/index";
+//@import "assets/css/index";
 </style>
 

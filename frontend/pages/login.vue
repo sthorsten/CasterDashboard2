@@ -94,6 +94,7 @@ export default {
     },
 
     mounted() {
+        console.log(this.$config.baseURL)
         // Redirect if already logged in
         if (this.$auth.loggedIn){
             this.loginRedirect()
@@ -102,7 +103,7 @@ export default {
 
     methods: {
         loginRedirect(){
-            if (this.$route.query.next) {
+            if (this.$route.query.next){
                 this.$router.push(this.$route.query.next)
             } else {
                 this.$router.push("/dashboard/home")

@@ -65,7 +65,7 @@ def overlay_state_post_save(sender, instance, created, **kwargs):
     data = OverlayStateSerializer(instance).data
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
-        "overlay_state_" + instance.user.username,
+        "overlay_state_" + str(instance.user.id),
         {
             'type': 'send_to_client',
             'data': data

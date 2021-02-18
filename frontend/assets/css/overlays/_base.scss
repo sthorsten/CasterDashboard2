@@ -1,0 +1,45 @@
+/*
+  Base SCSS
+ */
+
+// Variables
+$dark-gray: #111;
+$medium-gray: #333;
+$light-gray: #555;
+$r6-blue: rgb(8, 112, 211);
+$r6-orange: rgb(234, 117, 22);
+
+// Font
+@font-face {
+    font-family: 'ScoutCond Bold';
+    src: url("/assets/fonts/ScoutCond-Bold.woff") format('woff');
+}
+
+$font: "ScoutCond Bold", "BebasNeue", sans-serif;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+    width: 1920px;
+    height: 100%;
+
+    font-family: $font;
+    background: transparent !important;
+}
+
+span {
+    font-family: $font;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+    opacity: 0 !important;
+}

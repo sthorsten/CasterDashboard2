@@ -362,8 +362,6 @@ export default {
         this.$store.commit("setPageTitle", this.$t("navigation.maps"))
         this.$store.commit("setPageTitleIcon", "map")
         this.$store.commit("setBreadcrumbPath", ["Dashboard", "Matches", this.$route.params.matchID, "Maps"])
-
-        this.connectMatchMapAllWebsocket();
     },
 
     watch: {
@@ -381,6 +379,8 @@ export default {
 
         await this.getMapPools()
         this.mapPoolSelected = this.mapPools.filter(e => e.name === "Competitive")[0]
+
+        await this.connectMatchMapAllWebsocket();
     },
 
     methods: {

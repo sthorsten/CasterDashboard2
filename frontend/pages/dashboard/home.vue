@@ -3,7 +3,7 @@
 
         <!-- Global notifications -->
         <template v-if="!$fetchState.pending">
-            <b-row v-for="n in notifications">
+            <b-row v-for="n in notifications" :key="n.index">
                 <b-col>
                     <b-alert show :variant="n.variant" :class="`bg-gradient-${n.variant}`">
                         <h5>
@@ -81,7 +81,6 @@ export default {
     computed: {
         getRandomGreeting() {
             let rand = Math.floor(Math.random() * 5)
-            console.log(rand)
             return this.randomGreetings[rand]
         }
     },
