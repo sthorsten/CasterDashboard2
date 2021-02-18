@@ -61,6 +61,7 @@ export default {
                 {
                     rel: "stylesheet",
                     href: `/assets/css/overlays/maps-${style}.css`
+                    //href: `/css/overlays/maps-${style}.css` // dev only
                 }
             ]
         }

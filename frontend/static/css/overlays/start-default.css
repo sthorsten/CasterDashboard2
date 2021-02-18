@@ -15,6 +15,7 @@ body {
   width: 1920px;
   height: 100%;
   font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+  background: transparent !important;
 }
 
 span {

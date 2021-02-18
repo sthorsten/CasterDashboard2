@@ -18,7 +18,7 @@ from pip._vendor import requests
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filterset_fields = ['username']
@@ -176,12 +176,14 @@ class TeamViewSet(viewsets.ModelViewSet):
 
 
 class MatchViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
     filterset_fields = ['user']
 
 
 class MatchMapViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = MatchMap.objects.all()
     serializer_class = MatchMapSerializer
     filterset_fields = ['match', 'map', 'status']
@@ -199,12 +201,14 @@ class MatchMapViewSet(viewsets.ModelViewSet):
 
 
 class OperatorBansViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = OperatorBans.objects.all()
     serializer_class = OperatorBanSerializer
     filterset_fields = ['match', 'map']
 
 
 class RoundViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Round.objects.all()
     serializer_class = RoundSerializer
     filterset_fields = ['match', 'map']

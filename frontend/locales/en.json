@@ -144,6 +144,7 @@
             "light": "Light",
             "dark": "Dark",
             "drag_to_obs": "Drag me into OBS",
+            "overlay_copied": "Overlay URL copied to clipboard",
             "toasts": {
                 "overlay_updated": "Overlay style updated"
             }
