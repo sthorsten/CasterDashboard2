@@ -162,8 +162,8 @@
 
                         <b-row>
                             <b-col align="center">
-                                <router-link :to="{name: 'Overlay Control Center Popout'}" target="_blank">
-                                    <b-btn variant="secondary" class="pl-4 pr-4" disabled>
+                                <router-link to="/popout/overlay-toggles" target="_blank">
+                                    <b-btn variant="secondary" class="pl-4 pr-4">
                                         {{ $t('generic.popout') }}
                                         <i class="fa fas fa-external-link-alt"></i>
                                     </b-btn>
