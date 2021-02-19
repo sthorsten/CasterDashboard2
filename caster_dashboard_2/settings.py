@@ -108,6 +108,10 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer', 'Token',)
 }
 
+# Prevent client-side javscript from accessing the token
+# to prevent axios from sending the cookie in POST requests
+CSRF_COOKIE_HTTPONLY = True
+
 # endregion
 
 #region Logging
