@@ -43,6 +43,7 @@ export default {
 
     // Modules (https://go.nuxtjs.dev/config-modules)
     modules: [
+        'cookie-universal-nuxt',
         'bootstrap-vue/nuxt',
         '@nuxtjs/axios',
         '@nuxtjs/auth-next',
@@ -58,7 +59,9 @@ export default {
     // Nuxt Auth module config
     auth: {
         redirect: {
-            home: false
+            login: '/login',
+            callback: '/login',
+            home: '/'
         },
         strategies: {
             local: {

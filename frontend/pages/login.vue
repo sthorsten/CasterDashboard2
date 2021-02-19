@@ -94,22 +94,15 @@ export default {
     },
 
     mounted() {
-        console.log(this.$config.baseURL)
         // Redirect if already logged in
-        if (this.$auth.loggedIn){
-            this.loginRedirect()
+        let redirect = this.$cookies.get("auth.redirect")
+        console.debug("REDIRECT COOKIE => ", redirect)
+        if (this.$auth.loggedIn && redirect && redirect !== "/"){
+            this.$router.push(redirect)
         }
     },
 
     methods: {
-        loginRedirect(){
-            if (this.$route.query.next){
-                this.$router.push(this.$route.query.next)
-            } else {
-                this.$router.push("/dashboard/home")
-            }
-        },
-
         onSubmit() {
             this.$v.$touch()
 
@@ -129,11 +122,12 @@ export default {
                 this.$auth.setUser(response.data.user)
 
                 this.$toast.success(this.$t('login.welcome', {user: this.username}), this.$t('login.login_success'))
-                this.loginRedirect()
+                this.loginLoading = false
 
             }).catch((error) => {
                 console.log(error)
                 this.$toast.error(this.$t('login.invalid_credentials'), this.$t('login.login_failed'))
+                this.loginLoading = false
             })
         }
     },
