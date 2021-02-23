@@ -87,6 +87,7 @@ class OperatorViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class LeagueViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = League.objects.all()
     serializer_class = LeagueSerializer
 
@@ -98,18 +99,23 @@ class LeagueGroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
     filter_class = SeasonFilter
 
 
 class SponsorViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Sponsor.objects.all()
     serializer_class = SponsorSerializer
 
 
 class TeamViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Team.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
     serializer_class = TeamSerializer
 
     def create(self, request, *args, **kwargs):
