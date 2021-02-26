@@ -1,0 +1,55 @@
+@import "../base";
+@import "../animations";
+
+// Theme Overrides
+
+div {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+
+    &.main {
+        top: 0 !important;
+        left: 0 !important;
+        width: 1920px !important;
+        height: 48px !important;
+        display: grid;
+        grid-template-columns: 320px 40px 40px auto 40px 40px 320px !important;
+        background: transparent !important;
+    }
+
+    &.opban-container {
+        height: 40px !important;
+        width: 40px !important;
+        background: transparent !important;
+        margin: auto;
+    }
+}
+
+#op1 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+#op2 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+#op3 {
+    grid-column-start: 5;
+    grid-column-end: 6;
+}
+
+#op4 {
+    grid-column-start: 6;
+    grid-column-end: 7;
+}
+
+img.opban-image {
+    height: 40px !important;
+    width: 40px !important;
+    filter: grayscale(0.4);
+}
+
+
