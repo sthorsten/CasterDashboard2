@@ -31,6 +31,52 @@ span {
   opacity: 0 !important;
 }
 
+div.main {
+  grid-template-columns: 710px 80px 710px !important;
+}
+
+span {
+  font-size: 48px !important;
+  margin-top: 2px !important;
+}
+
+span.team-name-text, span.team-name-text-right, span.team-name-text-left {
+  display: none !important;
+}
+
+/*
+  Base SCSS
+ */
+@font-face {
+  font-family: "ScoutCond Bold";
+  src: url("/assets/fonts/ScoutCond-Bold.woff") format("woff");
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+  background: transparent !important;
+}
+
+span {
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 /*
   Animations SCSS
  */
@@ -232,21 +278,21 @@ div.container-left {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211, 0.8) 80%);
+  background: rgba(0, 0, 0, 0);
 }
 div.container-right {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%);
+  background: rgba(0, 0, 0, 0);
 }
 div.container-center {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: #111;
+  background: rgba(0, 0, 0, 0);
 }
 
 img.logo, img.logo-team {
@@ -260,13 +306,13 @@ img.logo-team {
 
 span {
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
   font-size: 68px;
   margin-top: -27px;
   height: 80px;
 }
 span.center-text {
-  color: #fff;
+  color: #000;
 }
 span.team-name-text, span.team-name-text-right, span.team-name-text-left {
   margin-left: 7px;
@@ -275,11 +321,11 @@ span.team-name-text, span.team-name-text-right, span.team-name-text-left {
 }
 span.team-name-text-left {
   margin-right: 14px;
-  color: #fff;
+  color: #000;
 }
 span.team-name-text-right {
   margin-left: 14px;
-  color: #fff;
+  color: #000;
 }
 
-/*# sourceMappingURL=start.css.map */
+/*# sourceMappingURL=start-logos.css.map */

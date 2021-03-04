@@ -58,6 +58,7 @@
 import {CurrentUserMatch} from "~/mixins/axios/CurrentUserMatch";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
+import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
 
 export default {
     name: "StartOverlay",
@@ -75,8 +76,12 @@ export default {
     },
 
     head() {
-        // ToDo: Add custom theme handling
-        let style = "default"
+        let styleCSS = ""
+        if (this.overlayStyle && this.overlayStyle.start_style){
+            styleCSS = this.overlayStyle.start_style
+        } else {
+            styleCSS = "default"
+        }
 
         return {
             title: this.$t("overlays.start") + " - Caster Dashboard",
@@ -84,8 +89,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/start-${style}.css`
-                    //href: `/css/overlays/start-${style}.css` // dev only
+                    href: `/assets/css/overlays/start-${styleCSS}.css`
+                    //href: `/css/overlays/start-${styleCSS}.css` // dev only
                 }
             ]
         }
@@ -135,6 +140,8 @@ export default {
     async fetch() {
         // Load data
         await this.getCurrentUserMatch()
+        await this.getOverlayStyle()
+
         this.matchID = this.currentUserMatch.id
         await this.connectMatchSingleWebsocket()
         await this.connectOverlayStateWebsocket()
@@ -145,6 +152,7 @@ export default {
 
     mixins: [
         CurrentUserMatch,
+        OverlayStyle,
         MatchSingleWebsocket,
         OverlayStateWebsocket
     ],

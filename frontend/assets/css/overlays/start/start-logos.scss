@@ -1,0 +1,23 @@
+@import "../base";
+
+// Theme Variable Overrides
+$left-bg: rgba(0, 0, 0, 0);
+$center-bg: rgba(0, 0, 0, 0);
+$right-bg: rgba(0, 0, 0, 0);
+$text-col: #000;
+$center-text-col: #000;
+
+div.main {
+    grid-template-columns: 710px 80px 710px !important;
+}
+
+span{
+    font-size: 48px !important;
+    margin-top: 2px !important;
+}
+
+span.team-name-text {
+    display: none !important;
+}
+
+@import "start-default";
