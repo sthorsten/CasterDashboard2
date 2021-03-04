@@ -132,18 +132,17 @@ def team_pre_delete(sender, instance, **kwargs):
 def match_post_save(sender, instance, **kwargs):
     send_match_data_to_consumers(instance)
 
-    # Send match to websockets on change
+    # Send match data to websockets on change
     from dashboard.models.serializers import MatchSerializer
-    serialized_data = MatchSerializer(instance)
     channel_layer = get_channel_layer()
-    for user in instance.user.all():
-        async_to_sync(channel_layer.group_send)(
-            "match_data_" + user.username,
-            {
-                'type': 'send_to_client',
-                'data': serialized_data.data
-            }
-        )
+    group_name = f"match_{str(instance.id)}"
+    async_to_sync(channel_layer.group_send)(
+        group_name,
+        {
+            'type': 'send_to_client',
+            'data': MatchSerializer(instance).data
+        }
+    )
 
 
 @receiver(post_save, sender=MatchMap)
