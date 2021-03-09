@@ -148,7 +148,8 @@
 
                         <b-img v-if="selectedOverlay && selectedOverlayStyle"
                                fluid class="w-100"
-                               :src="getStyleScreenshot(selectedOverlay, selectedOverlayStyle)" alt="Screenshot not available :/">
+                               :src="getStyleScreenshot(selectedOverlay, selectedOverlayStyle)"
+                               alt="Screenshot not available :/">
                         </b-img>
                         <span v-else class="font-italic">
                                 {{ $t('overlays.customize.select_first') }}
@@ -174,16 +175,20 @@
                                 <OverlayLink :title="$t('overlays.start')" url="start"></OverlayLink>
                             </b-col>
 
-                            <b-col lg="6" class="mt-2 mt-lg-0">
-                                <OverlayLink :title="$t('overlays.maps')" url="maps"></OverlayLink>
-                            </b-col>
-
-                            <b-col lg="6" class="mt-2">
+                            <b-col lg="6">
                                 <OverlayLink :title="$t('overlays.ingame')" url="ingame"></OverlayLink>
                             </b-col>
 
                             <b-col lg="6" class="mt-2">
+                                <OverlayLink :title="$t('overlays.start_next')" url="start/next"></OverlayLink>
+                            </b-col>
+
+                            <b-col lg="6" class="mt-2">
                                 <OverlayLink :title="$t('overlays.opbans')" url="opbans"></OverlayLink>
+                            </b-col>
+
+                            <b-col lg="6" class="mt-2">
+                                <OverlayLink :title="$t('overlays.maps')" url="maps"></OverlayLink>
                             </b-col>
 
                             <b-col lg="6" class="mt-2">
@@ -249,11 +254,11 @@ export default {
                 this.$fetch()
             })
         },
-        getStyleScreenshot(overlay, style){
+        getStyleScreenshot(overlay, style) {
             try {
                 return require(`~/assets/img/screenshots/${overlay}-${style.toLowerCase()}.png`)
-            } catch (e){
-                return  ""
+            } catch (e) {
+                return ""
             }
         }
     },

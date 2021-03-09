@@ -119,9 +119,16 @@
                         <b-row>
 
                             <b-col cols="12" class="mb-2">
-                                <b-btn variant="success" class="btn-block" @click="setMatchToOverlay">
+                                <b-btn variant="success" class="btn-block" @click="setMatchToOverlay(false)">
                                     <font-awesome-icon icon="share-square"/>
                                     {{ $t('matches.overview.actions.set_overlay') }}
+                                </b-btn>
+                            </b-col>
+
+                            <b-col cols="12" class="mb-2">
+                                <b-btn variant="success" class="btn-block" @click="setMatchToOverlay(true)">
+                                    <font-awesome-icon icon="share-square"/>
+                                    {{ $t('matches.overview.actions.set_overlay_next') }}
                                 </b-btn>
                             </b-col>
 
@@ -213,10 +220,18 @@ export default {
     },
 
     methods: {
-        setMatchToOverlay() {
-            let data = {
-                "user": this.$auth.user.id,
-                "current_match": this.matchID
+        setMatchToOverlay(next) {
+            let data = {}
+            if (next) {
+                data = {
+                    "user": this.$auth.user.id,
+                    "next_match": this.matchID
+                }
+            } else {
+                data = {
+                    "user": this.$auth.user.id,
+                    "current_match": this.matchID
+                }
             }
 
             this.$axios.$put(`/api/overlay/match_data/${this.$auth.user.id}/`, data,)

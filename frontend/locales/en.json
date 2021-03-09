@@ -122,6 +122,7 @@
     },
     "overlays": {
         "start": "Start Overlay",
+        "start_next": "Start Next Overlay",
         "ingame": "Ingame Overlay",
         "maps": "Maps Overlay",
         "opbans": "Operator Bans Overlay",
@@ -199,7 +200,8 @@
             "win_team": "Win Team",
             "actions": {
                 "title": "Match Actions",
-                "set_overlay": "Set current match to overlay",
+                "set_overlay": "Set match to overlay",
+                "set_overlay_next": "Set match as next match to overlay",
                 "continue": "Continue to Map Picks & Bans",
                 "show_details": "Show match details",
                 "share": "Share match",

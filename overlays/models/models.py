@@ -26,6 +26,7 @@ class OverlayStyle(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     start_style = models.CharField(max_length=255, default="default")
+    start_next_style = models.CharField(max_length=255, default="default")
     ingame_style = models.CharField(max_length=255, default="default")
     ingame_names = models.BooleanField(default=True)
     opbans_style = models.CharField(max_length=255, default="default")
@@ -42,10 +43,11 @@ class OverlayState(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     start_state = models.BooleanField(default=True)
+    start_next_state = models.BooleanField(default=True)
     ingame_state = models.BooleanField(default=True)
-    maps_state = models.BooleanField(default=False)
+    maps_state = models.BooleanField(default=True)
     opbans_state = models.BooleanField(default=True)
-    rounds_state = models.BooleanField(default=False)
+    rounds_state = models.BooleanField(default=True)
 
     social_state = models.BooleanField(default=False)
     poll_state = models.BooleanField(default=False)
