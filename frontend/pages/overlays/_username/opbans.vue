@@ -37,12 +37,13 @@
 </template>
 
 <script>
+import {SingleUser} from "~/mixins/axios/SingleUser";
+import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
 import {MatchMapAllWebsocket} from "~/mixins/websocket/MatchMapAllWebsocket";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
-import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
-import {CurrentUserMatch} from "~/mixins/axios/CurrentUserMatch";
 import {OperatorBansWebsocket} from "~/mixins/websocket/OperatorBansWebsocket";
+import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
 
 export default {
     name: "OperatorBansOverlay",
@@ -67,8 +68,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/opbans-${style}.css`
-                    //href: `/css/overlays/opbans-${style}.css` // dev only
+                    //href: `/assets/css/overlays/opbans-${style}.css`
+                    href: `/css/overlays/opbans-${style}.css` // dev only
                 }
             ]
         }
@@ -85,6 +86,7 @@ export default {
             return this.matchMaps.filter(m => m.status === 2)[0]
         },
         mapID() {
+            if (this.currentMap == null) return null
             return this.currentMap.map
         },
     },
@@ -109,6 +111,13 @@ export default {
                 }
             }
         },
+        overlayData: {
+            deep: true,
+            handler(newState, oldState) {
+                if (oldState.current_match == null || newState.current_match === oldState.current_match) return;
+                location.reload()
+            }
+        },
         animMain: {
             deep: true,
             handler() {
@@ -131,20 +140,28 @@ export default {
             if (operator) return require(`@/assets/img/operators/${operator.operator}.svg`)
             return 0
         },
-        getBanOrder(overlayOrder){
-            if (this.currentMap.atk_team === this.match.team_blue){
-                switch (overlayOrder){
-                    case 1: return 2
-                    case 2: return 3
-                    case 3: return 4
-                    case 4: return 1
+        getBanOrder(overlayOrder) {
+            if (this.currentMap.atk_team === this.match.team_blue) {
+                switch (overlayOrder) {
+                    case 1:
+                        return 2
+                    case 2:
+                        return 3
+                    case 3:
+                        return 4
+                    case 4:
+                        return 1
                 }
             } else {
-                switch (overlayOrder){
-                    case 1: return 1
-                    case 2: return 4
-                    case 3: return 3
-                    case 4: return 2
+                switch (overlayOrder) {
+                    case 1:
+                        return 1
+                    case 2:
+                        return 4
+                    case 3:
+                        return 3
+                    case 4:
+                        return 2
                 }
             }
         }
@@ -152,10 +169,11 @@ export default {
 
     async fetch() {
         // Load data
-        await this.getCurrentUserMatch()
+        await this.getSingleUser()
         await this.getOverlayStyle()
+        await this.connectOverlayDataWebsocket()
 
-        this.matchID = this.currentUserMatch.id
+        this.matchID = this.overlayData.current_match
         await this.connectMatchSingleWebsocket()
         await this.connectMatchMapAllWebsocket()
         await this.connectOperatorBansWebsocket()
@@ -166,11 +184,12 @@ export default {
     },
 
     mixins: [
-        CurrentUserMatch,
+        SingleUser,
         OverlayStyle,
         MatchSingleWebsocket,
         MatchMapAllWebsocket,
         OverlayStateWebsocket,
+        OverlayDataWebsocket,
         OperatorBansWebsocket,
     ],
 

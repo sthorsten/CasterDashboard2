@@ -55,10 +55,11 @@
 
 <script>
 
-import {CurrentUserMatch} from "~/mixins/axios/CurrentUserMatch";
+import {SingleUser} from "~/mixins/axios/SingleUser";
+import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
-import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
+import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
 
 export default {
     name: "StartOverlay",
@@ -77,7 +78,7 @@ export default {
 
     head() {
         let styleCSS = ""
-        if (this.overlayStyle && this.overlayStyle.start_style){
+        if (this.overlayStyle && this.overlayStyle.start_style) {
             styleCSS = this.overlayStyle.start_style
         } else {
             styleCSS = "default"
@@ -89,8 +90,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/start-${styleCSS}.css`
-                    //href: `/css/overlays/start-${styleCSS}.css` // dev only
+                    //href: `/assets/css/overlays/start-${styleCSS}.css`
+                    href: `/css/overlays/start-${styleCSS}.css` // dev only
                 }
             ]
         }
@@ -119,6 +120,14 @@ export default {
             }
         },
 
+        overlayData: {
+            deep: true,
+            handler(newState, oldState) {
+                if (oldState.current_match == null || newState.current_match === oldState.current_match) return;
+                location.reload()
+            }
+        },
+
         animMain: {
             deep: true,
             handler() {
@@ -131,7 +140,7 @@ export default {
     },
 
     methods: {
-        getTeamLogoURL(id){
+        getTeamLogoURL(id) {
             if (this.$config.baseURL) return `${this.$config.baseURL}/media/teams/${id}_500.webp`
             return `/media/teams/${id}_500.webp`
         }
@@ -139,10 +148,11 @@ export default {
 
     async fetch() {
         // Load data
-        await this.getCurrentUserMatch()
+        await this.getSingleUser()
+        await this.connectOverlayDataWebsocket()
         await this.getOverlayStyle()
 
-        this.matchID = this.currentUserMatch.id
+        this.matchID = this.overlayData.current_match
         await this.connectMatchSingleWebsocket()
         await this.connectOverlayStateWebsocket()
 
@@ -151,7 +161,9 @@ export default {
     },
 
     mixins: [
-        CurrentUserMatch,
+        //CurrentUserMatch,
+        SingleUser,
+        OverlayDataWebsocket,
         OverlayStyle,
         MatchSingleWebsocket,
         OverlayStateWebsocket

@@ -105,6 +105,18 @@ def match_overlay_data_post_save(sender, instance, created, **kwargs):
     if created:
         return
 
+    from overlays.models.serializers import MatchOverlayDataSerializer
+    data = MatchOverlayDataSerializer(instance).data
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "overlay_data_" + str(instance.user.id),
+        {
+            'type': 'send_to_client',
+            'data': data
+        }
+    )
+
+    """OLD
     # Send the new match data to websockets on change
     send_match_data_to_consumers(instance.current_match)
 
@@ -119,6 +131,7 @@ def match_overlay_data_post_save(sender, instance, created, **kwargs):
             'data': serialized_data.data
         }
     )
+    """
 
 
 class PollOverlayData(models.Model):

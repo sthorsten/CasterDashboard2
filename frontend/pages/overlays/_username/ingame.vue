@@ -161,11 +161,12 @@
 
 <script>
 
-import {CurrentUserMatch} from "~/mixins/axios/CurrentUserMatch";
+import {SingleUser} from "~/mixins/axios/SingleUser";
 import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {MatchMapAllWebsocket} from "~/mixins/websocket/MatchMapAllWebsocket";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
+import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
 
 export default {
     name: "InGameOverlay",
@@ -244,6 +245,14 @@ export default {
             }
         },
 
+        overlayData: {
+            deep: true,
+            handler(newState, oldState) {
+                if (oldState.current_match == null || newState.current_match === oldState.current_match) return;
+                location.reload()
+            }
+        },
+
         animMain: {
             deep: true,
             handler() {
@@ -313,10 +322,11 @@ export default {
 
     async fetch() {
         // Load data
-        await this.getCurrentUserMatch()
+        await this.getSingleUser()
+        await this.connectOverlayDataWebsocket()
         await this.getOverlayStyle()
 
-        this.matchID = this.currentUserMatch.id
+        this.matchID = this.overlayData.current_match
         await this.connectMatchSingleWebsocket()
         await this.connectMatchMapAllWebsocket()
         await this.connectOverlayStateWebsocket()
@@ -331,11 +341,12 @@ export default {
     },
 
     mixins: [
-        CurrentUserMatch,
+        SingleUser,
         OverlayStyle,
         MatchSingleWebsocket,
         MatchMapAllWebsocket,
-        OverlayStateWebsocket
+        OverlayStateWebsocket,
+        OverlayDataWebsocket
     ],
 
 }
