@@ -193,7 +193,7 @@ export default {
 
     head() {
         let styleCSS = ""
-        if (this.overlayStyle && this.overlayStyle.ingame_style){
+        if (this.overlayStyle && this.overlayStyle.ingame_style) {
             styleCSS = this.overlayStyle.ingame_style
         } else {
             styleCSS = "default"
@@ -220,11 +220,25 @@ export default {
             return this.currentUser.id
         },
         currentMap() {
-            return this.matchMaps.filter(m => m.status === 2)[0]
+            if (this.matchMaps == null) return null
+            let matchMaps = this.matchMaps.filter(m => m.status === 2)
+            if (matchMaps == null || matchMaps.length === 0) return null
+            return matchMaps[0]
         },
     },
 
     watch: {
+        currentMap: {
+            deep: true,
+            handler(newState, oldState) {
+                if (oldState == null) {
+                    // (Re)Start Title animation
+                    this.animTitle = -1
+                    setTimeout(() => this.animTitle = 0, 600)
+                }
+            }
+        },
+
         overlayState: {
             deep: true,
             handler() {
@@ -268,7 +282,7 @@ export default {
         animTitle: {
             deep: true,
             handler() {
-                if (this.currentMap) {
+                if (this.match.best_of !== 1 && this.currentMap) {
                     if (this.animTitle === 0) {
                         // Title => Map
                         this.animTitleTimeout1 = setTimeout(() => this.animTitle = -1, 9400)
@@ -277,6 +291,13 @@ export default {
                         // Map => Title
                         this.animTitleTimeout1 = setTimeout(() => this.animTitle = -1, 9400)
                         this.animTitleTimeout2 = setTimeout(() => this.animTitle = 0, 10000)
+                    }
+                } else {
+                    if (this.match.best_of !== 1 && this.currentMap && this.animTitle !== 0) {
+                        clearTimeout(this.animTitleTimeout1)
+                        clearTimeout(this.animTitleTimeout2)
+                        this.animTitle = -1
+                        setTimeout(() => this.animTitle = 0, 600)
                     }
                 }
             }
