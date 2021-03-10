@@ -48,6 +48,19 @@
                                 </b-tr>
 
                                 <b-tr>
+                                    <b-th class="text-bold">Start Next Overlay</b-th>
+                                    <b-td class="text-right">
+                                        <a href="#"
+                                           @click="overlayState.start_next_state = !overlayState.start_next_state; updateOverlayState()">
+                                            <b-badge :variant="statusColor(overlayState.start_next_state)"
+                                                     class="text-uppercase w-100">
+                                                {{ statusText(overlayState.start_next_state) }}
+                                            </b-badge>
+                                        </a>
+                                    </b-td>
+                                </b-tr>
+
+                                <b-tr>
                                     <b-th class="text-bold">Maps Overlay</b-th>
                                     <b-td class="text-right">
                                         <a href="#"
