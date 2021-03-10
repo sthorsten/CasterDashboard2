@@ -157,9 +157,9 @@
                             </b-col>
 
                             <b-col cols="12">
-                                <b-btn variant="secondary" class="btn-block" disabled>
+                                <b-btn variant="secondary" class="btn-block" @click="shareMatchModal = true">
                                     <font-awesome-icon icon="share-alt"/>
-                                    {{ $t('matches.overview.actions.share') }} <i>(coming soon)</i>
+                                    {{ $t('matches.overview.actions.share') }}
                                 </b-btn>
                             </b-col>
 
@@ -189,7 +189,9 @@
                 </CustomCard>
 
             </b-col>
-
+            
+            <ShareMatchModal :show="shareMatchModal" @hide="shareMatchModal = false" :match="match"
+                             @reload="$fetch(); shareMatchLoading = false"/>
         </b-row>
 
     </div>
@@ -197,14 +199,17 @@
 
 <script>
 import CustomCard from "~/components/CustomCard";
-import {SingleMatch} from "../../../../mixins/axios/SingleMatch";
+import ShareMatchModal from "~/components/modals/ShareMatchModal";
+import {SingleMatch} from "~/mixins/axios/SingleMatch";
 
 export default {
     name: "MatchOverview",
     layout: "match",
 
     data() {
-        return {}
+        return {
+            shareMatchModal: false,
+        }
     },
 
     head() {
@@ -260,7 +265,8 @@ export default {
     ],
 
     components: {
-        "CustomCard": CustomCard
+        "CustomCard": CustomCard,
+        ShareMatchModal
     }
 
 }

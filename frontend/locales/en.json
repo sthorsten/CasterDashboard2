@@ -208,6 +208,18 @@
                 "edit": "Edit match details",
                 "delete": "Delete match"
             },
+            "modal": {
+                "share": "Share match",
+                "share_title": "Share match with other users",
+                "share_user": "Select user(s) to share the match with",
+                "share_user_feedback": "Please select a user!",
+                "info_line1": "You can share a match with every registered user.",
+                "info_line2": "Simply select one or more from the list above.",
+                "toasts": {
+                    "success": "The match has been shared with the selected user(s)",
+                    "error": "Failed to share the match with the selected user(s) :/"
+                }
+            },
             "toasts": {
                 "overlay_success": "The match has been set to the overlays!",
                 "overlay_failed": "Failed to set match to the overlays :("
