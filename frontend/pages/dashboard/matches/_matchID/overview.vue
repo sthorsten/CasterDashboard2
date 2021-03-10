@@ -189,7 +189,7 @@
                 </CustomCard>
 
             </b-col>
-            
+
             <ShareMatchModal :show="shareMatchModal" @hide="shareMatchModal = false" :match="match"
                              @reload="$fetch(); shareMatchLoading = false"/>
         </b-row>
