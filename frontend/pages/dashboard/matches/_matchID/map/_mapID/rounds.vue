@@ -1,6 +1,25 @@
 <template>
     <div>
 
+        <b-row v-if="this.$fetchState.pending">
+            <b-col cols="6">
+                <CustomCard color="primary" outline>
+                    <template #card-body>
+                        <b-skeleton-table/>
+                        <b-skeleton-table/>
+                    </template>
+                </CustomCard>
+            </b-col>
+            <b-col cols="6">
+                <CustomCard color="success" outline>
+                    <template #card-body>
+                        <b-skeleton-table/>
+                        <b-skeleton-table/>
+                    </template>
+                </CustomCard>
+            </b-col>
+        </b-row>
+
         <b-row v-if="!$fetchState.pending">
 
             <!-- Round Controls -->

@@ -232,7 +232,7 @@
 
             <b-col lg="6">
 
-                <CustomCard color="primary" outline divider :title="$t('matches.op_bans.ban_operators')">
+                <CustomCard color="danger" outline divider :title="$t('matches.op_bans.ban_operators')">
                     <template #card-body>
 
                         <b-row>

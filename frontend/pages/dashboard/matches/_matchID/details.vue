@@ -1,6 +1,15 @@
 <template>
     <div>
 
+        <CustomCard color="primary" outline divider :title="$t('generic.loading')"
+                    v-if="this.$fetchState.pending">
+            <template #card-body>
+                <b-skeleton-table/>
+                <b-skeleton-table/>
+            </template>
+        </CustomCard>
+
+
         <!-- Map Picks & Bans -->
         <b-row v-if="!$fetchState.pending">
             <b-col cols="12">
