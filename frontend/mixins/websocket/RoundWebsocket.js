@@ -68,18 +68,22 @@ export const RoundWebsocket = {
                 }
             })
         },
+
+        async disconnectRoundWebsocket() {
+            // Close the websocket connection
+            if (this.roundWebsocket) {
+                await this.roundWebsocket.close()
+                this.roundWebsocketStatus = WebsocketStatus.CLOSED
+
+                // Cancel reconnection attempt
+                if (this.roundWebsocketTimeout) {
+                    clearTimeout(this.roundWebsocketTimeout)
+                }
+            }
+        }
     },
 
     beforeDestroy() {
-        // Always close the websocket connection when leaving the site
-        if (this.roundWebsocket) {
-            this.roundWebsocket.close()
-            this.roundWebsocketStatus = WebsocketStatus.CLOSED
-
-            // Cancel reconnection attempt when leaving the site
-            if (this.roundWebsocketTimeout) {
-                clearTimeout(this.roundWebsocketTimeout)
-            }
-        }
+        this.disconnectRoundWebsocket()
     }
 }

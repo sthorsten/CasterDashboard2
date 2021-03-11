@@ -68,18 +68,22 @@ export const OperatorBansWebsocket = {
                 }
             })
         },
+
+        async disconnectOperatorBansWebsocket(){
+            // Close the websocket connection
+            if (this.operatorBansWebsocket) {
+                await this.operatorBansWebsocket.close()
+                this.operatorBansWebsocketStatus = WebsocketStatus.CLOSED
+
+                // Cancel reconnection attempt
+                if (this.operatorBansWebsocketTimeout) {
+                    clearTimeout(this.operatorBansWebsocketTimeout)
+                }
+            }
+        }
     },
 
     beforeDestroy() {
-        // Always close the websocket connection when leaving the site
-        if (this.operatorBansWebsocket) {
-            this.operatorBansWebsocket.close()
-            this.operatorBansWebsocketStatus = WebsocketStatus.CLOSED
-
-            // Cancel reconnection attempt when leaving the site
-            if (this.operatorBansWebsocketTimeout) {
-                clearTimeout(this.operatorBansWebsocketTimeout)
-            }
-        }
+        this.disconnectOperatorBansWebsocket()
     }
 }

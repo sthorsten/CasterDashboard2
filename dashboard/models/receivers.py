@@ -202,7 +202,7 @@ def match_maps_post_save(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
 
     # MatchMapsAll
-    matchMaps = MatchMap.objects.filter(match=instance.match)
+    matchMaps = MatchMap.objects.filter(match=instance.match).order_by('order')
     group_name = f"matches_{str(instance.match.id)}_maps"
     async_to_sync(channel_layer.group_send)(
         group_name,
@@ -230,7 +230,7 @@ def match_maps_post_delete(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
 
     # Get Match maps
-    matchMaps = MatchMap.objects.filter(match=instance.match)
+    matchMaps = MatchMap.objects.filter(match=instance.match).order_by('order')
 
     # Set channels group name
     group_name = f"matches_{str(instance.match.id)}_maps"

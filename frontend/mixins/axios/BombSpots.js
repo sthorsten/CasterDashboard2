@@ -6,6 +6,12 @@ export const BombSpots = {
     },
 
     methods: {
+        async getAllBombSpots() {
+            await this.$axios.$get('/api/core/bomb_spot/')
+                .then((data) => {
+                    this.bombSpots = data.sort(compareBombSpots);
+                })
+        },
         async getBombSpots() {
             await this.$axios.$get(`/api/core/bomb_spot/?map=${this.mapID}`)
                 .then((data) => {

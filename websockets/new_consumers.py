@@ -100,7 +100,7 @@ class MatchMapAllConsumer(JsonWebsocketConsumer):
         from dashboard.models.serializers import MatchMapSerializer
 
         # Get Match maps
-        matchMaps = MatchMap.objects.filter(match=self.id)
+        matchMaps = MatchMap.objects.filter(match=self.id).order_by('order')
 
         # Set channels group name
         self.group_name = f"matches_{str(self.id)}_maps"
