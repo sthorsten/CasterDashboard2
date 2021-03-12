@@ -47,7 +47,7 @@ export default {
     },
     computed: {
         baseLink() {
-            if (this.$config.browserBaseURL) return this.$config.baseURL
+            if (this.$config.browserBaseURL) return this.$config.browserBaseURL
             return location.origin
         }
     },

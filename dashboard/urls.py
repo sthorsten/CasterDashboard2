@@ -35,6 +35,7 @@ urlpatterns = [
     path('data/teams/new', forms.new_team_form),
     path('data/teams/edit', forms.edit_team_form),
     path('matches/create/new', forms.new_match_form),
+    path('register', forms.register_form),
 
     # Vue
     path('data/teams-vue', sites.teams_vue),

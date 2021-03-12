@@ -21,12 +21,12 @@ export default {
     // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
     plugins: [
         {src: '~/plugins/vuex-persist', ssr: false},
-        //'~/plugins/axios',
         {src: '~/plugins/vuelidate', ssr: true},
         {src: '~/plugins/vue-select', ssr: false},
         {src: '~/plugins/vue-izitoast', ssr: false},
         {src: '~/plugins/vue-apexcharts', ssr: false},
         {src: '~/plugins/vue-clipboard', ssr: false},
+        '~/plugins/local-axios',
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -36,6 +36,9 @@ export default {
         baseURL: process.env.BASE_URL || "" ,
         browserBaseURL: process.env.BROWSER_BASE_URL || "",
         websocketBaseURL: process.env.WEBSOCKET_BASE_URL || "",
+
+        fromEmail: process.env.EMAIL_ADDRESS,
+        registrationEnabled: process.env.REGISTRATION_ENABLED
     },
 
     // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
@@ -47,6 +50,7 @@ export default {
         'bootstrap-vue/nuxt',
         '@nuxtjs/axios',
         '@nuxtjs/auth-next',
+        'nuxt-mail',
         'nuxt-i18n',
         '@nuxtjs/fontawesome',
     ],
@@ -86,6 +90,18 @@ export default {
                 },
             }
         },
+    },
+
+    mail: {
+        smtp: {
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
+            secure: process.env.EMAIL_USE_TLS,
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        }
     },
 
     i18n: {

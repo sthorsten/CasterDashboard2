@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.template.loader import get_template
 from django.utils.translation import gettext as _
 from django.db import DatabaseError
 from django.http import JsonResponse
@@ -22,6 +24,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import caster_dashboard_2
 from api.filter import SeasonFilter
 from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
     Sponsor, Team, Match, OperatorBans, Round, Notification
@@ -346,6 +349,78 @@ class TickerOverlayDataViewSet(viewsets.ModelViewSet):
 def version(request):
     current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
     return Response({'version': current_version})
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register(request):
+    if not django_settings.REGISTRATION_ENABLED:
+        return Response({"status": "Registration disabled"}, status=503)
+
+    if not request.method == 'POST':
+        return Response({'status': "Method Not Allowed"}, status=405)
+
+    data = request.data
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+
+    # Validate input
+    if not username or not email or not password or not first_name or not last_name:
+        return Response({"status": "invalid data"}, status=400)
+
+    # Check if user exists
+    try:
+        user = User.objects.get(username=username)
+        return Response({"status": "duplicate user"}, status=400)
+    except User.DoesNotExist:
+        # All ok
+        pass
+
+    # Create user
+    user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
+                                    last_name=last_name)
+
+    if user is not None:
+        logging.info("[User: %s] New registration" % user)
+        profile = Profile.objects.get(user=user)
+
+        return Response({"status": "ok", "registration_token": profile.registration_token})
+    else:
+        logging.error("[User: %s] Registration failed!" % username)
+        return Response({"status": "error", "message": "User could not be created."}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_confirm(request):
+    if not django_settings.REGISTRATION_ENABLED:
+        return Response({"status": "Registration disabled"}, status=503)
+
+    if not request.method == 'POST':
+        return Response({'status': "Method Not Allowed"}, status=405)
+
+    data = request.data
+    username = data.get('username')
+    token = data.get('token')
+
+    if not username or not token:
+        return Response({"status": "invalid data"}, status=400)
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"status": "user not found"}, status=400)
+
+    user_profile = Profile.objects.get(user=user)
+    if user_profile.registration_token == token:
+        user_profile.confirmed = True
+
+    user_profile.save()
+
+    return Response({"status": "ok"})
 
 
 @api_view(['POST'])

@@ -62,7 +62,7 @@
                         <p class="mb-1 text-center">
                             <a href="#">{{ $t('login.forgot_password') }}</a>
                         </p>
-                        <p class="mb-0 text-center">
+                        <p v-if="$config.registrationEnabled" class="mb-0 text-center">
                             <a href="/register" class="text-center">{{ $t('login.register') }}</a>
                         </p>
                     </div>

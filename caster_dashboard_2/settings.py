@@ -114,7 +114,7 @@ CSRF_COOKIE_HTTPONLY = True
 
 # endregion
 
-#region Logging
+# region Logging
 
 """
 LOGGING = {
@@ -181,7 +181,7 @@ LOGGING = {
 }
 """
 
-#endregion
+# endregion
 
 # region DEPRECATED - soon to be removed
 # Will be handled by the Vue / Nuxt frontend
@@ -256,6 +256,9 @@ if env('MODE') == 'production':
 
 MEDIA_URL = env('MEDIA_URL')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Registration config
+REGISTRATION_ENABLED = env('REGISTRATION_ENABLED', cast=bool)
 
 # Allowed Hosts / Origins
 # Includes localhost and the internal docker network ("dashboard") by default
