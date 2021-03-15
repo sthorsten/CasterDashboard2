@@ -27,10 +27,11 @@ from rest_framework.views import APIView
 import caster_dashboard_2
 from api.filter import SeasonFilter
 from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
-    Sponsor, Team, Match, OperatorBans, Round, Notification
+    Sponsor, Team, Match, OperatorBans, Round, Notification, MatchGroup
 from dashboard.models.serializers import OperatorBanSerializer, RoundSerializer, UserSerializer, ProfileSerializer, \
     MapSerializer, MapPoolSerializer, BombSpotSerializer, OperatorSerializer, LeagueSerializer, LeagueGroupSerializer, \
-    SeasonSerializer, SponsorSerializer, TeamSerializer, MatchSerializer, MatchMapSerializer, NotificationSerializer
+    SeasonSerializer, SponsorSerializer, TeamSerializer, MatchSerializer, MatchMapSerializer, NotificationSerializer, \
+    MatchGroupSerializer
 from overlays.models import *
 from overlays.models.models import MatchOverlayData, OverlayStyle, OverlayState, PollOverlayData, SocialOverlayData, \
     TimerOverlayData, TickerOverlayData
@@ -275,8 +276,15 @@ class RoundViewSet(viewsets.ModelViewSet):
 
         return Response({"detail": "Invalid Data"}, status=400)
 
-    # Overlay Views
 
+class MatchGroupViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = MatchGroup.objects.all()
+    serializer_class = MatchGroupSerializer
+    filterset_fields = ['users', 'matches']
+
+
+# Overlay Views
 
 class OverlayStyleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -325,23 +333,31 @@ class MatchOverlayDataViewSet(viewsets.ModelViewSet):
 
 
 class PollOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = PollOverlayData.objects.all()
     serializer_class = PollOverlayDataSerializer
+    filterset_fields = ['user']
 
 
 class SocialOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = SocialOverlayData.objects.all()
     serializer_class = SocialOverlayDataSerializer
+    filterset_fields = ['user']
 
 
 class TimerOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = TimerOverlayData.objects.all()
     serializer_class = TimerOverlayDataSerializer
+    filterset_fields = ['user']
 
 
 class TickerOverlayDataViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = TickerOverlayData.objects.all()
     serializer_class = TickerOverlayDataSerializer
+    filterset_fields = ['user']
 
 
 @api_view(['GET'])

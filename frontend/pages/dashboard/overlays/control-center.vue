@@ -195,11 +195,53 @@
                 <CustomCard color="primary" outline divider :title="$t('overlays.control_center.overlay_actions')">
                     <template #card-body>
 
-                        <span class="font-italic">
-                            This feature hasn't been implemented yet
-                        </span>
-                        <!-- Neutral Face Emoji -->
-                        &#128528;<br>
+                        <b-row>
+                            <b-col>
+                                <label>{{ $t("overlays.control_center.ticker_data") }}:</label>
+
+                                <b-input-group v-for="(text, index) in tickerText" :key="index" class="mb-2">
+                                    <b-form-input v-if="tickerEditIndex !== index" readonly disabled
+                                                  :value="text"
+                                                  class="bg-dark"/>
+
+                                    <b-form-input v-else class="bg-dark border-success" :formatter="tickerTextFormatter"
+                                                  v-model="tickerEditText"/>
+
+                                    <b-input-group-append v-if="tickerEditIndex === index">
+                                        <b-btn variant="success" @click="editTickerText">
+                                            <font-awesome-icon icon="save" class="mr-1"/>
+                                            {{ $t('generic.save') }}
+                                        </b-btn>
+                                    </b-input-group-append>
+
+                                    <b-input-group-append v-else>
+                                        <b-btn variant="secondary"
+                                               @click="tickerEditText = text; tickerEditIndex = index">
+                                            <font-awesome-icon icon="pencil-alt" class="mr-1"/>
+                                            {{ $t('generic.edit') }}
+                                        </b-btn>
+                                        <b-btn variant="danger" @click="deleteTickerText(index)">
+                                            <font-awesome-icon icon="trash" class="mr-1"/>
+                                            {{ $t('generic.delete') }}
+                                        </b-btn>
+                                    </b-input-group-append>
+                                </b-input-group>
+
+                                <b-input-group>
+                                    <b-form-input class="bg-dark" :formatter="tickerTextFormatter"
+                                                  :placeholder="$t('overlays.control_center.add_ticker_line')"
+                                                  v-model="tickerAddText"/>
+
+                                    <b-input-group-append>
+                                        <b-btn variant="primary" @click="addTickerText">
+                                            <font-awesome-icon icon="plus" class="mr-1"/>
+                                            {{ $t('generic.add') }}
+                                        </b-btn>
+                                    </b-input-group-append>
+                                </b-input-group>
+
+                            </b-col>
+                        </b-row>
 
                     </template>
                 </CustomCard>
@@ -215,13 +257,17 @@
 <script>
 import CustomCard from "~/components/CustomCard";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
-import axios from "axios";
+import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
 
 export default {
     name: "ControlCenter",
 
     data() {
-        return {}
+        return {
+            tickerEditIndex: -1,
+            tickerEditText: "",
+            tickerAddText: "",
+        }
     },
 
     head() {
@@ -231,8 +277,12 @@ export default {
     },
 
     computed: {
-        userID(){
+        userID() {
             return this.$auth.user.id
+        },
+        tickerText() {
+            if (this.tickerOverlayData == null || this.tickerOverlayData.text == null) return null
+            return this.tickerOverlayData.text.split(",")
         }
     },
 
@@ -248,6 +298,33 @@ export default {
         updateOverlayState() {
             this.$axios.$put(`/api/overlay/state/${this.$auth.user.id}/`, this.overlayState)
         },
+        tickerTextFormatter(value) {
+            return value.split(",").join("")
+        },
+        addTickerText(){
+            if (this.tickerAddText == null) return
+            let data = this.tickerText
+            data.push(this.tickerAddText)
+            this.saveTickerText(data)
+        },
+        editTickerText() {
+            let data = this.tickerText
+            data[this.tickerEditIndex] = this.tickerEditText
+            this.saveTickerText(data)
+        },
+        deleteTickerText(index) {
+            let data = this.tickerText
+            data[index] = null
+            this.saveTickerText(data)
+        },
+        saveTickerText(data){
+            let dataString = data.filter(Boolean).join(",")
+            this.tickerOverlayData.text = dataString
+            this.$axios.$put(`/api/overlay/ticker_data/${this.$auth.user.id}/`, this.tickerOverlayData)
+            this.tickerEditIndex = -1
+            this.tickerEditText = ""
+            this.tickerAddText = ""
+        }
     },
 
     mounted() {
@@ -257,11 +334,13 @@ export default {
     },
 
     async fetch() {
-        this.connectOverlayStateWebsocket()
+        await this.connectOverlayStateWebsocket()
+        await this.connectOverlayDataWebsocket()
     },
 
     mixins: [
-        OverlayStateWebsocket
+        OverlayStateWebsocket,
+        OverlayDataWebsocket,
     ],
 
     components: {

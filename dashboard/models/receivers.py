@@ -130,6 +130,26 @@ def team_pre_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Match)
 def match_post_save(sender, instance, **kwargs):
+    # Set match status to finished?
+    if instance.state == 3:
+        if instance.best_of == 1:
+            if instance.score_blue == 1 or instance.score_orange == 1:
+                instance.state = 4
+                instance.save()
+                return
+
+        elif instance.best_of == 2 or instance.best_of == 3:
+            if instance.score_blue == 2 or instance.score_orange == 2:
+                instance.state = 4
+                instance.save()
+                return
+
+        elif instance.best_of == 5:
+            if instance.score_blue == 3 or instance.score_orange == 3:
+                instance.state = 4
+                instance.save()
+                return
+
     send_match_data_to_consumers(instance)
 
     # Send match data to websockets on change

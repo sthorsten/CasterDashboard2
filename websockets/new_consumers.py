@@ -565,13 +565,14 @@ class OverlayDataConsumer(JsonWebsocketConsumer):
 
         # Local import to prevent circular imports
         from django.contrib.auth.models import User
-        from overlays.models.models import MatchOverlayData
-        from overlays.models.serializers import MatchOverlayDataSerializer
+        from overlays.models.models import MatchOverlayData, TickerOverlayData
+        from overlays.models.serializers import MatchOverlayDataSerializer, TickerOverlayDataSerializer
 
         # Set match
         try:
             user = User.objects.get(id=self.user_id)
-            overlay_state = MatchOverlayData.objects.get(user=user)
+            match_overlay_data = MatchOverlayData.objects.get(user=user)
+            ticker_overlay_data = TickerOverlayData.objects.get(user=user)
         except User.DoesNotExist:
             # Close connection if the user with the specified id does not exists
             self.send_json(
@@ -594,8 +595,13 @@ class OverlayDataConsumer(JsonWebsocketConsumer):
             self.channel_name
         )
 
-        # Send match data back to connecting client
-        self.send_json(MatchOverlayDataSerializer(overlay_state).data)
+        # Send data back to connecting client
+        data = {
+            "match_overlay_data": MatchOverlayDataSerializer(match_overlay_data).data,
+            "ticker_overlay_data": TickerOverlayDataSerializer(ticker_overlay_data).data
+        }
+
+        self.send_json(data)
 
     def disconnect(self, code):
         # Leave channels group

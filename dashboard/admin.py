@@ -108,6 +108,10 @@ class RoundAdmin(admin.ModelAdmin):
     ]
 
 
+class MatchGroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date')
+
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(Map)
@@ -123,3 +127,4 @@ admin.site.register(Match, MatchAdmin)
 admin.site.register(MatchMap, MatchMapAdmin)
 admin.site.register(OperatorBans, OperatorBansAdmin)
 admin.site.register(Round, RoundAdmin)
+admin.site.register(MatchGroup, MatchGroupAdmin)

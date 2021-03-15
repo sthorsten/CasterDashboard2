@@ -28,6 +28,7 @@ router.register(r'match', MatchViewSet)
 router.register(r'matches/maps', MatchMapViewSet)
 router.register(r'matches/opbans', OperatorBansViewSet)
 router.register(r'matches/round', RoundViewSet)
+router.register(r'match_groups', MatchGroupViewSet)
 
 router.register(r'overlay/style', OverlayStyleViewSet)
 router.register(r'overlay/state', OverlayStateViewSet)

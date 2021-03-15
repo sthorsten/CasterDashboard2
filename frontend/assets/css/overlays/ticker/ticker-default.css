@@ -1,0 +1,236 @@
+/*
+  Base SCSS
+ */
+@font-face {
+  font-family: "ScoutCond Bold";
+  src: url("/assets/fonts/ScoutCond-Bold.woff") format("woff");
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+  background: transparent !important;
+}
+
+span {
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/*
+  Animations SCSS
+ */
+.anim_0-5s {
+  animation-duration: 0.5s !important;
+}
+
+.anim_1s {
+  animation-duration: 1s !important;
+}
+
+.anim_2s {
+  animation-duration: 2s !important;
+}
+
+.anim_delay_0-5s {
+  animation-delay: 0.5s !important;
+}
+
+.anim_delay_1s {
+  animation-delay: 1s !important;
+}
+
+.anim_delay_2s {
+  animation-delay: 2s !important;
+}
+
+.anim_scaleInRight {
+  animation: scaleInRight 0.5s;
+}
+
+.anim_scaleInLeft {
+  animation: scaleInLeft 0.5s;
+}
+
+.anim_scaleInUp {
+  animation: scaleInUp 0.5s;
+}
+
+.anim_reverse {
+  animation-direction: reverse;
+}
+
+@-webkit-keyframes fadeInLeftCenter {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-220%, 0, 0);
+    transform: translate3d(-220%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes fadeInLeftCenter {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-220%, 0, 0);
+    transform: translate3d(-220%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@-webkit-keyframes fadeInRightCenter {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(220%, 0, 0);
+    transform: translate3d(220%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes fadeInRightCenter {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(220%, 0, 0);
+    transform: translate3d(220%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@-webkit-keyframes scaleInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0, 1, 1);
+    transform: scale3d(0, 1, 1);
+    transform-origin: left;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: left;
+  }
+}
+@keyframes scaleInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0, 1, 1);
+    transform: scale3d(0, 1, 1);
+    transform-origin: left;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: left;
+  }
+}
+@-webkit-keyframes scaleInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0, 1, 1);
+    transform: scale3d(0, 1, 1);
+    transform-origin: right;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: right;
+  }
+}
+@keyframes scaleInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0, 1, 1);
+    transform: scale3d(0, 1, 1);
+    transform-origin: right;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: right;
+  }
+}
+@-webkit-keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
+@keyframes scaleInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    transform-origin: bottom;
+  }
+}
+.main {
+  position: absolute;
+  background: #aaa;
+  height: 40px;
+  bottom: 0;
+  width: 1920px;
+  overflow: hidden;
+  border-top: 3px solid #000;
+}
+
+.m-text-wrapper {
+  width: max-content;
+  margin-top: -4px;
+}
+
+.m-text {
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+.m-text-img {
+  margin-top: -4px;
+  width: 22px;
+  height: 22px;
+}
+
+/*# sourceMappingURL=ticker-default.css.map */

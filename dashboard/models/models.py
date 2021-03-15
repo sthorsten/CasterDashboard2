@@ -313,3 +313,15 @@ class Round(models.Model):
 
     def __str__(self):
         return f'{str(self.round_no)} (Match: {str(self.match.id)}, Map: {str(self.map)})'
+
+
+class MatchGroup(models.Model):
+    # Represents a group of matches, i.e. a tournament, matches of the day, etc.
+
+    name = models.CharField(max_length=255)
+    date = models.DateField()
+    users = models.ManyToManyField(User)
+    matches = models.ManyToManyField(Match)
+
+    def __str__(self):
+        return self.name

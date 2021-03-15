@@ -15,7 +15,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-from dashboard.models.models import Match, Team, Map, Profile
+from dashboard.models.models import Match, Team, Map, Profile, MatchGroup
 from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
@@ -97,6 +97,7 @@ class MatchOverlayData(models.Model):
     current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True,
                                       related_name='current_match')
     next_match = models.ForeignKey(Match, on_delete=models.CASCADE, blank=True, null=True, related_name='next_match')
+    match_group = models.ForeignKey(MatchGroup, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f'Match Overlay Data: {str(self.user)}'
@@ -107,16 +108,7 @@ def match_overlay_data_post_save(sender, instance, created, **kwargs):
     if created:
         return
 
-    from overlays.models.serializers import MatchOverlayDataSerializer
-    data = MatchOverlayDataSerializer(instance).data
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        "overlay_data_" + str(instance.user.id),
-        {
-            'type': 'send_to_client',
-            'data': data
-        }
-    )
+    send_overlay_data(matchData=instance, tickerData=None, user=instance.user)
 
     """OLD
     # Send the new match data to websockets on change
@@ -195,6 +187,40 @@ class TickerOverlayData(models.Model):
 
     def __str__(self):
         return f'Ticker Overlay Data: {str(self.user)}'
+
+
+@receiver(post_save, sender=TickerOverlayData)
+def ticker_overlay_data_post_save(sender, instance, created, **kwargs):
+    if created:
+        return
+
+    send_overlay_data(matchData=None, tickerData=instance, user=instance.user)
+
+
+def send_overlay_data(matchData, tickerData, user):
+    from overlays.models.serializers import MatchOverlayDataSerializer, TickerOverlayDataSerializer
+
+    if matchData:
+        match_data = MatchOverlayDataSerializer(matchData).data
+    else:
+        match_data = MatchOverlayDataSerializer(MatchOverlayData.objects.get(user=user)).data
+
+    if tickerData:
+        ticker_data = TickerOverlayDataSerializer(tickerData).data
+    else:
+        ticker_data = TickerOverlayDataSerializer(TickerOverlayData.objects.get(user=user)).data
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "overlay_data_" + str(user.id),
+        {
+            'type': 'send_to_client',
+            'data': {
+                'match_overlay_data': match_data,
+                'ticker_overlay_data': ticker_data
+            }
+        }
+    )
 
 
 @receiver(post_save, sender=User)

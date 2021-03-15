@@ -156,3 +156,11 @@ class RoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Round
         fields = '__all__'
+
+
+class MatchGroupSerializer(serializers.ModelSerializer):
+    users_name = serializers.StringRelatedField(source='users', many=True, read_only=True)
+
+    class Meta:
+        model = MatchGroup
+        fields = '__all__'

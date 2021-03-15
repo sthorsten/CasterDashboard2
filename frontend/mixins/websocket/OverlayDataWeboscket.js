@@ -10,6 +10,7 @@ export const OverlayDataWebsocket = {
     data() {
         return {
             overlayData: {},
+            tickerOverlayData: {},
             overlayDataWebsocket: null,
             overlayDataWebsocketStatus: WebsocketStatus.CLOSED,
             overlayDataWebsocketTimeout: null,
@@ -36,8 +37,11 @@ export const OverlayDataWebsocket = {
                 }
 
                 this.overlayDataWebsocket.onmessage = (e) => {
-                    this.overlayData = JSON.parse(e.data)
+                    let data = JSON.parse(e.data)
+                    this.overlayData = data['match_overlay_data']
+                    this.tickerOverlayData = data['ticker_overlay_data']
                     console.debug("OverlayData => ", this.overlayData)
+                    console.debug("TickerOverlayData => ", this.tickerOverlayData)
                     resolve()
                 }
 

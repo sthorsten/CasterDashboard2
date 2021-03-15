@@ -47,7 +47,11 @@
         "contact_admin": "Please try again later or contact an administrator!",
         "no_data": "No data.",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "add": "Add"
     },
     "profile": {
         "user_data": "User Data",
@@ -140,11 +144,18 @@
         "maps": "Maps Overlay",
         "opbans": "Operator Bans Overlay",
         "rounds": "Rounds Overlay",
+        "ticker_overlay": "Ticker Overlay",
+        "ticker": {
+            "recent_matches": "Recent matches",
+            "upcoming_matches": "Upcoming matches"
+        },
         "control_center": {
             "overlay_controls": "Overlay Controls",
             "game_overlays": "Game Overlays",
             "other_overlays": "Other Overlays",
-            "overlay_actions": "Overlay Actions"
+            "overlay_actions": "Overlay Actions",
+            "ticker_data": "Ticker Overlay Data",
+            "add_ticker_line": "Add a new ticker line"
         },
         "customize": {
             "select_overlay": "Select Overlay",
