@@ -8,7 +8,7 @@
                     <div class="m-text-wrapper">
 
                         <!-- Manual text -->
-                        <template v-if="tickerText">
+                        <template v-if="tickerText && tickerText.length > 0">
                             <template v-for="text in tickerText">
                                 <span class="m-text ml-2 mr-2">//</span>
                                 <span class="m-text">{{ text }}</span>
@@ -16,44 +16,54 @@
                         </template>
 
                         <!-- Current match -->
-                        <span class="m-text ml-2 mr-2">//</span>
-                        <span class="m-text">{{ this.$t('navigation.current_match') }}:</span>
-                        <span class="m-text">
-                        {{ match.team_blue_name }}
-                        <img class="m-text-img" :src="getTeamLogoURL(match.team_blue)" alt="">
-                        <span v-if="match.score_blue === 0 && match.score_orange === 0" class="ml-1 mr-1">- vs -</span>
-                        <span v-else class="ml-1 mr-1">{{ match.score_blue }} - {{ match.score_orange }}</span>
-                        <img class="m-text-img" :src="getTeamLogoURL(match.team_orange)" alt="">
-                        {{ match.team_orange_name }}
-                    </span>
-
-                        <span class="m-text ml-2 mr-2">//</span>
-                        <span class="m-text">{{ this.$t('overlays.ticker.recent_matches') }}:</span>
-
-                        <template v-for="(m, index) in finishedMatches">
-                        <span class="m-text">
-                            {{ m.team_blue_name }}
-                            <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
-                            <span v-if="m.score_blue === 0 && m.score_orange === 0" class="ml-1 mr-1">- vs -</span>
-                            <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
-                            <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
-                            {{ m.team_orange_name }}
-                        </span>
+                        <template v-if="match">
+                            <span class="m-text ml-2 mr-2">//</span>
+                            <span class="m-text">{{ this.$t('navigation.current_match') }}:</span>
+                            <span class="m-text">
+                                {{ match.team_blue_name }}
+                                <img class="m-text-img" :src="getTeamLogoURL(match.team_blue)" alt="">
+                                <span v-if="match.score_blue === 0 && match.score_orange === 0"
+                                      class="ml-1 mr-1">- vs -</span>
+                                <span v-else class="ml-1 mr-1">{{ match.score_blue }} - {{ match.score_orange }}</span>
+                                <img class="m-text-img" :src="getTeamLogoURL(match.team_orange)" alt="">
+                                {{ match.team_orange_name }}
+                            </span>
                         </template>
 
-                        <span class="m-text ml-2 mr-2">//</span>
-                        <span class="m-text">{{ this.$t('overlays.ticker.upcoming_matches') }}:</span>
+                        <!-- Finished matches -->
+                        <template v-if="finishedMatches && finishedMatches.length > 0">
+                            <span class="m-text ml-2 mr-2">//</span>
+                            <span class="m-text">{{ this.$t('overlays.ticker.recent_matches') }}:</span>
 
-                        <template v-for="(m, index) in upcomingMatches">
-                        <span class="m-text">
-                            {{ m.team_blue_name }}
-                            <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
-                            <span v-if="m.score_blue === 0 && m.score_orange === 0" class="ml-1 mr-1">- vs -</span>
-                            <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
-                            <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
-                            {{ m.team_orange_name }}
-                        </span>
-                            <span v-if="index < (upcomingMatches.length - 1)" class="m-text ml-2 mr-2">//</span>
+                            <template v-for="(m, index) in finishedMatches">
+                                <span class="m-text">
+                                    {{ m.team_blue_name }}
+                                    <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
+                                    <span v-if="m.score_blue === 0 && m.score_orange === 0"
+                                          class="ml-1 mr-1">- vs -</span>
+                                    <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
+                                    <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
+                                    {{ m.team_orange_name }}
+                                </span>
+                            </template>
+                        </template>
+
+                        <!-- Upcoming matches -->
+                        <template v-if="upcomingMatches && upcomingMatches.length > 0">
+                            <span class="m-text ml-2 mr-2">//</span>
+                            <span class="m-text">{{ this.$t('overlays.ticker.upcoming_matches') }}:</span>
+
+                            <template v-for="(m, index) in upcomingMatches">
+                            <span class="m-text">
+                                {{ m.team_blue_name }}
+                                <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
+                                <span v-if="m.score_blue === 0 && m.score_orange === 0" class="ml-1 mr-1">- vs -</span>
+                                <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
+                                <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
+                                {{ m.team_orange_name }}
+                            </span>
+                                <span v-if="index < (upcomingMatches.length - 1)" class="m-text ml-2 mr-2">//</span>
+                            </template>
                         </template>
                     </div>
                 </DynamicMarquee>
@@ -96,8 +106,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    //href: `/assets/css/overlays/ticker-${style}.css`
-                    href: `/css/overlays/ticker-${style}.css` // dev only
+                    href: `/assets/css/overlays/ticker-${style}.css`
+                    //href: `/css/overlays/ticker-${style}.css` // dev only
                 }
             ]
         }
@@ -118,7 +128,7 @@ export default {
             if (this.matchGroupData == null || this.matchGroupData.length <= 0) return null
             return this.matchGroupData.filter(m => m.state === 1 || m.state === 2)
         },
-        tickerText(){
+        tickerText() {
             if (this.tickerOverlayData == null || this.tickerOverlayData.text == null) return null
             return this.tickerOverlayData.text.split(",")
         }
