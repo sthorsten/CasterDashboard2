@@ -281,7 +281,7 @@ export default {
             return this.$auth.user.id
         },
         tickerText() {
-            if (this.tickerOverlayData == null || this.tickerOverlayData.text == null) return null
+            if (this.tickerOverlayData == null || this.tickerOverlayData.text == null) return []
             return this.tickerOverlayData.text.split(",")
         }
     },

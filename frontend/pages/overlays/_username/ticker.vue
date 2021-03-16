@@ -8,7 +8,7 @@
                     <div class="m-text-wrapper">
 
                         <!-- Manual text -->
-                        <template v-if="tickerText && tickerText.length > 0">
+                        <template v-if="tickerText.length > 0">
                             <template v-for="text in tickerText">
                                 <span class="m-text ml-2 mr-2">//</span>
                                 <span class="m-text">{{ text }}</span>
@@ -31,7 +31,7 @@
                         </template>
 
                         <!-- Finished matches -->
-                        <template v-if="finishedMatches && finishedMatches.length > 0">
+                        <template v-if="finishedMatches.length > 0">
                             <span class="m-text ml-2 mr-2">//</span>
                             <span class="m-text">{{ this.$t('overlays.ticker.recent_matches') }}:</span>
 
@@ -45,24 +45,26 @@
                                     <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
                                     {{ m.team_orange_name }}
                                 </span>
+                                <span v-if="index < (finishedMatches.length - 1)" class="m-text ml-2 mr-2">&</span>
                             </template>
                         </template>
 
                         <!-- Upcoming matches -->
-                        <template v-if="upcomingMatches && upcomingMatches.length > 0">
+                        <template v-if="upcomingMatches.length > 0">
                             <span class="m-text ml-2 mr-2">//</span>
                             <span class="m-text">{{ this.$t('overlays.ticker.upcoming_matches') }}:</span>
 
                             <template v-for="(m, index) in upcomingMatches">
-                            <span class="m-text">
-                                {{ m.team_blue_name }}
-                                <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
-                                <span v-if="m.score_blue === 0 && m.score_orange === 0" class="ml-1 mr-1">- vs -</span>
-                                <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
-                                <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
-                                {{ m.team_orange_name }}
-                            </span>
-                                <span v-if="index < (upcomingMatches.length - 1)" class="m-text ml-2 mr-2">//</span>
+                                <span class="m-text">
+                                    {{ m.team_blue_name }}
+                                    <img class="m-text-img" :src="getTeamLogoURL(m.team_blue)" alt="">
+                                    <span v-if="m.score_blue === 0 && m.score_orange === 0"
+                                          class="ml-1 mr-1">- vs -</span>
+                                    <span v-else class="ml-1 mr-1">{{ m.score_blue }} - {{ m.score_orange }}</span>
+                                    <img class="m-text-img" :src="getTeamLogoURL(m.team_orange)" alt="">
+                                    {{ m.team_orange_name }}
+                                </span>
+                                <span v-if="index < (upcomingMatches.length - 1)" class="m-text ml-2 mr-2">&</span>
                             </template>
                         </template>
                     </div>
@@ -76,12 +78,13 @@
 <script>
 import {SingleUser} from "~/mixins/axios/SingleUser";
 import {OverlayStyle} from "~/mixins/axios/OverlayStyle";
-import {MatchGroup} from "~/mixins/axios/MatchGroup";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {OverlayStateWebsocket} from "~/mixins/websocket/OverlayStateWeboscket";
 import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
+import {MatchGroupWebsocket} from "~/mixins/websocket/MatchGroupWebsocket";
 import CustomCard from "~/components/CustomCard";
 import DynamicMarquee from 'vue-dynamic-marquee';
+
 
 export default {
     name: "TickerOverlay",
@@ -91,8 +94,8 @@ export default {
 
     data() {
         return {
-            animMain: true,
             matchGroupData: [],
+            animMain: true,
         }
     },
 
@@ -106,8 +109,8 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/ticker-${style}.css`
-                    //href: `/css/overlays/ticker-${style}.css` // dev only
+                    //href: `/assets/css/overlays/ticker-${style}.css`
+                    href: `/css/overlays/ticker-${style}.css` // dev only
                 }
             ]
         }
@@ -121,27 +124,44 @@ export default {
             return this.currentUser.id
         },
         finishedMatches() {
-            if (this.matchGroupData == null || this.matchGroupData.length <= 0) return null
+            if (this.matchGroupData.length === 0) return []
             return this.matchGroupData.filter(m => m.state === 4)
         },
         upcomingMatches() {
-            if (this.matchGroupData == null || this.matchGroupData.length <= 0) return null
-            return this.matchGroupData.filter(m => m.state === 1 || m.state === 2)
+            if (this.matchGroupData.length === 0) return []
+            return this.matchGroupData.filter(m => m.state <= 3)
         },
         tickerText() {
-            if (this.tickerOverlayData == null || this.tickerOverlayData.text == null) return null
+            if (!this.tickerOverlayData || !this.tickerOverlayData.text) return []
             return this.tickerOverlayData.text.split(",")
         }
     },
 
     watch: {
+        matchGroup: {
+            deep: true,
+            async handler() {
+                if (this.matchGroup) {
+                    this.animMain = false
+                    this.matchGroupData = []
+                    for (const matchID of this.matchGroup.matches) {
+                        if (matchID !== this.matchID) {
+                            await this.$axios.$get(`/api/match/${matchID}/`)
+                                .then((data) => {
+                                    this.matchGroupData.push(data);
+                                })
+                        }
+                    }
+                    if (this.overlayState.ticker_state) this.animMain = true
+                }
+            }
+        },
         overlayState: {
             deep: true,
             handler() {
                 this.animMain = !!this.overlayState.ticker_state;
             }
         },
-
         overlayData: {
             deep: true,
             handler(newState, oldState) {
@@ -169,19 +189,7 @@ export default {
         await this.connectOverlayStateWebsocket()
 
         // Get match group and all matches except the current one
-        await this.getMatchGroup()
-        if (this.matchGroup !== null) {
-            for (const matchID of this.matchGroup.matches) {
-                if (matchID !== this.matchID) {
-                    await this.$axios.$get(`/api/match/${matchID}/`)
-                        .then((data) => {
-                            this.matchGroupData.push(data);
-                        })
-                }
-            }
-        }
-
-        if (this.overlayState.ticker_state) this.animMain = true
+        await this.connectMatchGroupWebsocket()
     },
 
     mixins: [
@@ -190,7 +198,7 @@ export default {
         OverlayStyle,
         MatchSingleWebsocket,
         OverlayStateWebsocket,
-        MatchGroup
+        MatchGroupWebsocket
     ],
 
     components: {

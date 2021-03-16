@@ -477,6 +477,74 @@ class MatchMapConsumer3(JsonWebsocketConsumer):
         self.send_json(event['data'])
 
 
+class MatchGroupConsumer(JsonWebsocketConsumer):
+    """ Provides the match group data over a websocket connection given a user id
+
+        URL: /ws/match_group/<user_id>/
+    """
+
+    def connect(self):
+        self.accept()
+
+        # Set id
+        try:
+            self.user_id = int(self.scope['url_route']['kwargs']['user_id'])
+        except ValueError:
+            # Close connection if the provided match id is not a valid number
+            self.send_json(
+                {"status": "Rejected", "reason": f"Invalid user id: '{self.scope['url_route']['kwargs']['user_id']}'"})
+            self.close(code=4000)
+            return
+
+        # Local import to prevent circular imports
+        from django.contrib.auth.models import User
+        from overlays.models.models import MatchOverlayData
+        from dashboard.models.serializers import MatchGroupSerializer
+
+        # Set match
+        try:
+            user = User.objects.get(id=self.user_id)
+            overlay_data = MatchOverlayData.objects.get(user=user)
+            match_group = overlay_data.match_group
+        except User.DoesNotExist:
+            # Close connection if the user with the specified id does not exists
+            self.send_json(
+                {"status": "Rejected", "reason": f"User not found: {self.user_id}"})
+            self.close(code=4000)
+            return
+        except MatchOverlayData.DoesNotExist:
+            # Close connection if the OverlayState with the specified id does not exists
+            self.send_json(
+                {"status": "Rejected", "reason": f"MatchOverlayData not found for user: {self.user_id}"})
+            self.close(code=4000)
+            return
+
+        # Set channels group name
+        self.group_name = 'match_group_' + str(self.user_id)
+
+        # Add group django channels
+        async_to_sync(self.channel_layer.group_add)(
+            self.group_name,
+            self.channel_name
+        )
+
+        # Send data back to connecting client
+        self.send_json(MatchGroupSerializer(match_group).data)
+
+    def disconnect(self, code):
+        # Leave channels group
+        if hasattr(self, 'group_name'):
+            async_to_sync(self.channel_layer.group_discard)(
+                self.group_name,
+                self.channel_name
+            )
+
+    def send_to_client(self, event):
+        logger.info(f"Sending data to websocket clients: {self.group_name}")
+        # Relay message from group to client
+        self.send_json(event['data'])
+
+
 class OverlayStateConsumer(JsonWebsocketConsumer):
     """ Provides match data over a websocket connection given a match id
 

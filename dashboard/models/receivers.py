@@ -9,13 +9,14 @@ import logging
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
 from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, convert_sponsor_logo
 from caster_dashboard_2 import settings as django_settings
 
-from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round
+from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round, MatchGroup
 from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
@@ -362,3 +363,25 @@ def round_post_delete(sender, instance, **kwargs):
             'data': RoundSerializer(rounds, many=True).data
         }
     )
+
+
+@receiver(m2m_changed, sender=MatchGroup.matches.through)
+def match_group_post_save(sender, instance, action, **kwargs):
+    if action != "post_remove" and action != "post_add":
+        return
+
+    # Send data to websockets on change
+    from dashboard.models.serializers import MatchGroupSerializer
+    channel_layer = get_channel_layer()
+
+    data = MatchGroupSerializer(instance).data
+
+    # Send match maps to client(s)
+    for user in instance.users.all():
+        async_to_sync(channel_layer.group_send)(
+            f"match_group_{str(user.id)}",
+            {
+                'type': 'send_to_client',
+                'data': data
+            }
+        )
