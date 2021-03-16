@@ -104,13 +104,13 @@ export default {
         let style = "default"
 
         return {
-            title: this.$t("navigation.ticker") + " - Caster Dashboard",
+            title: this.$t("overlays.ticker_overlay") + " - Caster Dashboard",
             // Dynamically load theme css
             link: [
                 {
                     rel: "stylesheet",
-                    //href: `/assets/css/overlays/ticker-${style}.css`
-                    href: `/css/overlays/ticker-${style}.css` // dev only
+                    href: `/assets/css/overlays/ticker-${style}.css`
+                    //href: `/css/overlays/ticker-${style}.css` // dev only
                 }
             ]
         }
