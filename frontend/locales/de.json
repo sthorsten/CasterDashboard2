@@ -26,7 +26,8 @@
         "login": "Login",
         "current_match": "Aktuelles Match",
         "current_map": "Aktuelle Map",
-        "match_details": "Match Details"
+        "match_details": "Match Details",
+        "create_match_group": "Eine Match-Gruppe erstellen"
     },
     "login": {
         "sign_in": "Anmelden",
@@ -102,7 +103,8 @@
         "edit": "Bearbeiten",
         "delete": "Löschen",
         "save": "Speichern",
-        "add": "Hinzufügen"
+        "add": "Hinzufügen",
+        "name": "Name"
     },
     "home": {
         "welcome": "Willkommen",
@@ -290,6 +292,27 @@
             "not_played_yet": "Diese Map wird noch nicht gespielt!",
             "map_details": "Map Details",
             "ot_atk_team": "Overtime ATK Team"
+        },
+        "create_match_group": {
+            "set": "Match-Gruppe setzen",
+            "create": "Eine Match-Gruppe erstellen",
+            "select": "Wähle eine Match-Gruppe aus",
+            "current": "Aktuelle Match-Gruppe",
+            "edit": "Aktuelle Match-Gruppe bearbeiten",
+            "set_name": "Gib einen Namen für die Match-Gruppe ein",
+            "edit_name": "Namen für die Match-Gruppe bearbeiten",
+            "no_match_group": "Du hast noch keine Match-Gruppe erstellt.",
+            "select_match": "Match(es) auswählen",
+            "set_to_overlay": "Match-Gruppe ins Overlay übernehmen",
+            "toasts": {
+                "no_name": "Bitte gib einen Namen für die Match-Gruppe ein!",
+                "created": "Die Match-Gruppe wurde erstellt.",
+                "created_failed": "Die Match-Gruppe konnte nicht erstellt werden :/",
+                "edited": "Die Match-Gruppe wurde bearbeitet.",
+                "edited_failed": "Die Match-Gruppe konnte nicht bearbeitet werden :/",
+                "overlay_set": "Die Match-Gruppe wurde ins Overlays übernommen",
+                "overlay_set_failed": "Die Match-Gruppe konnte nicht ins Overlay übernommen werden :/"
+            }
         }
     },
     "data": {
