@@ -51,7 +51,8 @@
         "edit": "Edit",
         "delete": "Delete",
         "save": "Save",
-        "add": "Add"
+        "add": "Add",
+        "name": "Name"
     },
     "profile": {
         "user_data": "User Data",
@@ -103,7 +104,8 @@
         "user_settings": "User Settings",
         "profile": "Profile & Settings",
         "log_out": "Log Out",
-        "match_details": "Match Details"
+        "match_details": "Match Details",
+        "create_match_group": "Create a match group"
     },
     "login": {
         "sign_in": "Sign in",
@@ -214,6 +216,27 @@
             "reset_btn": "Reset match data",
             "match_created": "The match has been created",
             "match_create_failed": "The match could not be created!"
+        },
+        "create_match_group": {
+            "set": "Set Match Group",
+            "create": "Create a match group",
+            "select": "Select a match group",
+            "current": "Current Match Group",
+            "edit": "Edit current match group",
+            "set_name": "Set a name for the match group",
+            "edit_name": "Edit the name for the match group",
+            "no_match_group": "You don't have set up a match group yet.",
+            "select_match": "Select match(es)",
+            "set_to_overlay": "Set match group to overlay",
+            "toasts": {
+                "no_name": "Please enter a name for the match group!",
+                "created": "The match group has been created.",
+                "created_failed": "The match group could not be created :/",
+                "edited": "The match group has been edited.",
+                "edited_failed": "The match group could not be edited :/",
+                "overlay_set": "The match group has been set to the overlays",
+                "overlay_set_failed": "The match group could not be set to the overlays :/"
+            }
         },
         "overview": {
             "match_info": "Match Info",

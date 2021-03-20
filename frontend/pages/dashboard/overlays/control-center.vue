@@ -195,6 +195,7 @@
                 <CustomCard color="primary" outline divider :title="$t('overlays.control_center.overlay_actions')">
                     <template #card-body>
 
+                        <!-- Ticker Settings -->
                         <b-row>
                             <b-col>
                                 <label>{{ $t("overlays.control_center.ticker_data") }}:</label>

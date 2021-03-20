@@ -27,6 +27,12 @@
                 {{ $t('navigation.create') }}
             </b-nav-item>
 
+            <!-- Create MatchGroup -->
+            <b-nav-item to="/dashboard/matches/create_group" exact class="nav-link" active-class="active">
+                <i class="nav-icon fas fa-plus"></i>
+                {{ $t('navigation.create_match_group') }}
+            </b-nav-item>
+
 
             <!-- Overlays -->
             <b-nav-item class="text-uppercase nav-header" disabled>{{ $t('navigation.overlays') }}</b-nav-item>

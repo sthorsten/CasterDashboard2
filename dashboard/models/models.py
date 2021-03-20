@@ -321,7 +321,7 @@ class MatchGroup(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateField()
     users = models.ManyToManyField(User)
-    matches = models.ManyToManyField(Match)
+    matches = models.ManyToManyField(Match, null=True, blank=True)
 
     def __str__(self):
         return self.name
