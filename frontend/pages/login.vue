@@ -97,8 +97,13 @@ export default {
         // Redirect if already logged in
         let redirect = this.$cookies.get("auth.redirect")
         console.debug("REDIRECT COOKIE => ", redirect)
-        if (this.$auth.loggedIn && redirect && redirect !== "/"){
-            this.$router.push(redirect)
+        if (this.$auth.loggedIn && redirect){
+            if (redirect === "/"){
+                this.$router.push("/dashboard/home")
+            } else {
+                this.$router.push(redirect)
+            }
+
         }
     },
 

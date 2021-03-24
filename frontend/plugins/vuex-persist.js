@@ -2,6 +2,6 @@ import VuexPersistence from 'vuex-persist'
 
 export default ({ store }) => {
     new VuexPersistence({
-        storage: sessionStorage
+        storage: localStorage
     }).plugin(store);
 }
