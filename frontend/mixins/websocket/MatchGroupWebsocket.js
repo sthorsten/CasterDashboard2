@@ -45,6 +45,7 @@ export const MatchGroupWebsocket = {
                     if (e.wasClean) {
                         console.info("MatchGroup websocket disconnected cleanly.")
                         resolve()
+                        return
                     }
 
                     // Print status error
@@ -52,19 +53,22 @@ export const MatchGroupWebsocket = {
                         this.matchGroupWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Server rejected websocket connection");
                         reject()
+                        return
                     }
 
                     // Terminate connection
-                    if (this.matchGroupWebsocketConnectCounter >= 5) {
+                    if (this.matchGroupWebsocketConnectCounter >= 10) {
                         this.matchGroupWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Failed to (re)connect MatchGroup websocket!")
                         reject()
+                        return
                     }
 
                     // Reconnect
-                    console.warn("MatchGroup websocket connection closed unexpectedly. Trying to reconnect (5s.)")
+                    let timeout = this.matchGroupWebsocketConnectCounter * 2
+                    console.warn(`MatchGroup websocket connection closed unexpectedly. Trying to reconnect (${timeout}s.)`)
                     this.matchGroupWebsocketStatus = WebsocketStatus.RECONNECTING
-                    this.matchGroupWebsocketTimeout = setTimeout(this.connectMatchMapAllWebsocket, 5000)
+                    this.matchGroupWebsocketTimeout = setTimeout(this.connectMatchGroupWebsocket, timeout * 1000)
                 }
             })
         },

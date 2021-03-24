@@ -45,6 +45,7 @@ export const MatchMapSingleWebsocket = {
                     if (e.wasClean) {
                         console.info("MatchMapSingle websocket disconnected cleanly.")
                         resolve()
+                        return
                     }
 
                     // Print status error
@@ -52,19 +53,22 @@ export const MatchMapSingleWebsocket = {
                         this.matchMapSingleWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Server rejected websocket connection");
                         reject()
+                        return
                     }
 
                     // Terminate connection
-                    if (this.matchMapSingleWebsocketConnectCounter >= 5) {
+                    if (this.matchMapSingleWebsocketConnectCounter >= 10) {
                         this.matchMapSingleWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Failed to (re)connect MatchMapSingle websocket!")
                         reject()
+                        return
                     }
 
                     // Reconnect
-                    console.warn("MatchMapSingle websocket connection closed unexpectedly. Trying to reconnect (5s.)")
+                    let timeout = this.matchMapSingleWebsocketConnectCounter * 2
+                    console.warn(`MatchMapSingle websocket connection closed unexpectedly. Trying to reconnect (${timeout}s.)`)
                     this.matchMapSingleWebsocketStatus = WebsocketStatus.RECONNECTING
-                    this.matchMapSingleWebsocketTimeout = setTimeout(this.connectMatchMapAllWebsocket, 5000)
+                    this.matchMapSingleWebsocketTimeout = setTimeout(this.connectMatchMapSingleWebsocket, timeout * 1000)
                 }
             })
         },

@@ -49,6 +49,7 @@ export const OverlayDataWebsocket = {
                     if (e.wasClean) {
                         console.info("OverlayData websocket disconnected cleanly.")
                         resolve()
+                        return
                     }
 
                     // Print status error
@@ -56,19 +57,22 @@ export const OverlayDataWebsocket = {
                         this.overlayDataWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Server rejected websocket connection");
                         reject()
+                        return
                     }
 
                     // Terminate connection
-                    if (this.overlayDataWebsocketConnectCounter >= 5) {
+                    if (this.overlayDataWebsocketConnectCounter >= 10) {
                         this.overlayDataWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Failed to (re)connect OverlayData websocket!")
                         reject()
+                        return
                     }
 
                     // Reconnect
-                    console.warn("OverlayData websocket connection closed unexpectedly. Trying to reconnect (5s.)")
+                    let timeout = this.overlayDataWebsocketConnectCounter * 2
+                    console.warn(`OverlayData websocket connection closed unexpectedly. Trying to reconnect (${timeout}s.)`)
                     this.overlayDataWebsocketStatus = WebsocketStatus.RECONNECTING
-                    this.overlayDataWebsocketTimeout = setTimeout(this.connectMatchMapAllWebsocket, 5000)
+                    this.overlayDataWebsocketTimeout = setTimeout(this.connectOverlayDataWebsocket, timeout * 1000)
                 }
             })
         },

@@ -45,6 +45,7 @@ export const OperatorBansWebsocket = {
                     if (e.wasClean) {
                         console.info("OperatorBans websocket disconnected cleanly.")
                         resolve()
+                        return
                     }
 
                     // Print status error
@@ -52,19 +53,22 @@ export const OperatorBansWebsocket = {
                         this.operatorBansWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Server rejected websocket connection");
                         reject()
+                        return
                     }
 
                     // Terminate connection
-                    if (this.operatorBansWebsocketConnectCounter >= 5){
+                    if (this.operatorBansWebsocketConnectCounter >= 10){
                         this.operatorBansWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Failed to (re)connect OperatorBans websocket!")
                         reject()
+                        return
                     }
 
                     // Reconnect
-                    console.warn("OperatorBans websocket connection closed unexpectedly. Trying to reconnect (5s.)")
+                    let timeout = this.operatorBansWebsocketConnectCounter * 2
+                    console.warn(`OperatorBans websocket connection closed unexpectedly. Trying to reconnect (${timeout}s.)`)
                     this.operatorBansWebsocketStatus = WebsocketStatus.RECONNECTING
-                    this.operatorBansWebsocketTimeout = setTimeout(this.connectMatchMapAllWebsocket, 5000)
+                    this.operatorBansWebsocketTimeout = setTimeout(this.connectOperatorBansWebsocket, timeout * 1000)
                 }
             })
         },

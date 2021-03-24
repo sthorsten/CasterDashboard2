@@ -24,10 +24,6 @@ export const WebsocketURL = {
             }
         }
 
-        console.log("BASE_URL => ", baseURL)
-        console.log("LOCATION_HOST => ", location.host)
-        console.log("WEBSOCKET_BASE_URL => ", websocketBaseURL)
-
         return websocketBaseURL
     }
 }

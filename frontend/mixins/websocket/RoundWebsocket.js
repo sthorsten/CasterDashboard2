@@ -45,6 +45,7 @@ export const RoundWebsocket = {
                     if (e.wasClean) {
                         console.info("rounds websocket disconnected cleanly.")
                         resolve()
+                        return
                     }
 
                     // Print status error
@@ -52,19 +53,22 @@ export const RoundWebsocket = {
                         this.roundWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Server rejected websocket connection");
                         reject()
+                        return
                     }
 
                     // Terminate connection
-                    if (this.roundWebsocketConnectCounter >= 5) {
+                    if (this.roundWebsocketConnectCounter >= 10) {
                         this.roundWebsocketStatus = WebsocketStatus.ERROR
                         console.error("Failed to (re)connect rounds websocket!")
                         reject()
+                        return
                     }
 
                     // Reconnect
-                    console.warn("rounds websocket connection closed unexpectedly. Trying to reconnect (5s.)")
+                    let timeout = this.roundWebsocketConnectCounter * 2
+                    console.warn(`Rounds websocket connection closed unexpectedly. Trying to reconnect (${timeout}s.)`)
                     this.roundWebsocketStatus = WebsocketStatus.RECONNECTING
-                    this.roundWebsocketTimeout = setTimeout(this.connectRoundsAllWebsocket, 5000)
+                    this.roundWebsocketTimeout = setTimeout(this.connectRoundWebsocket, timeout * 1000)
                 }
             })
         },
