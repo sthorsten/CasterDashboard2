@@ -20,7 +20,7 @@ from pip._vendor import requests
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -440,7 +440,32 @@ def register_confirm(request):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
+def change_user_data(request):
+    if not request.method == 'POST':
+        return Response({'status': "Method Not Allowed"}, status=405)
+
+    # Check input data
+    data = request.data
+    if not data.get('user') or not data.get('email') or not data.get('first_name') or not data.get('last_name'):
+        return Response({'status': "Invalid Data"}, status=400)
+
+    try:
+        user = User.objects.get(id=data['user'])
+    except User.DoesNotExist:
+        return Response({'status': "Not Found"}, status=404)
+
+    user.email = data['email']
+    user.first_name = data['first_name']
+    user.last_name = data['last_name']
+
+    user.save()
+
+    return Response({'status': "ok"}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def change_password(request):
     if not request.method == 'POST':
         return Response({'status': "Method Not Allowed"}, status=405)

@@ -59,6 +59,7 @@ urlpatterns = [
     path(r'version/', views.version),
     path(r'register/', views.register),
     path(r'register/confirm/', views.register_confirm),
+    path(r'users/change-user-data/', views.change_user_data),
     path(r'users/change-password/', views.change_password)
 
 

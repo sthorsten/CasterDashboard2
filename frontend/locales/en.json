@@ -52,14 +52,22 @@
         "delete": "Delete",
         "save": "Save",
         "add": "Add",
-        "name": "Name"
+        "name": "Name",
+        "form_invalid": "Please fill out all required fields!"
     },
     "profile": {
         "user_data": "User Data",
         "user_settings": "User Settings",
+        "username_change_text": "You can not change your username by yourself. Please contact an administrator if you want to change your username.",
         "email": "Email",
+        "email_invalid": "Please enter a valid email address!",
         "first_name": "First Name",
+        "first_name_invalid": "Please enter your first name!",
         "last_name": "Last Name",
+        "last_name_invalid": "Please enter your last name!",
+        "change_user_data": "Change User Data",
+        "change_user_data_success": "Your user data has been changed successfully.",
+        "change_user_data_error": "Failed to update user data :/",
         "change_password": "Change Password",
         "current_password": "Current Password",
         "current_password_text": "Enter your current password",
