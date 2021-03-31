@@ -104,7 +104,8 @@
         "delete": "Löschen",
         "save": "Speichern",
         "add": "Hinzufügen",
-        "name": "Name"
+        "name": "Name",
+        "form_invalid": "Bitte fülle alle erforderlichen Felder aus!"
     },
     "home": {
         "welcome": "Willkommen",
@@ -419,7 +420,14 @@
         "new_password_invalid": "Bitte gib ein neues Passwort ein",
         "new_password_confirm_invalid": "Bitte bestätige dein neues Passwort",
         "password_change_success": "Dein Passwort wurde erfolgreich geändert!",
-        "password_change_error": "Dein Passwort konnte nicht geändert werden :/"
+        "password_change_error": "Dein Passwort konnte nicht geändert werden :/",
+        "username_change_text": "Du kannst deinen Benutzernamen nicht selbst ändern. Bitte kontaktiere einen Administrator um deinen Benutzernamen zu ändern.",
+        "email_invalid": "Bitte gib eine gültige Email-Adresse ein!",
+        "first_name_invalid": "Bitte gib deinen Vornamen ein!",
+        "last_name_invalid": "Bitte gib deinen Nachnamen ein!",
+        "change_user_data": "Benutzerdaten Ändern",
+        "change_user_data_success": "Deine Benutzerdaten wurden erfolgreich geändert.",
+        "change_user_data_error": "Fehler beim Ändern der Benutzerdaten :/"
     },
     "websocket": {
         "connection_lost": "Verbindung zum Server verloren. Versuche neu zu verbinden...",
