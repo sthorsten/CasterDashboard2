@@ -29,7 +29,7 @@ class BombSpotAdmin(admin.ModelAdmin):
 
 
 class OperatorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'side')
+    list_display = ('name', 'display_name', 'side')
 
 
 class LeagueAdmin(admin.ModelAdmin):

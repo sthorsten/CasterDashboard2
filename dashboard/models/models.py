@@ -90,8 +90,14 @@ class BombSpot(models.Model):
 class Operator(models.Model):
     # Represents an Operator in Rainbow Six Siege
 
+    SIDE_CHOICES = [
+        ('ATK', 'Attacker'),
+        ('DEF', 'Defender')
+    ]
+
     name = models.CharField(max_length=255)
-    side = models.CharField(max_length=3)
+    display_name = models.CharField(max_length=255)
+    side = models.CharField(max_length=3, choices=SIDE_CHOICES)
 
     def __str__(self):
         return self.name

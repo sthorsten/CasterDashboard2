@@ -6,28 +6,28 @@
             <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s">
                 <div v-if="(animOps >= 1 && getBanOrder(1) === 2) || (animOps >= 0 && getBanOrder(1) === 1)"
                      id="op1" class="opban-container">
-                    <img class="opban-image" :src="getOperatorImgURL(this.match.team_blue, 'ATK')" alt="">
+                    <div v-html="getOperatorImgURL(this.match.team_blue, 'ATK')"/>
                 </div>
             </transition>
 
             <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s">
                 <div v-if="(animOps >= 2 && getBanOrder(2) === 3) || (animOps >= 3 && getBanOrder(2) === 4)"
                      id="op2" class="opban-container">
-                    <img class="opban-image" :src="getOperatorImgURL(this.match.team_blue, 'DEF')" alt="">
+                    <div v-html="getOperatorImgURL(this.match.team_blue, 'DEF')"/>
                 </div>
             </transition>
 
             <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s">
                 <div v-if="(animOps >= 3 && getBanOrder(3) === 4) || (animOps >= 2 && getBanOrder(3) === 3)"
                      id="op3" class="opban-container">
-                    <img class="opban-image" :src="getOperatorImgURL(this.match.team_orange, 'DEF')" alt="">
+                    <div v-html="getOperatorImgURL(this.match.team_orange, 'DEF')"/>
                 </div>
             </transition>
 
             <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s">
                 <div v-if="(animOps >= 0 && getBanOrder(4) === 1) || (animOps >= 1 && getBanOrder(4) === 2)"
                      id="op4" class="opban-container">
-                    <img class="opban-image" :src="getOperatorImgURL(this.match.team_orange, 'ATK')" alt="">
+                    <div v-html="getOperatorImgURL(this.match.team_orange, 'ATK')"/>
                 </div>
             </transition>
 
@@ -44,6 +44,7 @@ import {MatchMapAllWebsocket} from "~/mixins/websocket/MatchMapAllWebsocket";
 import {MatchSingleWebsocket} from "~/mixins/websocket/MatchSingleWebsocket";
 import {OperatorBansWebsocket} from "~/mixins/websocket/OperatorBansWebsocket";
 import {OverlayDataWebsocket} from "~/mixins/websocket/OverlayDataWeboscket";
+import r6operators from "r6operators";
 
 export default {
     name: "OperatorBansOverlay",
@@ -53,6 +54,7 @@ export default {
 
     data() {
         return {
+            operatorIcons: r6operators,
             animMain: false,
             animOps: -1
         }
@@ -137,7 +139,12 @@ export default {
         getOperatorImgURL(team, side) {
             if (!this.bannedOperators.length > 0) return 0
             let operator = this.bannedOperators.filter(o => o.operator_side === side && o.team === team)[0]
-            if (operator) return require(`@/assets/img/operators/${operator.operator}.svg`)
+            if (operator) {
+                if (operator.operator_name === '_none') {
+                    return `<img class="opban-image" src="${require('@/assets/img/operators/' + operator.operator + '.svg')}" alt="">`
+                }
+                return this.operatorIcons[operator.operator_name].toSVG({class: 'opban-image'})
+            }
             return 0
         },
         getBanOrder(overlayOrder) {

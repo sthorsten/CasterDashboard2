@@ -171,9 +171,14 @@
                             <!-- Banned Operators -->
                             <b-col v-for="(n, index) in 4" :key="index" cols="3" class="text-center">
                                 <template v-if="bannedOperators.length > index">
-                                    <img :src="require(`@/assets/img/operators/${bannedOperators[index].operator}.svg`)"
-                                         style="height: 50px; width: 50px;"><br>
-                                    <span>{{ bannedOperators[index].operator_name }}</span><br>
+                                    <img v-if="bannedOperators[index].operator_name === '_none'"
+                                         :src="require(`@/assets/img/operators/${bannedOperators[index].operator}.svg`)"
+                                         style="height: 50px; width: 50px;">
+                                    <svg v-else
+                                         v-html="operatorIcons[bannedOperators[index].operator_name].toSVG()"
+                                         style="height:50px; width: 50px;"/>
+                                    <br>
+                                    <span>{{ bannedOperators[index].operator_display_name }}</span><br>
                                     <span class="font-italic">{{ bannedOperators[index].team_name }}</span>
                                 </template>
 
@@ -247,20 +252,32 @@
                                     <b-col cols="6" v-for="op in atkOps" :key="op.id">
                                         <template v-if="isOperatorBanned(op.id)">
                                             <b-btn variant="danger" class="btn-block mb-2 text-left" disabled>
-                                                <img :src="require(`@/assets/img/operators/${op.id}.svg`)"
+
+                                                <img v-if="op.name === '_none'"
+                                                     :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                     style="height: 25px; width: 25px;" alt="">
+
+                                                <svg v-else v-html="operatorIcons[op.name].toSVG()"
                                                      style="height: 25px; width: 25px;">
-                                                {{ op.name }}
+                                                </svg>
+                                                {{ op.display_name }}
                                             </b-btn>
                                         </template>
                                         <template v-else>
                                             <b-btn variant="secondary" class="btn-block mb-2 text-left"
                                                    :disabled="atkOpsBanned || !matchMap.atk_team || mapLocked"
                                                    @click="banOperator(op.id)">
-                                                <img :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                <img v-if="op.name === '_none'"
+                                                     :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                     style="height: 25px; width: 25px;" alt="">
+
+                                                <svg v-else v-html="operatorIcons[op.name].toSVG()"
                                                      style="height: 25px; width: 25px;">
-                                                {{ op.name }}
+                                                </svg>
+                                                {{ op.display_name }}
                                                 <b-spinner v-if="loadingSmall === 'ban-' + op.id" variant="light"
                                                            small/>
+
                                             </b-btn>
                                         </template>
                                     </b-col>
@@ -278,18 +295,27 @@
                                     <b-col cols="6" v-for="op in defOps" :key="op.id">
                                         <template v-if="isOperatorBanned(op.id)">
                                             <b-btn variant="danger" class="btn-block mb-2 text-left" disabled>
-                                                <img :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                <img v-if="op.name === '_none'"
+                                                     :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                     style="height: 25px; width: 25px;" alt="">
+                                                <svg v-else v-html="operatorIcons[op.name].toSVG()"
                                                      style="height: 25px; width: 25px;">
-                                                {{ op.name }}
+                                                </svg>
+                                                {{ op.display_name }}
                                             </b-btn>
                                         </template>
                                         <template v-else>
                                             <b-btn variant="secondary" class="btn-block mb-2 text-left"
                                                    :disabled="allOperatorsBanned || !atkOpsBanned || !matchMap.atk_team || mapLocked"
                                                    @click="banOperator(op.id)">
-                                                <img :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                <img v-if="op.name === '_none'"
+                                                     :src="require(`@/assets/img/operators/${op.id}.svg`)"
+                                                     style="height: 25px; width: 25px;" alt="">
+
+                                                <svg v-else v-html="operatorIcons[op.name].toSVG()"
                                                      style="height: 25px; width: 25px;">
-                                                {{ op.name }}
+                                                </svg>
+                                                {{ op.display_name }}
                                                 <b-spinner v-if="loadingSmall === 'ban-' + op.id" variant="light"
                                                            small/>
                                             </b-btn>
@@ -320,7 +346,8 @@ import {Operators} from "~/mixins/axios/Operators";
 import {WebsocketStatus} from "~/helpers/WebsocketStatus";
 import {MatchMapSingleWebsocket} from "~/mixins/websocket/MatchMapSingleWebsocket";
 import {OperatorBansWebsocket} from "~/mixins/websocket/OperatorBansWebsocket";
-import match from "../../../../../../layouts/match";
+import match from "~/layouts/match";
+import r6operators from "r6operators";
 
 export default {
     name: "OperatorBans",
@@ -328,6 +355,7 @@ export default {
 
     data() {
         return {
+            operatorIcons: r6operators,
             WebsocketStatus: WebsocketStatus,
             mapLocked: false,
             loadingSmall: {},

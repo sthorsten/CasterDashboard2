@@ -247,7 +247,7 @@ div.opban-container {
   grid-column-end: 7;
 }
 
-img.opban-image {
+.opban-image {
   height: 40px !important;
   width: 40px !important;
   filter: grayscale(0.4);

@@ -248,10 +248,14 @@
                                         <!-- Banned Operators -->
                                         <b-col v-for="(n, index) in 4" :key="index" cols="3" class="text-center">
                                             <template v-if="bannedOperators.length > index">
-                                                <img
-                                                    :src="require(`@/assets/img/operators/${bannedOperators[index].operator}.svg`)"
-                                                    style="height: 50px; width: 50px;"><br>
-                                                <span>{{ bannedOperators[index].operator_name }}</span><br>
+                                                <img v-if="bannedOperators[index].operator_name === '_none'"
+                                                     :src="require(`@/assets/img/operators/${bannedOperators[index].operator}.svg`)"
+                                                     style="height: 50px; width: 50px;">
+                                                <svg v-else
+                                                     v-html="operatorIcons[bannedOperators[index].operator_name].toSVG()"
+                                                     style="height:50px; width: 50px;"/>
+                                                <br>
+                                                <span>{{ bannedOperators[index].operator_display_name }}</span><br>
                                                 <span class="font-italic">{{ bannedOperators[index].team_name }}</span>
                                             </template>
 
@@ -389,6 +393,7 @@ import {OperatorBansWebsocket} from "~/mixins/websocket/OperatorBansWebsocket";
 import {RoundWebsocket} from "~/mixins/websocket/RoundWebsocket";
 import {Maps} from "~/mixins/axios/Maps";
 import {BombSpots} from "~/mixins/axios/BombSpots";
+import r6operators from "r6operators";
 
 export default {
     name: "MatchDetails",
@@ -396,6 +401,7 @@ export default {
 
     data() {
         return {
+            operatorIcons: r6operators,
             finishedMapData: [],
             mapID: null,
 

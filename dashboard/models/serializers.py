@@ -136,6 +136,7 @@ class MatchMapSerializer(serializers.ModelSerializer):
 class OperatorBanSerializer(serializers.ModelSerializer):
     map_name = serializers.StringRelatedField(source='map', read_only=True)
     operator_name = serializers.StringRelatedField(source='operator', read_only=True)
+    operator_display_name = serializers.StringRelatedField(source='operator.display_name', read_only=True)
     operator_side = serializers.StringRelatedField(source='operator.side', read_only=True)
     team_name = serializers.StringRelatedField(source='team', read_only=True)
 
