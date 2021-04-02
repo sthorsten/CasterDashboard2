@@ -80,7 +80,7 @@
                     <template #card-body>
 
                         <div class="font-italic mb-2">
-                            {{ $t('matches.maps.match_is_best_of')}} <b>Best Of {{ match.best_of }}</b>!
+                            {{ $t('matches.maps.match_is_best_of') }} <b>Best Of {{ match.best_of }}</b>!
                         </div>
 
                         <span v-if="matchMaps.length === 0" class="font-italic">
@@ -170,24 +170,24 @@
                                             <template
                                                 v-if="matchMapFiltered[map.id - 1].type=== 2 || matchMapFiltered[map.id - 1].type=== 3">
                                                 <div class="img-container pick">
-                                                    <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    <img class="w-100" :src="mapImgURLs[map['name']]" alt="-">
                                                 </div>
                                             </template>
                                             <template
                                                 v-else-if="matchMapFiltered[map.id - 1].type === 1 || matchMapFiltered[map.id - 1].type === 4">
                                                 <div class="img-container ban">
-                                                    <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    <img class="w-100" :src="mapImgURLs[map['name']]" alt="-">
                                                 </div>
                                             </template>
                                             <template v-else>
                                                 <div class="img-container">
-                                                    <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                    <img class="w-100" :src="mapImgURLs[map['name']]" alt="-">
                                                 </div>
                                             </template>
                                         </template>
                                         <template v-else>
                                             <div class="img-container">
-                                                <img class="w-100" :src="mapImgURLs[map.id - 1]" alt="-">
+                                                <img class="w-100" :src="mapImgURLs[map['name']]" alt="-">
                                             </div>
                                         </template>
 
@@ -334,9 +334,9 @@ export default {
             return this.$route.params.matchID
         },
         mapImgURLs() {
-            let urls = []
+            let urls = {}
             this.maps.forEach(e => {
-                urls.push(require('~/assets/img/maps/' + e.id + ".webp"))
+                urls[e.name] = require(`~/assets/img/maps/${e.name}.webp`)
             })
             return urls
         },

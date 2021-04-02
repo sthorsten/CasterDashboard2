@@ -9,7 +9,7 @@
 
                     <transition appear enter-active-class="animate__animated animate__fadeIn anim_0-5s">
                         <div v-if="animMap >= index" class="img-container">
-                            <img class="map" :src="require('~/assets/img/maps/' + map.map + '.webp')" alt="">
+                            <img class="map" :src="require('~/assets/img/maps/' + map.map_name + '.webp')" alt="">
                             <img v-if="map.type !== 3 && map.type !== 4" class="team"
                                  :src="getTeamLogoURL(map.choose_team)" alt="">
                             <img v-else class="team" :src="getLeagueLogoURL(match.league)"
