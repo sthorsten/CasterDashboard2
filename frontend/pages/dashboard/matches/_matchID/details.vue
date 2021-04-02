@@ -25,13 +25,13 @@
                                 <template
                                     v-if="map.type === 2 || map.type === 3">
                                     <div class="img-container pick mb-1">
-                                        <img class="w-100" :src="mapImgURLs[map.map - 1]" alt="-">
+                                        <img class="w-100" :src="mapImgURLs[map.map_name]" alt="-">
                                     </div>
                                 </template>
                                 <template
                                     v-else-if="map.type === 1 || map.type === 4">
                                     <div class="img-container ban mb-1">
-                                        <img class="w-100" :src="mapImgURLs[map.map - 1]" alt="-">
+                                        <img class="w-100" :src="mapImgURLs[map.map_name]" alt="-">
                                     </div>
                                 </template>
 
@@ -478,9 +478,9 @@ export default {
         },
 
         mapImgURLs() {
-            let urls = []
+            let urls = {}
             this.maps.forEach(e => {
-                urls.push(require('~/assets/img/maps/' + e.id + ".webp"))
+                urls[e.name] = require(`~/assets/img/maps/${e.name}.webp`)
             })
             return urls
         },
