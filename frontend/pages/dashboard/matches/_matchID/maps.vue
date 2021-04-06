@@ -374,10 +374,12 @@ export default {
     },
 
     async fetch() {
-        await this.getSingleMatch()
-        await this.getMaps()
+        await Promise.all([
+            this.getSingleMatch(),
+            this.getMaps(),
+            this.getMapPools()
+        ])
 
-        await this.getMapPools()
         this.mapPoolSelected = this.mapPools.filter(e => e.name === "Competitive")[0]
 
         await this.connectMatchMapAllWebsocket();

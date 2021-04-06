@@ -344,13 +344,19 @@ export default {
     async fetch() {
         // Load data
         await this.getSingleUser()
-        await this.connectOverlayDataWebsocket()
-        await this.getOverlayStyle()
+
+        await Promise.all([
+            this.connectOverlayDataWebsocket(),
+            this.getOverlayStyle()
+        ])
 
         this.matchID = this.overlayData.current_match
-        await this.connectMatchSingleWebsocket()
-        await this.connectMatchMapAllWebsocket()
-        await this.connectOverlayStateWebsocket()
+
+        await Promise.all([
+            this.connectMatchSingleWebsocket(),
+            this.connectMatchMapAllWebsocket(),
+            this.connectOverlayStateWebsocket()
+        ])
 
         // Set first sponsor (if present)
         if (this.match && this.match.sponsors && this.match.sponsors.length > 0) {

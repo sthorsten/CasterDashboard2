@@ -145,9 +145,12 @@ export default {
         await this.connectOverlayDataWebsocket()
 
         this.matchID = this.overlayData.current_match
-        await this.connectMatchSingleWebsocket()
-        await this.connectMatchMapAllWebsocket()
-        await this.connectOverlayStateWebsocket()
+
+        await Promise.all([
+            this.connectMatchSingleWebsocket(),
+            this.connectMatchMapAllWebsocket(),
+            this.connectOverlayStateWebsocket()
+        ])
 
         // Start Animation
         if (this.overlayState.maps_state) this.animMain = true

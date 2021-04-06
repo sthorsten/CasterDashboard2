@@ -270,9 +270,11 @@ export default {
     },
 
     async fetch() {
-        await this.getOverlayStyle()
-        await this.getLeagueGroups()
-        await this.getLeagueData()
+        await Promise.all([
+            this.getOverlayStyle(),
+            this.getLeagueGroups(),
+            this.getLeagueData()
+        ])
     },
 
     mixins: [

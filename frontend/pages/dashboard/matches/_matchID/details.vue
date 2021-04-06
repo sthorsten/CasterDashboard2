@@ -584,29 +584,34 @@ export default {
     },
 
     async fetch() {
-        // Static data
-        await this.getAllBombSpots()
-
-        // Match
-        await this.connectMatchSingleWebsocket()
-
-        // Maps
-        await this.getMaps()
-        await this.connectMatchMapAllWebsocket()
+        await Promise.all([
+            this.getAllBombSpots(),
+            this.connectMatchSingleWebsocket(),
+            this.getMaps(),
+            this.connectMatchMapAllWebsocket()
+        ])
 
         // Get match data for finished maps via websocket and disconnect it afterwards
         for (const map of this.finishedMaps) {
             this.mapID = map.map
-            await this.connectOperatorBansWebsocket()
-            await this.connectRoundWebsocket()
+
+            await Promise.all([
+                this.connectOperatorBansWebsocket(),
+                this.connectRoundWebsocket()
+            ])
+
             let combinedMapData = {
                 "map": map,
                 "opBans": this.bannedOperators,
                 "rounds": this.rounds,
             }
             this.finishedMapData.push(combinedMapData)
-            await this.disconnectOperatorBansWebsocket()
-            await this.disconnectRoundWebsocket()
+
+            await Promise.all([
+                this.disconnectOperatorBansWebsocket(),
+                this.disconnectRoundWebsocket()
+            ])
+
             this.bannedOperators = null
             this.rounds = null
         }
@@ -614,8 +619,11 @@ export default {
         // Get match data for current map
         if (this.currentMap != null) {
             this.mapID = this.currentMap.map
-            await this.connectOperatorBansWebsocket()
-            await this.connectRoundWebsocket()
+
+            await Promise.all([
+                this.connectOperatorBansWebsocket(),
+                this.connectRoundWebsocket()
+            ])
         }
     },
 

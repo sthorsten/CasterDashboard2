@@ -181,12 +181,18 @@ export default {
     async fetch() {
         // Load data
         await this.getSingleUser()
-        await this.connectOverlayDataWebsocket()
-        await this.getOverlayStyle()
+
+        await Promise.all([
+            this.connectOverlayDataWebsocket(),
+            this.getOverlayStyle()
+        ])
 
         this.matchID = this.overlayData.current_match
-        await this.connectMatchSingleWebsocket()
-        await this.connectOverlayStateWebsocket()
+
+        await Promise.all([
+            this.connectMatchSingleWebsocket(),
+            this.connectOverlayStateWebsocket()
+        ])
 
         // Get match group and all matches except the current one
         await this.connectMatchGroupWebsocket()

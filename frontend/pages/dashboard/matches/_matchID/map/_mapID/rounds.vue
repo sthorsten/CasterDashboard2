@@ -615,15 +615,14 @@ export default {
     },
 
     async fetch() {
-        await this.getSingleMatch()
-        await this.getSingleMatchMap()
+        await Promise.all([this.getSingleMatch(), this.getSingleMatchMap()])
+
         // Set Map to Breadcrumbs
         this.$store.commit("setBreadcrumbPath",
             ["Dashboard", "Matches", this.$route.params.matchID, `${this.matchMap.map_name} (Map ${this.matchMap.play_order}/${this.match.best_of})`, "Rounds"]
         )
 
-        await this.getBombSpots()
-        await this.connectRoundWebsocket()
+        await Promise.all([this.getBombSpots(), this.connectRoundWebsocket()])
     },
 
     mixins: [

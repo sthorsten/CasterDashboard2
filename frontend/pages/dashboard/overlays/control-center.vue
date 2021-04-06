@@ -302,7 +302,7 @@ export default {
         tickerTextFormatter(value) {
             return value.split(",").join("")
         },
-        addTickerText(){
+        addTickerText() {
             if (this.tickerAddText == null) return
             let data = this.tickerText
             data.push(this.tickerAddText)
@@ -318,7 +318,7 @@ export default {
             data[index] = null
             this.saveTickerText(data)
         },
-        saveTickerText(data){
+        saveTickerText(data) {
             let dataString = data.filter(Boolean).join(",")
             this.tickerOverlayData.text = dataString
             this.$axios.$put(`/api/overlay/ticker_data/${this.$auth.user.id}/`, this.tickerOverlayData)
@@ -335,8 +335,10 @@ export default {
     },
 
     async fetch() {
-        await this.connectOverlayStateWebsocket()
-        await this.connectOverlayDataWebsocket()
+        await Promise.all([
+            this.connectOverlayStateWebsocket(),
+            this.connectOverlayDataWebsocket()
+        ])
     },
 
     mixins: [

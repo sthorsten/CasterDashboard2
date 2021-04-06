@@ -515,18 +515,18 @@ export default {
     },
 
     async fetch() {
-        await this.getSingleMatch()
+        await Promise.all([this.getSingleMatch(), this.getSingleMatchMap()])
 
-        await this.getSingleMatchMap()
         // Set Map to Breadcrumbs
         this.$store.commit("setBreadcrumbPath",
             ["Dashboard", "Matches", this.$route.params.matchID, `${this.matchMap.map_name} (Map ${this.matchMap.play_order}/${this.match.best_of})`, "OpBans"]
         )
 
-        await this.getOperators()
-
-        await this.connectMatchMapSingleWebsocket()
-        await this.connectOperatorBansWebsocket()
+        await Promise.all([
+            this.getOperators(),
+            this.connectMatchMapSingleWebsocket(),
+            this.connectOperatorBansWebsocket()
+        ])
     },
 
     mixins: [

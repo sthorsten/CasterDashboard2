@@ -149,12 +149,18 @@ export default {
     async fetch() {
         // Load data
         await this.getSingleUser()
-        await this.connectOverlayDataWebsocket()
-        await this.getOverlayStyle()
+
+        await Promise.all([
+            this.connectOverlayDataWebsocket(),
+            this.getOverlayStyle()
+        ])
 
         this.matchID = this.overlayData.next_match
-        await this.connectMatchSingleWebsocket()
-        await this.connectOverlayStateWebsocket()
+
+        await Promise.all([
+            this.connectMatchSingleWebsocket(),
+            this.connectOverlayStateWebsocket()
+        ])
 
         // Start Animation
         if (this.overlayState.start_next_state) this.animMain = true

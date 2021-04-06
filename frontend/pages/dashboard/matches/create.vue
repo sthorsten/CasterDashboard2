@@ -420,23 +420,25 @@ export default {
     },
 
     async fetch() {
-        await this.getUserData()
+
+        await Promise.all([
+            this.getUserData(),
+            this.getLeagueData(),
+            this.getSeasonData(),
+            this.getTeamData(),
+            this.getSponsorData(),
+            this.getCurrentUserMatch()
+        ])
+
         // Filter out current user
         this.users = this.users.filter(user => user.username !== this.$auth.user.userName)
 
-        await this.getLeagueData()
-
-        await this.getSeasonData()
         // Add labels
         this.seasons.forEach(season => {
             if (season.official_season) season.label = `${season.name} (Official Season)`
             else if (season.league) season.label = `${season.name} (${season.league_name})`
             else season.label = season.name
         })
-
-        await this.getTeamData()
-        await this.getSponsorData()
-        await this.getCurrentUserMatch()
     },
 
     mixins: [

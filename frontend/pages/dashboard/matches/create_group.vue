@@ -266,14 +266,14 @@ export default {
     },
 
     async fetch() {
-        await this.getMatchData()
-        await this.connectMatchGroupWebsocket()
+        let [r1, r2, r3] =
+        await Promise.all([
+            this.getMatchData(),
+            this.connectMatchGroupWebsocket(),
+            await this.$axios.$get(`/api/match_groups/?user=${this.userID}`)
+        ])
 
-        // Get user match groups
-        await this.$axios.$get(`/api/match_groups/?user=${this.userID}`)
-            .then((data) => {
-                this.userMatchGroups = data
-            })
+        this.userMatchGroups = r3
     },
 
     mixins: [
