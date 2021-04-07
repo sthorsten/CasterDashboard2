@@ -113,7 +113,7 @@
         "profile": "Profile & Settings",
         "log_out": "Log Out",
         "match_details": "Match Details",
-        "create_match_group": "Create a match group"
+        "manage_match_groups": "Manage match groups"
     },
     "login": {
         "sign_in": "Sign in",

@@ -29,8 +29,8 @@
 
             <!-- Create MatchGroup -->
             <b-nav-item to="/dashboard/matches/create_group" exact class="nav-link" active-class="active">
-                <i class="nav-icon fas fa-plus"></i>
-                {{ $t('navigation.create_match_group') }}
+                <i class="nav-icon fas fa-layer-group"></i>
+                {{ $t('navigation.manage_match_groups') }}
             </b-nav-item>
 
 

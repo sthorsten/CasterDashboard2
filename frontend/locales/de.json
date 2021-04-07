@@ -27,7 +27,7 @@
         "current_match": "Aktuelles Match",
         "current_map": "Aktuelle Map",
         "match_details": "Match Details",
-        "create_match_group": "Eine Match-Gruppe erstellen"
+        "manage_match_groups": "Match Gruppen verwalten"
     },
     "login": {
         "sign_in": "Anmelden",

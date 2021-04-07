@@ -2,8 +2,19 @@
     <div>
 
         <b-row v-if="$fetchState.pending">
-            <b-col>
-
+            <b-col cols="12" md="6">
+                <CustomCard color="primary" outline divider :title="$t('matches.create_match_group.create')">
+                    <template #card-body>
+                        <b-skeleton-table :columns="1" :rows="8"></b-skeleton-table>
+                    </template>
+                </CustomCard>
+            </b-col>
+            <b-col cols="12" md="6">
+                <CustomCard color="secondary" outline divider :title="$t('matches.create_match_group.current')">
+                    <template #card-body>
+                        <b-skeleton-table :columns="1" :rows="8"></b-skeleton-table>
+                    </template>
+                </CustomCard>
             </b-col>
         </b-row>
 
