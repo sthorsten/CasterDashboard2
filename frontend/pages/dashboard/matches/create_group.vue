@@ -267,13 +267,18 @@ export default {
 
     async fetch() {
         let [r1, r2, r3] =
-        await Promise.all([
-            this.getMatchData(),
-            this.connectMatchGroupWebsocket(),
-            await this.$axios.$get(`/api/match_groups/?user=${this.userID}`)
-        ])
+            await Promise.all([
+                this.getMatchData(),
+                this.connectMatchGroupWebsocket(),
+                await this.$axios.$get(`/api/match_groups/?user=${this.userID}`)
+            ])
 
         this.userMatchGroups = r3
+
+        // Sort matches by ID desc.
+        this.matches.sort((a, b) => {
+            return a.id > b.id ? -1 : 1
+        })
     },
 
     mixins: [
