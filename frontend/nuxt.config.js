@@ -42,7 +42,9 @@ export default {
     },
 
     // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
-    buildModules: [],
+    buildModules: [
+        '@nuxtjs/pwa',
+    ],
 
     // Modules (https://go.nuxtjs.dev/config-modules)
     modules: [
@@ -58,6 +60,15 @@ export default {
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
     axios: {
         baseURL: process.env.BASE_URL
+    },
+
+    pwa: {
+        manifest: {
+            name: 'R6 Caster Dashboard v2',
+            short_name: 'Caster Dashboard',
+            background_color: '#121212',
+            theme_color: '#363636'
+        }
     },
 
     // Nuxt Auth module config

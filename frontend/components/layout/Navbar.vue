@@ -1,6 +1,12 @@
 <template>
     <b-navbar type="dark" variant="dark" class="shadow">
 
+
+        <b-link v-b-toggle:mobile-sidebar class="d-block d-lg-none">
+            <i class="fa fas fa-bars">
+            </i>
+        </b-link>
+
         <b-navbar-brand href="/" class="ml-3">
             <strong>R6</strong> Caster Dashboard
         </b-navbar-brand>

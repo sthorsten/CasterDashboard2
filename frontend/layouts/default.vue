@@ -10,6 +10,11 @@
                     <Sidebar/>
                 </b-col>
 
+                <b-sidebar id="mobile-sidebar" title="Navigation" header-class="bg-dark" text-variant="light" backdrop
+                           class="d-block d-lg-none p-0">
+                    <Sidebar/>
+                </b-sidebar>
+
                 <b-col cols="12" lg="9" xl="10">
 
                     <div class="content-header">
@@ -17,7 +22,7 @@
                             <b-col>
                                 <h1 class="text-white mt-2 ml-2" style="font-weight: 400">
                                     <template v-if="$store.state.pageTitleIcon">
-                                            <font-awesome-icon :icon="$store.state.pageTitleIcon" class="mr-1"/>
+                                        <font-awesome-icon :icon="$store.state.pageTitleIcon" class="mr-1"/>
                                     </template>
                                     {{ $store.state.pageTitle }}
                                 </h1>
@@ -29,7 +34,8 @@
                                     <b-breadcrumb-item active>
                                         <i class="fa fas fa-chevron-circle-right"></i>
                                     </b-breadcrumb-item>
-                                    <b-breadcrumb-item active v-for="elem in $store.state.breadcrumbPath" :key="elem.index">
+                                    <b-breadcrumb-item active v-for="elem in $store.state.breadcrumbPath"
+                                                       :key="elem.index">
                                         <span>{{ elem }}</span>
                                     </b-breadcrumb-item>
                                 </b-breadcrumb>

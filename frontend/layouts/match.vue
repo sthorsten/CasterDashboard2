@@ -10,6 +10,11 @@
                     <MatchSidebar/>
                 </b-col>
 
+                <b-sidebar id="mobile-sidebar" title="Navigation" header-class="bg-dark" text-variant="light" backdrop
+                           class="d-block d-lg-none p-0">
+                    <MatchSidebar/>
+                </b-sidebar>
+
                 <b-col cols="12" lg="9" xl="10">
 
                     <div class="content-header">
