@@ -109,7 +109,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/css/overlays/ticker-${style}.css
+                    href: `/css/overlays/ticker-${style}.css`
                 }
             ]
         }

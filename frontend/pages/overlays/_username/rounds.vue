@@ -91,7 +91,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/css/overlays/rounds-${styleCSS}.css
+                    href: `/css/overlays/rounds-${styleCSS}.css`
                 }
             ]
         }
