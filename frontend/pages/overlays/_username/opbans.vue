@@ -70,8 +70,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/opbans-${style}.css`
-                    //href: `/css/overlays/opbans-${style}.css` // dev only
+                    href: `/css/overlays/opbans-${style}.css`
                 }
             ]
         }

@@ -7,4 +7,3 @@ _old-vue-src
 .env*
 .gitignore
 Dockerfile
-yarn.lock

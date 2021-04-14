@@ -228,6 +228,10 @@ def new_user_post_save(sender, instance, created, **kwargs):
     # Create overlay entries when a new user is created
 
     if created:
+        if instance.username == "admin":
+            # Do not create any overlay data for the default admin user
+            return
+
         registration_token = secrets.token_hex(64)
         Profile.objects.create(user=instance, registration_token=registration_token)
         Token.objects.get_or_create(user=instance)

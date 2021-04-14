@@ -553,7 +553,7 @@ span.team-name-text-right {
 }
 
 div.main-bg {
-  background-image: url("/assets/img/FireLeagueInGame.svg");
+  background-image: url("/img/FireLeagueInGame.svg");
   background-size: 1920px;
   height: 6px !important;
   top: 48px !important;

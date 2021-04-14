@@ -205,8 +205,7 @@ export default {
             link: [
                 {
                     rel: "stylesheet",
-                    href: `/assets/css/overlays/ingame-${styleCSS}.css`
-                    //href: `/css/overlays/ingame-${styleCSS}.css` // dev only
+                    href: `/css/overlays/ingame-${styleCSS}.css`
                 }
             ]
         }
