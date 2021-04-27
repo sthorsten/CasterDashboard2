@@ -1,6 +1,7 @@
 .git
 .github
 .idea
+.vscode
 __pycache__
 docker-nginx
 frontend
