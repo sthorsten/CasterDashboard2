@@ -40,7 +40,9 @@ span {
   margin-top: 2px !important;
 }
 
-span.team-name-text, span.team-name-text-right, span.team-name-text-left {
+span.team-name-text,
+span.team-name-text-right,
+span.team-name-text-left {
   display: none !important;
 }
 
@@ -295,7 +297,8 @@ div.container-center {
   background: rgba(0, 0, 0, 0);
 }
 
-img.logo, img.logo-team {
+img.logo,
+img.logo-team {
   height: 70px;
   width: 70px;
 }
@@ -314,7 +317,9 @@ span {
 span.center-text {
   color: #000;
 }
-span.team-name-text, span.team-name-text-right, span.team-name-text-left {
+span.team-name-text,
+span.team-name-text-right,
+span.team-name-text-left {
   margin-left: 7px;
   margin-right: 7px;
   height: 80px;

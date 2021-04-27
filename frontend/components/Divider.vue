@@ -1,15 +1,15 @@
 <template>
-    <hr align="center" color="#ced4da" noshade width="100%">
+  <hr align="center" color="#ced4da" noshade width="100%" />
 </template>
 
 <script>
-export default {
-    name: "Divider"
-}
+  export default {
+    name: "Divider",
+  }
 </script>
 
 <style scoped>
-    hr {
-        margin: 0.5rem;
-    }
+  hr {
+    margin: 0.5rem;
+  }
 </style>

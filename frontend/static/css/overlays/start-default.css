@@ -232,14 +232,22 @@ div.container-left {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0.25turn, rgba(8, 112, 211, 0.3) 10%, rgba(8, 112, 211, 0.8) 80%);
+  background: linear-gradient(
+    0.25turn,
+    rgba(8, 112, 211, 0.3) 10%,
+    rgba(8, 112, 211, 0.8) 80%
+  );
 }
 div.container-right {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background: linear-gradient(0.75turn, rgba(234, 117, 22, 0.3) 10%, rgba(234, 117, 22, 0.8) 80%);
+  background: linear-gradient(
+    0.75turn,
+    rgba(234, 117, 22, 0.3) 10%,
+    rgba(234, 117, 22, 0.8) 80%
+  );
 }
 div.container-center {
   display: flex;
@@ -249,7 +257,8 @@ div.container-center {
   background: #111;
 }
 
-img.logo, img.logo-team {
+img.logo,
+img.logo-team {
   height: 70px;
   width: 70px;
 }
@@ -268,7 +277,9 @@ span {
 span.center-text {
   color: #fff;
 }
-span.team-name-text, span.team-name-text-right, span.team-name-text-left {
+span.team-name-text,
+span.team-name-text-right,
+span.team-name-text-left {
   margin-left: 7px;
   margin-right: 7px;
   height: 80px;

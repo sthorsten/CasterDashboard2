@@ -1,221 +1,227 @@
 @import "bootstrap-variables";
 
 @font-face {
-    font-family: 'ScoutCond Regular';
-    src: url("~@/assets/fonts/ScoutCond-Regular.woff") format('woff');
+  font-family: "ScoutCond Regular";
+  src: url("~@/assets/fonts/ScoutCond-Regular.woff") format("woff");
 }
 
 @font-face {
-    font-family: 'ScoutCond Bold';
-    src: url("~@/assets/fonts/ScoutCond-Bold.woff") format('woff');
+  font-family: "ScoutCond Bold";
+  src: url("~@/assets/fonts/ScoutCond-Bold.woff") format("woff");
 }
 
 div.title-icon {
-    width: max-content;
-    padding: 1em;
-    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
-    color: #fff;
-    background: $gray-800;
-    border-radius: 8%;
+  width: max-content;
+  padding: 1em;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  color: #fff;
+  background: $gray-800;
+  border-radius: 8%;
 }
 
 h1.title-text {
-    color: #fff !important;
-    margin-top: .5em;
+  color: #fff !important;
+  margin-top: 0.5em;
 }
 
 ol.breadcrumb {
-    margin-top: 1em !important;
+  margin-top: 1em !important;
 }
 
 @each $name, $color in $theme-colors {
-    .card-#{$name}.card-outline-all {
-        border: 3px solid $color;
-    }
+  .card-#{$name}.card-outline-all {
+    border: 3px solid $color;
+  }
 }
 
 @each $name, $color in $grays {
-    .bg-gray-#{$name} {
-        background: $color;
-    }
+  .bg-gray-#{$name} {
+    background: $color;
+  }
 }
 
 .nav-link {
-    padding: 0.25rem 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
 }
 
 .nav-header {
-    padding-top: 0.5rem;
-    font-size: 0.85rem;
+  padding-top: 0.5rem;
+  font-size: 0.85rem;
 }
 
 .navbar-custom a {
-    padding: 0.5rem 1rem !important;
-    color: #c2c7d0 !important;
+  padding: 0.5rem 1rem !important;
+  color: #c2c7d0 !important;
 
-    &.active, &:hover {
-        color: #fff !important;
-        background-color: $gray-700;
-    }
+  &.active,
+  &:hover {
+    color: #fff !important;
+    background-color: $gray-700;
+  }
 }
 
 .main-footer {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 
 .card-title-upper {
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 0.5em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.5em;
 }
 
 .badge {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 div.card-divider {
-    border-bottom: 1px solid #fff;
-    margin-top: 0;
-    margin-bottom: 1em;
+  border-bottom: 1px solid #fff;
+  margin-top: 0;
+  margin-bottom: 1em;
 }
 
 hr.divider {
-    border-top: 1px solid #adb5bd
+  border-top: 1px solid #adb5bd;
 }
 
 .user-menu-custom-outer {
-    .user-menu-link {
-        height: 40px;
-        margin: 0;
-        padding: 0;
-    }
+  .user-menu-link {
+    height: 40px;
+    margin: 0;
+    padding: 0;
+  }
 
-    .user-menu-link::after {
-        display: none !important;
-    }
+  .user-menu-link::after {
+    display: none !important;
+  }
 }
 
 .user-menu-custom-inner {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0;
+  padding: 0;
+
+  * {
+    height: 32px;
+    width: auto;
+    margin: 4px;
+  }
+
+  div {
     display: grid;
-    grid-template-columns: auto auto;
-    margin: 0;
-    padding: 0;
+    grid-template-rows: auto auto;
+    margin-left: 8px;
 
-    * {
-        height: 32px;
-        width: auto;
-        margin: 4px;
+    span {
+      margin: 0;
+      padding: 0;
     }
 
-    div {
-        display: grid;
-        grid-template-rows: auto auto;
-        margin-left: 8px;
-
-        span {
-            margin: 0;
-            padding: 0;
-        }
-
-        .user-name {
-            font-weight: bold;
-            margin-top: -7px;
-        }
-
-        .user-email {
-            margin-top: -12px;
-        }
+    .user-name {
+      font-weight: bold;
+      margin-top: -7px;
     }
+
+    .user-email {
+      margin-top: -12px;
+    }
+  }
 }
 
 @media (max-width: 991.98px) {
-    .user-menu-custom-inner {
-        div {
-            display: none;
-        }
+  .user-menu-custom-inner {
+    div {
+      display: none;
     }
+  }
 }
 
 .toast {
-    opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 .table.table-head-fixed thead tr:nth-child(1) th {
-    background: $gray-900;
+  background: $gray-900;
 }
 
 .page-item .page-link {
-    color: #fff;
-    background: $gray-700;
-    border-color: $primary;
+  color: #fff;
+  background: $gray-700;
+  border-color: $primary;
 }
 
 .page-item.disabled .page-link {
-    color: #fff;
-    background: $gray-700;
-    border-color: $primary;
+  color: #fff;
+  background: $gray-700;
+  border-color: $primary;
 }
 
 .dropdown-menu {
-    background: $gray-800;
-    color: #fff;
+  background: $gray-800;
+  color: #fff;
 }
 
 .dropdown-item {
-    color: #fff;
+  color: #fff;
 }
 
-.dropdown-item:hover, .dropdown-item:focus {
-    background: $primary;
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: $primary;
 }
 
 .bootstrap-select .no-results {
-    background: $dark;
-    color: #fff;
+  background: $dark;
+  color: #fff;
 }
 
 .form-control {
-    background: $gray-900;
-    color: #fff;
+  background: $gray-900;
+  color: #fff;
 }
 
 .form-control:focus {
-    background: $gray-900;
-    color: #fff;
+  background: $gray-900;
+  color: #fff;
 }
 
 // File input
 .custom-file-label {
-    background: $gray-900 !important;
-    color: #fff !important;
+  background: $gray-900 !important;
+  color: #fff !important;
 }
 
 .custom-file-label:after {
-    background: $gray-800 !important;
-    color: #fff !important;
+  background: $gray-800 !important;
+  color: #fff !important;
 }
 
 // Login page
-.login-page, .register-page {
-    background: $dark;
+.login-page,
+.register-page {
+  background: $dark;
 }
 
-.login-logo a, .register-logo a {
-    color: #fff;
+.login-logo a,
+.register-logo a {
+  color: #fff;
 }
 
-.login-card-body, .register-card-body {
-    background: $gray-900;
-    color: #fff;
+.login-card-body,
+.register-card-body {
+  background: $gray-900;
+  color: #fff;
 }
 
-.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
-    background: $gray-900;
+.login-card-body .input-group .input-group-text,
+.register-card-body .input-group .input-group-text {
+  background: $gray-900;
 }
 
 // Custom Modal
 
 .modal-backdrop {
-    background: rgba(0, 0, 0, 0.7) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
 }

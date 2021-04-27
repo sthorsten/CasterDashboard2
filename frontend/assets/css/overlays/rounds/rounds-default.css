@@ -246,7 +246,8 @@ table {
   border-style: hidden;
 }
 
-th, td {
+th,
+td {
   border: 3px solid white;
   text-align: center;
 }

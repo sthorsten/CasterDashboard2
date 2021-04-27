@@ -6,17 +6,19 @@ $vs-selected-bg: #007bff;
 $vs-selected-border-color: #007bff;
 $vs-component-placeholder-color: #fff;
 
-.vs__search, .vs__dropdown-toggle {
-    color: #fff !important;
-    background: #212529 !important;
+.vs__search,
+.vs__dropdown-toggle {
+  color: #fff !important;
+  background: #212529 !important;
 }
 
-.vs__dropdown-option, .vs__selected {
-    color: #fff !important;
+.vs__dropdown-option,
+.vs__selected {
+  color: #fff !important;
 }
 
 .vs__clear {
-    margin-top: -5px !important;
+  margin-top: -5px !important;
 }
 
 @import "~vue-select/src/scss/vue-select.scss";

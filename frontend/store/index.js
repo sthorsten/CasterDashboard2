@@ -1,25 +1,24 @@
 export const state = () => ({
-    pageTitle: "",
-    pageTitleIcon: null,
-    breadcrumbPath: [],
-    version: "?"
+  pageTitle: "",
+  pageTitleIcon: null,
+  breadcrumbPath: [],
+  version: "?",
 })
 
 export const mutations = {
-    setPageTitle(state, title){
-        state.pageTitle = title
-    },
+  setPageTitle(state, title) {
+    state.pageTitle = title
+  },
 
-    setPageTitleIcon(state, icon){
-        state.pageTitleIcon = icon
-    },
+  setPageTitleIcon(state, icon) {
+    state.pageTitleIcon = icon
+  },
 
-    setBreadcrumbPath(state, bcPath){
-        state.breadcrumbPath = bcPath
-    },
+  setBreadcrumbPath(state, bcPath) {
+    state.breadcrumbPath = bcPath
+  },
 
-    setVersion(state, version){
-        state.version = version
-    }
-
+  setVersion(state, version) {
+    state.version = version
+  },
 }

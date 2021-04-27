@@ -1,16 +1,13 @@
 <template>
-    <div class="container">
-        Loading...
-    </div>
+  <div class="container">Loading...</div>
 </template>
 
 <script>
-export default {
+  export default {
     mounted() {
-        this.$router.push({path: "/dashboard/home"})
-    }
-}
+      this.$router.push({path: "/dashboard/home"})
+    },
+  }
 </script>
 
-<style>
-</style>
+<style></style>

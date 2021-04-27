@@ -1,13 +1,11 @@
 <template>
-    <Nuxt/>
+  <Nuxt />
 </template>
 
 <script>
-export default {
-    name: "empty"
-}
+  export default {
+    name: "empty",
+  }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

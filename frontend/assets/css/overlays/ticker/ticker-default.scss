@@ -3,28 +3,28 @@
 @import "../animations";
 
 .main {
-    position: absolute;
-    background: #aaa;
-    height: 40px;
-    bottom: 0;
-    width: 1920px;
-    overflow: hidden;
-    border-top: 3px solid #000;
+  position: absolute;
+  background: #aaa;
+  height: 40px;
+  bottom: 0;
+  width: 1920px;
+  overflow: hidden;
+  border-top: 3px solid #000;
 }
 
 .m-text-wrapper {
-    width: max-content;
-    margin-top: -4px;
+  width: max-content;
+  margin-top: -4px;
 }
 
 .m-text {
-    font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
-    font-size: 28px;
-    text-transform: uppercase;
+  font-family: "ScoutCond Bold", "BebasNeue", sans-serif;
+  font-size: 28px;
+  text-transform: uppercase;
 }
 
 .m-text-img {
-    margin-top: -4px;
-    width: 22px;
-    height: 22px;
+  margin-top: -4px;
+  width: 22px;
+  height: 22px;
 }

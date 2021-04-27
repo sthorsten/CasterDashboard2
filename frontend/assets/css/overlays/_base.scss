@@ -11,35 +11,35 @@ $r6-orange: rgb(234, 117, 22);
 
 // Font
 @font-face {
-    font-family: 'ScoutCond Bold';
-    src: url("/assets/fonts/ScoutCond-Bold.woff") format('woff');
+  font-family: "ScoutCond Bold";
+  src: url("/assets/fonts/ScoutCond-Bold.woff") format("woff");
 }
 
 $font: "ScoutCond Bold", "BebasNeue", sans-serif;
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    overflow: hidden;
-    width: 1920px;
-    height: 100%;
+  overflow: hidden;
+  width: 1920px;
+  height: 100%;
 
-    font-family: $font;
-    background: transparent !important;
+  font-family: $font;
+  background: transparent !important;
 }
 
 span {
-    font-family: $font;
+  font-family: $font;
 }
 
 .d-none {
-    display: none !important;
+  display: none !important;
 }
 
 .invisible {
-    visibility: hidden !important;
-    opacity: 0 !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
