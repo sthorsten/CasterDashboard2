@@ -187,12 +187,20 @@ def match_maps_post_save(sender, instance, **kwargs):
             instance.status = 3
             instance.save()
 
-            if instance.score_blue > instance.score_orange:
-                instance.match.score_blue = instance.match.score_blue + 1
+            # Set match score equal to map score if BO1
+            if instance.match.best_of == 1:
+                instance.match.score_blue = instance.score_blue
+                instance.match.score_orange = instance.score_orange
                 instance.match.save()
-            else:
-                instance.match.score_orange = instance.match.score_orange + 1
-                instance.match.save()
+
+            # Set match score
+            else: 
+                if instance.score_blue > instance.score_orange:
+                    instance.match.score_blue = instance.match.score_blue + 1
+                    instance.match.save()
+                else:
+                    instance.match.score_orange = instance.match.score_orange + 1
+                    instance.match.save()
 
         # Draw
         elif instance.score_blue == 6 and instance.score_orange == 6:
