@@ -16,7 +16,7 @@ services:
     
   
   nginx: # Reverse proxy
-    image: docker.pkg.github.com/sthorsten/casterdashboard2/nginx:latest
+    image: ghcr.io/sthorsten/casterdashboard2-nginx:develop
     volumes:
       - asset_files:/opt/static/assets
       - media_files:/opt/static/media
@@ -28,14 +28,21 @@ services:
 
 
   frontend: # Nuxt frontend
-    image: docker.pkg.github.com/sthorsten/casterdashboard2/frontend:latest
+    image: ghcr.io/sthorsten/casterdashboard2-frontend:develop
     command: yarn run start
     environment:
       - NUXT_HOST=0.0.0.0
+      - EMAIL_ADDRESS=mail@example.com
+      - EMAIL_HOST=mail.example.com
+      - EMAIL_PORT=587
+      - EMAIL_USERNAME=example_user
+      - EMAIL_PASSWORD=example_password
+      - EMAIL_USE_TLS=true
+      - REGISTRATION_ENABLED=false
 
 
   backend: # Django backend
-    image: docker.pkg.github.com/sthorsten/casterdashboard2/backend:latest
+    image: ghcr.io/sthorsten/casterdashboard2-backend:develop
     volumes:
       - asset_files:/backend/assets
       - media_files:/backend/media
@@ -44,12 +51,7 @@ services:
       - SECRET_KEY=<your-secret-key>
       - DB_HOST=db
       - ALLOWED_HOSTS=example.com
-      - EMAIL_ADDRESS=mail@example.com
-      - EMAIL_HOST=mail.example.com
-      - EMAIL_PORT=587
-      - EMAIL_USERNAME=example_user
-      - EMAIL_PASSWORD=example_password
-      - EMAIL_USE_TLS=true
+      - REGISTRATION_ENABLED=false
     depends_on:
       - db
       - redis
