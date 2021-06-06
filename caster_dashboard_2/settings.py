@@ -51,8 +51,8 @@ LOGIN_URL = '/admin/login'
 
 # Password Hashing
 PASSWORD_HASHERS = [
-    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',  # temporary until release of Django 3.2
-    # 'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',  # temporary until release of Django 3.2 - Fallback
     'django.contrib.auth.hashers.PBKDF2PasswordHasher'  # Fallback
 ]
 
