@@ -5,6 +5,14 @@
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
 
+## :warning: Important Note
+I am currently in the process of cleaning up some important parts of the code, updating dependencies, removing old code parts and changing the structure around a bit.
+
+**Please be aware that this may break things!**
+
+Once this process is complete, I will move to the first beta release, which should be more stable overall and easier to install and update (an updated guide on this will follow).
+
+
 ## Description
 
 This is the repository for the new Rainbow Six Siege Caster Dashboard.
@@ -43,6 +51,8 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 
 ## Installation
 
+***This section is outdated and will be updated with the first beta release!***
+
 The dashboard is available as a [Docker Image](https://hub.docker.com/r/thorshero/caster-dashboard-2).
 
 To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit it to your needs. The parts that need to be edited are documented by comments.
@@ -51,7 +61,7 @@ You **must** set a secret key for your Django instance in the `environment` sect
 
 Additionally, add your the domain on which the dashboard will be accessed to the `ALLOWED_HOSTS` (you can skip that if you only run the dashboard locally). Finally, add your email address and it's server settings which is needed for users to be able to register for the dashboard (*Note: The registration is not implemented yet!*).
 
-That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`. You may want to create users manually from there.
+That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`. You may want to create users manually from there.**
 
 
 ## Screenshots
