@@ -4,6 +4,7 @@
 
 import os
 from datetime import timedelta
+from django.core.exceptions import ImproperlyConfigured
 import environ
 
 # region Base config
@@ -115,75 +116,6 @@ CSRF_COOKIE_HTTPONLY = True
 
 # endregion
 
-# region Logging
-
-"""
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': "[%(asctime)s.%(msecs)03d] %(levelname)s [%(name)s] %(message)s",
-            'datefmt': "%d/%b/%Y %H:%M:%S"
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
-
-        # File Handlers
-        'django_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 5,
-            'formatter': 'verbose',
-        },
-
-        'dashboard_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'dashboard.log'),
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 5,
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'django_file'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-        },
-        'caster_dashboard_2': {
-            'handlers': ['console', 'dashboard_file'],
-            'level': 'DEBUG',
-        },
-        'dashboard': {
-            'handlers': ['console', 'dashboard_file'],
-            'level': 'DEBUG',
-        },
-        'overlays': {
-            'handlers': ['console', 'dashboard_file'],
-            'level': 'DEBUG',
-        },
-        'api': {
-            'handlers': ['console', 'dashboard_file'],
-            'level': 'DEBUG',
-        },
-        'websockets': {
-            'handlers': ['console', 'dashboard_file'],
-            'level': 'DEBUG',
-        }
-    },
-}
-"""
-
-# endregion
-
 # region DEPRECATED - soon to be removed
 # Will be handled by the Vue / Nuxt frontend
 
@@ -287,5 +219,81 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 # Add entries from ALLOWED_HOSTS to CORS_ALLOWED_ORIGIN_REGEXES
 for host in env('ALLOWED_HOSTS', cast=[str]):
     CORS_ALLOWED_ORIGIN_REGEXES.append(r"^(https?:\/\/" + host + r"):(\d*)")
+
+# endregion
+
+# region Logging Configuration
+
+LOGGING = {}
+
+try:
+    LOGGING = env('LOGGING')
+
+except ImproperlyConfigured:
+    # Use default configuration
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'default': {
+                'format': '[{asctime}] [{name}] [{levelname}] {message}',
+                'style': '{'
+            }
+        },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'default'
+            },
+            'django': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': f"{BASE_DIR}/logs/django.log",
+                'formatter': 'default',
+                'maxBytes': 1024 * 1024 * 10,  # 10 MB
+                'backupCount': 5
+            },
+            'caster_dashboard': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': f"{BASE_DIR}/logs/caster_dashboard.log",
+                'formatter': 'default',
+                'maxBytes': 1024 * 1024 * 10,  # 10 MB
+                'backupCount': 5
+            },
+            'errors': {
+                'level': 'ERROR',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': f"{BASE_DIR}/logs/errors.log",
+                'formatter': 'default',
+                'maxBytes': 1024 * 1024 * 10,  # 10 MB
+                'backupCount': 5
+            }
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console', 'django', 'errors'],
+                'level': 'INFO'
+            },
+            'api': {
+                'handlers': ['console', 'caster_dashboard', 'errors'],
+                'level': 'INFO'
+            },
+            'caster_dashboard_2': {
+                'handlers': ['console', 'caster_dashboard', 'errors'],
+                'level': 'INFO'
+            },
+            'dashboard': {
+                'handlers': ['console', 'caster_dashboard', 'errors'],
+                'level': 'INFO'
+            },
+            'overlays': {
+                'handlers': ['console', 'caster_dashboard', 'errors'],
+                'level': 'INFO'
+            },
+            'websockets': {
+                'handlers': ['console', 'caster_dashboard', 'errors'],
+                'level': 'INFO'
+            },
+        }
+    }
 
 # endregion
