@@ -3,11 +3,11 @@ import os
 from pathlib import Path
 
 import requests
+from uuid import uuid4
 from django.conf import settings as django_settings
 from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-
 from django.views.decorators.csrf import csrf_exempt
 from pip._vendor import requests
 from rest_framework import viewsets
@@ -127,6 +127,8 @@ class TeamViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
+            logger.info("Creating new team...")
+
             try:
                 new_team = serializer.create(
                     validated_data=serializer.validated_data)
@@ -135,29 +137,38 @@ class TeamViewSet(viewsets.ModelViewSet):
                 if not request.data.get('team_logo') and request.data.get('team_logo_url'):
                     try:
                         # Download and save file
+                        logger.info("Downloading team logo...")
                         url = request.data['team_logo_url']
                         req = requests.get(url, allow_redirects=True)
+
+                        temp_filename = f"{uuid4().hex}_temp.png"
                         save_path = os.path.join(
-                            django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
+                            django_settings.MEDIA_ROOT, 'teams', temp_filename)
                         with open(save_path, 'wb') as logo_file:
                             logo_file.write(req.content)
 
-                        new_team.team_logo = "teams/%(id)s.png" % (
-                            {'id': new_team.id})
-                        new_team.save()
+                        logger.info(
+                            f"Team logo downloaded from {url} to {temp_filename}")
+
+                        new_team.team_logo = f"teams/{temp_filename}"
+                        new_team.save()  # Renaming will be handled by the model receiver
 
                     except requests.RequestException as ex:
-                        print(ex)
+                        logger.error(ex)
 
                 return Response({"status": "ok"}, status=201)
 
             except ValidationError as ex:
+                logger.error({ex.messages[0]})
                 return Response({"error": ex.messages[0]}, status=400)
 
         else:
             if serializer.errors['name'][0].code == "unique":
+                logger.error("Team already exists.")
                 return Response(data={"error": _('A team with this name already exists!')},
                                 status=400)
+
+            logger.error(serializer.errors)
             return Response(data={"error": serializer.errors}, status=400)
 
     def partial_update(self, request, *args, **kwargs):
@@ -171,24 +182,32 @@ class TeamViewSet(viewsets.ModelViewSet):
                 if not request.data['team_logo'] and request.data['team_logo_url']:
                     try:
                         # Download and save file
+                        logger.info("Downloading team logo...")
                         url = request.data['team_logo_url']
                         req = requests.get(url, allow_redirects=True)
+
+                        temp_filename = f"{uuid4().hex}_temp.png"
                         save_path = os.path.join(
-                            django_settings.MEDIA_ROOT, 'teams', str(team.id) + '.png')
+                            django_settings.MEDIA_ROOT, 'teams', temp_filename)
                         with open(save_path, 'wb') as logo_file:
                             logo_file.write(req.content)
 
-                        team.team_logo = "teams/%(id)s.png" % ({'id': team.id})
-                        team.save()
+                        logger.info(
+                            f"Team logo downloaded from {url} to {temp_filename}")
+
+                        team.team_logo = f"teams/{temp_filename}"
+                        team.save() # Renaming will be handled by the model receiver
 
                     except requests.RequestException as ex:
-                        print(ex)
+                        logger.error(ex)
 
                 return Response({"status": "ok"}, status=200)
             except ValidationError as ex:
+                logger.error({ex.messages[0]})
                 return Response({"error": ex.messages[0]}, status=400)
 
         else:
+            logger.error(serializer.errors)
             return Response(data={"error": serializer.errors}, status=400)
 
 
@@ -241,6 +260,7 @@ class RoundViewSet(viewsets.ModelViewSet):
         # Validate data
         if not data.get('match') or not data.get('map') or not data.get('win_type') or not data.get(
                 'bomb_spot') or not data.get('win_team'):
+            logger.error("Invalid round data!")    
             return Response({"required_fields":
                             ["match", "map", "bomb_spot", "win_type", "win_team"]},
                             status=400)
@@ -292,6 +312,7 @@ class RoundViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=201)
 
+        logger.error("Invalid round data!")   
         return Response({"detail": "Invalid Data"}, status=400)
 
 
@@ -415,9 +436,12 @@ def register(request):
     if not username or not email or not password or not first_name or not last_name:
         return Response({"status": "invalid data"}, status=400)
 
+    logging.info(f"Creating new user: {username}...")
+
     # Check if user exists
     try:
         user = get_user_model().objects.get(username=username)
+        logger.error(f"User '{username}' already exists!")
         return Response({"status": "duplicate user"}, status=400)
     except get_user_model().DoesNotExist:
         # All ok
@@ -429,12 +453,12 @@ def register(request):
         first_name=first_name, last_name=last_name)
 
     if user is not None:
-        logging.info(f"[User: {user}] New registration")
+        logging.info(f"User '{username}' registered successfully.")
         profile = Profile.objects.get(user=user)
 
         return Response({"status": "ok", "registration_token": profile.registration_token})
     else:
-        logging.error(f"[User: {username}] Registration failed!")
+        logging.error(f"Registration for user '{username}' failed!")
         return Response({"status": "error", "message": "User could not be created."}, status=500)
 
 
@@ -454,9 +478,12 @@ def register_confirm(request):
     if not username or not token:
         return Response({"status": "invalid data"}, status=400)
 
+    logger.info(f"Validating new user: {username}...")
+
     try:
         user = get_user_model().objects.get(username=username)
     except get_user_model().DoesNotExist:
+        logger.error(f"User '{username}' does not exist!")
         return Response({"status": "user not found"}, status=400)
 
     user_profile = Profile.objects.get(user=user)
@@ -464,6 +491,8 @@ def register_confirm(request):
         user_profile.confirmed = True
 
     user_profile.save()
+
+    logger.info(f"User '{username}' validated successfully.")
 
     return Response({"status": "ok"})
 
@@ -480,9 +509,12 @@ def change_user_data(request):
             not data.get('last_name'):
         return Response({'status': "Invalid Data"}, status=400)
 
+    logger.info(f"Changing data for user: {data['user']}...")
+
     try:
         user = get_user_model().objects.get(id=data['user'])
     except get_user_model().DoesNotExist:
+        logger.error(f"User '{data['user']}' does not exist!")
         return Response({'status': "Not Found"}, status=404)
 
     user.email = data['email']
@@ -490,6 +522,8 @@ def change_user_data(request):
     user.last_name = data['last_name']
 
     user.save()
+
+    logger.info(f"User data for user {data['user']} updated successfully.")
 
     return Response({'status': "ok"}, status=200)
 
@@ -505,15 +539,20 @@ def change_password(request):
     if not data.get('username') or not data.get('current_password') or not data.get('new_password'):
         return Response({'status': "Invalid Data"}, status=400)
 
+    logger.info(f"Changing password for user: {data['username']}...")
+
     # Check current password
     user = authenticate(
         username=data['username'], password=data['current_password'])
     if not user:
+        logger.error(f"Current password for user '{data['username']}' is invalid!")
         return Response({'status': "Invalid current password"}, status=400)
 
     # Set new password
     user.set_password(data['new_password'])
     user.save()
+
+    logger.info(f"The password for user '{data['username']}' has been changed successfully.")
 
     return Response({'status': "ok"}, status=200)
 
@@ -531,7 +570,7 @@ def share_match(request, match_id):
         match = Match.objects.get(id=match_id)
     except Match.DoesNotExist:
         return Response({"detail": "Not found."}, status=404)
-
+    
     data = request.POST.getlist('user')
     for elem in data:
         new_match_user = get_user_model().objects.get(id=elem)
