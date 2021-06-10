@@ -8,13 +8,15 @@ has an ID.
 """
 
 from rest_framework import serializers
-from rest_framework.relations import StringRelatedField
+from rest_framework.relations import PrimaryKeyRelatedField, StringRelatedField
 
-from overlays.models.models import OverlayStyle, OverlayState, MatchOverlayData, PollOverlayData, SocialOverlayData, \
-    TimerOverlayData, TickerOverlayData
+from overlays.models.models import OverlayStyle, OverlayState, MatchOverlayData, PollOverlayData, \
+    SocialOverlayData, TimerOverlayData, TickerOverlayData
 
 
-class OverlayStyleSerializer(serializers.ModelSerializer):
+class OverlayStyleSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
 
     class Meta:
@@ -22,7 +24,9 @@ class OverlayStyleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OverlayStateSerializer(serializers.ModelSerializer):
+class OverlayStateSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
 
     class Meta:
@@ -30,7 +34,9 @@ class OverlayStateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MatchOverlayDataSerializer(serializers.ModelSerializer):
+class MatchOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
 
     class Meta:
@@ -38,7 +44,9 @@ class MatchOverlayDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PollOverlayDataSerializer(serializers.ModelSerializer):
+class PollOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
 
     class Meta:
@@ -46,7 +54,9 @@ class PollOverlayDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SocialOverlayDataSerializer(serializers.ModelSerializer):
+class SocialOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
     type_name = StringRelatedField(source='get_type_display', read_only=True)
 
@@ -55,7 +65,9 @@ class SocialOverlayDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TimerOverlayDataSerializer(serializers.ModelSerializer):
+class TimerOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
     mode_name = StringRelatedField(source='get_mode_display', read_only=True)
 
@@ -64,7 +76,9 @@ class TimerOverlayDataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TickerOverlayDataSerializer(serializers.ModelSerializer):
+class TickerOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+    id = PrimaryKeyRelatedField(read_only=True)
+    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
     user_name = StringRelatedField(source='user', read_only=True)
 
     class Meta:

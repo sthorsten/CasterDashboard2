@@ -9,14 +9,13 @@ import secrets
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-from dashboard.models.models import Match, Team, Map, Profile, MatchGroup
-from websockets.helper import send_match_data_to_consumers
+from dashboard.models.models import Match, Profile, MatchGroup
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ logger = logging.getLogger(__name__)
 class OverlayStyle(models.Model):
     # Represents the currently selected overlay styles
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     start_style = models.CharField(max_length=255, default="default")
     start_next_style = models.CharField(max_length=255, default="default")
     ingame_style = models.CharField(max_length=255, default="default")
@@ -41,7 +40,7 @@ class OverlayStyle(models.Model):
 class OverlayState(models.Model):
     # Represents the overlay state for each overlay
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     start_state = models.BooleanField(default=True)
     start_next_state = models.BooleanField(default=True)
     ingame_state = models.BooleanField(default=True)
@@ -59,7 +58,7 @@ class OverlayState(models.Model):
 
 
 @receiver(post_save, sender=OverlayState)
-def overlay_state_post_save(sender, instance, created, **kwargs):
+def overlay_state_post_save(_sender, instance, created, **kwargs):
     if created:
         return
 
@@ -74,64 +73,35 @@ def overlay_state_post_save(sender, instance, created, **kwargs):
         }
     )
 
-    """ OLD
-    # Sends overlay state message to websockets on change
-    from overlays.models.serializers import OverlayStateSerializer
-
-    channel_layer = get_channel_layer()
-    data = OverlayStateSerializer(instance).data
-    async_to_sync(channel_layer.group_send)(
-        str(instance.user) + "_overlay_state",
-        {
-            "type": "send_message",
-            "message": data,
-        }
-    )
-    """
-
 
 class MatchOverlayData(models.Model):
     # Hold the current and next match a user selected for use in the overlays
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True,
                                       related_name='current_match')
-    next_match = models.ForeignKey(Match, on_delete=models.CASCADE, blank=True, null=True, related_name='next_match')
-    match_group = models.ForeignKey(MatchGroup, on_delete=models.SET_NULL, blank=True, null=True)
+    next_match = models.ForeignKey(
+        Match, on_delete=models.CASCADE, blank=True, null=True, related_name='next_match')
+    match_group = models.ForeignKey(
+        MatchGroup, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return f'Match Overlay Data: {str(self.user)}'
 
 
 @receiver(post_save, sender=MatchOverlayData)
-def match_overlay_data_post_save(sender, instance, created, **kwargs):
+def match_overlay_data_post_save(_sender, instance, created, **kwargs):
     if created:
         return
 
-    send_overlay_data(matchData=instance, tickerData=None, user=instance.user)
-
-    """OLD
-    # Send the new match data to websockets on change
-    send_match_data_to_consumers(instance.current_match)
-
-    from dashboard.models.serializers import MatchSerializer
-    match = instance.current_match
-    serialized_data = MatchSerializer(match)
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        "match_data_" + instance.user.username,
-        {
-            'type': 'send_to_client',
-            'data': serialized_data.data
-        }
-    )
-    """
+    send_overlay_data(match_data=instance,
+                      ticker_data=None, user=instance.user)
 
 
 class PollOverlayData(models.Model):
     # Represents poll data used by in the poll overlay
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     value_blue = models.IntegerField(default=0)
     value_draw = models.IntegerField(default=0)
     value_orange = models.IntegerField(default=0)
@@ -154,7 +124,7 @@ class SocialOverlayData(models.Model):
         (8, "Other")
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     type = models.IntegerField(choices=TYPE_CHOICES, default=1)
     title = models.CharField(max_length=255, blank=True, null=True)
     text = models.CharField(max_length=255, blank=True, null=True)
@@ -171,7 +141,7 @@ class TimerOverlayData(models.Model):
         (2, 'Timer')
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     mode = models.IntegerField(choices=MODE_CHOICES, default=1)
     value = models.CharField(max_length=255)
 
@@ -182,7 +152,7 @@ class TimerOverlayData(models.Model):
 class TickerOverlayData(models.Model):
     # Represents additional text in the ticker overlay
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     text = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -190,25 +160,28 @@ class TickerOverlayData(models.Model):
 
 
 @receiver(post_save, sender=TickerOverlayData)
-def ticker_overlay_data_post_save(sender, instance, created, **kwargs):
+def ticker_overlay_data_post_save(_sender, instance, created, **kwargs):
     if created:
         return
 
-    send_overlay_data(matchData=None, tickerData=instance, user=instance.user)
+    send_overlay_data(match_data=None, ticker_data=instance,
+                      user=instance.user)
 
 
-def send_overlay_data(matchData, tickerData, user):
+def send_overlay_data(match_data, ticker_data, user):
     from overlays.models.serializers import MatchOverlayDataSerializer, TickerOverlayDataSerializer
 
-    if matchData:
-        match_data = MatchOverlayDataSerializer(matchData).data
+    if match_data:
+        match_data = MatchOverlayDataSerializer(match_data).data
     else:
-        match_data = MatchOverlayDataSerializer(MatchOverlayData.objects.get(user=user)).data
+        match_data = MatchOverlayDataSerializer(
+            MatchOverlayData.objects.get(user=user)).data
 
-    if tickerData:
-        ticker_data = TickerOverlayDataSerializer(tickerData).data
+    if ticker_data:
+        ticker_data = TickerOverlayDataSerializer(ticker_data).data
     else:
-        ticker_data = TickerOverlayDataSerializer(TickerOverlayData.objects.get(user=user)).data
+        ticker_data = TickerOverlayDataSerializer(
+            TickerOverlayData.objects.get(user=user)).data
 
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -223,8 +196,8 @@ def send_overlay_data(matchData, tickerData, user):
     )
 
 
-@receiver(post_save, sender=User)
-def new_user_post_save(sender, instance, created, **kwargs):
+@receiver(post_save, sender=get_user_model())
+def new_user_post_save(_sender, instance, created, **kwargs):
     # Create overlay entries when a new user is created
 
     if created:
@@ -233,7 +206,8 @@ def new_user_post_save(sender, instance, created, **kwargs):
             return
 
         registration_token = secrets.token_hex(64)
-        Profile.objects.create(user=instance, registration_token=registration_token)
+        Profile.objects.create(
+            user=instance, registration_token=registration_token)
         Token.objects.get_or_create(user=instance)
 
         OverlayStyle.objects.create(user=instance)

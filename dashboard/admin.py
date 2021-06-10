@@ -7,7 +7,8 @@ Most admin pages have customized list columns and details page categories.
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-from dashboard.models.models import *
+from dashboard.models.models import Profile, Notification, Map, MapPool, BombSpot, Operator, \
+    League, LeagueGroup, Season, Sponsor, Team, Match, MatchMap, OperatorBans, Round, MatchGroup
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -35,7 +36,8 @@ class OperatorAdmin(admin.ModelAdmin):
 class LeagueAdmin(admin.ModelAdmin):
     list_display = ('name', 'is_restricted', 'has_custom_overlay')
     fieldsets = [
-        (_("Base Information"), {'fields': ['name', 'is_restricted', 'has_custom_overlay']}),
+        (_("Base Information"), {'fields': [
+         'name', 'is_restricted', 'has_custom_overlay']}),
         (_("Logos"), {'fields': ['league_logo', 'league_logo_small']})
     ]
 
@@ -45,9 +47,11 @@ class LeagueGroupAdmin(admin.ModelAdmin):
 
 
 class SeasonAdmin(admin.ModelAdmin):
-    list_display = ('name', 'league', 'official_season', 'start_date', 'end_date')
+    list_display = ('name', 'league', 'official_season',
+                    'start_date', 'end_date')
     fieldsets = [
-        (_("Base Information"), {'fields': ['name', 'league', 'official_season']}),
+        (_("Base Information"), {'fields': [
+         'name', 'league', 'official_season']}),
         (_("Dates"), {'fields': ['start_date', 'end_date']})
     ]
 
@@ -70,23 +74,29 @@ class TeamAdmin(admin.ModelAdmin):
 
 
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'league', 'team_blue', 'team_orange', 'state', 'created')
+    list_display = ('id', 'title', 'league', 'team_blue',
+                    'team_orange', 'state', 'created')
     readonly_fields = ('created',)
     fieldsets = [
-        (_("Base Information"), {'fields': ['title', 'subtitle', 'best_of', 'state', 'created']}),
-        (_("Match Details"), {'fields': ['league', 'season', 'team_blue', 'team_orange', 'sponsors']}),
+        (_("Base Information"), {'fields': [
+         'title', 'subtitle', 'best_of', 'state', 'created']}),
+        (_("Match Details"), {'fields': [
+         'league', 'season', 'team_blue', 'team_orange', 'sponsors']}),
         (_("Results"), {'fields': ['score_blue', 'score_orange', 'win_team']}),
         (_("Access"), {'fields': ['user', 'share_mode']})
     ]
 
 
 class MatchMapAdmin(admin.ModelAdmin):
-    list_display = ('map', 'match', 'type', 'order', 'play_order', 'choose_team', 'status')
+    list_display = ('map', 'match', 'type', 'order',
+                    'play_order', 'choose_team', 'status')
     fieldsets = [
         (_("Base Information"), {'fields': ['match', 'map', 'status']}),
         (_("Map Details"), {'fields': ['type', 'order', 'play_order']}),
-        (_("Team Details"), {'fields': ['choose_team', 'atk_team', 'ot_atk_team']}),
-        (_("Results"), {'fields': ['score_blue', 'score_orange', 'win_type', 'win_team']}),
+        (_("Team Details"), {'fields': [
+         'choose_team', 'atk_team', 'ot_atk_team']}),
+        (_("Results"), {'fields': ['score_blue',
+         'score_orange', 'win_type', 'win_team']}),
     ]
 
 
@@ -99,10 +109,12 @@ class OperatorBansAdmin(admin.ModelAdmin):
 
 
 class RoundAdmin(admin.ModelAdmin):
-    list_display = ('round_no', 'match', 'map', 'bomb_spot', 'win_type', 'score_blue', 'score_orange')
+    list_display = ('round_no', 'match', 'map', 'bomb_spot',
+                    'win_type', 'score_blue', 'score_orange')
     fieldsets = [
         (_("Base Information"), {'fields': ['match', 'map', 'round_no']}),
-        (_("Round Details"), {'fields': ['bomb_spot', 'win_type', 'win_team', 'notes']}),
+        (_("Round Details"), {'fields': [
+         'bomb_spot', 'win_type', 'win_team', 'notes']}),
         (_("Team Details"), {'fields': ['atk_team', 'def_team', 'of_team']}),
         (_("Results"), {'fields': ['score_blue', 'score_orange']}),
     ]

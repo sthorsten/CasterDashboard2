@@ -7,11 +7,12 @@ Serializers and receivers can be found in the serializers.py and receivers.py fi
 
 import logging
 from datetime import datetime
+from uuid import uuid4
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from dashboard.validators import *
+from dashboard.validators import validate_square_logo
 
 logger = logging.getLogger(__name__)
 
@@ -19,8 +20,9 @@ logger = logging.getLogger(__name__)
 class Profile(models.Model):
     # The profile extends django's default user model to allow for a few extra fields
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    registration_token = models.CharField(max_length=128, blank=True, null=True)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    registration_token = models.CharField(
+        max_length=128, blank=True, null=True)
     confirmed = models.BooleanField(default=0)
 
     def __str__(self):
@@ -103,8 +105,8 @@ class Operator(models.Model):
         return self.name
 
 
-def league_logo_path(instance, filename):
-    return f'leagues/{instance.id}.png'
+def league_logo_upload_path(_instance, _filename):
+    return f'leagues/{uuid4().hex}_temp.png'
 
 
 class League(models.Model):
@@ -115,9 +117,10 @@ class League(models.Model):
     name = models.CharField(max_length=255)
     is_restricted = models.BooleanField(default=True)
     has_custom_overlay = models.BooleanField(default=False)
-    league_logo = models.ImageField(upload_to=league_logo_path, validators=[validate_square_logo], blank=True,
-                                    null=True)
-    league_logo_small = models.ImageField(upload_to=league_logo_path, blank=True, null=True)
+    league_logo = models.ImageField(upload_to=league_logo_upload_path,
+                                    validators=[validate_square_logo], blank=True, null=True)
+    league_logo_small = models.ImageField(
+        upload_to=league_logo_upload_path, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -138,7 +141,7 @@ class LeagueGroup(models.Model):
         (4, 'Admin')
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
     rank = models.IntegerField(choices=RANK_CHOICES, default=1)
 
@@ -153,7 +156,8 @@ class Season(models.Model):
     # as well as being able to restrict access to that season
 
     name = models.CharField(max_length=255)
-    league = models.ForeignKey(League, on_delete=models.SET_NULL, blank=True, null=True)
+    league = models.ForeignKey(
+        League, on_delete=models.SET_NULL, blank=True, null=True)
     official_season = models.BooleanField(default=False)
     start_date = models.DateField(default=datetime.now, blank=True)
     end_date = models.DateField(blank=True, null=True)
@@ -166,11 +170,8 @@ class Season(models.Model):
             return f'{self.name} ({str(self.league)})'
 
 
-def team_logo_path(instance, filename):
-    if instance.id:
-        return f'teams/{instance.id}.png'
-    else:
-        return f'teams/{filename}'
+def sponsor_logo_upload_path(_instance, _filename):
+    return f'sponsors/{uuid4().hex}_temp.png'
 
 
 class Sponsor(models.Model):
@@ -179,13 +180,21 @@ class Sponsor(models.Model):
 
     name = models.CharField(max_length=255)
     public = models.BooleanField(default=True)
-    sponsor_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
-    light_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
-    dark_logo = models.ImageField(upload_to="sponsors", blank=True, null=True)
-    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True, blank=True)
+    sponsor_logo = models.ImageField(
+        upload_to=sponsor_logo_upload_path, blank=True, null=True)
+    light_logo = models.ImageField(
+        upload_to=sponsor_logo_upload_path, blank=True, null=True)
+    dark_logo = models.ImageField(
+        upload_to=sponsor_logo_upload_path, blank=True, null=True)
+    league = models.ForeignKey(
+        League, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+
+def team_logo_upload_path(_instance, _filename):
+    return f'teams/{uuid4().hex}_temp.png'
 
 
 class Team(models.Model):
@@ -193,8 +202,10 @@ class Team(models.Model):
 
     name = models.CharField(max_length=22, unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    team_logo = models.ImageField(upload_to=team_logo_path, validators=[validate_square_logo], blank=True, null=True)
-    team_logo_small = models.ImageField(upload_to=team_logo_path, blank=True, null=True)
+    team_logo = models.ImageField(upload_to=team_logo_upload_path, validators=[
+                                  validate_square_logo], blank=True, null=True)
+    team_logo_small = models.ImageField(
+        upload_to=team_logo_upload_path, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -220,7 +231,7 @@ class Match(models.Model):
         (5, "Dummy")
     ]
 
-    user = models.ManyToManyField(User)
+    user = models.ManyToManyField(get_user_model())
     share_mode = models.IntegerField(choices=SHARE_MODE_CHOICES, default=1)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
@@ -230,11 +241,14 @@ class Match(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     state = models.IntegerField(choices=STATUS_CHOICES, default=1)
     best_of = models.IntegerField(default=1)
-    team_blue = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="match_team_blue")
-    team_orange = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="match_team_orange")
+    team_blue = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="match_team_blue")
+    team_orange = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="match_team_orange")
     score_blue = models.IntegerField(default=0)
     score_orange = models.IntegerField(default=0)
-    win_team = models.ForeignKey(Team, on_delete=models.CASCADE, blank=True, null=True, related_name="match_win_team")
+    win_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, blank=True, null=True, related_name="match_win_team")
 
     def __str__(self):
         return f'{str(self.id)}: {str(self.team_blue)} vs. {str(self.team_orange)}'
@@ -268,10 +282,14 @@ class MatchMap(models.Model):
     type = models.IntegerField(choices=TYPE_CHOICES)
     order = models.IntegerField(default=0)
     play_order = models.IntegerField(default=0)
-    choose_team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True, related_name='choose_team')
-    atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_atk_team")
-    ot_atk_team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="ot_atk_team")
-    win_team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True, related_name='map_win_team')
+    choose_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name='choose_team')
+    atk_team = models.ForeignKey(
+        Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_atk_team")
+    ot_atk_team = models.ForeignKey(
+        Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="ot_atk_team")
+    win_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name='map_win_team')
     win_type = models.IntegerField(choices=WIN_TYPE_CHOICES, default=1)
     status = models.IntegerField(choices=STATUS_CHOICES, default=1)
     score_blue = models.IntegerField(default=0)
@@ -308,11 +326,15 @@ class Round(models.Model):
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
     round_no = models.IntegerField()
     bomb_spot = models.ForeignKey(BombSpot, on_delete=models.CASCADE)
-    atk_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_atk_team")
-    def_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_def_team")
-    of_team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.CASCADE, related_name="round_of_team")
+    atk_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="round_atk_team")
+    def_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="round_def_team")
+    of_team = models.ForeignKey(
+        Team, null=True, blank=True, on_delete=models.CASCADE, related_name="round_of_team")
     win_type = models.IntegerField(choices=WIN_TYPE_CHOICES, default=1)
-    win_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="round_win_team")
+    win_team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="round_win_team")
     score_blue = models.IntegerField()
     score_orange = models.IntegerField()
     notes = models.TextField(null=True, blank=True)
@@ -326,7 +348,7 @@ class MatchGroup(models.Model):
 
     name = models.CharField(max_length=255)
     date = models.DateField()
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(get_user_model())
     matches = models.ManyToManyField(Match, null=True, blank=True)
 
     def __str__(self):

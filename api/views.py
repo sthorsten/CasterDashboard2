@@ -4,49 +4,39 @@ from pathlib import Path
 
 import requests
 from django.conf import settings as django_settings
-from django.contrib import messages
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from django.template.loader import get_template
 from django.utils.translation import gettext as _
-from django.db import DatabaseError
-from django.http import JsonResponse
 
 from django.views.decorators.csrf import csrf_exempt
-from django_filters.rest_framework import DjangoFilterBackend
 from pip._vendor import requests
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
-import caster_dashboard_2
 from api.filter import SeasonFilter
-from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, LeagueGroup, Season, \
-    Sponsor, Team, Match, OperatorBans, Round, Notification, MatchGroup
-from dashboard.models.serializers import OperatorBanSerializer, RoundSerializer, UserSerializer, ProfileSerializer, \
-    MapSerializer, MapPoolSerializer, BombSpotSerializer, OperatorSerializer, LeagueSerializer, LeagueGroupSerializer, \
-    SeasonSerializer, SponsorSerializer, TeamSerializer, MatchSerializer, MatchMapSerializer, NotificationSerializer, \
-    MatchGroupSerializer
-from overlays.models import *
-from overlays.models.models import MatchOverlayData, OverlayStyle, OverlayState, PollOverlayData, SocialOverlayData, \
-    TimerOverlayData, TickerOverlayData
-from overlays.models.serializers import MatchOverlayDataSerializer, OverlayStyleSerializer, OverlayStateSerializer, \
-    PollOverlayDataSerializer, SocialOverlayDataSerializer, TimerOverlayDataSerializer, TickerOverlayDataSerializer
+from dashboard.models.models import MatchMap, Profile, Map, MapPool, BombSpot, Operator, League, \
+    LeagueGroup, Season, Sponsor, Team, Match, OperatorBans, Round, Notification, MatchGroup
+from dashboard.models.serializers import OperatorBanSerializer, RoundSerializer, UserSerializer, \
+    ProfileSerializer, MapSerializer, MapPoolSerializer, BombSpotSerializer, OperatorSerializer, \
+    LeagueSerializer, LeagueGroupSerializer, SeasonSerializer, SponsorSerializer, TeamSerializer, \
+    MatchSerializer, MatchMapSerializer, NotificationSerializer, MatchGroupSerializer
+from overlays.models.models import MatchOverlayData, OverlayStyle, OverlayState, PollOverlayData, \
+    SocialOverlayData, TimerOverlayData, TickerOverlayData
+from overlays.models.serializers import MatchOverlayDataSerializer, OverlayStyleSerializer, \
+    OverlayStateSerializer, PollOverlayDataSerializer, SocialOverlayDataSerializer, \
+    TimerOverlayDataSerializer, TickerOverlayDataSerializer
 
 logger = logging.getLogger(__name__)
 
 
 # ViewSets
 
+# region System data view sets
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     filterset_fields = ['username']
 
@@ -59,17 +49,23 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    filterset_fields = ['user_id', 'confirmed']
 
 
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    filterset_fields = ['type', 'show']
+    filterset_fields = ['type', 'show'],
 
+# endregion
+
+
+# region Core model view sets
 
 class MapViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Map.objects.all()
     serializer_class = MapSerializer
+    filterset_fields = ['name']
 
 
 class MapPoolViewSet(viewsets.ReadOnlyModelViewSet):
@@ -81,25 +77,31 @@ class MapPoolViewSet(viewsets.ReadOnlyModelViewSet):
 class BombSpotViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = BombSpot.objects.all()
     serializer_class = BombSpotSerializer
-    filterset_fields = ['map']
+    filterset_fields = ['map', 'floor']
 
 
 class OperatorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Operator.objects.all()
     serializer_class = OperatorSerializer
-    filterset_fields = ['side']
+    filterset_fields = ['side', 'name']
 
+
+# endregion
+
+
+# region Data model view sets
 
 class LeagueViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = League.objects.all()
     serializer_class = LeagueSerializer
+    filterset_fields = ['name', 'is_restricted', 'has_custom_overlay']
 
 
 class LeagueGroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = LeagueGroup.objects.all()
     serializer_class = LeagueGroupSerializer
-    filterset_fields = ['user', 'rank']
+    filterset_fields = ['user', 'league', 'rank']
 
 
 class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
@@ -113,45 +115,49 @@ class SponsorViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Sponsor.objects.all()
     serializer_class = SponsorSerializer
+    filterset_fields = ['league', 'name', 'public']
 
 
 class TeamViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Team.objects.all()
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
     serializer_class = TeamSerializer
+    filterset_fields = ['name']
 
     def create(self, request, *args, **kwargs):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                new_team = serializer.create(validated_data=serializer.validated_data)
+                new_team = serializer.create(
+                    validated_data=serializer.validated_data)
 
                 # Download logo from URL if present and no logo upload
                 if not request.data.get('team_logo') and request.data.get('team_logo_url'):
                     try:
                         # Download and save file
                         url = request.data['team_logo_url']
-                        r = requests.get(url, allow_redirects=True)
-                        save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
+                        req = requests.get(url, allow_redirects=True)
+                        save_path = os.path.join(
+                            django_settings.MEDIA_ROOT, 'teams', str(new_team.id) + '.png')
                         with open(save_path, 'wb') as logo_file:
-                            logo_file.write(r.content)
+                            logo_file.write(req.content)
 
-                        new_team.team_logo = "teams/%(id)s.png" % ({'id': new_team.id})
+                        new_team.team_logo = "teams/%(id)s.png" % (
+                            {'id': new_team.id})
                         new_team.save()
 
-                    except requests.RequestException as e:
-                        print(e.messages[0])
+                    except requests.RequestException as ex:
+                        print(ex)
 
                 return Response({"status": "ok"}, status=201)
 
-            except ValidationError as e:
-                return Response({"error": e.messages[0]}, status=400)
+            except ValidationError as ex:
+                return Response({"error": ex.messages[0]}, status=400)
 
         else:
             if serializer.errors['name'][0].code == "unique":
-                return Response(data={"error": _('A team with this name already exists!')}, status=400)
+                return Response(data={"error": _('A team with this name already exists!')},
+                                status=400)
             return Response(data={"error": serializer.errors}, status=400)
 
     def partial_update(self, request, *args, **kwargs):
@@ -166,24 +172,30 @@ class TeamViewSet(viewsets.ModelViewSet):
                     try:
                         # Download and save file
                         url = request.data['team_logo_url']
-                        r = requests.get(url, allow_redirects=True)
-                        save_path = os.path.join(django_settings.MEDIA_ROOT, 'teams', str(team.id) + '.png')
+                        req = requests.get(url, allow_redirects=True)
+                        save_path = os.path.join(
+                            django_settings.MEDIA_ROOT, 'teams', str(team.id) + '.png')
                         with open(save_path, 'wb') as logo_file:
-                            logo_file.write(r.content)
+                            logo_file.write(req.content)
 
                         team.team_logo = "teams/%(id)s.png" % ({'id': team.id})
                         team.save()
 
-                    except requests.RequestException as e:
-                        print(e.messages[0])
+                    except requests.RequestException as ex:
+                        print(ex)
 
                 return Response({"status": "ok"}, status=200)
-            except ValidationError as e:
-                return Response({"error": e.messages[0]}, status=400)
+            except ValidationError as ex:
+                return Response({"error": ex.messages[0]}, status=400)
 
         else:
             return Response(data={"error": serializer.errors}, status=400)
 
+
+# endregion
+
+
+# region Match model view sets
 
 class MatchViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -206,7 +218,8 @@ class MatchMapViewSet(viewsets.ModelViewSet):
         queryset = MatchMap.objects.filter(match=match_id).all()
         if not queryset:
             return Response({"detail": _("Not found.")}, status=404)
-        serializer = MatchMapSerializer(queryset, many=True)
+        serializer = MatchMapSerializer(
+            queryset, context={'request': request}, many=True)
         return Response(serializer.data)
 
 
@@ -223,22 +236,26 @@ class RoundViewSet(viewsets.ModelViewSet):
     serializer_class = RoundSerializer
     filterset_fields = ['match', 'map']
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         data = request.data
         # Validate data
         if not data.get('match') or not data.get('map') or not data.get('win_type') or not data.get(
                 'bomb_spot') or not data.get('win_team'):
-            return Response({"required_fields": ["match", "map", "bomb_spot", "win_type", "win_team"]}, status=400)
+            return Response({"required_fields":
+                            ["match", "map", "bomb_spot", "win_type", "win_team"]},
+                            status=400)
 
         # Get Match related data
-        rounds = Round.objects.filter(match=data.get('match'), map=data.get('map')).order_by('-round_no').all()
-        match_map = MatchMap.objects.get(match=data.get('match'), map=data.get('map'))
+        filtered_rounds = Round.objects.filter(match=data.get(
+            'match'), map=data.get('map')).order_by('-round_no').all()
+        match_map = MatchMap.objects.get(
+            match=data.get('match'), map=data.get('map'))
         match_data = Match.objects.get(id=data.get('match'))
 
         # Round ID and Score
-        if rounds and len(rounds) > 0:
-            last_round = rounds[0]
-            next_round_no = len(rounds) + 1
+        if filtered_rounds and len(filtered_rounds) > 0:
+            last_round = filtered_rounds[0]
+            next_round_no = len(filtered_rounds) + 1
             score_blue = last_round.score_blue
             score_orange = last_round.score_orange
         else:
@@ -265,9 +282,10 @@ class RoundViewSet(viewsets.ModelViewSet):
 
         serializer = RoundSerializer(
             data={'match': data.get('match'), 'map': data.get('map'), 'round_no': next_round_no,
-                  'bomb_spot': data.get('bomb_spot'), 'atk_team': atk_team.id, 'def_team': def_team.id,
-                  'of_team': data.get('of_team'), 'win_type': data.get('win_type'),
-                  'win_team': data.get('win_team'), 'score_blue': score_blue, 'score_orange': score_orange,
+                  'bomb_spot': data.get('bomb_spot'), 'atk_team': atk_team.id,
+                  'def_team': def_team.id, 'of_team': data.get('of_team'),
+                  'win_type': data.get('win_type'), 'win_team': data.get('win_team'),
+                  'score_blue': score_blue, 'score_orange': score_orange,
                   'notes': data.get('notes')})
 
         if serializer.is_valid():
@@ -284,7 +302,10 @@ class MatchGroupViewSet(viewsets.ModelViewSet):
     filterset_fields = ['users', 'matches']
 
 
-# Overlay Views
+# endregion
+
+
+# region overlay view sets
 
 class OverlayStyleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -317,7 +338,8 @@ class OverlayStateViewSet(viewsets.ModelViewSet):
         queryset = OverlayState.objects.get(user=user_id)
         if not queryset:
             return Response({"detail": _("Not found.")}, status=404)
-        serializer = OverlayStateSerializer(queryset, data=request.POST, partial=True)
+        serializer = OverlayStateSerializer(
+            queryset, data=request.POST, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -360,10 +382,16 @@ class TickerOverlayDataViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user']
 
 
+# endregion
+
+
+# region Various single api views
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def version(request):
-    current_version = Path(os.path.join(django_settings.BASE_DIR, "VERSION")).read_text()
+    current_version = Path(os.path.join(
+        django_settings.BASE_DIR, "VERSION")).read_text()
     return Response({'version': current_version})
 
 
@@ -389,23 +417,24 @@ def register(request):
 
     # Check if user exists
     try:
-        user = User.objects.get(username=username)
+        user = get_user_model().objects.get(username=username)
         return Response({"status": "duplicate user"}, status=400)
-    except User.DoesNotExist:
+    except get_user_model().DoesNotExist:
         # All ok
         pass
 
     # Create user
-    user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
-                                    last_name=last_name)
+    user = get_user_model().objects.create_user(
+        username=username, email=email, password=password,
+        first_name=first_name, last_name=last_name)
 
     if user is not None:
-        logging.info("[User: %s] New registration" % user)
+        logging.info(f"[User: {user}] New registration")
         profile = Profile.objects.get(user=user)
 
         return Response({"status": "ok", "registration_token": profile.registration_token})
     else:
-        logging.error("[User: %s] Registration failed!" % username)
+        logging.error(f"[User: {username}] Registration failed!")
         return Response({"status": "error", "message": "User could not be created."}, status=500)
 
 
@@ -426,8 +455,8 @@ def register_confirm(request):
         return Response({"status": "invalid data"}, status=400)
 
     try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
+        user = get_user_model().objects.get(username=username)
+    except get_user_model().DoesNotExist:
         return Response({"status": "user not found"}, status=400)
 
     user_profile = Profile.objects.get(user=user)
@@ -447,12 +476,13 @@ def change_user_data(request):
 
     # Check input data
     data = request.data
-    if not data.get('user') or not data.get('email') or not data.get('first_name') or not data.get('last_name'):
+    if not data.get('user') or not data.get('email') or not data.get('first_name') or \
+            not data.get('last_name'):
         return Response({'status': "Invalid Data"}, status=400)
 
     try:
-        user = User.objects.get(id=data['user'])
-    except User.DoesNotExist:
+        user = get_user_model().objects.get(id=data['user'])
+    except get_user_model().DoesNotExist:
         return Response({'status': "Not Found"}, status=404)
 
     user.email = data['email']
@@ -476,7 +506,8 @@ def change_password(request):
         return Response({'status': "Invalid Data"}, status=400)
 
     # Check current password
-    user = authenticate(username=data['username'], password=data['current_password'])
+    user = authenticate(
+        username=data['username'], password=data['current_password'])
     if not user:
         return Response({'status': "Invalid current password"}, status=400)
 
@@ -487,68 +518,9 @@ def change_password(request):
     return Response({'status': "ok"}, status=200)
 
 
-# Other views
+# endregion
 
-def get_current_match(request, user_id):
-    try:
-        match_overlay_data = MatchOverlayData.objects.get(user=user_id)
-    except MatchOverlayData.DoesNotExist:
-        return JsonResponse({"status": "Not Found"}, status=404)
-
-    if request.method == 'GET':
-        serializer = MatchOverlayDataSerializer(match_overlay_data)
-        return JsonResponse(serializer.data)
-
-    else:
-        return JsonResponse(data={"error": "Method Not Allowed"}, status=405)
-
-
-@csrf_exempt
-def set_current_match(request, user_id):
-    try:
-        match_overlay_data = MatchOverlayData.objects.get(user=user_id)
-    except MatchOverlayData.DoesNotExist:
-        return JsonResponse({"status": "Not Found"}, status=404)
-
-    if request.method == 'GET':
-        serializer = MatchOverlayDataSerializer(match_overlay_data)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = MatchOverlayDataSerializer(match_overlay_data, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-
-
-@csrf_exempt
-def update_match_score(request, match_id):
-    try:
-        match = Match.objects.get(id=match_id)
-    except Match.DoesNotExist:
-        return JsonResponse({"status": "Not Found"}, status=404)
-
-    if request.method == 'GET':
-        return JsonResponse({"error": "Method Not Allowed"}, status=405)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        if data.get("score_blue") is not None:
-            match.score_blue = data.get("score_blue")
-        elif data.get("score_orange") is not None:
-            match.score_orange = data.get("score_orange")
-        else:
-            return JsonResponse({"error": "Bad Request"}, status=400)
-
-        try:
-            match.save()
-        except ValidationError:
-            return JsonResponse({"error": "Internal Server Error"}, status=500)
-
-        return JsonResponse({"status": "OK"})
-
+# region Other views
 
 @csrf_exempt
 def share_match(request, match_id):
@@ -562,201 +534,9 @@ def share_match(request, match_id):
 
     data = request.POST.getlist('user')
     for elem in data:
-        new_match_user = User.objects.get(id=elem)
+        new_match_user = get_user_model().objects.get(id=elem)
         match.user.add(new_match_user)
 
     return Response({"detail": "ok"}, status=200)
 
-
-@csrf_exempt
-def swap_teams(request, match_id):
-    try:
-        match = Match.objects.get(id=match_id)
-    except Match.DoesNotExist:
-        return JsonResponse({"status": "Not Found"}, status=404)
-
-    if request.method == 'GET':
-        return JsonResponse({"team_blue": match.team_blue.id, "team_orange": match.team_orange.id})
-
-    if request.method == 'POST':
-        team_blue = match.team_blue
-        match.team_blue = match.team_orange
-        match.team_orange = team_blue
-        match.save()
-
-        return JsonResponse({"team_blue": match.team_blue.id, "team_orange": match.team_orange.id})
-
-
-@csrf_exempt
-def rounds(request, match_id, map_id):
-    match = Match.objects.get(id=match_id)
-    map = Map.objects.get(id=map_id)
-    map_settings = MapSettings.objects.get(match=match, map=map)
-
-    rounds = Round.objects.filter(match=match, map=map).all()
-
-    if request.method == 'GET':
-        if len(rounds) == 0:
-            return JsonResponse({"status": "Not Found"}, status=404)
-
-        data = []
-        for round in rounds:
-            serializer = RoundSerializer(round)
-            data.append(serializer.data)
-
-        return JsonResponse(data, safe=False)
-
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-
-        # Reset Round(s)
-        if data.get('reset'):
-            if data['reset'] == "single":
-                last_round = rounds.last()
-                last_round.delete()
-            elif data['reset'] == "all":
-                for round in rounds:
-                    round.delete()
-
-            return JsonResponse({"status": "ok"})
-
-        # Check data
-        if not data['bombspot'] or not data['win_type'] or not data['win_team'] or not data['of_team']:
-            return JsonResponse({"status": "Bad Request"}, status=400)
-
-        try:
-            bombspot = BombSpot.objects.get(id=data['bombspot'])
-        except BombSpot.DoesNotExist:
-            return JsonResponse({"status": "Bad Request"}, status=400)
-
-        try:
-            win_type = WinType.objects.get(id=data['win_type'])
-        except WinType.DoesNotExist:
-            return JsonResponse({"status": "Bad Request"}, status=400)
-
-        try:
-            win_team = Team.objects.get(id=data['win_team'])
-        except Team.DoesNotExist:
-            return JsonResponse({"status": "Bad Request"}, status=400)
-
-        try:
-            of_team = Team.objects.get(id=data['of_team'])
-        except Team.DoesNotExist:
-            return JsonResponse({"status": "Bad Request"}, status=400)
-
-        if not data.get('notes'):
-            notes = None
-        else:
-            notes = data['notes']
-
-        # Format data
-        round_no = len(rounds) + 1
-
-        # Set ATK / DEF team for round
-        if round_no <= 6:
-            atk_team = map_settings.atk_team
-            if atk_team == match.team_blue:
-                def_team = match.team_orange
-            else:
-                def_team = match.team_blue
-
-        elif 6 < round_no <= 12:
-            def_team = map_settings.atk_team
-            if def_team == match.team_blue:
-                atk_team = match.team_orange
-            else:
-                atk_team = match.team_blue
-
-        # Odd OT Rounds (13, 15, ...)
-        elif round_no > 12 and (round_no % 2 != 0):
-            atk_team = map_settings.ot_atk_team
-            if atk_team == match.team_blue:
-                def_team = match.team_orange
-            else:
-                def_team = match.team_blue
-
-        # Even OT Rounds (14, 16, ...)
-        else:
-            def_team = map_settings.ot_atk_team
-            if def_team == match.team_blue:
-                atk_team = match.team_orange
-            else:
-                atk_team = match.team_blue
-
-        # Set Score
-        if round_no <= 1:
-            score_blue = 0
-            score_orange = 0
-        else:
-            score_blue = rounds.last().score_blue
-            score_orange = rounds.last().score_orange
-
-        if win_team == match.team_blue:
-            score_blue += 1
-        else:
-            score_orange += 1
-
-        new_round = Round(match=match, map=map, round_no=round_no, bombspot=bombspot, atk_team=atk_team,
-                          def_team=def_team, of_team=of_team, win_type=win_type, win_team=win_team,
-                          score_blue=score_blue, score_orange=score_orange, notes=notes)
-
-        try:
-            new_round.save()
-        except DatabaseError:
-            return JsonResponse({"error": "Database Error"}, status=500)
-
-        messages.success(request, _('The round has been added successfully'))
-        return JsonResponse({"status": "ok"})
-
-
-@csrf_exempt
-def finish_map(request, match_id, map_id):
-    if request.method == 'GET':
-        return JsonResponse({"status": "Method Not Allowed"}, status=405)
-
-    data = JSONParser().parse(request)
-
-    if data.get('finish_map'):
-        match = Match.objects.get(id=match_id)
-        map = Map.objects.get(id=map_id)
-        last_round = Round.objects.filter(match=match, map=map).last()
-
-        if last_round.score_blue > last_round.score_orange:
-            win_team = match.team_blue
-            match.score_blue += 1
-        elif last_round.score_orange > last_round.score_blue:
-            win_team = match.team_orange
-            match.score_orange += 1
-        else:
-            win_team = None
-
-        map_win = MapWins(match=match, map=map, win_team=win_team)
-        current_map_ban = MatchMap.objects.get(match=match, map=map)
-        current_map_ban.status = 3  # Set map status to Finished (3)
-        map_win.save()
-        match.save()
-        current_map_ban.save()
-
-        # Set Next URL
-        map_win_len = len(MapWins.objects.filter(match=match).all())
-        if match.best_of == 1:
-            match.state = MatchState.objects.get(id=8)
-            match.save()
-            next_url = "/dashboard/matches/%s" % match.id
-
-        else:
-            if map_win_len >= match.best_of:
-                match.state = MatchState.objects.get(id=8)
-                match.save()
-                next_url = "/dashboard/matches/%s" % match.id
-            else:
-                next_map = MatchMap.objects.get(match=match, play_order=(map_win_len + 1))
-                match.state = MatchState.objects.get(id=(2 + next_map.order))
-                match.save()
-                next_url = "/dashboard/matches/%s/map/%s/opbans" % (match.id, next_map.map.id)
-
-        messages.info(request, _('Match Finished!'))
-        return JsonResponse({"status": "ok", "next_url": next_url})
-
-    else:
-        return JsonResponse({"status": "Bad Request"}, status=400)
+# endregion

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from overlays.models.models import *
+from overlays.models.models import OverlayStyle, OverlayState, MatchOverlayData, PollOverlayData, \
+    SocialOverlayData, TimerOverlayData, TickerOverlayData
 
 admin.site.register(OverlayStyle)
 admin.site.register(OverlayState)

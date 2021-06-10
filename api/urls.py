@@ -2,11 +2,17 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework import routers
 from rest_framework.authtoken import views as rest_views
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from api import views
 from api.tokens import CustomTokenObtainPairView
-from api.views import *
+from api.views import UserViewSet, ProfileViewSet, NotificationViewSet, MapViewSet, \
+    MapPoolViewSet, BombSpotViewSet, OperatorViewSet, LeagueViewSet, LeagueGroupViewSet, \
+    SeasonViewSet, SponsorViewSet, TeamViewSet, MatchViewSet, MatchMapViewSet, \
+    OperatorBansViewSet, RoundViewSet, MatchGroupViewSet, OverlayStyleViewSet, \
+    OverlayStateViewSet, MatchOverlayDataViewSet, PollOverlayDataViewSet, \
+    SocialOverlayDataViewSet, TimerOverlayDataViewSet, TickerOverlayDataViewSet
+
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet)
@@ -49,11 +55,11 @@ urlpatterns = [
     # Overlays
     path('overlay/state/by_user/<int:user_id>/',
          OverlayStateViewSet.as_view({'get': 'get_by_user', 'post': 'post_by_user'})),
-    # path('overlay/current_match/<int:user_id>/', views.set_current_match),
 
     # Match Data
     # Additional URLs
-    path('matches/<int:match_id>/maps/', MatchMapViewSet.as_view({'get': 'match_maps'})),
+    path('matches/<int:match_id>/maps/',
+         MatchMapViewSet.as_view({'get': 'match_maps'})),
     path('matches/<int:match_id>/share/', views.share_match),
 
     path(r'version/', views.version),
@@ -61,21 +67,8 @@ urlpatterns = [
     path(r'register/confirm/', views.register_confirm),
     path(r'users/change-user-data/', views.change_user_data),
     path(r'users/change-password/', views.change_password)
-
-
-    # Old
-    # TODO: Refactor!
-    # path('matches/<int:match_id>/update_score', views.update_match_score),
-    # path('matches/map_ban/<int:match_id>/', views.map_ban),
-    # path('matches/map_settings/<int:match_id>/<int:map_id>/', views.map_settings),
-    # path('matches/swap_teams/<int:match_id>/', views.swap_teams),
-    # path('matches/operator_bans/<int:match_id>/<int:map_id>/', views.operator_bans),
-    # path('matches/rounds/<int:match_id>/<int:map_id>/', views.rounds),
-    # path('matches/finish_map/<int:match_id>/<int:map_id>/', views.finish_map),
-
 ]
 
 urlpatterns += [
     path('api-token-auth/', rest_views.obtain_auth_token)
 ]
-

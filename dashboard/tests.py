@@ -1,17 +1,15 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from dashboard.models import Profile
+from dashboard.models.models import Profile
 
 
 class TestAutoCreatedEntries(TestCase):
-    def setUp(self):
-        User.objects.create_user("testcaseuser", "testcaseuserpass")
+    def set_up(self):
+        get_user_model().objects.create_user("testcaseuser", "testcaseuserpass")
 
-    def testProfileEntry(self):
-        user = User.objects.get(username="testcaseuser")
+    def test_profile_entry(self):
+        user = get_user_model().objects.get(username="testcaseuser")
         entry = Profile.objects.get(user=user)
         self.assertIsNotNone(entry)
         self.assertEqual(entry.confirmed, False)
-
-

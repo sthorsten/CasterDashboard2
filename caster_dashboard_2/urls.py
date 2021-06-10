@@ -20,29 +20,17 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 from django.views.i18n import JavaScriptCatalog
 
-from caster_dashboard_2.settings import *
-from dashboard.views import sites, forms
+from caster_dashboard_2.settings import MEDIA_URL, MEDIA_ROOT
+from dashboard import views
 
-urlpatterns = [    
-    # Old URLs
-    #path('', sites.index),
-    #path('login/', sites.login_view),
-    #path('login/form', forms.login_form),
-    #path('register/', sites.register),
-    #path('register/form', forms.register_form),
-    #path('register/success', sites.register_success),
-    #path('logout/', sites.logout_view),
-    #path('dashboard/', include('dashboard.urls')),
-    #path('overlays/', include('overlays.urls')),
-        
+urlpatterns = [
     # Errors
-    path('500', sites.error_500, name='500'),
-    path('404', sites.error_404, name='404'),    
+    path('500', views.error_500, name='500'),
+    path('404', views.error_404, name='404'),
 
     # Backend urls
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    #url(r'^api-auth/', include('rest_framework.urls')), # Old toklen auth
     url(r'^jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 
     # API Home (default route)
@@ -51,5 +39,5 @@ urlpatterns = [
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
 
-handler404 = sites.error_404
-handler500 = sites.error_500
+handler404 = views.error_404
+handler500 = views.error_500

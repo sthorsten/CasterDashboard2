@@ -52,7 +52,8 @@ LOGIN_URL = '/admin/login'
 # Password Hashing
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',  # temporary until release of Django 3.2 - Fallback
+    # temporary until release of Django 3.2 - Fallback
+    'caster_dashboard_2.argon2id.Argon2idPasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher'  # Fallback
 ]
 
@@ -189,8 +190,7 @@ LOGGING = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -247,12 +247,14 @@ CHANNEL_LAYERS = {
 }
 
 STATIC_URL = env('STATIC_URL')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = []
 
 if env('MODE') == 'production':
     STATIC_ROOT = os.path.join(BASE_DIR, "assets")
+    STATICFILES_DIRS += os.path.join(BASE_DIR, "static")
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 MEDIA_URL = env('MEDIA_URL')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

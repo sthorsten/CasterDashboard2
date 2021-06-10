@@ -3,6 +3,7 @@
 import dashboard.models.models
 import dashboard.validators
 import datetime
+from uuid import uuid4
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
@@ -32,8 +33,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('is_restricted', models.BooleanField(default=True)),
                 ('has_custom_overlay', models.BooleanField(default=False)),
-                ('league_logo', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.league_logo_path, validators=[dashboard.validators.validate_square_logo])),
-                ('league_logo_small', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.league_logo_path)),
+                ('league_logo', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.league_logo_upload_path, validators=[dashboard.validators.validate_square_logo])),
+                ('league_logo_small', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.league_logo_upload_path)),
             ],
         ),
         migrations.CreateModel(
@@ -72,8 +73,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=22, unique=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('team_logo', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.team_logo_path, validators=[dashboard.validators.validate_square_logo])),
-                ('team_logo_small', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.team_logo_path)),
+                ('team_logo', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.team_logo_upload_path, validators=[dashboard.validators.validate_square_logo])),
+                ('team_logo_small', models.ImageField(blank=True, null=True, upload_to=dashboard.models.models.team_logo_upload_path)),
             ],
         ),
         migrations.CreateModel(

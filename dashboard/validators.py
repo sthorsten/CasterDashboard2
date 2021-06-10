@@ -22,7 +22,8 @@ def validate_image(image):
     if current_file_size > max_file_size:
         raise ValidationError(
             _('The file size exceeds the limit of 1 MB (is %(current_file_size)s MB)!'),
-            params={'current_file_size': round(current_file_size / (1024 * 1024), 2)}
+            params={'current_file_size': round(
+                current_file_size / (1024 * 1024), 2)}
         )
 
 

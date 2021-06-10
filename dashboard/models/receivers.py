@@ -9,63 +9,71 @@ import logging
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.db.models.signals import post_save, pre_delete, pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
-from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, convert_sponsor_logo
+from caster_dashboard_2.helpers.image_handler import convert_league_logo, convert_team_logo, \
+    convert_sponsor_logo
 from caster_dashboard_2 import settings as django_settings
 
-from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round, MatchGroup
+from dashboard.models.models import League, Sponsor, Team, Match, MatchMap, OperatorBans, Round, \
+    MatchGroup
 from websockets.helper import send_match_data_to_consumers
 
 logger = logging.getLogger(__name__)
 
 
 @receiver(pre_save, sender=League)
-def league_pre_save(sender, instance, **kwargs):
+def league_pre_save(_sender, instance, **kwargs):
     instance.full_clean()
 
 
 @receiver(post_save, sender=League)
-def league_post_save(sender, instance, **kwargs):
+def league_post_save(_sender, instance, **kwargs):
     # Rename file to id
     if instance.league_logo:
-        if not instance.league_logo.name.__contains__(str(instance.id) + "_500.webp"):
+        if instance.league_logo.name.__contains__("_temp.png"):
+
             convert_league_logo(instance.id, instance.league_logo.path)
             os.remove(instance.league_logo.path)
 
-            instance.league_logo = "leagues/%(id)s_500.webp" % ({'id': instance.id})
-            instance.league_logo_small = "leagues/%(id)s_50.webp" % ({'id': instance.id})
+            instance.league_logo = f"leagues/{instance.id}_500.webp"
+            instance.league_logo_small = f"leagues/{instance.id}_50.webp"
             instance.save()
 
     else:
-        no_logo_path = os.path.join(django_settings.MEDIA_ROOT, "teams", "_nologo.png")
-        convert_league_logo(instance.id, no_logo_path)
+        no_logo_path = os.path.join(
+            django_settings.STATIC_ROOT, "img", "_nologo.png")
 
-        instance.league_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
-        instance.league_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+        convert_league_logo(instance.id, no_logo_path)
+        instance.league_logo = f"leagues/{instance.id}_500.webp"
+        instance.league_logo_small = f"leagues/{instance.id}_50.webp"
         instance.save()
 
 
 @receiver(pre_delete, sender=League)
-def league_pre_delete(sender, instance, **kwargs):
+def league_pre_delete(_sender, instance, **kwargs):
     # Auto delete image
     if instance.league_logo:
         if os.path.isfile(instance.league_logo.path):
             os.remove(instance.league_logo.path)
 
+    if instance.league_logo_small:
+        if os.path.isfile(instance.league_logo_small.path):
+            os.remove(instance.league_logo_small.path)
+
 
 @receiver(pre_save, sender=Sponsor)
-def sponsor_pre_save(sender, instance, **kwargs):
+def sponsor_pre_save(_sender, instance, **kwargs):
     instance.full_clean()
 
 
 @receiver(post_save, sender=Sponsor)
-def sponsor_post_save(sender, instance, **kwargs):
+def sponsor_post_save(_sender, instance, **kwargs):
     # Rename file to id
     if instance.sponsor_logo:
-        if not instance.sponsor_logo.name.__contains__(str(instance.id) + "_100.webp"):
+        if instance.sponsor_logo.name.__contains__("_temp.png"):
             convert_sponsor_logo(instance.id, instance.sponsor_logo.path)
             os.remove(instance.sponsor_logo.path)
 
@@ -74,63 +82,55 @@ def sponsor_post_save(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Sponsor)
-def sponsor_pre_delete(sender, instance, **kwargs):
+def sponsor_pre_delete(_sender, instance, **kwargs):
+    # Auto delete image
     if instance.sponsor_logo:
-        logo = instance.sponsor_logo.path
-        # Auto delete image
-        if logo:
+        if instance.sponsor_logo.path:
             if os.path.exists(instance.sponsor_logo.path):
                 os.remove(instance.sponsor_logo.path)
 
 
 @receiver(pre_save, sender=Team)
-def team_pre_save(sender, instance, **kwargs):
+def team_pre_save(_sender, instance, **kwargs):
     instance.full_clean()
 
 
 @receiver(post_save, sender=Team)
-def team_post_save(sender, instance, **kwargs):
+def team_post_save(_sender, instance, **kwargs):
     # Rename file to id
     if instance.team_logo:
-        if not instance.team_logo.name.__contains__(str(instance.id) + "_500.webp"):
+        if instance.team_logo.name.__contains__("_temp.png"):
             convert_team_logo(instance.id, instance.team_logo.path)
             os.remove(instance.team_logo.path)
 
-            instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
-            instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+            instance.team_logo = f"teams/{instance.id}_500.webp"
+            instance.team_logo_small = f"teams/{instance.id}_50.webp"
             instance.save()
 
     else:
-        no_logo_path = os.path.join(django_settings.BASE_DIR, "static", "img", "_nologo.png")
+        no_logo_path = os.path.join(
+            django_settings.STATIC_ROOT, "img", "_nologo.png")
         convert_team_logo(instance.id, no_logo_path)
 
-        instance.team_logo = "teams/%(id)s_500.webp" % ({'id': instance.id})
-        instance.team_logo_small = "teams/%(id)s_50.webp" % ({'id': instance.id})
+        instance.team_logo = f"teams/{instance.id}_500.webp"
+        instance.team_logo_small = f"teams/{instance.id}_50.webp"
         instance.save()
 
 
 @receiver(pre_delete, sender=Team)
-def team_pre_delete(sender, instance, **kwargs):
-    # Auto delete images
-    try:
-        team_logo = instance.team_logo.path
-        os.remove(team_logo)
-    except ValueError as e:
-        logger.error("Failed to get team logo: " + str(e))
-    except FileNotFoundError as e:
-        logger.error("Failed to delete team logo: " + str(e))
+def team_pre_delete(_sender, instance, **kwargs):
+    # Auto delete image
+    if instance.team_logo:
+        if os.path.isfile(instance.team_logo.path):
+            os.remove(instance.team_logo.path)
 
-    try:
-        team_logo_small = instance.team_logo_small.path
-        os.remove(team_logo_small)
-    except ValueError as e:
-        logger.error("Failed to get team logo: " + str(e))
-    except FileNotFoundError as e:
-        logger.error("Failed to delete team logo: " + str(e))
+    if instance.team_logo_small:
+        if os.path.isfile(instance.team_logo_small.path):
+            os.remove(instance.team_logo_small.path)
 
 
 @receiver(post_save, sender=Match)
-def match_post_save(sender, instance, **kwargs):
+def match_post_save(_sender, instance, **kwargs):
     # Set match status to finished?
     if instance.state == 3:
         if instance.best_of == 1:
@@ -167,7 +167,7 @@ def match_post_save(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=MatchMap)
-def match_maps_post_save(sender, instance, **kwargs):
+def match_maps_post_save(_sender, instance, **kwargs):
     # Set MatchMap state to Finished (3)
     if instance.status == 2:
         # Match finished
@@ -194,7 +194,7 @@ def match_maps_post_save(sender, instance, **kwargs):
                 instance.match.save()
 
             # Set match score
-            else: 
+            else:
                 if instance.score_blue > instance.score_orange:
                     instance.match.score_blue = instance.match.score_blue + 1
                     instance.match.save()
@@ -222,7 +222,8 @@ def match_maps_post_save(sender, instance, **kwargs):
 
     # Set Play Order
     if instance.play_order == 0 and (instance.type == 2 or instance.type == 3):
-        maps = MatchMap.objects.filter(match=instance.match, type__in=[2, 3]).all()
+        maps = MatchMap.objects.filter(
+            match=instance.match, type__in=[2, 3]).all()
         instance.play_order = len(maps)  # Not len(maps) + 1 because post_save
         instance.save()
 
@@ -231,13 +232,14 @@ def match_maps_post_save(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
 
     # MatchMapsAll
-    matchMaps = MatchMap.objects.filter(match=instance.match).order_by('order')
+    match_maps = MatchMap.objects.filter(
+        match=instance.match).order_by('order')
     group_name = f"matches_{str(instance.match.id)}_maps"
     async_to_sync(channel_layer.group_send)(
         group_name,
         {
             'type': 'send_to_client',
-            'data': MatchMapSerializer(matchMaps, many=True).data
+            'data': MatchMapSerializer(match_maps, many=True).data
         }
     )
 
@@ -253,13 +255,14 @@ def match_maps_post_save(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=MatchMap)
-def match_maps_post_delete(sender, instance, **kwargs):
+def match_maps_post_delete(_sender, instance, **kwargs):
     # Send data to websockets on change
     from dashboard.models.serializers import MatchMapSerializer
     channel_layer = get_channel_layer()
 
     # Get Match maps
-    matchMaps = MatchMap.objects.filter(match=instance.match).order_by('order')
+    match_maps = MatchMap.objects.filter(
+        match=instance.match).order_by('order')
 
     # Set channels group name
     group_name = f"matches_{str(instance.match.id)}_maps"
@@ -269,13 +272,13 @@ def match_maps_post_delete(sender, instance, **kwargs):
         group_name,
         {
             'type': 'send_to_client',
-            'data': MatchMapSerializer(matchMaps, many=True).data
+            'data': MatchMapSerializer(match_maps, many=True).data
         }
     )
 
 
 @receiver(post_save, sender=OperatorBans)
-def operator_bans_post_save(sender, instance, **kwargs):
+def operator_bans_post_save(_sender, instance, **kwargs):
     # Set Match state to Playing (3)
     if instance.match.state <= 2:
         instance.match.state = 3
@@ -292,7 +295,8 @@ def operator_bans_post_save(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
 
     # Get Match maps
-    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+    opbans = OperatorBans.objects.filter(
+        match=instance.match, map=instance.map)
 
     # Set channels group name
     group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
@@ -308,13 +312,14 @@ def operator_bans_post_save(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=OperatorBans)
-def operator_bans_post_delete(sender, instance, **kwargs):
+def operator_bans_post_delete(_sender, instance, **kwargs):
     # Send data to websockets on change
     from dashboard.models.serializers import OperatorBanSerializer
     channel_layer = get_channel_layer()
 
     # Get Match maps
-    opbans = OperatorBans.objects.filter(match=instance.match, map=instance.map)
+    opbans = OperatorBans.objects.filter(
+        match=instance.match, map=instance.map)
 
     # Set channels group name
     group_name = f"matches_{str(instance.match.id)}_map_{str(instance.map.id)}_opbans"
@@ -330,7 +335,7 @@ def operator_bans_post_delete(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Round)
-def round_post_save(sender, instance, **kwargs):
+def round_post_save(_sender, instance, **kwargs):
     # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
     channel_layer = get_channel_layer()
@@ -352,7 +357,7 @@ def round_post_save(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Round)
-def round_post_delete(sender, instance, **kwargs):
+def round_post_delete(_sender, instance, **kwargs):
     # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
     channel_layer = get_channel_layer()
@@ -374,7 +379,7 @@ def round_post_delete(sender, instance, **kwargs):
 
 
 @receiver(m2m_changed, sender=MatchGroup.matches.through)
-def match_group_post_save(sender, instance, action, **kwargs):
+def match_group_post_save(_sender, instance, action, **kwargs):
     if action != "post_remove" and action != "post_add":
         return
 

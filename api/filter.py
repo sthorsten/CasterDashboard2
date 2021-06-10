@@ -12,4 +12,4 @@ class SeasonFilter(FilterSet):
 
     class Meta:
         model = Season
-        fields = ['league', 'official_season']
+        fields = ['league', 'official_season', 'name']
