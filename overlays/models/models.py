@@ -201,6 +201,8 @@ def new_user_post_save(_sender, instance, created, **kwargs):
     # Create overlay entries when a new user is created
 
     if created:
+        logger.info("New user. Creating overlay entries...")
+
         if instance.username == "admin":
             # Do not create any overlay data for the default admin user
             return

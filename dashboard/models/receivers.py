@@ -9,7 +9,7 @@ import logging
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-#from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db.models.signals import post_save, pre_delete, pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
@@ -35,6 +35,9 @@ def league_post_save(_sender, instance, **kwargs):
     if instance.league_logo:
         if instance.league_logo.name.__contains__("_temp.png"):
 
+            logger.info(
+                f"Converting league logo for league '{str(instance)}': {instance.league_logo.name}...")
+
             convert_league_logo(instance.id, instance.league_logo.path)
             os.remove(instance.league_logo.path)
 
@@ -42,14 +45,20 @@ def league_post_save(_sender, instance, **kwargs):
             instance.league_logo_small = f"leagues/{instance.id}_50.webp"
             instance.save()
 
+            logger.info("League Logo saved successfully.")
+
     else:
         no_logo_path = os.path.join(
             django_settings.STATIC_ROOT, "img", "_nologo.png")
 
+        logger.info(
+            f"Setting default template logo for league '{str(instance)}'...")
         convert_league_logo(instance.id, no_logo_path)
         instance.league_logo = f"leagues/{instance.id}_500.webp"
         instance.league_logo_small = f"leagues/{instance.id}_50.webp"
         instance.save()
+
+        logger.info("League Logo saved successfully.")
 
 
 @receiver(pre_delete, sender=League)
@@ -57,11 +66,17 @@ def league_pre_delete(_sender, instance, **kwargs):
     # Auto delete image
     if instance.league_logo:
         if os.path.isfile(instance.league_logo.path):
+            logger.info(
+                f"Deleting league logo for league '{str(instance)}'...")
             os.remove(instance.league_logo.path)
+            logger.info("League logo deleted successfully.")
 
     if instance.league_logo_small:
         if os.path.isfile(instance.league_logo_small.path):
+            logger.info(
+                f"Deleting league logo small for league '{str(instance)}'...")
             os.remove(instance.league_logo_small.path)
+            logger.info("League logo small deleted successfully.")
 
 
 @receiver(pre_save, sender=Sponsor)
@@ -74,11 +89,16 @@ def sponsor_post_save(_sender, instance, **kwargs):
     # Rename file to id
     if instance.sponsor_logo:
         if instance.sponsor_logo.name.__contains__("_temp.png"):
+            logger.info(
+                f"Converting sponsor logo for sponsor '{str(instance)}': {instance.sponsor_logo.name}...")
+
             convert_sponsor_logo(instance.id, instance.sponsor_logo.path)
             os.remove(instance.sponsor_logo.path)
 
             instance.sponsor_logo = f'sponsors/{instance.id}_100.webp'
             instance.save()
+
+            logger.info("Sponsor logo saved successfully.")
 
 
 @receiver(pre_delete, sender=Sponsor)
@@ -87,7 +107,10 @@ def sponsor_pre_delete(_sender, instance, **kwargs):
     if instance.sponsor_logo:
         if instance.sponsor_logo.path:
             if os.path.exists(instance.sponsor_logo.path):
+                logger.info(
+                    f"Deleting sponsor logo for sponsor '{str(instance)}'...")
                 os.remove(instance.sponsor_logo.path)
+                logger.info("Sponsor logo deleted successfully.")
 
 
 @receiver(pre_save, sender=Team)
@@ -100,6 +123,9 @@ def team_post_save(_sender, instance, **kwargs):
     # Rename file to id
     if instance.team_logo:
         if instance.team_logo.name.__contains__("_temp.png"):
+            logger.info(
+                f"Converting team logo for team '{str(instance)}': {instance.team_logo.name}...")
+
             convert_team_logo(instance.id, instance.team_logo.path)
             os.remove(instance.team_logo.path)
 
@@ -107,14 +133,22 @@ def team_post_save(_sender, instance, **kwargs):
             instance.team_logo_small = f"teams/{instance.id}_50.webp"
             instance.save()
 
+            logger.info("Team logo saved successfully.")
+
     else:
         no_logo_path = os.path.join(
             django_settings.STATIC_ROOT, "img", "_nologo.png")
+
+        logger.info(
+            f"Setting default template logo for team '{str(instance)}'...")
+
         convert_team_logo(instance.id, no_logo_path)
 
         instance.team_logo = f"teams/{instance.id}_500.webp"
         instance.team_logo_small = f"teams/{instance.id}_50.webp"
         instance.save()
+
+        logger.info("Team logo saved successfully.")
 
 
 @receiver(pre_delete, sender=Team)
@@ -122,11 +156,16 @@ def team_pre_delete(_sender, instance, **kwargs):
     # Auto delete image
     if instance.team_logo:
         if os.path.isfile(instance.team_logo.path):
+            logger.info(f"Deleting team logo for team '{str(instance)}'...")
             os.remove(instance.team_logo.path)
+            logger.info("Team logo deleted successfully.")
 
     if instance.team_logo_small:
         if os.path.isfile(instance.team_logo_small.path):
+            logger.info(
+                f"Deleting team logo small for team '{str(instance)}'...")
             os.remove(instance.team_logo_small.path)
+            logger.info("Team logo small deleted successfully.")
 
 
 @receiver(post_save, sender=Match)
@@ -135,18 +174,24 @@ def match_post_save(_sender, instance, **kwargs):
     if instance.state == 3:
         if instance.best_of == 1:
             if instance.score_blue == 1 or instance.score_orange == 1:
+                logger.info("Setting match state to Finished.")
+
                 instance.state = 4
                 instance.save()
                 return
 
         elif instance.best_of == 2 or instance.best_of == 3:
             if instance.score_blue == 2 or instance.score_orange == 2:
+                logger.info("Setting match state to Finished.")
+
                 instance.state = 4
                 instance.save()
                 return
 
         elif instance.best_of == 5:
             if instance.score_blue == 3 or instance.score_orange == 3:
+                logger.info("Setting match state to Finished.")
+
                 instance.state = 4
                 instance.save()
                 return
@@ -179,9 +224,15 @@ def match_maps_post_save(_sender, instance, **kwargs):
 
             # Overtime win
             if instance.score_blue == 8 or instance.score_orange == 8:
+                logging.info(
+                    "Map Finished. Setting win type to 'Overtime Win'.")
+
                 instance.win_type = 3
             # Regular win
             else:
+                logging.info(
+                    "Map Finished. Setting win type to 'Regular Win'.")
+
                 instance.win_type = 2
 
             instance.status = 3
@@ -189,6 +240,9 @@ def match_maps_post_save(_sender, instance, **kwargs):
 
             # Set match score equal to map score if BO1
             if instance.match.best_of == 1:
+                logging.info(
+                    "BO1 Match. Setting match win score to map score.")
+
                 instance.match.score_blue = instance.score_blue
                 instance.match.score_orange = instance.score_orange
                 instance.match.save()
@@ -204,6 +258,8 @@ def match_maps_post_save(_sender, instance, **kwargs):
 
         # Draw
         elif instance.score_blue == 6 and instance.score_orange == 6:
+            logging.info("Map Finished. Setting win type to 'Draw'.")
+
             instance.win_type = 4
             instance.status = 3
             instance.save()
@@ -281,12 +337,18 @@ def match_maps_post_delete(_sender, instance, **kwargs):
 def operator_bans_post_save(_sender, instance, **kwargs):
     # Set Match state to Playing (3)
     if instance.match.state <= 2:
+        logging.info(
+            "Started operator ban phase. Setting match state to 'Playing'.")
+
         instance.match.state = 3
         instance.match.save()
 
     # Set MatchMap state to Playing (2)
     match_map = MatchMap.objects.get(match=instance.match, map=instance.map)
     if match_map and match_map.status <= 1:
+        logging.info(
+            "Started operator ban phase. Setting match map state to 'Playing'.")
+
         match_map.status = 2
         match_map.save()
 
