@@ -25,12 +25,12 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(pre_save, sender=League)
-def league_pre_save(_sender, instance, **kwargs):
+def league_pre_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     instance.full_clean()
 
 
 @receiver(post_save, sender=League)
-def league_post_save(_sender, instance, **kwargs):
+def league_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Rename file to id
     if instance.league_logo:
         if instance.league_logo.name.__contains__("_temp.png"):
@@ -62,7 +62,7 @@ def league_post_save(_sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=League)
-def league_pre_delete(_sender, instance, **kwargs):
+def league_pre_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Auto delete image
     if instance.league_logo:
         if os.path.isfile(instance.league_logo.path):
@@ -80,12 +80,12 @@ def league_pre_delete(_sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=Sponsor)
-def sponsor_pre_save(_sender, instance, **kwargs):
+def sponsor_pre_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     instance.full_clean()
 
 
 @receiver(post_save, sender=Sponsor)
-def sponsor_post_save(_sender, instance, **kwargs):
+def sponsor_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Rename file to id
     if instance.sponsor_logo:
         if instance.sponsor_logo.name.__contains__("_temp.png"):
@@ -102,7 +102,7 @@ def sponsor_post_save(_sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Sponsor)
-def sponsor_pre_delete(_sender, instance, **kwargs):
+def sponsor_pre_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Auto delete image
     if instance.sponsor_logo:
         if instance.sponsor_logo.path:
@@ -114,12 +114,12 @@ def sponsor_pre_delete(_sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=Team)
-def team_pre_save(_sender, instance, **kwargs):
+def team_pre_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     instance.full_clean()
 
 
 @receiver(post_save, sender=Team)
-def team_post_save(_sender, instance, **kwargs):
+def team_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Rename file to id
     if instance.team_logo:
         if instance.team_logo.name.__contains__("_temp.png"):
@@ -152,7 +152,7 @@ def team_post_save(_sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Team)
-def team_pre_delete(_sender, instance, **kwargs):
+def team_pre_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Auto delete image
     if instance.team_logo:
         if os.path.isfile(instance.team_logo.path):
@@ -169,7 +169,7 @@ def team_pre_delete(_sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Match)
-def match_post_save(_sender, instance, **kwargs):
+def match_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Set match status to finished?
     if instance.state == 3:
         if instance.best_of == 1:
@@ -212,7 +212,7 @@ def match_post_save(_sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=MatchMap)
-def match_maps_post_save(_sender, instance, **kwargs):
+def match_maps_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Set MatchMap state to Finished (3)
     if instance.status == 2:
         # Match finished
@@ -311,7 +311,7 @@ def match_maps_post_save(_sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=MatchMap)
-def match_maps_post_delete(_sender, instance, **kwargs):
+def match_maps_post_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Send data to websockets on change
     from dashboard.models.serializers import MatchMapSerializer
     channel_layer = get_channel_layer()
@@ -334,7 +334,7 @@ def match_maps_post_delete(_sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=OperatorBans)
-def operator_bans_post_save(_sender, instance, **kwargs):
+def operator_bans_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Set Match state to Playing (3)
     if instance.match.state <= 2:
         logging.info(
@@ -374,7 +374,7 @@ def operator_bans_post_save(_sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=OperatorBans)
-def operator_bans_post_delete(_sender, instance, **kwargs):
+def operator_bans_post_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Send data to websockets on change
     from dashboard.models.serializers import OperatorBanSerializer
     channel_layer = get_channel_layer()
@@ -397,7 +397,7 @@ def operator_bans_post_delete(_sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Round)
-def round_post_save(_sender, instance, **kwargs):
+def round_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
     channel_layer = get_channel_layer()
@@ -419,7 +419,7 @@ def round_post_save(_sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Round)
-def round_post_delete(_sender, instance, **kwargs):
+def round_post_delete(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Send data to websockets on change
     from dashboard.models.serializers import RoundSerializer
     channel_layer = get_channel_layer()
@@ -441,7 +441,7 @@ def round_post_delete(_sender, instance, **kwargs):
 
 
 @receiver(m2m_changed, sender=MatchGroup.matches.through)
-def match_group_post_save(_sender, instance, action, **kwargs):
+def match_group_post_save(sender, instance, action, **kwargs):  # pylint: disable=unused-argument
     if action != "post_remove" and action != "post_add":
         return
 

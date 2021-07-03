@@ -58,7 +58,7 @@ class OverlayState(models.Model):
 
 
 @receiver(post_save, sender=OverlayState)
-def overlay_state_post_save(_sender, instance, created, **kwargs):
+def overlay_state_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
     if created:
         return
 
@@ -90,7 +90,7 @@ class MatchOverlayData(models.Model):
 
 
 @receiver(post_save, sender=MatchOverlayData)
-def match_overlay_data_post_save(_sender, instance, created, **kwargs):
+def match_overlay_data_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
     if created:
         return
 
@@ -160,7 +160,7 @@ class TickerOverlayData(models.Model):
 
 
 @receiver(post_save, sender=TickerOverlayData)
-def ticker_overlay_data_post_save(_sender, instance, created, **kwargs):
+def ticker_overlay_data_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
     if created:
         return
 
@@ -197,7 +197,7 @@ def send_overlay_data(match_data, ticker_data, user):
 
 
 @receiver(post_save, sender=get_user_model())
-def new_user_post_save(_sender, instance, created, **kwargs):
+def new_user_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
     # Create overlay entries when a new user is created
 
     if created:
