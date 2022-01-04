@@ -24,7 +24,7 @@ def league_post_save(instance, created, **kwargs):
         del instance._dirty
 
 
-@receiver(signals.pre_delete)
+@receiver(signals.pre_delete, sender=models.League)
 def league_pre_delete(instance, **kwargs):
     deleteLogoFiles(instance)
 
@@ -62,3 +62,8 @@ def team_post_save(instance, created, **kwargs):
         instance.save()
     finally:
         del instance._dirty
+
+
+@receiver(signals.pre_delete, sender=models.Team)
+def team_pre_delete(instance, **kwargs):
+    deleteLogoFiles(instance)

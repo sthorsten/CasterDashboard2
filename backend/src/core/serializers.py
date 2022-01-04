@@ -4,7 +4,7 @@ from . import models
 
 class NotificationSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    type_name = serializers.StringRelatedField(
+    typeName = serializers.StringRelatedField(
         source='get_type_display', read_only=True)
 
     class Meta:
@@ -14,7 +14,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 class MapPoolSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    maps_name = serializers.StringRelatedField(
+    mapsName = serializers.StringRelatedField(
         source='maps', many=True, read_only=True)
 
     class Meta:
@@ -32,9 +32,9 @@ class MapSerializer(serializers.ModelSerializer):
 
 class BombSpotSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    map_name = serializers.StringRelatedField(source='map', read_only=True)
-    map_id = serializers.PrimaryKeyRelatedField(source='map', read_only=True)
-    floor_name = serializers.StringRelatedField(
+    mapMame = serializers.StringRelatedField(source='map', read_only=True)
+    mapId = serializers.PrimaryKeyRelatedField(source='map', read_only=True)
+    floorName = serializers.StringRelatedField(
         source='get_floor_display', read_only=True)
 
     class Meta:

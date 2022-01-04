@@ -8,12 +8,21 @@ from . import serializers
 class LeagueViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.League.objects.all()
     serializer_class = serializers.LeagueSerializer
-    filterset_fields = ['name', 'is_restricted', 'has_custom_overlay']
 
 
 class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Season.objects.all()
     serializer_class = serializers.SeasonSerializer
+
+
+class PlaydayViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Playday.objects.all()
+    serializer_class = serializers.PlaydaySerializer
+
+
+class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Tournament.objects.all()
+    serializer_class = serializers.TournamentSerializer
 
 
 class SponsorViewSet(viewsets.ReadOnlyModelViewSet):
@@ -22,7 +31,7 @@ class SponsorViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['league', 'name', 'public']
 
 
-class TeamViewSet(viewsets.ModelViewSet):
+class TeamViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Team.objects.all()
     serializer_class = serializers.TeamSerializer
     filterset_fields = ['name']

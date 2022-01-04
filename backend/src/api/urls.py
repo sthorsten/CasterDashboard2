@@ -21,12 +21,14 @@ router.register(r'user/league_group', userViews.LeagueAccessGroupViewSet)
 
 router.register(r'core/notification', coreViews.NotificationViewSet)
 router.register(r'core/map', coreViews.MapViewSet)
-router.register(r'core/map_pool', coreViews.MapPoolViewSet)
-router.register(r'core/bomb_spot', coreViews.BombSpotViewSet)
+router.register(r'core/mappool', coreViews.MapPoolViewSet)
+router.register(r'core/bombspot', coreViews.BombSpotViewSet)
 router.register(r'core/operator', coreViews.OperatorViewSet)
 
 router.register(r'main/league', mainViews.LeagueViewSet)
 router.register(r'main/season', mainViews.SeasonViewSet)
+router.register(r'main/playday', mainViews.PlaydayViewSet)
+router.register(r'main/tournament', mainViews.TournamentViewSet)
 router.register(r'main/sponsor', mainViews.SponsorViewSet)
 router.register(r'main/team', mainViews.TeamViewSet)
 
