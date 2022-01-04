@@ -1,0 +1,11 @@
+.venv
+.vscode
+logs
+media
+
+.env
+dumb.rdb
+poetry.lock
+
+__pycache__
+*old*

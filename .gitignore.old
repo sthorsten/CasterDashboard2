@@ -1,0 +1,10 @@
+.idea
+.vscode
+__pycache__
+media
+venv
+caster_dashboard_2/settings_old
+
+logs/*.log
+*.ignored
+.env

@@ -1,0 +1,14 @@
+@import "base";
+
+// Theme Variable Overrides
+$left-bg: linear-gradient(90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+$right-bg: linear-gradient(-90deg, rgba(252, 158, 6, 0.6) 0%, rgba(255, 144, 45, 0.8) 20%, rgba(230, 95, 0, 0.8) 60%, rgba(237, 86, 0, 0.9) 100%);
+
+div.main-bg {
+  background-image: url("/static/old/css/FearNixx.png");
+  background-size: contain;
+  background-position-x: 42%;
+  background-repeat: no-repeat;
+}
+
+@import "start";

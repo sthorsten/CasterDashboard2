@@ -1,0 +1,173 @@
+@import "bootstrap-variables";
+
+@font-face {
+  font-family: 'ScoutCond Regular';
+  src: url("/static/fonts/ScoutCond-Regular.woff") format('woff');
+}
+
+@font-face {
+  font-family: 'ScoutCond Bold';
+  src: url("/static/fonts/ScoutCond-Bold.woff") format('woff');
+}
+
+div.title-icon {
+  width: max-content;
+  padding: 1em;
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+  color: #fff;
+  background: $gray-800;
+  border-radius: 8%;
+}
+
+h1.title-text {
+  color: #fff !important;
+  margin-top: .5em;
+}
+
+ol.breadcrumb {
+  margin-top: 1em !important;
+}
+
+@each $name, $color in $theme-colors {
+  .card-#{$name}.card-outline-all {
+    border: 3px solid $color;
+  }
+}
+
+@each $name, $color in $grays {
+  .bg-gray-#{$name} {
+    background: $color;
+  }
+}
+
+.card-title-upper {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.5em;
+}
+
+.badge {
+  text-transform: uppercase;
+}
+
+div.card-divider {
+  border-bottom: 1px solid #fff;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.user-menu-custom-outer {
+  .user-menu-link {
+    height: 40px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .user-menu-link::after {
+    display: none !important;
+  }
+}
+
+.user-menu-custom-inner {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0;
+  padding: 0;
+
+  * {
+    height: 32px;
+    width: auto;
+    margin: 4px;
+  }
+
+  div {
+    display: grid;
+    grid-template-rows: auto auto;
+    margin-left: 8px;
+
+    span {
+      margin: 0;
+      padding: 0;
+    }
+
+    .user-name {
+      font-weight: bold;
+      margin-top: -7px;
+    }
+
+    .user-email {
+      margin-top: -12px;
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .user-menu-custom-inner {
+    div {
+      display: none;
+    }
+  }
+}
+
+.toast {
+  opacity: 1 !important;
+}
+
+.table.table-head-fixed thead tr:nth-child(1) th {
+  background: $gray-900;
+}
+
+.page-item.disabled .page-link {
+  color: #fff;
+  background: $gray-700;
+  border-color: $primary;
+}
+
+.dropdown-menu {
+  background: $gray-800;
+  color: #fff;
+}
+
+.dropdown-item {
+  color: #fff;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: $primary;
+}
+
+.bootstrap-select .no-results {
+  background: $dark;
+  color: #fff;
+}
+
+.form-control {
+  background: $gray-900;
+  color: #fff;
+}
+
+.form-control:focus {
+  background: $gray-900;
+  color: #fff;
+}
+
+// Login page
+.login-page, .register-page {
+  background: $dark;
+}
+
+.login-logo a, .register-logo a {
+  color: #fff;
+}
+
+.login-card-body, .register-card-body {
+  background: $gray-900;
+  color: #fff;
+}
+
+.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
+  background: $gray-900;
+}
+
+

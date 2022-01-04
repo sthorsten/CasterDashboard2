@@ -6,7 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
---
+### Notes
+
+- This release is not ready for production yet!
+
+### Added
+
+- Added (better) logging to backend (WIP!)
+
+### Changed
+
+- Moved backend and frontend to seperate sub folders
+- Major code refactoring (WIP!)
+
+#### Backend
+- Reworked backend and updated Django to Version 4.0 (WIP!)
+- Replaced pip with poetry for better python package version management
+
+
 
 ## [2.0.0-alpha5] - 2021-02-18
 
