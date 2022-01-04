@@ -113,7 +113,7 @@ class OperatorBanSerializer(serializers.HyperlinkedModelSerializer):
     team_name = serializers.StringRelatedField(source='team', read_only=True)
 
     class Meta:
-        model = models.OperatorBans
+        model = models.OperatorBan
         fields = '__all__'
 
 
@@ -155,18 +155,3 @@ class RoundSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Round
         fields = '__all__'
 
-
-class MatchGroupSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    users_id = serializers.PrimaryKeyRelatedField(
-        source='users', many=True, read_only=True)
-    users_name = serializers.StringRelatedField(
-        source='users', many=True, read_only=True)
-
-    matches_id = serializers.PrimaryKeyRelatedField(
-        source='matches', many=True, read_only=True)
-
-    class Meta:
-        model = models.MatchGroup
-        fields = '__all__'

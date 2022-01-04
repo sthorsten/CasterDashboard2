@@ -84,7 +84,7 @@ class BombSpot(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return str(self.name)
+        return f'{self.name} ({self.map})'
 
     def __repr__(self) -> str:
         return f'<BombSpot map={self.map} floor={self.floor} name={self.name}>'

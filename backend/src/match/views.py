@@ -35,7 +35,7 @@ class MatchMapViewSet(viewsets.ModelViewSet):
 
 
 class OperatorBansViewSet(viewsets.ModelViewSet):
-    queryset = models.OperatorBans.objects.all()
+    queryset = models.OperatorBan.objects.all()
     serializer_class = serializers.OperatorBanSerializer
     filterset_fields = ['match', 'map']
 
@@ -105,8 +105,3 @@ class RoundViewSet(viewsets.ModelViewSet):
         logger.error("Invalid round data!")
         return Response({"detail": "Invalid Data"}, status=400)
 
-
-class MatchGroupViewSet(viewsets.ModelViewSet):
-    queryset = models.MatchGroup.objects.all()
-    serializer_class = serializers.MatchGroupSerializer
-    filterset_fields = ['users', 'matches']

@@ -13,7 +13,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from match.models import Match, MatchGroup
+from match.models import Match
 
 logger = logging.getLogger(__name__)
 
@@ -77,28 +77,28 @@ def overlay_state_post_save(sender, instance, created, **kwargs):  # pylint: dis
     )
 
 
-class MatchOverlayData(models.Model):
-    # Hold the current and next match a user selected for use in the overlays
+# class MatchOverlayData(models.Model):
+#     # Hold the current and next match a user selected for use in the overlays
 
-    user = models.OneToOneField(User(), on_delete=models.CASCADE)
-    current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True,
-                                      related_name='current_match')
-    next_match = models.ForeignKey(
-        Match, on_delete=models.CASCADE, blank=True, null=True, related_name='next_match')
-    match_group = models.ForeignKey(
-        MatchGroup, on_delete=models.SET_NULL, blank=True, null=True)
+#     user = models.OneToOneField(User(), on_delete=models.CASCADE)
+#     current_match = models.ForeignKey(Match, on_delete=models.SET_NULL, blank=True, null=True,
+#                                       related_name='current_match')
+#     next_match = models.ForeignKey(
+#         Match, on_delete=models.CASCADE, blank=True, null=True, related_name='next_match')
+#     match_group = models.ForeignKey(
+#         MatchGroup, on_delete=models.SET_NULL, blank=True, null=True)
 
-    def __str__(self):
-        return f'Match Overlay Data: {str(self.user)}'
+#     def __str__(self):
+#         return f'Match Overlay Data: {str(self.user)}'
 
 
-@receiver(post_save, sender=MatchOverlayData)
-def match_overlay_data_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
-    if created:
-        return
+# @receiver(post_save, sender=MatchOverlayData)
+# def match_overlay_data_post_save(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
+#     if created:
+#         return
 
-    send_overlay_data(match_data=instance,
-                      ticker_data=None, user=instance.user)
+#     send_overlay_data(match_data=instance,
+#                       ticker_data=None, user=instance.user)
 
 
 class PollOverlayData(models.Model):

@@ -33,14 +33,14 @@ class OverlayStateSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class MatchOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
+# class MatchOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
+#     id = PrimaryKeyRelatedField(read_only=True)
+#     user_id = PrimaryKeyRelatedField(source='user', read_only=True)
+#     user_name = StringRelatedField(source='user', read_only=True)
 
-    class Meta:
-        model = models.MatchOverlayData
-        fields = '__all__'
+#     class Meta:
+#         model = models.MatchOverlayData
+#         fields = '__all__'
 
 
 class PollOverlayDataSerializer(serializers.HyperlinkedModelSerializer):

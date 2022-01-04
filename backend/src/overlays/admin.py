@@ -14,9 +14,9 @@ class OverlayStateAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(models.MatchOverlayData)
-class MatchOverlayDataAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(models.MatchOverlayData)
+# class MatchOverlayDataAdmin(admin.ModelAdmin):
+#     pass
 
 
 @admin.register(models.PollOverlayData)

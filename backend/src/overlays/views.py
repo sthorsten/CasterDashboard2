@@ -17,10 +17,10 @@ class OverlayStateViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user']
 
 
-class MatchOverlayDataViewSet(viewsets.ModelViewSet):
-    queryset = models.MatchOverlayData.objects.all()
-    serializer_class = serializers.MatchOverlayDataSerializer
-    filterset_fields = ['user']
+# class MatchOverlayDataViewSet(viewsets.ModelViewSet):
+#     queryset = models.MatchOverlayData.objects.all()
+#     serializer_class = serializers.MatchOverlayDataSerializer
+#     filterset_fields = ['user']
 
 
 class PollOverlayDataViewSet(viewsets.ModelViewSet):

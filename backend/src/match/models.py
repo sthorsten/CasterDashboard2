@@ -1,7 +1,9 @@
+from datetime import datetime, date, time
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
 from core.models import Map, BombSpot, Operator
-from main.models import League, Season, Sponsor, Team
+from main.models import League, Playday, Team, Tournament
 
 # pylint: disable=no-member
 
@@ -15,139 +17,200 @@ class Match(models.Model):
 
     SHARE_MODE_CHOICES = [
         # Options on what access is granted to a user if it is shared with one.
-
-        (1, "None"),
-        (2, "Read Only"),
-        (3, "Read Write")
+        ("NONE", "None"),
+        ("READ_ONLY", "Read Only"),
+        ("READ_WRITE", "Read and Write")
     ]
 
     STATUS_CHOICES = [
-        (1, "Created"),
-        (2, "Map Ban"),
-        (3, "Playing"),
-        (4, "Finished"),
-        (5, "Dummy")
-    ]
-
-    user = models.ManyToManyField(User)
-    share_mode = models.IntegerField(choices=SHARE_MODE_CHOICES, default=1)
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
-    league = models.ForeignKey(League, on_delete=models.CASCADE)
-    title = models.CharField(max_length=22)
-    sponsors = models.ManyToManyField(Sponsor)
-    subtitle = models.CharField(max_length=22, null=True)
-    created = models.DateTimeField(auto_now_add=True)
-    state = models.IntegerField(choices=STATUS_CHOICES, default=1)
-    best_of = models.IntegerField(default=1)
-    team_blue = models.ForeignKey(
-        Team, on_delete=models.CASCADE, related_name="match_team_blue")
-    team_orange = models.ForeignKey(
-        Team, on_delete=models.CASCADE, related_name="match_team_orange")
-    score_blue = models.IntegerField(default=0)
-    score_orange = models.IntegerField(default=0)
-    win_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, blank=True, null=True, related_name="match_win_team")
-
-    def __str__(self) -> str:
-        return f'{str(self.id)}: {str(self.team_blue)} vs. {str(self.team_orange)}'
-
-
-class MatchMap(models.Model):
-    """Represents a map being either banned in the Map Pick & Ban phase or being played in a match by it's teams"""
-
-    TYPE_CHOICES = [
-        (1, "Ban"),
-        (2, "Pick"),
-        (3, "Decider"),
-        (4, "Default Ban")
-    ]
-
-    STATUS_CHOICES = [
-        (1, "Created"),
-        (2, "Playing"),
-        (3, "Finished")
+        ("CREATED", "Created"),
+        ("MAP_BAN", "Map Ban"),
+        ("PLAYING", "Playing"),
+        ("CLOSED", "Closed"),
+        ("ARCHIVED", "Archived"),
+        ("DUMMY", "Dummy")
     ]
 
     WIN_TYPE_CHOICES = [
-        (1, "None"),
-        (2, "Regular Win"),
-        (3, "Overtime Win"),
-        (4, "Draw")
+        ("NONE", "None"),
+        ("BLUE_WIN", "Blue Win"),
+        ("ORANGE_WIN", "Orange Win"),
+        ("DRAW", "Draw")
+    ]
+
+    name = models.CharField(
+        max_length=22,
+        null=True,
+        blank=True,
+        help_text="You can leave this field blank. The match name will then be set automatically, e.g. 'Team A vs. Team B'")
+    creator = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name='matches')
+    additionalUsers = models.ManyToManyField(User, blank=True)
+    shareMode = models.CharField(
+        max_length=255, choices=SHARE_MODE_CHOICES, default="NONE")
+
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
+    playday = models.ForeignKey(
+        Playday, on_delete=models.CASCADE, null=True, blank=True)
+    tournament = models.ForeignKey(
+        Tournament, on_delete=models.CASCADE, null=True, blank=True)
+
+    bestOf = models.IntegerField(default=1, validators=[
+                                 MinValueValidator(1), MaxValueValidator(5)])
+    status = models.CharField(
+        max_length=255, choices=STATUS_CHOICES, default="CREATED")
+
+    teamBlue = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="match_team_blue")
+    teamOrange = models.ForeignKey(
+        Team, on_delete=models.CASCADE, related_name="match_team_orange")
+    scoreBlue = models.IntegerField(default=0)
+    scoreOrange = models.IntegerField(default=0)
+    winTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, blank=True, null=True, related_name="match_win_team")
+    winType = models.CharField(
+        max_length=255, choices=WIN_TYPE_CHOICES, default="NONE")
+
+    date = models.DateTimeField(
+        default=datetime.combine(date.today(), time(hour=18)))
+    created = models.DateTimeField(auto_now_add=True)
+    lastModified = models.DateTimeField(
+        auto_now=True, verbose_name="last modified")
+
+    def __str__(self) -> str:
+        return f'{self.name} ({self.id})'
+
+    def __repr__(self) -> str:
+        return f'<Match {self.name} id={self.id}>'
+
+    class Meta:
+        verbose_name = "Match"
+        verbose_name_plural = "Matches"
+
+
+class MapBan(models.Model):
+    TYPE_CHOICES = [
+        ("BAN", "Ban"),
+        ("PICK", "Pick")
     ]
 
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    type = models.IntegerField(choices=TYPE_CHOICES)
-    order = models.IntegerField(default=0)
-    play_order = models.IntegerField(default=0)
-    choose_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, null=True, blank=True, related_name='choose_team')
-    atk_team = models.ForeignKey(
-        Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="map_atk_team")
-    ot_atk_team = models.ForeignKey(
-        Team, on_delete=models.SET_NULL, null=True, blank=True, related_name="ot_atk_team")
-    win_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, null=True, blank=True, related_name='map_win_team')
-    win_type = models.IntegerField(choices=WIN_TYPE_CHOICES, default=1)
-    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
-    score_blue = models.IntegerField(default=0)
-    score_orange = models.IntegerField(default=0)
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
 
-    def __str__(self):
-        return f'{str(self.id)}: {str(self.map)} (Match {self.match.id})'
+    type = models.CharField(
+        max_length=255, choices=TYPE_CHOICES, default="BAN")
+    order = models.IntegerField(default=1, validators=[
+                                MinValueValidator(1), MaxValueValidator(7)])
+    isDecider = models.BooleanField(
+        default=False, help_text="Map is Decider Map or Default Ban?")
+
+    def __str__(self) -> str:
+        return f'{self.id} ({self.match})'
+
+    def __repr__(self) -> str:
+        return f'<MapBan {self.id}>'
+
+    class Meta:
+        verbose_name = "Map Ban"
 
 
-class OperatorBans(models.Model):
-    # Represents an operator that is being banned by a team during a map in a match
+class MatchMap(models.Model):
+
+    STATUS_CHOICES = [
+        ("CREATED", "Created"),
+        ("PREPARING", "Preparing"),
+        ("OPERATOR_BAN", "Operator Ban"),
+        ("PLAYING", "Playing"),
+        ("OVERTIME", "Overtime"),
+        ("FINISHED", "Finished")
+    ]
+
+    WIN_TYPE_CHOICES = [
+        ("NONE", "None"),
+        ("BLUE_WIN", "Blue Win"),
+        ("ORANGE_WIN", "Orange Win"),
+        ("BLUE_OT_WIN", "Blue Overtime Win"),
+        ("ORANGE_OT_WIN", "Orange Overtime Win"),
+        ("DRAW", "Draw")
+    ]
 
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
+
+    status = models.CharField(
+        max_length=255, choices=STATUS_CHOICES, default="CREATED")
+    order = models.IntegerField(default=1, validators=[
+                                MinValueValidator(1), MaxValueValidator(7)])
+
+    atkTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name="matchMapATKTeam")
+    defTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name="matchMapDEFTeam")
+    otAtkTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name="matchMapOTATKTeam")
+    otDefTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name="matchMapOTDEFTeam")
+
+    scoreBlue = models.IntegerField(default=0)
+    scoreOrange = models.IntegerField(default=0)
+    winType = models.CharField(
+        max_length=255, choices=WIN_TYPE_CHOICES, default="NONE")
+    winTeam = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True, related_name="matchMapWinTeam")
+
+    def __str__(self) -> str:
+        return f'{self.map} ({self.match})'
+
+    def __repr__(self) -> str:
+        return f'<MatchMap {self.id}>'
+
+    class Meta:
+        verbose_name = "Match Map"
+
+
+class OperatorBan(models.Model):
+
+    matchMap = models.ForeignKey(MatchMap, on_delete=models.CASCADE)
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     order = models.IntegerField(default=1)
 
     def __str__(self) -> str:
-        return f'{str(self.operator)} (Match: {self.match.id}, Map: {str(self.map)})'
+        return f'{self.operator} ({self.matchMap})'
+
+    def __repr__(self) -> str:
+        return f'<OperatorBan {self.id}>'
+
+    class Meta:
+        verbose_name = "Operator Ban"
 
 
 class Round(models.Model):
     # Represents a single round of a match being played
 
     WIN_TYPE_CHOICES = [
-        (1, "Kills"),
-        (2, "Defuser Planted"),
-        (3, "Defuser Disabled"),
-        (4, "Time")
+        ("KILLS", "Kills"),
+        ("DEFUSER_PLANTED", "Defuser Planted"),
+        ("DEFUSER_DISABLED", "Defuser Disabled"),
+        ("TIME", "Time")
     ]
 
-    match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    map = models.ForeignKey(Map, on_delete=models.CASCADE)
-    round_no = models.IntegerField()
-    bomb_spot = models.ForeignKey(BombSpot, on_delete=models.CASCADE)
-    atk_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, related_name="round_atk_team")
-    def_team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, related_name="round_def_team")
-    of_team = models.ForeignKey(
+    matchMap = models.ForeignKey(MatchMap, on_delete=models.CASCADE)
+
+    roundNo = models.IntegerField(default=1)
+    bombSpot = models.ForeignKey(BombSpot, on_delete=models.CASCADE)
+    winType = models.IntegerField(choices=WIN_TYPE_CHOICES, default=1)
+
+    openingFragTeam = models.ForeignKey(
         Team, null=True, blank=True, on_delete=models.CASCADE, related_name="round_of_team")
-    win_type = models.IntegerField(choices=WIN_TYPE_CHOICES, default=1)
-    win_team = models.ForeignKey(
+    winTeam = models.ForeignKey(
         Team, on_delete=models.CASCADE, related_name="round_win_team")
-    score_blue = models.IntegerField()
-    score_orange = models.IntegerField()
+
     notes = models.TextField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return f'{str(self.round_no)} (Match: {str(self.match.id)}, Map: {str(self.map)})'
+        return f'{self.roundNo} ({self.matchMap})'
 
-
-class MatchGroup(models.Model):
-    # Represents a group of matches, i.e. a tournament, matches of the day, etc.
-
-    name = models.CharField(max_length=255)
-    date = models.DateField()
-    users = models.ManyToManyField(get_user_model())
-    matches = models.ManyToManyField(Match)
-
-    def __str__(self) -> str:
-        return str(self.name)
+    def __repr__(self) -> str:
+        return f'<Round {self.roundNo}>'

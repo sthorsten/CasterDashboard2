@@ -7,12 +7,17 @@ class MatchAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(models.MapBan)
+class MapBanAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.MatchMap)
 class MatchMapAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(models.OperatorBans)
+@admin.register(models.OperatorBan)
 class OperatorBansAdmin(admin.ModelAdmin):
     pass
 
@@ -20,8 +25,3 @@ class OperatorBansAdmin(admin.ModelAdmin):
 @admin.register(models.Round)
 class RoundAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(models.MatchGroup)
-class MatchGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date')

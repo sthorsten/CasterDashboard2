@@ -111,7 +111,7 @@ def match_maps_post_save(sender, instance, **kwargs):  # pylint: disable=unused-
         instance.save()
 
 
-@receiver(post_save, sender=models.OperatorBans)
+@receiver(post_save, sender=models.OperatorBan)
 def operator_bans_post_save(sender, instance, **kwargs):  # pylint: disable=unused-argument
     # Set Match state to Playing (3)
     if instance.match.state <= 2:
