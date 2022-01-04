@@ -135,6 +135,7 @@ env = environ.Env()
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, "..", ".env"))
 
 DEBUG = env('DEBUG', cast=bool)
+MODE = env('MODE')
 SECRET_KEY = env('SECRET_KEY')
 
 DATABASES = {
@@ -158,17 +159,18 @@ CHANNEL_LAYERS = {
 }
 
 STATIC_URL = env('STATIC_URL')
-STATICFILES_DIRS = []
-
-if env('MODE') == 'production':
-    STATIC_ROOT = os.path.join(BASE_DIR, "assets")
-    STATICFILES_DIRS += os.path.join(BASE_DIR, "static")
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
+STATIC_ROOT = env('STATIC_ROOT')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_URL = env('MEDIA_URL')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = env('MEDIA_ROOT')
+
+# if MODE == 'production':
+#     STATIC_ROOT = os.path.join(BASE_DIR, "assets")
+#     STATICFILES_DIRS.append(os.path.join(BASE_DIR, "static"))
+# else:
+#     STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 # Registration config
 REGISTRATION_ENABLED = env('REGISTRATION_ENABLED', cast=bool)
@@ -185,13 +187,10 @@ ALLOWED_HOSTS = [
 
 ALLOWED_HOSTS = ALLOWED_HOSTS + env('ALLOWED_HOSTS', cast=[str])
 CSRF_TRUSTED_ORIGINS = []
-CORS_ALLOWED_ORIGIN_REGEXES = []
 
 for host in ALLOWED_HOSTS:
     CSRF_TRUSTED_ORIGINS.append(f"http://{host}")
     CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
-    CORS_ALLOWED_ORIGIN_REGEXES.append(r"^(https?:\/\/" + host + r":(\d*)")
-    CORS_ALLOWED_ORIGIN_REGEXES.append(r"^(https?:\/\/" + host + r":(\d*)")
 
 # endregion
 
