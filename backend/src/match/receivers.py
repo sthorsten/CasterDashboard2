@@ -1,12 +1,45 @@
 import logging
-from django.db.models.signals import post_save
+from django.db.models import signals
 from django.dispatch import receiver
+from util import websocket
+
 from . import models
+from . import serializers
 
 # pylint: disable=no-member
 
 
 logger = logging.getLogger(__name__)
+
+
+@receiver(signals.post_save, sender=models.Match)
+def notification_post_save(instance, created, **kwargs):
+    serialized_data = serializers.MatchSerializer(instance).data
+    websocket.send_server_data("match", "Match", serialized_data)
+
+
+@receiver(signals.post_save, sender=models.MapBan)
+def notification_post_save(instance, created, **kwargs):
+    serialized_data = serializers.MapBanSerializer(instance).data
+    websocket.send_server_data("match", "MapBan", serialized_data)
+
+
+@receiver(signals.post_save, sender=models.MatchMap)
+def notification_post_save(instance, created, **kwargs):
+    serialized_data = serializers.MatchMapSerializer(instance).data
+    websocket.send_server_data("match", "MatchMap", serialized_data)
+
+
+@receiver(signals.post_save, sender=models.OperatorBan)
+def notification_post_save(instance, created, **kwargs):
+    serialized_data = serializers.OperatorBanSerializer(instance).data
+    websocket.send_server_data("match", "OperatorBan", serialized_data)
+
+
+@receiver(signals.post_save, sender=models.Round)
+def notification_post_save(instance, created, **kwargs):
+    serialized_data = serializers.RoundSerializer(instance).data
+    websocket.send_server_data("match", "Round", serialized_data)
 
 
 # @receiver(post_save, sender=models.Match)
