@@ -6,6 +6,7 @@ from django.views.generic.base import RedirectView
 
 from core.channels import CoreConsumer
 from main.channels import MainConsumer
+from match.channels import MatchConsumer
 
 from dashboard import views
 
@@ -32,7 +33,8 @@ urlpatterns = [
 
 websocket_urlpatterns = [
     re_path(r'ws/core/$', CoreConsumer.as_asgi()),
-    re_path(r'ws/main/$', MainConsumer.as_asgi())
+    re_path(r'ws/main/$', MainConsumer.as_asgi()),
+    re_path(r'ws/match/$', MatchConsumer.as_asgi())
 ]
 
 handler404 = views.error_404

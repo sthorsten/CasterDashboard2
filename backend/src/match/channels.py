@@ -6,17 +6,17 @@ from . import models
 from . import serializers
 
 
-class MainConsumer(JsonWebsocketConsumer):
+class MatchConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.accept()
-        async_to_sync(self.channel_layer.group_add)("main", self.channel_name)
+        async_to_sync(self.channel_layer.group_add)("match", self.channel_name)
 
         self.send_json({
             "status": "Accepted",
             "code": 202,
             "channel_name": self.channel_name,
-            "group": "main"
+            "group": "match"
         })
 
     def server_data(self, event):
@@ -35,29 +35,25 @@ class MainConsumer(JsonWebsocketConsumer):
 
         model = content.get("model")
 
-        if model == "League":
+        if model == "Match":
             response = websocket.make_query(
-                models.League, content.get("query"), serializers.LeagueSerializer)
+                models.Match, content.get("query"), serializers.MatchSerializer)
 
-        elif model == "Season":
+        elif model == "MapBan":
             response = websocket.make_query(
-                models.Season, content.get("query"), serializers.SeasonSerializer)
+                models.MapBan, content.get("query"), serializers.MapBanSerializer)
 
-        elif model == "Playday":
+        elif model == "MatchMap":
             response = websocket.make_query(
-                models.Playday, content.get("query"), serializers.PlaydaySerializer)
+                models.MatchMap, content.get("query"), serializers.MatchMapSerializer)
 
-        elif model == "Tournament":
+        elif model == "OperatorBan":
             response = websocket.make_query(
-                models.Tournament, content.get("query"), serializers.TournamentSerializer)
+                models.OperatorBan, content.get("query"), serializers.OperatorBanSerializer)
 
-        elif model == "Sponsor":
+        elif model == "Round":
             response = websocket.make_query(
-                models.Sponsor, content.get("query"), serializers.SponsorSerializer)
-
-        elif model == "Team":
-            response = websocket.make_query(
-                models.Team, content.get("query"), serializers.TeamSerializer)                
+                models.Round, content.get("query"), serializers.RoundSerializer)
 
         else:
             self.send_json({"status": "Bad Request", "code": 400})
