@@ -15,7 +15,7 @@ import user.views as userViews
 
 
 router = routers.DefaultRouter()
-router.register(r'user/user', UserViewSet)
+router.register(r'user/user', userViews.UserViewSet)
 router.register(r'user/profile', userViews.ProfileViewSet)
 router.register(r'user/leaguegroup', userViews.LeagueAccessGroupViewSet)
 
@@ -50,6 +50,7 @@ urlpatterns = [
     # SimpleJWT
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/me/', userViews.LoggedInUserView.as_view(), name='loggedIn_user_view'),
 
     # Overlays
     # path('overlay/state/by_user/<int:user_id>/',

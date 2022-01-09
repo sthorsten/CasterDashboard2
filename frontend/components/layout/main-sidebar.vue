@@ -1,7 +1,7 @@
 <template>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a class="brand-link" href="/">
-      <img class="brand-image" src="img/ThorsHero_200.webp" style="padding-top: 6px;">
+      <img class="brand-image" src="/static/img/ThorsHero_200.webp" style="padding-top: 6px;">
       <span class="brand-text">
         Caster Dashboard
       </span>

@@ -19,6 +19,7 @@ export default {
   ],
 
   plugins: [
+    { src: '~/plugins/websocket', ssr: false }
   ],
 
   components: [
