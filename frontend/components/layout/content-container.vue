@@ -1,7 +1,7 @@
 <template>
   <section class="content">
-    <div class="container-fluid">
+    <b-container fluid>
       <slot />
-    </div>
+    </b-container>
   </section>
 </template>

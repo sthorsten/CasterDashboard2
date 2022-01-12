@@ -1,6 +1,10 @@
 <template>
   <li class="nav-item">
-    <a :class="active ? 'nav-link active' : 'nav-link'" :href="link" :target="target">
+    <NuxtLink v-if="nuxtLink" class="nav-link" :to="link" exact :active="active">
+      <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
+      {{ text }}
+    </NuxtLink>
+    <a v-else :class="active ? 'nav-link active' : 'nav-link'" :href="link" :target="target">
       <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
       {{ text }}
     </a>
@@ -29,6 +33,10 @@ export default {
     target: {
       type: String,
       default: ''
+    },
+    nuxtLink: {
+      type: Boolean,
+      default: false
     }
   }
 }

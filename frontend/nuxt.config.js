@@ -47,7 +47,8 @@ export default {
   },
 
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
+    linkActiveClass: 'active'
   },
 
   fontawesome: {
@@ -58,7 +59,17 @@ export default {
         'faHome',
         'faBars',
         'faUserCircle',
-        'faChevronCircleRight'
+        'faChevronCircleRight',
+        'faHistory',
+        'faPlus',
+        'faDesktop',
+        'faPalette',
+        'faTrophy',
+        'faAward',
+        'faCalendarAlt',
+        'faCalendarDay',
+        'faUsers',
+        'faMoneyBillAlt'
       ],
       brands: [
         'faGithub'
