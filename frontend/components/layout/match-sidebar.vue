@@ -33,10 +33,10 @@
           />
 
           <li class="nav-header text-uppercase">
-            Overlays
+            Current Match
           </li>
           <NavItem
-            v-for="item in overlaysNavItems"
+            v-for="item in currentMatchNavItems"
             :key="item.link"
             :text="item.text"
             :link="item.link"
@@ -45,10 +45,10 @@
           />
 
           <li class="nav-header text-uppercase">
-            Main Data
+            Map Specific
           </li>
           <NavItem
-            v-for="item in mainDataNavItems"
+            v-for="item in mapNavItems"
             :key="item.link"
             :text="item.text"
             :link="item.link"
@@ -82,48 +82,38 @@ export default {
           icon: 'plus'
         }
       ],
-      overlaysNavItems: [
+      currentMatchNavItems: [
         {
-          text: 'Control Center',
-          link: '/dashboard/overlays/control-center',
-          icon: 'desktop'
+          text: 'Match Overview',
+          link: `/dashboard/matches/${this.$route.params.matchID}/overview`,
+          icon: 'list-ul'
         },
         {
-          text: 'Customize',
-          link: '/dashboard/overlays/customize',
-          icon: 'palette'
+          text: 'Match Details',
+          link: `/dashboard/matches/${this.$route.params.matchID}/details`,
+          icon: 'info-circle'
         }
       ],
-      mainDataNavItems: [
+      mapNavItems: [
         {
-          text: 'Leagues',
+          text: 'Map Pick & Ban',
           link: '/dashboard/main/leagues',
-          icon: 'trophy'
+          icon: 'map'
         },
         {
-          text: 'Seasons',
+          text: 'Map Overview?',
+          link: '/dashboard/main/leagues',
+          icon: 'map'
+        },
+        {
+          text: 'Operator Bans',
           link: '/dashboard/main/seasons',
-          icon: 'calendar-alt'
+          icon: 'users-slash'
         },
         {
-          text: 'Playdays',
+          text: 'Rounds',
           link: '/dashboard/main/playdays',
-          icon: 'calendar-day'
-        },
-        {
-          text: 'Tournaments',
-          link: '/dashboard/main/tournaments',
-          icon: 'award'
-        },
-        {
-          text: 'Teams',
-          link: '/dashboard/main/teams',
-          icon: 'users'
-        },
-        {
-          text: 'Sponsors',
-          link: '/dashboard/main/sponsors',
-          icon: 'money-bill-alt'
+          icon: 'play-circle'
         }
       ]
     }

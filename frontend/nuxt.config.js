@@ -1,4 +1,7 @@
 export default {
+
+  ssr: false,
+
   head: {
     title: 'caster-dashboard-2',
     htmlAttrs: {
@@ -19,6 +22,7 @@ export default {
   ],
 
   plugins: [
+    { src: '~/plugins/vue-select', ssr: false },
     { src: '~/plugins/websocket', ssr: false }
   ],
 
@@ -36,14 +40,21 @@ export default {
 
   modules: [
     'bootstrap-vue/nuxt',
+    'vue-toastification/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/auth-next'
   ],
 
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL,
+    browserBaseURL: process.env.BROWSER_BASE_URL,
+    wsBaseURL: process.env.WS_BASE_URL
+  },
+
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://dev.thorshero.de',
-    browserBaseURL: 'https://dev.thorshero.de'
+    baseURL: process.env.BASE_URL,
+    browserBaseURL: process.env.BROWSER_BASE_URL
   },
 
   router: {
@@ -69,7 +80,17 @@ export default {
         'faCalendarAlt',
         'faCalendarDay',
         'faUsers',
-        'faMoneyBillAlt'
+        'faMoneyBillAlt',
+        'faUser',
+        'faLock',
+        'faPencilAlt',
+        'faInfoCircle',
+        'faListUl',
+        'faMap',
+        'faUsersSlash',
+        'faPlayCircle',
+        'faClipboardList',
+        'faBug'
       ],
       brands: [
         'faGithub'
@@ -77,7 +98,22 @@ export default {
     }
   },
 
+  toast: {
+    position: 'top-center',
+    timeout: 3000
+  },
+
   auth: {
+    cookie: {
+      options: {
+        sameSite: 'lax',
+        secure: true
+      }
+    },
+
+    localStorage: false,
+    fullPathRedirect: true,
+
     strategies: {
       local: {
         scheme: 'refresh',
@@ -85,7 +121,6 @@ export default {
           property: 'access',
           maxAge: 1800,
           global: true
-          // type: 'Bearer'
         },
         refreshToken: {
           property: 'refresh',
@@ -102,15 +137,11 @@ export default {
           user: { url: '/api/v2/user/me/', method: 'get' },
           logout: false
         },
-        localStorage: false,
-        fullPathRedirect: true,
         redirect: {
           login: '/login',
-          logout: '/login',
-          callback: false,
-          home: '/'
+          logout: '/logout',
+          home: '/dashboard/home'
         }
-        // autoLogout: false
       }
     }
   },

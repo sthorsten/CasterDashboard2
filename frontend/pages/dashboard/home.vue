@@ -22,7 +22,8 @@ export default {
       test: 'hi'
     }
   },
-  mounted () {
+  async fetch () {
+    await this.$axios.$get('/api/v2/main/league/')
   }
 }
 </script>

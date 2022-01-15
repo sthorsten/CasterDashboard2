@@ -53,7 +53,17 @@ export const getters = {
 
 export const actions = {
   connect ({ commit, dispatch }) {
-    const socket = new WebSocket('wss://dev.thorshero.de/ws/core/')
+    return new Promise((resolve, reject) => {
+      const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/core/`)
+      socket.onopen = () => {
+        commit('setConnected', true)
+        resolve(socket)
+      }
+      socket.onerror = error => reject(error)
+    })
+
+    /*
+    const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/core/`)
     socket.onopen = () => {
       commit('setConnected', true)
       dispatch('getInitialData')
@@ -89,6 +99,7 @@ export const actions = {
     }
 
     commit('setSocket', socket)
+    */
   },
 
   disconnect ({ state }) {
