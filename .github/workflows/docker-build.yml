@@ -1,0 +1,114 @@
+name: Docker
+
+on:
+  push:
+    # Build Docker images on push to develop or master
+    branches:
+      - develop
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+env:
+  IMAGE_NAME_BACKEND: casterdashboard2-backend
+  IMAGE_NAME_FRONTEND: casterdashboard2-frontend
+  IMAGE_NAME_NGINX: casterdashboard2-nginx
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  build-backend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME_BACKEND
+        working-directory: ./backend
+
+      - name: Log into registry
+        run: echo "${{ secrets.GHCR_ACCESS_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/sthorsten/$IMAGE_NAME_BACKEND
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention if the branch is master
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_BACKEND $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME_FRONTEND
+        working-directory: ./frontend
+
+      - name: Log into registry
+        run: echo "${{ secrets.GHCR_ACCESS_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        working-directory: ./frontend
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/sthorsten/$IMAGE_NAME_FRONTEND
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention if the branch is master
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_FRONTEND $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+        working-directory: ./frontend
+
+  build-nginx:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME_NGINX
+        working-directory: ./docker-nginx
+
+      - name: Log into registry
+        run: echo "${{ secrets.GHCR_ACCESS_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        working-directory: ./docker-nginx
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/sthorsten/$IMAGE_NAME_NGINX
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention if the branch is master
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_NGINX $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+        working-directory: ./docker-nginx

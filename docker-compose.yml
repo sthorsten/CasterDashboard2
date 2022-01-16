@@ -1,8 +1,11 @@
+# Use this docker compose file to easily install the CasterDashboard in a docker environment
+# Modify the marked lines according to your needs!
+
 version: '3'
 
 services:
-  db: # Postgres Database
-    image: postgres:12.0-alpine
+  postgres:
+    image: postgres:alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -11,53 +14,49 @@ services:
       - POSTGRES_DB=caster_dashboard_2
       
 
-  redis: # Redis for Websocket connections
+  redis:
     image: redis:alpine
     
   
   nginx: # Reverse proxy
     image: ghcr.io/sthorsten/casterdashboard2-nginx:develop
     volumes:
-      - asset_files:/opt/static/assets
-      - media_files:/opt/static/media
+      - static_files:/nginx/static
+      - media_files:/nginx/media
     ports:
-      - 80:80
+      - 80:80 # Set the exposing host port - e.g. 3000:80
     depends_on:
       - frontend
       - backend
 
-
   frontend: # Nuxt frontend
     image: ghcr.io/sthorsten/casterdashboard2-frontend:develop
-    command: yarn run start
+    command: sh /frontend/docker-start.sh
+    volumes:
+      - static_files:/frontend/static_files
     environment:
       - NUXT_HOST=0.0.0.0
-      - EMAIL_ADDRESS=mail@example.com
-      - EMAIL_HOST=mail.example.com
-      - EMAIL_PORT=587
-      - EMAIL_USERNAME=example_user
-      - EMAIL_PASSWORD=example_password
-      - EMAIL_USE_TLS=true
-      - REGISTRATION_ENABLED=false
+      - BASE_URL=https://example.com # Set your public url, e.g. https://example.com
+      - BROWSER_BASE_URL=https://example.com # Set your public url, e.g. https://example.com (the same as above)
+      - WS_BASE_URL=wss://example.com # Set your public url for websockets, e.g. wss://example.com
 
 
   backend: # Django backend
     image: ghcr.io/sthorsten/casterdashboard2-backend:develop
     volumes:
-      - asset_files:/backend/assets
+      - static_files:/backend/static
       - media_files:/backend/media
-    command: sh /backend/docker-compose-start.sh
+    command: sh /backend/docker-start.sh
     environment:
-      - SECRET_KEY=<your-secret-key>
-      - DB_HOST=db
-      - ALLOWED_HOSTS=example.com
-      - REGISTRATION_ENABLED=false
+      - SECRET_KEY=django-secret-12345 # Generate a secret key for your instance and set it here
+      - ALLOWED_HOSTS=example.com # Set your public url (without http(s))
+      - REGISTRATION_ENABLED=false # Allow new users to register
     depends_on:
-      - db
+      - postgres
       - redis
 
 
 volumes:
   postgres_data:
-  asset_files:
+  static_files:
   media_files:
