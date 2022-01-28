@@ -2,7 +2,7 @@
 # Build stage #
 ###############
 
-FROM node:lts-alpine as build
+FROM node:14 as build
 
 WORKDIR /frontend
 
