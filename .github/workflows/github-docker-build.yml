@@ -4,8 +4,7 @@ on:
   push:
     # Build Docker images on push to develop or master
     branches:
-      - develop
-      - master
+      - legacy
 
     # Publish `v1.2.3` tags as releases.
     tags:
