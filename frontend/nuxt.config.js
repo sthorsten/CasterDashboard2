@@ -90,7 +90,10 @@ export default {
         'faUsersSlash',
         'faPlayCircle',
         'faClipboardList',
-        'faBug'
+        'faBug',
+        'faHeading',
+        'faListOl',
+        'faLongArrowAltRight'
       ],
       brands: [
         'faGithub'
@@ -147,5 +150,12 @@ export default {
   },
 
   build: {
+    loaders: {
+      scss: {
+        sassOptions: {
+          quietDeps: true
+        }
+      }
+    }
   }
 }

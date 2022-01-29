@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-3" :class="[colorClass, {'card-outline-all': outline}]">
+  <div class="card mb-3" :class="[colorClass, { 'card-outline-all': outline }]">
     <div class="card-body bg-gray-800 text-white">
       <h5 class="card-title card-title-upper">
         <fa-icon v-if="icon" :icon="icon" class="mr-1" />
@@ -10,7 +10,8 @@
         <div class="card-divider" />
       </template>
       <template v-else>
-        <br><br>
+        <br>
+        <br>
       </template>
       <slot />
     </div>
@@ -59,10 +60,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
+@import "bootstrap/scss/bootstrap.scss";
+@import "admin-lte/build/scss/variables";
+@import "admin-lte/build/scss/variables-alt";
 
-@each $name, $color in $theme-colors {
+@each $name, $color in $theme-colors-alt {
   .card-#{$name}.card-outline-all {
     border: 3px solid $color;
   }
@@ -80,5 +82,4 @@ div.card-divider {
   margin-top: 0;
   margin-bottom: 1em;
 }
-
 </style>

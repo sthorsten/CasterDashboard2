@@ -97,22 +97,22 @@ export default {
       mapNavItems: [
         {
           text: 'Map Pick & Ban',
-          link: '/dashboard/main/leagues',
+          link: '/dashboard/matches/123',
           icon: 'map'
         },
         {
           text: 'Map Overview?',
-          link: '/dashboard/main/leagues',
+          link: '/dashboard/matches/234',
           icon: 'map'
         },
         {
           text: 'Operator Bans',
-          link: '/dashboard/main/seasons',
+          link: '/dashboard/matches/456',
           icon: 'users-slash'
         },
         {
           text: 'Rounds',
-          link: '/dashboard/main/playdays',
+          link: '/dashboard/matches/789',
           icon: 'play-circle'
         }
       ]

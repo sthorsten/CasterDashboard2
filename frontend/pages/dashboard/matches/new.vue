@@ -9,9 +9,13 @@
               <!-- League -->
               <b-container fluid>
                 <b-form-group
-                  label="League"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="trophy" />
+                    League
+                  </template>
+
                   <v-select
                     v-model="selectedLeague"
                     :options="leagues"
@@ -35,9 +39,13 @@
               <!-- Season -->
               <b-container fluid>
                 <b-form-group
-                  label="Season"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="calendar-alt" />
+                    Season
+                  </template>
+
                   <v-select
                     v-model="selectedSeason"
                     :options="filteredSeasons"
@@ -54,9 +62,13 @@
               <!-- Playday -->
               <b-container fluid>
                 <b-form-group
-                  label="Playday"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="calendar-day" />
+                    Playday
+                  </template>
+
                   <v-select
                     v-model="selectedPlayday"
                     :options="filteredPlaydays"
@@ -73,9 +85,13 @@
               <!-- Team Blue -->
               <b-container fluid>
                 <b-form-group
-                  label="Team Blue"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="users" />
+                    Team Blue
+                  </template>
+
                   <v-select
                     v-model="teamBlue"
                     :options="teams"
@@ -98,9 +114,13 @@
               <!-- Team Orange -->
               <b-container fluid>
                 <b-form-group
-                  label="Team Orange"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="users" />
+                    Team Orange
+                  </template>
+
                   <v-select
                     v-model="teamOrange"
                     :options="teams"
@@ -127,6 +147,7 @@
                 <b-form-group>
                   <b-row>
                     <b-col lg="3">
+                      <fa-icon icon="list-ol" />
                       Best Of
                     </b-col>
                     <b-col>
@@ -154,9 +175,13 @@
               <!-- Match Title -->
               <b-container fluid>
                 <b-form-group
-                  label="Match Title"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="heading" />
+                    Match Title
+                  </template>
+
                   <b-form-input
                     v-model="matchTitle"
                     :disabled="!selectedSeason"
@@ -168,9 +193,12 @@
               <!-- Match Subtitle -->
               <b-container fluid>
                 <b-form-group
-                  label="Match Subtitle"
                   label-cols-lg="3"
                 >
+                  <template #label>
+                    <fa-icon icon="heading" />
+                    Match Subtitle
+                  </template>
                   <b-form-input
                     v-model="matchSubtitle"
                     :disabled="!selectedPlayday"
