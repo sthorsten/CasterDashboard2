@@ -1,3 +1,5 @@
+import handleMessage from '../helper/mainSocketMessageHandler'
+
 export const state = () => ({
   socket: null,
   connected: false,
@@ -16,6 +18,7 @@ export const mutations = {
   setConnected (state, connected) {
     state.connected = connected
   },
+
   setLeagues (state, leagues) {
     state.leagues = leagues
   },
@@ -33,7 +36,33 @@ export const mutations = {
   },
   setTeams (state, teams) {
     state.teams = teams
+  },
+
+  updateLeague (state, league) {
+    const listElem = state.leagues.findIndex(l => l.id === league.id)
+    state.leagues[listElem] = league
+  },
+  updateSeason (state, season) {
+    const listElem = state.seasons.findIndex(s => s.id === season.id)
+    state.seasons[listElem] = season
+  },
+  updatePlayday (state, playday) {
+    const listElem = state.playdays.findIndex(p => p.id === playday.id)
+    state.playdays[listElem] = playday
+  },
+  updateTournament (state, tournament) {
+    const listElem = state.tournaments.findIndex(t => t.id === tournament.id)
+    state.tournaments[listElem] = tournament
+  },
+  updateSponsor (state, sponsor) {
+    const listElem = state.sponsors.findIndex(s => s.id === sponsor.id)
+    state.sponsors[listElem] = sponsor
+  },
+  updateTeam (state, team) {
+    const listElem = state.teams.findIndex(t => t.id === team.id)
+    state.teams[listElem] = team
   }
+
 }
 
 export const getters = {
@@ -46,6 +75,11 @@ export const getters = {
   },
   getSeason: state => (id) => {
     return state.seasons.filter(s => s.id === id)[0]
+  },
+  getSeasonByPlaydayID: (state, getters) => (playdayID) => {
+    const playday = getters.getPlayday(playdayID)
+    if (!playday) { return null }
+    return state.seasons.filter(s => s.id === playday.season)[0]
   },
   getPlayday: state => (id) => {
     return state.playdays.filter(p => p.id === id)[0]
@@ -63,46 +97,19 @@ export const getters = {
 
 export const actions = {
   connect ({ commit, dispatch }) {
-    const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/main/`)
-    socket.onopen = () => {
-      commit('setConnected', true)
-      dispatch('getInitialData')
-    }
-    socket.onclose = () => {
-      commit('setConnected', false)
-      commit('setSocket', null)
-    }
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.model === 'League') {
-        if (data.partition === 'full') {
-          commit('setLeagues', data.data)
-        }
-      } else if (data.model === 'Season') {
-        if (data.partition === 'full') {
-          commit('setSeasons', data.data)
-        }
-      } else if (data.model === 'Playday') {
-        if (data.partition === 'full') {
-          commit('setPlaydays', data.data)
-        }
-      } else if (data.model === 'Tournament') {
-        if (data.partition === 'full') {
-          commit('setTournaments', data.data)
-        }
-      } else if (data.model === 'Sponsor') {
-        if (data.partition === 'full') {
-          commit('setSponsors', data.data)
-        }
-      } else if (data.model === 'Team') {
-        if (data.partition === 'full') {
-          commit('setTeams', data.data)
-        }
+    return new Promise((resolve, reject) => {
+      const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/main/`)
+      socket.onopen = () => {
+        commit('setConnected', true)
+        dispatch('getInitialData')
+        resolve(socket)
       }
-    }
-
-    commit('setSocket', socket)
+      socket.onmessage = (event) => {
+        handleMessage(event, commit)
+      }
+      socket.onerror = error => reject(error)
+      commit('setSocket', socket)
+    })
   },
 
   disconnect ({ state }) {

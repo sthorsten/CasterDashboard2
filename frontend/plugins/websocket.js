@@ -9,17 +9,17 @@ export default ({ app, store, route }, inject) => {
 
     if (!fromDashboard && toDashboard) {
       await store.dispatch('coreSocket/connect')
-      store.dispatch('mainSocket/connect')
+      await store.dispatch('mainSocket/connect')
     } else if (!toDashboard && store.state.coreSocket.connected) {
       store.dispatch('coreSocket/disconnect')
       store.dispatch('mainSocket/disconnect')
     }
 
-    if (!fromMatch && toMatch) {
-      if (to.params.matchID) {
-        store.dispatch('matchSocket/connect', to.params.matchID)
+    if (toMatch) {
+      if (from.params.matchID !== to.params.matchID) {
+        await store.dispatch('matchSocket/connect', to.params.matchID)
       } else {
-        store.dispatch('matchSocket/connect')
+        await store.dispatch('matchSocket/connect')
       }
     } else if (!toMatch && store.state.matchSocket.connected) {
       store.dispatch('matchSocket/disconnect')

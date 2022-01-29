@@ -1,3 +1,5 @@
+import handleMessage from '../helper/coreSocketMessageHandler'
+
 export const state = () => ({
   socket: null,
   connected: false,
@@ -15,6 +17,7 @@ export const mutations = {
   setConnected (state, connected) {
     state.connected = connected
   },
+
   setNotifications (state, notifications) {
     state.notifications = notifications
   },
@@ -29,6 +32,27 @@ export const mutations = {
   },
   setOperators (state, operators) {
     state.operators = operators
+  },
+
+  updateNotification (state, notification) {
+    const listElem = state.notifications.findIndex(n => n.id === notification.id)
+    state.notifications[listElem] = notification
+  },
+  updateMapPool (state, mapPool) {
+    const listElem = state.mapPools.findIndex(m => m.id === mapPool.id)
+    state.mapPools[listElem] = mapPool
+  },
+  updateMap (state, map) {
+    const listElem = state.maps.findIndex(m => m.id === map.id)
+    state.maps[listElem] = map
+  },
+  updateBombSpot (state, bombSpot) {
+    const listElem = state.bombSpots.findIndex(b => b.id === bombSpot.id)
+    state.bombSpots[listElem] = bombSpot
+  },
+  updateOperator (state, operator) {
+    const listElem = state.operators.findIndex(o => o.id === operator.id)
+    state.operators[listElem] = operator
   }
 }
 
@@ -52,54 +76,20 @@ export const getters = {
 }
 
 export const actions = {
-  connect ({ commit, dispatch }) {
+  connect ({ commit, dispatch, state }) {
     return new Promise((resolve, reject) => {
       const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/core/`)
       socket.onopen = () => {
         commit('setConnected', true)
+        dispatch('getInitialData')
         resolve(socket)
       }
-      socket.onerror = error => reject(error)
-    })
-
-    /*
-    const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/core/`)
-    socket.onopen = () => {
-      commit('setConnected', true)
-      dispatch('getInitialData')
-    }
-    socket.onclose = () => {
-      commit('setConnected', false)
-      commit('setSocket', null)
-    }
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.model === 'Notification') {
-        if (data.partition === 'full') {
-          commit('setNotifications', data.data)
-        }
-      } else if (data.model === 'MapPool') {
-        if (data.partition === 'full') {
-          commit('setMapPools', data.data)
-        }
-      } else if (data.model === 'Map') {
-        if (data.partition === 'full') {
-          commit('setMaps', data.data)
-        }
-      } else if (data.model === 'BombSpot') {
-        if (data.partition === 'full') {
-          commit('setBombSpots', data.data)
-        }
-      } else if (data.model === 'Operator') {
-        if (data.partition === 'full') {
-          commit('setOperators', data.data)
-        }
+      socket.onmessage = (event) => {
+        handleMessage(event, commit, state)
       }
-    }
-
-    commit('setSocket', socket)
-    */
+      socket.onerror = error => reject(error)
+      commit('setSocket', socket)
+    })
   },
 
   disconnect ({ state }) {

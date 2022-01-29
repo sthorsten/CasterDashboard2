@@ -1,3 +1,5 @@
+import handleMessage from '../helper/matchSocketMessageHandler'
+
 export const state = () => ({
   socket: null,
   connected: false,
@@ -15,6 +17,7 @@ export const mutations = {
   setConnected (state, connected) {
     state.connected = connected
   },
+
   setMatches (state, matches) {
     state.matches = matches
   },
@@ -29,6 +32,47 @@ export const mutations = {
   },
   setRounds (state, rounds) {
     state.rounds = rounds
+  },
+
+  updateMatch (state, match) {
+    const listElem = state.matches.findIndex(m => m.id === match.id)
+    if (listElem !== -1) {
+      state.matches[listElem] = match
+    } else {
+      state.matches.push(match)
+    }
+  },
+  updateMapBan (state, mapBan) {
+    const listElem = state.mapBans.findIndex(m => m.id === mapBan.id)
+    if (listElem !== -1) {
+      state.mapBans[listElem] = mapBan
+    } else {
+      state.mapBans.push(mapBan)
+    }
+  },
+  updateMatchMap (state, matchMap) {
+    const listElem = state.matchMaps.findIndex(m => m.id === matchMap.id)
+    if (listElem !== -1) {
+      state.matchMaps[listElem] = matchMap
+    } else {
+      state.matchMaps.push(matchMap)
+    }
+  },
+  updateOperatorBan (state, operatorBan) {
+    const listElem = state.operatorBans.findIndex(o => o.id === operatorBan.id)
+    if (listElem !== -1) {
+      state.operatorBans[listElem] = operatorBan
+    } else {
+      state.operatorBans.push(operatorBan)
+    }
+  },
+  updateRound (state, round) {
+    const listElem = state.rounds.findIndex(r => r.id === round.id)
+    if (listElem !== -1) {
+      state.rounds[listElem] = round
+    } else {
+      state.rounds.push(round)
+    }
   }
 }
 
@@ -56,45 +100,26 @@ export const getters = {
 
 export const actions = {
   connect ({ commit, dispatch }, matchID) {
-    const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/match/`)
-    socket.onopen = () => {
-      commit('setConnected', true)
-      dispatch('getInitialData')
-      if (matchID) {
-        dispatch('getMatchMaps', matchID)
+    return new Promise((resolve, reject) => {
+      const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/match/`)
+      socket.onopen = () => {
+        commit('setConnected', true)
+        dispatch('getInitialData')
+        if (matchID) {
+          dispatch('getMatchMaps', matchID)
+        }
+        resolve(socket)
       }
-    }
-    socket.onclose = () => {
-      commit('setConnected', false)
-      commit('setSocket', null)
-    }
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.model === 'Match') {
-        if (data.partition === 'full') {
-          commit('setMatches', data.data)
-        }
-      } else if (data.model === 'MapBan') {
-        if (data.partition === 'full') {
-          commit('setMapBans', data.data)
-        }
-      } else if (data.model === 'MatchMap') {
-        if (data.partition === 'full') {
-          commit('setMatchMaps', data.data)
-        }
-      } else if (data.model === 'OperatorBan') {
-        if (data.partition === 'full') {
-          commit('setOperatorBans', data.data)
-        }
-      } else if (data.model === 'Round') {
-        if (data.partition === 'full') {
-          commit('setRounds', data.data)
-        }
+      socket.onmessage = (event) => {
+        handleMessage(event, commit)
       }
-    }
-
-    commit('setSocket', socket)
+      socket.onerror = error => reject(error)
+      socket.onclose = () => {
+        commit('setConnected', false)
+        commit('setSocket', null)
+      }
+      commit('setSocket', socket)
+    })
   },
 
   disconnect ({ state }) {
@@ -106,28 +131,8 @@ export const actions = {
       method: 'get',
       model: 'Match'
     }
-    // const mapBans = {
-    //   method: 'get',
-    //   model: 'MapBan'
-    // }
-    // const matchMaps = {
-    //   method: 'get',
-    //   model: 'MatchMap'
-    // }
-    // const operatorBans = {
-    //   method: 'get',
-    //   model: 'OperatorBan'
-    // }
-    // const rounds = {
-    //   method: 'get',
-    //   model: 'Round'
-    // }
 
     state.socket.send(JSON.stringify(matches))
-    // state.socket.send(JSON.stringify(mapBans))
-    // state.socket.send(JSON.stringify(matchMaps))
-    // state.socket.send(JSON.stringify(operatorBans))
-    // state.socket.send(JSON.stringify(rounds))
   },
 
   getMatchMaps ({ state }, matchID) {
@@ -145,8 +150,24 @@ export const actions = {
         match: matchID
       }
     }
+    const operatorBans = {
+      method: 'get',
+      model: 'OperatorBan',
+      query: {
+        matchMap__match: matchID
+      }
+    }
+    const rounds = {
+      method: 'get',
+      model: 'Round',
+      query: {
+        matchMap__match: matchID
+      }
+    }
 
     state.socket.send(JSON.stringify(mapBans))
     state.socket.send(JSON.stringify(matchMaps))
+    state.socket.send(JSON.stringify(operatorBans))
+    state.socket.send(JSON.stringify(rounds))
   }
 }
