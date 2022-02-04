@@ -7,7 +7,145 @@
     />
     <ContentContainer v-if="match">
       <b-container fluid>
-        Status: <MatchStatusBadge :status="match.status" />
+        <b-row>
+          <!-- Left -->
+          <b-col cols="6">
+            <CustomCard title="Match Info">
+              <b-table-simple striped small>
+                <b-tbody>
+                  <b-tr>
+                    <b-th colspan="2" class="bg-primary">
+                      Base Information
+                    </b-th>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Match ID</b-th>
+                    <b-td class="text-right">
+                      <b-badge class="bg-primary" pill>
+                        {{ match.id }}
+                      </b-badge>
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Match Status</b-th>
+                    <b-td class="text-right">
+                      <MatchStatusBadge :status="match.status" />
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Date</b-th>
+                    <b-td class="text-right">
+                      {{ match.date }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th colspan="2" class="bg-primary">
+                      Match Details
+                    </b-th>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>League</b-th>
+                    <b-td class="text-right">
+                      <img :src="leagueLogo" width="20" height="20" alt="League Logo">
+                      {{ match.leagueName }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Season</b-th>
+                    <b-td class="text-right">
+                      {{ $store.getters['mainSocket/getSeasonByPlaydayID'](match.playday).name }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Playday</b-th>
+                    <b-td class="text-right">
+                      {{ match.playdayName }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Teams</b-th>
+                    <b-td class="text-right">
+                      <img :src="teamLogo(match.teamBlue)" width="20" height="20" alt="Team Blue Logo">
+                      {{ match.teamBlueName }} <b>vs.</b> {{ match.teamOrangeName }}
+                      <img :src="teamLogo(match.teamOrange)" width="20" height="20" alt="Team Orange Logo">
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th colspan="2" class="bg-primary">
+                      Match Result
+                    </b-th>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Score</b-th>
+                    <b-td class="text-right">
+                      {{ match.scoreBlue }} - {{ match.scoreOrange }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Winner</b-th>
+                    <b-td class="text-right">
+                      {{ match.winTeam ? match.winTeamName : '-' }}
+                    </b-td>
+                  </b-tr>
+
+                  <b-tr>
+                    <b-th>Win type</b-th>
+                    <b-td class="text-right">
+                      <MatchWinTypeBadge :status="match.winType" />
+                    </b-td>
+                  </b-tr>
+                </b-tbody>
+              </b-table-simple>
+            </CustomCard>
+          </b-col>
+
+          <!-- Right -->
+          <b-col cols="6">
+            <CustomCard title="Match Actions" color="info">
+              <b-container fluid>
+                <b-btn variant="primary" block disabled>
+                  Set Match to overlays
+                </b-btn>
+                <b-btn variant="primary" block disabled>
+                  Set Match as <b>next match</b> to overlays
+                </b-btn>
+
+                <hr class="border-secondary">
+
+                <b-btn variant="primary" block @click="$router.push(`/dashboard/matches/${match.id}/mapban`)">
+                  Continue to Map Pick & Ban
+                </b-btn>
+                <b-btn variant="primary" block disabled>
+                  Show match details
+                </b-btn>
+
+                <hr class="border-secondary">
+
+                <b-btn variant="danger" block disabled>
+                  Edit match
+                </b-btn>
+                <b-btn variant="danger" block disabled>
+                  Delete match
+                </b-btn>
+              </b-container>
+            </customcard>
+          </b-col>
+        </b-row>
+      </b-container>
+      </CustomCard>
+      </b-col>
+      </b-row>
       </b-container>
     </ContentContainer>
   </div>
@@ -18,6 +156,13 @@ export default {
   name: 'MatchOverview',
   layout: 'match-page',
 
+  data () {
+    return {
+      edit: false,
+      text: 'test'
+    }
+  },
+
   computed: {
     match () {
       try {
@@ -26,6 +171,19 @@ export default {
       } catch {
         return null
       }
+    },
+
+    leagueLogo () {
+      return this.$store.getters['mainSocket/getLeagueLogo'](this.match.league, true)
+    }
+  },
+
+  methods: {
+    test (value) {
+      this.text = value
+    },
+    teamLogo (id) {
+      return this.$store.getters['mainSocket/getTeamLogo'](id, true)
     }
   }
 

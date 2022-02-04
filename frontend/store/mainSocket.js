@@ -73,6 +73,11 @@ export const getters = {
   getLeague: state => (id) => {
     return state.leagues.filter(l => l.id === id)[0]
   },
+  getLeagueLogo: (_, getters) => (id, small) => {
+    const league = getters.getLeague(id)
+    if (!league) { return '' }
+    return small ? league.logoSmall : league.logo
+  },
   getSeason: state => (id) => {
     return state.seasons.filter(s => s.id === id)[0]
   },
@@ -92,6 +97,11 @@ export const getters = {
   },
   getTeam: state => (id) => {
     return state.teams.filter(t => t.id === id)[0]
+  },
+  getTeamLogo: (_, getters) => (id, small) => {
+    const team = getters.getTeam(id)
+    if (!team) { return '' }
+    return small ? team.logoSmall : team.logo
   }
 }
 

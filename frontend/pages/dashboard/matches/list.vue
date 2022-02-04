@@ -22,8 +22,11 @@
                   <img :src="$store.getters['mainSocket/getTeam'](data.item.teamOrange).logoSmall " width="25" height="25" alt="Team Orange Logo">
                   {{ data.item.teamOrangeName }}
                 </template>
+                <template #cell(status)="data">
+                  <MatchStatusBadge :status="data.item.status" />
+                </template>
                 <template #cell(button)="data">
-                  <b-btn variant="primary" @click="$router.push(`/dashboard/matches/${data.item.id}/overview`)">
+                  <b-btn size="sm" variant="primary" @click="$router.push(`/dashboard/matches/${data.item.id}/overview`)">
                     <fa-icon icon="long-arrow-alt-right" />
                     Go to match
                   </b-btn>
@@ -69,6 +72,7 @@ export default {
           label: 'Team Orange'
         },
         'date',
+        'status',
         'button'
       ]
     }

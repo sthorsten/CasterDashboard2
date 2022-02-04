@@ -93,7 +93,8 @@ export default {
         'faBug',
         'faHeading',
         'faListOl',
-        'faLongArrowAltRight'
+        'faLongArrowAltRight',
+        'faSave'
       ],
       brands: [
         'faGithub'

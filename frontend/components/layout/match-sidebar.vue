@@ -92,14 +92,15 @@ export default {
           text: 'Match Details',
           link: `/dashboard/matches/${this.$route.params.matchID}/details`,
           icon: 'info-circle'
+        },
+        {
+          text: 'Map Pick & Ban',
+          link: `/dashboard/matches/${this.$route.params.matchID}/mapban`,
+          icon: 'map'
         }
       ],
       mapNavItems: [
-        {
-          text: 'Map Pick & Ban',
-          link: '/dashboard/matches/123',
-          icon: 'map'
-        },
+
         {
           text: 'Map Overview?',
           link: '/dashboard/matches/234',
