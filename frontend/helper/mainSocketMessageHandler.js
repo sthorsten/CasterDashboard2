@@ -38,4 +38,6 @@ export default function handleMessage (event, commit) {
       commit('updateTeam', data.data)
     }
   }
+
+  commit('setLastUpdate')
 }

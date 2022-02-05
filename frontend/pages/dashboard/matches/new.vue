@@ -93,19 +93,20 @@
                   </template>
 
                   <v-select
+                    :key="lastUpdate"
                     v-model="teamBlue"
                     :options="teams"
                     label="name"
                     class="mt-1"
                     placeholder="Select a team"
                   >
-                    <template #option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-1">
-                      {{ name }}
+                    <template #option="option">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-1">
+                      {{ option.name }}
                     </template>
-                    <template #selected-option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-2">
-                      {{ name }}
+                    <template #selected-option="option">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-2">
+                      {{ option.name }}
                     </template>
                   </v-select>
                 </b-form-group>
@@ -122,19 +123,20 @@
                   </template>
 
                   <v-select
+                    :key="lastUpdate"
                     v-model="teamOrange"
                     :options="teams"
                     label="name"
                     class="mt-1"
                     placeholder="Select a team"
                   >
-                    <template #option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-1">
-                      {{ name }}
+                    <template #option="option">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-1">
+                      {{ option.name }}
                     </template>
-                    <template #selected-option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-2">
-                      {{ name }}
+                    <template #selected-option="option">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-2">
+                      {{ option.name }}
                     </template>
                   </v-select>
                 </b-form-group>
@@ -238,6 +240,8 @@ export default {
 
   data () {
     return {
+      teamKey: 0,
+
       selectedLeague: null,
       selectedSeason: null,
       selectedPlayday: null,
@@ -252,6 +256,10 @@ export default {
   },
 
   computed: {
+    lastUpdate () {
+      return this.$store.state.mainSocket.lastUpdate
+    },
+
     leagues () {
       return this.$store.state.mainSocket.leagues
     },

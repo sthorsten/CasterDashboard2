@@ -3,6 +3,7 @@ import handleMessage from '../helper/mainSocketMessageHandler'
 export const state = () => ({
   socket: null,
   connected: false,
+  lastUpdate: null,
   leagues: [],
   seasons: [],
   playdays: [],
@@ -17,6 +18,9 @@ export const mutations = {
   },
   setConnected (state, connected) {
     state.connected = connected
+  },
+  setLastUpdate (state) {
+    state.lastUpdate = Date.now()
   },
 
   setLeagues (state, leagues) {
@@ -40,27 +44,51 @@ export const mutations = {
 
   updateLeague (state, league) {
     const listElem = state.leagues.findIndex(l => l.id === league.id)
-    state.leagues[listElem] = league
+    if (listElem !== -1) {
+      state.leagues[listElem] = league
+    } else {
+      state.leagues.push(league)
+    }
   },
   updateSeason (state, season) {
     const listElem = state.seasons.findIndex(s => s.id === season.id)
-    state.seasons[listElem] = season
+    if (listElem !== -1) {
+      state.seasons[listElem] = season
+    } else {
+      state.seasons.push(season)
+    }
   },
   updatePlayday (state, playday) {
     const listElem = state.playdays.findIndex(p => p.id === playday.id)
-    state.playdays[listElem] = playday
+    if (listElem !== -1) {
+      state.playdays[listElem] = playday
+    } else {
+      state.playdays.push(playday)
+    }
   },
   updateTournament (state, tournament) {
     const listElem = state.tournaments.findIndex(t => t.id === tournament.id)
-    state.tournaments[listElem] = tournament
+    if (listElem !== -1) {
+      state.tournaments[listElem] = tournament
+    } else {
+      state.tournaments.push(tournament)
+    }
   },
   updateSponsor (state, sponsor) {
     const listElem = state.sponsors.findIndex(s => s.id === sponsor.id)
-    state.sponsors[listElem] = sponsor
+    if (listElem !== -1) {
+      state.sponsors[listElem] = sponsor
+    } else {
+      state.sponsors.push(sponsor)
+    }
   },
   updateTeam (state, team) {
     const listElem = state.teams.findIndex(t => t.id === team.id)
-    state.teams[listElem] = team
+    if (listElem !== -1) {
+      state.teams[listElem] = team
+    } else {
+      state.teams.push(team)
+    }
   }
 
 }
