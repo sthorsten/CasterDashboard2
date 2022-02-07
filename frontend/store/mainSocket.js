@@ -3,7 +3,6 @@ import handleMessage from '../helper/mainSocketMessageHandler'
 export const state = () => ({
   socket: null,
   connected: false,
-  lastUpdate: null,
   leagues: [],
   seasons: [],
   playdays: [],
@@ -18,9 +17,6 @@ export const mutations = {
   },
   setConnected (state, connected) {
     state.connected = connected
-  },
-  setLastUpdate (state) {
-    state.lastUpdate = Date.now()
   },
 
   setLeagues (state, leagues) {
@@ -45,7 +41,10 @@ export const mutations = {
   updateLeague (state, league) {
     const listElem = state.leagues.findIndex(l => l.id === league.id)
     if (listElem !== -1) {
-      state.leagues[listElem] = league
+      // Copy array for reactivity
+      const newState = [...state.leagues]
+      newState[listElem] = league
+      state.leagues = newState
     } else {
       state.leagues.push(league)
     }
@@ -53,7 +52,10 @@ export const mutations = {
   updateSeason (state, season) {
     const listElem = state.seasons.findIndex(s => s.id === season.id)
     if (listElem !== -1) {
-      state.seasons[listElem] = season
+      // Copy array for reactivity
+      const newState = [...state.seasons]
+      newState[listElem] = season
+      state.seasons = newState
     } else {
       state.seasons.push(season)
     }
@@ -61,7 +63,10 @@ export const mutations = {
   updatePlayday (state, playday) {
     const listElem = state.playdays.findIndex(p => p.id === playday.id)
     if (listElem !== -1) {
-      state.playdays[listElem] = playday
+      // Copy array for reactivity
+      const newState = [...state.playdays]
+      newState[listElem] = playday
+      state.playdays = newState
     } else {
       state.playdays.push(playday)
     }
@@ -69,7 +74,10 @@ export const mutations = {
   updateTournament (state, tournament) {
     const listElem = state.tournaments.findIndex(t => t.id === tournament.id)
     if (listElem !== -1) {
-      state.tournaments[listElem] = tournament
+      // Copy array for reactivity
+      const newState = [...state.tournaments]
+      newState[listElem] = tournament
+      state.tournaments = newState
     } else {
       state.tournaments.push(tournament)
     }
@@ -77,7 +85,10 @@ export const mutations = {
   updateSponsor (state, sponsor) {
     const listElem = state.sponsors.findIndex(s => s.id === sponsor.id)
     if (listElem !== -1) {
-      state.sponsors[listElem] = sponsor
+      // Copy array for reactivity
+      const newState = [...state.sponsors]
+      newState[listElem] = sponsor
+      state.sponsors = newState
     } else {
       state.sponsors.push(sponsor)
     }
@@ -85,7 +96,10 @@ export const mutations = {
   updateTeam (state, team) {
     const listElem = state.teams.findIndex(t => t.id === team.id)
     if (listElem !== -1) {
-      state.teams[listElem] = team
+      // Copy array for reactivity
+      const newState = [...state.teams]
+      newState[listElem] = team
+      state.teams = newState
     } else {
       state.teams.push(team)
     }

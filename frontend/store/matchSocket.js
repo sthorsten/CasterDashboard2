@@ -3,6 +3,7 @@ import handleMessage from '../helper/matchSocketMessageHandler'
 export const state = () => ({
   socket: null,
   connected: false,
+  lastUpdate: null,
   matches: [],
   mapBans: [],
   matchMaps: [],
@@ -16,6 +17,9 @@ export const mutations = {
   },
   setConnected (state, connected) {
     state.connected = connected
+  },
+  setLastUpdate (state) {
+    state.lastUpdate = Date.now()
   },
 
   setMatches (state, matches) {
@@ -37,7 +41,10 @@ export const mutations = {
   updateMatch (state, match) {
     const listElem = state.matches.findIndex(m => m.id === match.id)
     if (listElem !== -1) {
-      state.matches[listElem] = match
+      // Copy array for reactivity
+      const newState = [...state.matches]
+      newState[listElem] = match
+      state.matches = newState
     } else {
       state.matches.push(match)
     }
@@ -82,7 +89,7 @@ export const getters = {
     return state.socket.readyState === 1
   },
   getMatch: state => (id) => {
-    return state.matches.filter(l => l.id === id)[0]
+    return state.matches.filter(m => m.id === id)[0]
   },
   getMapBansByMatch: state => (id) => {
     return state.mapBans.filter(s => s.match === id)[0]

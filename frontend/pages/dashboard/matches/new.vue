@@ -93,7 +93,6 @@
                   </template>
 
                   <v-select
-                    :key="lastUpdate"
                     v-model="teamBlue"
                     :options="teams"
                     label="name"
@@ -123,7 +122,6 @@
                   </template>
 
                   <v-select
-                    :key="lastUpdate"
                     v-model="teamOrange"
                     :options="teams"
                     label="name"
@@ -240,8 +238,6 @@ export default {
 
   data () {
     return {
-      teamKey: 0,
-
       selectedLeague: null,
       selectedSeason: null,
       selectedPlayday: null,
@@ -256,10 +252,6 @@ export default {
   },
 
   computed: {
-    lastUpdate () {
-      return this.$store.state.mainSocket.lastUpdate
-    },
-
     leagues () {
       return this.$store.state.mainSocket.leagues
     },
