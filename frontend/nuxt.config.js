@@ -22,6 +22,7 @@ export default {
   ],
 
   plugins: [
+    { src: '~/plugins/fontawesome', ssr: false },
     { src: '~/plugins/vue-select', ssr: false },
     { src: '~/plugins/websocket', ssr: false }
   ],
@@ -34,8 +35,7 @@ export default {
   ],
 
   buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/fontawesome'
+    '@nuxtjs/eslint-module'
   ],
 
   modules: [
@@ -60,48 +60,6 @@ export default {
   router: {
     middleware: ['auth'],
     linkActiveClass: 'active'
-  },
-
-  fontawesome: {
-    component: 'Fa',
-    suffix: true,
-    icons: {
-      solid: [
-        'faHome',
-        'faBars',
-        'faUserCircle',
-        'faChevronCircleRight',
-        'faHistory',
-        'faPlus',
-        'faDesktop',
-        'faPalette',
-        'faTrophy',
-        'faAward',
-        'faCalendarAlt',
-        'faCalendarDay',
-        'faUsers',
-        'faMoneyBillAlt',
-        'faUser',
-        'faLock',
-        'faPencilAlt',
-        'faInfoCircle',
-        'faListUl',
-        'faMap',
-        'faUsersSlash',
-        'faPlayCircle',
-        'faClipboardList',
-        'faBug',
-        'faHeading',
-        'faListOl',
-        'faLongArrowAltRight',
-        'faSave',
-        'faBan',
-        'faHandPointUp'
-      ],
-      brands: [
-        'faGithub'
-      ]
-    }
   },
 
   toast: {
