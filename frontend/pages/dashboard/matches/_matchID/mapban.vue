@@ -112,15 +112,18 @@
           <b-col cols="6">
             <CustomCard color="info" title="Map Ban Actions">
               <b-btn variant="danger" block>
+                <fa-icon icon="trash-can" />
                 Remove last map
               </b-btn>
               <b-btn variant="danger" block>
+                <fa-icon icon="trash-can" />
                 Remove all maps
               </b-btn>
 
               <hr class="border-secondary">
 
               <b-btn variant="primary" block>
+                <fa-icon icon="arrow-right" />
                 Continue to next map
                 <!-- ToDo: Add next map in text -->
               </b-btn>

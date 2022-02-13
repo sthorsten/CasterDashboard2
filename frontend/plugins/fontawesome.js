@@ -31,10 +31,12 @@ import {
   faBug,
   faHeading,
   faListOl,
-  faLongArrowAltRight,
   faSave,
   faBan,
-  faHandPointUp
+  faHandPointUp,
+  faArrowRight,
+  faArrowRightToBracket,
+  faTrashCan
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -65,10 +67,12 @@ library.add(faClipboardList)
 library.add(faBug)
 library.add(faHeading)
 library.add(faListOl)
-library.add(faLongArrowAltRight)
 library.add(faSave)
 library.add(faBan)
 library.add(faHandPointUp)
+library.add(faArrowRight)
+library.add(faArrowRightToBracket)
+library.add(faTrashCan)
 
 library.add(faGithub)
 

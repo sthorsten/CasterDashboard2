@@ -115,37 +115,39 @@
             <CustomCard title="Match Actions" color="info">
               <b-container fluid>
                 <b-btn variant="primary" block disabled>
+                  <fa-icon icon="arrow-right-to-bracket" />
                   Set Match to overlays
                 </b-btn>
                 <b-btn variant="primary" block disabled>
+                  <fa-icon icon="arrow-right-to-bracket" />
                   Set Match as <b>next match</b> to overlays
                 </b-btn>
 
                 <hr class="border-secondary">
 
                 <b-btn variant="primary" block @click="$router.push(`/dashboard/matches/${match.id}/mapban`)">
+                  <fa-icon icon="arrow-right" />
                   Continue to Map Pick & Ban
                 </b-btn>
                 <b-btn variant="primary" block disabled>
+                  <fa-icon icon="circle-info" />
                   Show match details
                 </b-btn>
 
                 <hr class="border-secondary">
 
                 <b-btn variant="danger" block disabled>
+                  <fa-icon icon="pencil-alt" />
                   Edit match
                 </b-btn>
                 <b-btn variant="danger" block disabled>
+                  <fa-icon icon="trash-can" />
                   Delete match
                 </b-btn>
               </b-container>
-            </customcard>
+            </CustomCard>
           </b-col>
         </b-row>
-      </b-container>
-      </CustomCard>
-      </b-col>
-      </b-row>
       </b-container>
     </ContentContainer>
   </div>

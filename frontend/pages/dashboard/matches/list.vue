@@ -27,7 +27,7 @@
                 </template>
                 <template #cell(button)="data">
                   <b-btn size="sm" variant="primary" @click="$router.push(`/dashboard/matches/${data.item.id}/overview`)">
-                    <fa-icon icon="long-arrow-alt-right" />
+                    <fa-icon icon="arrow-right" />
                     Go to match
                   </b-btn>
                 </template>
