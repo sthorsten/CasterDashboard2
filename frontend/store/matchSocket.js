@@ -92,16 +92,16 @@ export const getters = {
     return state.matches.filter(m => m.id === id)[0]
   },
   getMapBansByMatch: state => (id) => {
-    return state.mapBans.filter(s => s.match === id)[0]
+    return state.mapBans.filter(s => s.match === id)
   },
   getMatchMapsByMatch: state => (id) => {
-    return state.matchMaps.filter(p => p.match === id)[0]
+    return state.matchMaps.filter(p => p.match === id)
   },
   getOperatorBansByMatchMap: state => (id) => {
-    return state.operatorBans.filter(t => t.matchMap === id)[0]
+    return state.operatorBans.filter(t => t.matchMap === id)
   },
   getRoundsByMatchMap: state => (id) => {
-    return state.rounds.filter(s => s.matchMap === id)[0]
+    return state.rounds.filter(s => s.matchMap === id)
   }
 }
 

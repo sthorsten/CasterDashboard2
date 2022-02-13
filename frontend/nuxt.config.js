@@ -94,7 +94,9 @@ export default {
         'faHeading',
         'faListOl',
         'faLongArrowAltRight',
-        'faSave'
+        'faSave',
+        'faBan',
+        'faHandPointUp'
       ],
       brands: [
         'faGithub'

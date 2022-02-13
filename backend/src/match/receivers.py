@@ -13,31 +13,50 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(signals.post_save, sender=models.Match)
-def notification_post_save(instance, created, **kwargs):
+def match_post_save(instance, created, **kwargs):
     serialized_data = serializers.MatchSerializer(instance).data
     websocket.send_server_data("match", "Match", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.MapBan)
-def notification_post_save(instance, created, **kwargs):
+def mapBan_post_save(instance, created, **kwargs):
+    if created:
+        # Update match status
+        match = instance.match
+        match.status = 'MAP_BAN'
+        match.save()
+
+        # Create match map if type 'pick'
+        if instance.type == 'PICK':
+            # Get existing match maps
+            matchMaps = models.MatchMap.objects.filter(match=instance.match)            
+
+            matchMap = models.MatchMap(
+                match = instance.match,
+                map = instance.map,
+                order = len(matchMaps) + 1
+            )
+            matchMap.save()
+
+    # Send data via websocket
     serialized_data = serializers.MapBanSerializer(instance).data
     websocket.send_server_data("match", "MapBan", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.MatchMap)
-def notification_post_save(instance, created, **kwargs):
+def matchMap_post_save(instance, created, **kwargs):
     serialized_data = serializers.MatchMapSerializer(instance).data
     websocket.send_server_data("match", "MatchMap", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.OperatorBan)
-def notification_post_save(instance, created, **kwargs):
+def operatorBan_post_save(instance, created, **kwargs):
     serialized_data = serializers.OperatorBanSerializer(instance).data
     websocket.send_server_data("match", "OperatorBan", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.Round)
-def notification_post_save(instance, created, **kwargs):
+def round_post_save(instance, created, **kwargs):
     serialized_data = serializers.RoundSerializer(instance).data
     websocket.send_server_data("match", "Round", serialized_data)
 
