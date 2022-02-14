@@ -211,7 +211,7 @@ export default {
 
     nextMap () {
       if (!this.matchMaps) { return null }
-      return this.matchMaps.find(m => m.status === 'CREATED')
+      return this.matchMaps.find(m => m.status !== 'FINISHED')
     }
 
   },

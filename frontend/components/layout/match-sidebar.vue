@@ -44,7 +44,7 @@
             :nuxt-link="true"
           />
 
-          <template v-if="$route.params.mapName">
+          <template v-if="$route.params.matchID && $route.params.mapName">
             <li class="nav-header text-uppercase">
               {{ $route.params.mapName }}
             </li>
@@ -100,8 +100,13 @@ export default {
           link: `/dashboard/matches/${this.$route.params.matchID}/mapban`,
           icon: 'map'
         }
-      ],
-      mapNavItems: [
+      ]
+    }
+  },
+
+  computed: {
+    mapNavItems () {
+      return [
         {
           text: 'Map Overview',
           link: `/dashboard/matches/${this.$route.params.matchID}/map/${this.$route.params.mapName}/overview`,
