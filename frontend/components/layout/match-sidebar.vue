@@ -44,17 +44,19 @@
             :nuxt-link="true"
           />
 
-          <li class="nav-header text-uppercase">
-            Map Specific
-          </li>
-          <NavItem
-            v-for="item in mapNavItems"
-            :key="item.link"
-            :text="item.text"
-            :link="item.link"
-            :icon="item.icon"
-            :nuxt-link="true"
-          />
+          <template v-if="$route.params.mapName">
+            <li class="nav-header text-uppercase">
+              {{ $route.params.mapName }}
+            </li>
+            <NavItem
+              v-for="item in mapNavItems"
+              :key="item.link"
+              :text="item.text"
+              :link="item.link"
+              :icon="item.icon"
+              :nuxt-link="true"
+            />
+          </template>
         </ul>
       </nav>
     </div>
@@ -100,20 +102,19 @@ export default {
         }
       ],
       mapNavItems: [
-
         {
-          text: 'Map Overview?',
-          link: '/dashboard/matches/234',
+          text: 'Map Overview',
+          link: `/dashboard/matches/${this.$route.params.matchID}/map/${this.$route.params.mapName}/overview`,
           icon: 'map'
         },
         {
           text: 'Operator Bans',
-          link: '/dashboard/matches/456',
+          link: `/dashboard/matches/${this.$route.params.matchID}/map/${this.$route.params.mapName}/opbans`,
           icon: 'users-slash'
         },
         {
           text: 'Rounds',
-          link: '/dashboard/matches/789',
+          link: `/dashboard/matches/${this.$route.params.matchID}/map/${this.$route.params.mapName}/rounds`,
           icon: 'play-circle'
         }
       ]

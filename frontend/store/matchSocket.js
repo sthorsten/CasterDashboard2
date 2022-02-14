@@ -52,7 +52,10 @@ export const mutations = {
   updateMapBan (state, mapBan) {
     const listElem = state.mapBans.findIndex(m => m.id === mapBan.id)
     if (listElem !== -1) {
-      state.mapBans[listElem] = mapBan
+      // Copy array for reactivity
+      const newState = [...state.mapBans]
+      newState[listElem] = mapBan
+      state.mapBans = newState
     } else {
       state.mapBans.push(mapBan)
     }
@@ -60,23 +63,32 @@ export const mutations = {
   updateMatchMap (state, matchMap) {
     const listElem = state.matchMaps.findIndex(m => m.id === matchMap.id)
     if (listElem !== -1) {
-      state.matchMaps[listElem] = matchMap
+      // Copy array for reactivity
+      const newState = [...state.matchMaps]
+      newState[listElem] = matchMap
+      state.matchMaps = newState
     } else {
       state.matchMaps.push(matchMap)
     }
   },
   updateOperatorBan (state, operatorBan) {
-    const listElem = state.operatorBans.findIndex(o => o.id === operatorBan.id)
+    const listElem = state.operatorBans.findIndex(m => m.id === operatorBan.id)
     if (listElem !== -1) {
-      state.operatorBans[listElem] = operatorBan
+      // Copy array for reactivity
+      const newState = [...state.operatorBans]
+      newState[listElem] = operatorBan
+      state.operatorBans = newState
     } else {
       state.operatorBans.push(operatorBan)
     }
   },
   updateRound (state, round) {
-    const listElem = state.rounds.findIndex(r => r.id === round.id)
+    const listElem = state.rounds.findIndex(m => m.id === round.id)
     if (listElem !== -1) {
-      state.rounds[listElem] = round
+      // Copy array for reactivity
+      const newState = [...state.rounds]
+      newState[listElem] = round
+      state.rounds = newState
     } else {
       state.rounds.push(round)
     }

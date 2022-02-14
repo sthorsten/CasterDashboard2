@@ -102,7 +102,7 @@
                   <b-tr>
                     <b-th>Win type</b-th>
                     <b-td class="text-right">
-                      <MatchWinTypeBadge :status="match.winType" />
+                      <WintypeBadge :status="match.winType" />
                     </b-td>
                   </b-tr>
                 </b-tbody>

@@ -122,9 +122,12 @@
 
               <hr class="border-secondary">
 
-              <b-btn variant="primary" block>
+              <b-btn variant="primary" block :disabled="!nextMap" @click="$router.push(`/dashboard/matches/${match.id}/map/${nextMap.mapName}/overview`)">
                 <fa-icon icon="arrow-right" />
                 Continue to next map
+                <template v-if="nextMap">
+                  ({{ nextMap.mapName }})
+                </template>
                 <!-- ToDo: Add next map in text -->
               </b-btn>
             </CustomCard>
@@ -175,7 +178,11 @@ export default {
     matchMaps () {
       try {
         const matchID = parseInt(this.$route.params.matchID)
-        return this.$store.getters['matchSocket/getMatchMapsByMatch'](matchID)
+        const matchMaps = this.$store.getters['matchSocket/getMatchMapsByMatch'](matchID)
+        matchMaps.sort((e1, e2) => {
+          return e1.order > e2.order ? 1 : -1
+        })
+        return matchMaps
       } catch {
         return null
       }
@@ -200,6 +207,11 @@ export default {
         mapBans[m.map] = m
       })
       return mapBans
+    },
+
+    nextMap () {
+      if (!this.matchMaps) { return null }
+      return this.matchMaps.find(m => m.status === 'CREATED')
     }
 
   },

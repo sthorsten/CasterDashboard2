@@ -7,20 +7,32 @@
 
       <template v-if="status === 'BLUE_WIN'">
         <b-badge variant="primary" pill>
-          Map Ban
+          Blue Win
+        </b-badge>
+      </template>
+
+      <template v-if="status === 'BLUE_OT_WIN'">
+        <b-badge variant="primary" pill>
+          Blue Overtime Win
         </b-badge>
       </template>
 
       <template v-if="status === 'ORANGE_WIN'">
         <b-badge class="bg-orange" pill>
-          Map Ban
+          Orange Win
         </b-badge>
       </template>
 
-      <template v-if="status === 'DRAW'">
-        <b-badge variant="warning" pill>
-          Draw
+      <template v-if="status === 'BLUE_OT_WIN'">
+        <b-badge variant="primary" pill>
+          Orange Overtime Win
         </b-badge>
+
+        <template v-if="status === 'DRAW'">
+          <b-badge variant="warning" pill>
+            Draw
+          </b-badge>
+        </template>
       </template>
     </template>
   </div>
@@ -28,7 +40,7 @@
 
 <script>
 export default {
-  name: 'MatchWinTypeBadge',
+  name: 'WinTypeBadge',
 
   props: {
     status: {

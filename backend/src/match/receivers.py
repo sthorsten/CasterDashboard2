@@ -29,12 +29,12 @@ def mapBan_post_save(instance, created, **kwargs):
         # Create match map if type 'pick'
         if instance.type == 'PICK':
             # Get existing match maps
-            matchMaps = models.MatchMap.objects.filter(match=instance.match)            
+            matchMaps = models.MatchMap.objects.filter(match=instance.match)
 
             matchMap = models.MatchMap(
-                match = instance.match,
-                map = instance.map,
-                order = len(matchMaps) + 1
+                match=instance.match,
+                map=instance.map,
+                order=len(matchMaps) + 1
             )
             matchMap.save()
 
@@ -45,6 +45,25 @@ def mapBan_post_save(instance, created, **kwargs):
 
 @receiver(signals.post_save, sender=models.MatchMap)
 def matchMap_post_save(instance, created, **kwargs):
+    if hasattr(instance, '_dirty'):
+        return
+
+    if instance.atkTeam or instance.otAtkTeam:
+        # Update match status
+        match = instance.match
+        match.status = 'PLAYING'
+        match.save()
+
+        # Update own status
+        instance.status = 'PREPARING'
+
+    try:
+        instance._dirty = True  # pylint: disable=protected-access
+        instance.save()
+    finally:
+        del instance._dirty        
+
+    # Send data via websocket
     serialized_data = serializers.MatchMapSerializer(instance).data
     websocket.send_server_data("match", "MatchMap", serialized_data)
 
