@@ -236,14 +236,6 @@ export default {
         return null
       }
     },
-    mapBans () {
-      try {
-        const matchID = parseInt(this.$route.params.matchID)
-        return this.$store.getters['matchSocket/getMapBansByMatch'](matchID)
-      } catch {
-        return null
-      }
-    },
     matchMaps () {
       try {
         const matchID = parseInt(this.$route.params.matchID)
