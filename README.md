@@ -1,6 +1,7 @@
 # R6 Caster Dashboard
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsthorsten%2FCasterDashboard2.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsthorsten%2FCasterDashboard2?ref=badge_shield)
+
 ![Docker](https://github.com/sthorsten/CasterDashboard2/workflows/Docker/badge.svg)
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
@@ -91,3 +92,6 @@ Current Version: 2.0.0-alpha5
 **Note:** This release is not ready for production yet!
 
 See the full [Changelog](CHANGELOG.md) for further information.
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsthorsten%2FCasterDashboard2.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsthorsten%2FCasterDashboard2?ref=badge_large)
