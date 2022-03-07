@@ -4,6 +4,7 @@
 
 import os
 from datetime import timedelta
+from tkinter import ALL
 from django.core.exceptions import ImproperlyConfigured
 import environ
 
@@ -28,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'channels',
+    'corsheaders',
     'core.apps.CoreConfig',
     'dashboard.apps.DashboardConfig',
     'main.apps.MainConfig',
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -198,6 +201,11 @@ CSRF_TRUSTED_ORIGINS = []
 for host in ALLOWED_HOSTS:
     CSRF_TRUSTED_ORIGINS.append(f"http://{host}")
     CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
+
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
+
+if MODE == 'development':
+    CORS_ALLOW_ALL_ORIGINS = True
 
 # endregion
 
