@@ -67,6 +67,8 @@ class OperatorBanSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     operatorName = serializers.StringRelatedField(
         source='operator', read_only=True)
+    operatorIdentifier = serializers.StringRelatedField(
+        source='operator.identifier', read_only=True)
     teamName = serializers.StringRelatedField(
         source='team', read_only=True)
 

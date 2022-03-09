@@ -49,8 +49,20 @@ def matchMap_post_save(instance, created, **kwargs):
         return
 
     if instance.atkTeam or instance.otAtkTeam:
-        # Update match status
         match = instance.match
+
+        # Update def team
+        if instance.atkTeam == match.teamBlue:
+            instance.defTeam = match.teamOrange
+        elif instance.atkTeam == match.teamOrange:
+            instance.defTeam = match.teamBlue    
+
+        if instance.otAtkTeam == match.teamBlue:
+            instance.otDefTeam = match.teamOrange
+        elif instance.otAtkTeam == match.teamOrange:
+            instance.otDefTeam = match.teamBlue
+
+        # Update match status        
         match.status = 'PLAYING'
         match.save()
 
