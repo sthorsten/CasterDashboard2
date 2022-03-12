@@ -36,7 +36,8 @@ import {
   faHandPointUp,
   faArrowRight,
   faArrowRightToBracket,
-  faTrashCan
+  faTrashCan,
+faCheckCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -73,6 +74,7 @@ library.add(faHandPointUp)
 library.add(faArrowRight)
 library.add(faArrowRightToBracket)
 library.add(faTrashCan)
+library.add(faCheckCircle)
 
 library.add(faGithub)
 

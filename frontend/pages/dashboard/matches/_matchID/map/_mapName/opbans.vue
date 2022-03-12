@@ -62,11 +62,11 @@
             <b-row>
               <b-col>
                 <CustomCard color="info" title="Operator Ban Actions">
-                  <b-btn variant="danger" block>
-                    <fa-icon icon="trash-can" />Remove last operator ban
+                  <b-btn variant="danger" block disabled>
+                    <fa-icon icon="trash-can" class="mr-1" />Remove last operator ban
                   </b-btn>
-                  <b-btn variant="danger" block>
-                    <fa-icon icon="trash-can" />Remove all operator bans
+                  <b-btn variant="danger" block disabled>
+                    <fa-icon icon="trash-can" class="mr-1" />Remove all operator bans
                   </b-btn>
 
                   <hr class="border-secondary" />
@@ -76,7 +76,7 @@
                     block
                     @click="$router.push(`/dashboard/matches/${match.id}/map/${matchMap.mapName}/rounds`)"
                   >
-                    <fa-icon icon="arrow-right" />Continue to rounds
+                    <fa-icon icon="arrow-right" class="mr-1" />Continue to rounds
                   </b-btn>
                 </CustomCard>
               </b-col>

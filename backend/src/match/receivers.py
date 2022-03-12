@@ -55,25 +55,26 @@ def matchMap_post_save(instance, created, **kwargs):
         if instance.atkTeam == match.teamBlue:
             instance.defTeam = match.teamOrange
         elif instance.atkTeam == match.teamOrange:
-            instance.defTeam = match.teamBlue    
+            instance.defTeam = match.teamBlue
 
         if instance.otAtkTeam == match.teamBlue:
             instance.otDefTeam = match.teamOrange
         elif instance.otAtkTeam == match.teamOrange:
             instance.otDefTeam = match.teamBlue
 
-        # Update match status        
+        # Update match status
         match.status = 'PLAYING'
         match.save()
 
         # Update own status
-        instance.status = 'PREPARING'
+        if instance.status == 'CREATED':
+            instance.status = 'PREPARING'
 
     try:
         instance._dirty = True  # pylint: disable=protected-access
         instance.save()
     finally:
-        del instance._dirty        
+        del instance._dirty
 
     # Send data via websocket
     serialized_data = serializers.MatchMapSerializer(instance).data
@@ -82,12 +83,42 @@ def matchMap_post_save(instance, created, **kwargs):
 
 @receiver(signals.post_save, sender=models.OperatorBan)
 def operatorBan_post_save(instance, created, **kwargs):
+    # Set match map state
+    matchMap = instance.matchMap
+    if matchMap.status == 'PREPARING':
+        matchMap.status = 'OPERATOR_BAN'
+        matchMap.save()
+
+    # Send data via websocket
     serialized_data = serializers.OperatorBanSerializer(instance).data
     websocket.send_server_data("match", "OperatorBan", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.Round)
 def round_post_save(instance, created, **kwargs):
+    matchMap = instance.matchMap
+    match = instance.matchMap.match
+
+    # Set match map state to playing
+    if matchMap.status == 'OPERATOR_BAN':
+        matchMap.status = 'PLAYING'
+        matchMap.save()
+
+    # Set match map score and possibly state to overtime
+    if matchMap.status == 'PLAYING':
+        # Set score
+        if instance.winTeam == match.teamBlue:
+            matchMap.scoreBlue = matchMap.scoreBlue + 1
+        elif instance.winTeam == match.teamOrange:
+            matchMap.scoreOrange = matchMap.scoreOrange + 1
+
+        # Set status to overtime
+        if (matchMap.scoreBlue + 1) >= 6 and (matchMap.scoreOrange + 1) >= 6:
+            matchMap.status = 'OVERTIME'
+
+        matchMap.save()
+
+    # Send data via websocket
     serialized_data = serializers.RoundSerializer(instance).data
     websocket.send_server_data("match", "Round", serialized_data)
 
