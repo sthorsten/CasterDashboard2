@@ -1,34 +1,34 @@
 <template>
   <div>
-    <template v-if="status === 'NONE'">
+    <template v-if="mapStatus === 'NONE'">
       <b-badge variant="secondary" pill>
         None
       </b-badge>
 
-      <template v-if="status === 'BLUE_WIN'">
+      <template v-if="mapStatus === 'BLUE_WIN'">
         <b-badge variant="primary" pill>
           Blue Win
         </b-badge>
       </template>
 
-      <template v-if="status === 'BLUE_OT_WIN'">
+      <template v-if="mapStatus === 'BLUE_OT_WIN'">
         <b-badge variant="primary" pill>
           Blue Overtime Win
         </b-badge>
       </template>
 
-      <template v-if="status === 'ORANGE_WIN'">
+      <template v-if="mapStatus === 'ORANGE_WIN'">
         <b-badge class="bg-orange" pill>
           Orange Win
         </b-badge>
       </template>
 
-      <template v-if="status === 'BLUE_OT_WIN'">
+      <template v-if="mapStatus === 'BLUE_OT_WIN'">
         <b-badge variant="primary" pill>
           Orange Overtime Win
         </b-badge>
 
-        <template v-if="status === 'DRAW'">
+        <template v-if="mapStatus === 'DRAW'">
           <b-badge variant="warning" pill>
             Draw
           </b-badge>
@@ -43,7 +43,7 @@ export default {
   name: 'WinTypeBadge',
 
   props: {
-    status: {
+    mapStatus: {
       type: String,
       default: ''
     }

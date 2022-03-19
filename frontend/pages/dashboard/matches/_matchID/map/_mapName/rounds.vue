@@ -155,7 +155,7 @@
           <!-- Round Actions -->
           <b-col cols="6">
             <CustomCard title="Round Actions" color="info">
-              <b-btn variant="primary" block :disabled="!roundDetailsOK">
+              <b-btn variant="primary" block :disabled="!roundDetailsOK" @click="addRound">
                 <fa-icon icon="plus" class="mr-1" />Add round
               </b-btn>
 
@@ -170,7 +170,7 @@
 
               <hr class="border-secondary" />
 
-              <b-btn variant="success" block>
+              <b-btn variant="success" block @click="finishMap">
                 <fa-icon icon="circle-check" class="mr-1" />Finish map
               </b-btn>
             </CustomCard>
@@ -212,9 +212,7 @@
         <b-row>
           <b-col cols="12">
             <CustomCard title="Round Details" color="success">
-              <b-row>
-                <b-col cols="12"></b-col>
-              </b-row>
+              <RoundTable :match-map-id="matchMap.id" />
             </CustomCard>
           </b-col>
         </b-row>
@@ -231,6 +229,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Rounds",
   layout: "match-page",
@@ -241,7 +240,9 @@ export default {
       selectedOFTeam: -1,
       selectedWinTeam: -1,
       selectedWinType: null,
-      notes: ''
+      notes: '',
+
+      boxTwo: ''
     }
   },
 
@@ -282,6 +283,65 @@ export default {
   },
 
   methods: {
+    async addRound() {
+      const data = {
+        matchMap: this.matchMap.id,
+        winTeam: this.selectedWinTeam,
+        openingFragTeam: this.selectedOFTeam > -1 ? this.selectedOFTeam : null,
+        bombSpot: this.selectedBombspot,
+        winType: this.selectedWinType,
+        notes: this.notes
+      }
+
+      try {
+        await this.$axios.$post('/api/v2/match/round/', data)
+      } catch (e) {
+        console.error(e)
+        return
+      }
+
+      // Reset values
+      this.selectedBombspot = -1
+      this.selectedOFTeam = -1
+      this.selectedWinTeam = -1
+      this.selectedWinType = null
+      this.notes = ''
+    },
+
+    async finishMap() {
+      try {
+        await this.$axios.$patch('/api/v2/match/matchmap/' + this.matchMap.id + '/', {
+          status: 'FINISHED'
+        })
+      } catch (e) {
+        console.log(e)
+        return
+      }
+
+      // Redirect to next map or match overview page
+
+      // Match is BO1 or last map
+      if (this.match.bestOf === 1 || this.matchMap.order === this.match.bestOf) {
+        this.$router.push(`/dashboard/matches/${this.match.id}/overview`)
+        return
+      }
+
+      const nextMap = this.matchMaps.find(m => m.order === (this.matchMap.order + 1))
+
+      // BO2: Go to map 2 regardless of score
+      if (this.match.bestOf === 2) {
+        this.$router.push(`/dashboard/matches/${this.match.id}/map/${nextMap.mapName}/overview`)
+        return
+      }
+      // Match finished when score of one team > half of the maps to be played (e.g. 2:0 in BO3 or 3:0 in BO5)
+      if (this.match.scoreBlue > Math.floor(this.match.bestOf / 2) || this.match.scoreOrange > Math.floor(this.match.bestOf / 2)) {
+        this.$router.push(`/dashboard/matches/${this.match.id}/overview`)
+      }
+      // Go to next map
+      else {
+        this.$router.push(`/dashboard/matches/${this.match.id}/map/${nextMap.mapName}/overview`)
+      }
+    }
   }
 }
 </script>

@@ -40,7 +40,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 @permission_classes([AllowAny])
 def version(request):
     current_version = Path(os.path.join(
-        django_settings.BASE_DIR, "VERSION")).read_text()
+        django_settings.BASE_DIR, "..", "VERSION")).read_text()
     return Response({'version': current_version})
 
 

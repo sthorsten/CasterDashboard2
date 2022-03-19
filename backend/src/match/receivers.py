@@ -48,8 +48,9 @@ def matchMap_post_save(instance, created, **kwargs):
     if hasattr(instance, '_dirty'):
         return
 
+    match = instance.match
+
     if instance.atkTeam or instance.otAtkTeam:
-        match = instance.match
 
         # Update def team
         if instance.atkTeam == match.teamBlue:
@@ -69,6 +70,35 @@ def matchMap_post_save(instance, created, **kwargs):
         # Update own status
         if instance.status == 'CREATED':
             instance.status = 'PREPARING'
+
+    # Map finished
+    if instance.status == 'FINISHED':
+
+        # Set match map score & win type & match score
+        if instance.scoreBlue == instance.scoreOrange:
+            instance.winType = 'DRAW'
+
+        elif instance.scoreBlue > 7 or instance.scoreOrange > 7:
+            if instance.scoreBlue > instance.scoreOrange:
+                instance.winTeam = match.teamBlue
+                instance.winType = 'BLUE_OT_WIN'
+                match.scoreBlue = match.scoreBlue + 1
+            else:
+                instance.winTeam = match.teamOrange
+                instance.winType = 'ORANGE_OT_WIN'
+                match.scoreOrange = match.scoreOrange + 1
+
+        else:
+            if instance.scoreBlue > instance.scoreOrange:
+                instance.winTeam = match.teamBlue
+                instance.winType = 'BLUE_WIN'
+                match.scoreBlue = match.scoreBlue + 1
+            else:
+                instance.winTeam = match.teamOrange
+                instance.winType = 'ORANGE_WIN'
+                match.scoreOrange = match.scoreOrange + 1
+
+        match.save()
 
     try:
         instance._dirty = True  # pylint: disable=protected-access
@@ -96,6 +126,9 @@ def operatorBan_post_save(instance, created, **kwargs):
 
 @receiver(signals.post_save, sender=models.Round)
 def round_post_save(instance, created, **kwargs):
+    if hasattr(instance, '_dirty'):
+        return
+
     matchMap = instance.matchMap
     match = instance.matchMap.match
 
@@ -117,6 +150,17 @@ def round_post_save(instance, created, **kwargs):
             matchMap.status = 'OVERTIME'
 
         matchMap.save()
+
+    # Set round no
+    allRounds = models.Round.objects.filter(matchMap=instance.matchMap)
+    # not len + 1 because we are in post_save here!
+    instance.roundNo = len(allRounds)
+
+    try:
+        instance._dirty = True  # pylint: disable=protected-access
+        instance.save()
+    finally:
+        del instance._dirty
 
     # Send data via websocket
     serialized_data = serializers.RoundSerializer(instance).data
