@@ -1,10 +1,13 @@
 .venv
 .vscode
 logs
-media
+media/leagues
+media/teams
 static
 
 .env
+.env.example
+.pylint
 dumb.rdb
 poetry.lock
 

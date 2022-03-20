@@ -8,6 +8,7 @@ RUN /root/.poetry/bin/poetry config virtualenvs.in-project true
 WORKDIR /backend
 COPY pyproject.toml .
 RUN /root/.poetry/bin/poetry install
-COPY src src
+
+# Copy project files
+COPY . .
 COPY .env.docker .env
-COPY docker-start.sh .
