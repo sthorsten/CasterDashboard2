@@ -317,7 +317,7 @@ export default {
 
       try {
         const matchData = await this.$axios.$post('/api/v2/match/match/', data)
-        this.$router.push(`/dashboard/matches/${matchData.id}`)
+        this.$router.push(`/dashboard/matches/${matchData.id}/overview`)
         this.$toast.success('Match created successfully')
       } catch {
         this.$toast.error('Failed to create match')

@@ -6,7 +6,7 @@
         <b-row>
           <b-col>
             <CustomCard title="Recent Matches">
-              <b-table striped small :items="matches" :fields="matchTableFields">
+              <b-table striped small :items="matches" :fields="matchTableFields" sort-by="id" :sort-desc="true">
                 <template #cell(leagueField)="data">
                   <img :src="$store.getters['mainSocket/getLeague'](data.item.league).logoSmall " width="25" height="25" alt="League Logo">
                   {{ data.item.leagueName }}

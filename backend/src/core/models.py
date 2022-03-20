@@ -54,6 +54,7 @@ class Map(models.Model):
     """Represents a map in Rainbow Six Siege"""
 
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='maps', null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.name)

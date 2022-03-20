@@ -224,7 +224,8 @@ export default {
 
     // Set next ban team if bans are present
     if (this.match && this.mapBans) {
-      const lastBan = this.mapBans.filter(m => m.order === this.mapBans.length)[0]
+      const lastBan = this.mapBans.find(m => m.order === this.mapBans.length)
+      if (!lastBan) return
       this.currentPickTeam = this.match.teamBlue === lastBan.team ? this.match.teamOrange : this.match.teamBlue
     }
   },

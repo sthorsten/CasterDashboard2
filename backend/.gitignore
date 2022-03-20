@@ -1,7 +1,8 @@
 .venv
 .vscode
 logs
-media
+media/*
+!media/maps
 static
 
 .env

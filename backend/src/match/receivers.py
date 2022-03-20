@@ -1,4 +1,5 @@
 import logging
+import math
 from django.db.models import signals
 from django.dispatch import receiver
 from util import websocket
@@ -14,6 +15,51 @@ logger = logging.getLogger(__name__)
 
 @receiver(signals.post_save, sender=models.Match)
 def match_post_save(instance, created, **kwargs):
+    if hasattr(instance, '_dirty'):
+        return
+
+    # Set win team & win type & status
+    if instance.bestOf == 1:
+        if instance.scoreBlue > instance.scoreOrange:
+            instance.winTeam = instance.teamBlue
+            instance.winType = 'BLUE_WIN'
+            instance.status = 'CLOSED'
+        elif instance.scoreOrange > instance.scoreBlue:
+            instance.winTeam = instance.teamOrange
+            instance.winType = 'ORANGE_WIN'
+            instance.status = 'CLOSED'
+
+    elif instance.bestOf == 2:
+        if instance.scoreBlue >= 2 and instance.scoreOrange < 2:
+            instance.winTeam = instance.teamBlue
+            instance.winType = 'BLUE_WIN'
+            instance.status = 'CLOSED'
+        elif instance.scoreOrange >= 2 and instance.scoreBlue < 2:
+            instance.winTeam = instance.teamOrange
+            instance.winType = 'ORANGE_WIN'
+            instance.status = 'CLOSED'
+        elif instance.scoreBlue == 1 and instance.scoreOrange == 1:
+            instance.winType = 'DRAW'
+            instance.status = 'CLOSED'
+
+    elif instance.bestOf >= 3:  # BO3 and BO5
+        # 2:0 or 2:1 for BO3 and 3:0 3:1 3:2 for BO5
+        if instance.scoreBlue > math.floor(instance.bestOf / 2) and instance.scoreBlue > instance.scoreOrange:
+            instance.winTeam = instance.teamBlue
+            instance.winType = 'BLUE_WIN'
+            instance.status = 'CLOSED'
+        elif instance.scoreOrange > math.floor(instance.bestOf / 2) and instance.scoreOrange > instance.scoreBlue:
+            instance.winTeam = instance.teamOrange
+            instance.winType = 'ORANGE_WIN'
+            instance.status = 'CLOSED'
+
+    try:
+        instance._dirty = True  # pylint: disable=protected-access
+        instance.save()
+    finally:
+        del instance._dirty
+
+    # Send data via websocket
     serialized_data = serializers.MatchSerializer(instance).data
     websocket.send_server_data("match", "Match", serialized_data)
 
