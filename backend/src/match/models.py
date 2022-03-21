@@ -101,7 +101,7 @@ class MapBan(models.Model):
     type = models.CharField(
         max_length=255, choices=TYPE_CHOICES, default="BAN")
     order = models.IntegerField(default=1, validators=[
-                                MinValueValidator(1), MaxValueValidator(7)])
+                                MinValueValidator(1), MaxValueValidator(9)])
     isDecider = models.BooleanField(
         default=False, help_text="Map is Decider Map or Default Ban?", verbose_name='is decider')
             

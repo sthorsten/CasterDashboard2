@@ -13,12 +13,9 @@
             <CustomCard title="Map Picks and Bans">
               <b-container fluid>
                 <!-- Map Pool -->
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="map" />
-                    Select Map Pool
+                    <fa-icon icon="map" />Select Map Pool
                   </template>
 
                   <v-select
@@ -29,16 +26,59 @@
                   />
                 </b-form-group>
 
-                <hr class="border-secondary">
+                <hr class="border-secondary" />
+
+                <!-- Map Pool -->
+                <b-form-group label-cols-lg="3">
+                  <template #label>
+                    <fa-icon icon="list-ol" />Select Map Count
+                  </template>
+
+                  <b-form-input v-model="mapCount" type="number" min="0" max="9" />
+                </b-form-group>
+
+                <hr class="border-secondary" />
 
                 <!-- Current pick team -->
                 <b-form-group>
                   <b-row>
-                    <b-col lg="3">
-                      <fa-icon icon="users" />
-                      Select next Team
+                    <b-col lg="3" class="d-flex align-items-center">
+                      <fa-icon icon="users" />Select next Team
                     </b-col>
 
+                    <b-col>
+                      <b-btn
+                        :variant="currentPickTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                        block
+                        @click="currentPickTeam = match.teamBlue"
+                      >
+                        <img
+                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                          height="20"
+                          width="20"
+                          alt="teamBlue logo"
+                        />
+                        {{ match.teamBlueName }}
+                      </b-btn>
+                    </b-col>
+
+                    <b-col>
+                      <b-btn
+                        :variant="currentPickTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                        block
+                        @click="currentPickTeam = match.teamOrange"
+                      >
+                        <img
+                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                          height="20"
+                          width="20"
+                          alt="teamOrange logo"
+                        />
+                        {{ match.teamOrangeName }}
+                      </b-btn>
+                    </b-col>
+
+                    <!--
                     <b-form-radio-group v-model="currentPickTeam">
                       <b-form-radio :value="match.teamBlue">
                         <img
@@ -59,10 +99,11 @@
                         {{ match.teamOrangeName }}
                       </b-form-radio>
                     </b-form-radio-group>
+                    -->
                   </b-row>
                 </b-form-group>
 
-                <hr class="border-secondary">
+                <hr class="border-secondary" />
 
                 <!-- Maps -->
                 <div v-if="selectedMapPool">
@@ -81,8 +122,7 @@
                           :disabled="currentPickTeam === -1 || !!mapBansByMap[map.id]"
                           @click="selectMap(map, 'BAN')"
                         >
-                          <fa-icon icon="ban" />
-                          Ban Map
+                          <fa-icon icon="ban" />Ban Map
                         </b-btn>
                         <b-btn
                           variant="success"
@@ -90,8 +130,7 @@
                           :disabled="currentPickTeam === -1 || !!mapBansByMap[map.id]"
                           @click="selectMap(map, 'PICK')"
                         >
-                          <fa-icon icon="hand-point-up" />
-                          Pick Map
+                          <fa-icon icon="hand-point-up" />Pick Map
                         </b-btn>
                       </b-col>
 
@@ -101,7 +140,7 @@
                       </b-col>
                     </b-row>
 
-                    <hr class="border-secondary my-2">
+                    <hr class="border-secondary my-2" />
                   </b-container>
                 </div>
               </b-container>
@@ -111,32 +150,30 @@
           <!-- Right column -->
           <b-col cols="6">
             <CustomCard color="info" title="Map Ban Actions">
-              <b-btn variant="danger" block>
-                <fa-icon icon="trash-can" />
-                Remove last map
+              <b-btn variant="danger" block @click="removeLastMap">
+                <fa-icon icon="trash-can" />Remove last map
               </b-btn>
-              <b-btn variant="danger" block>
-                <fa-icon icon="trash-can" />
-                Remove all maps
+              <b-btn variant="danger" block @click="removeAllMaps">
+                <fa-icon icon="trash-can" />Remove all maps
               </b-btn>
 
-              <hr class="border-secondary">
+              <hr class="border-secondary" />
 
-              <b-btn variant="primary" block :disabled="!nextMap" @click="$router.push(`/dashboard/matches/${match.id}/map/${nextMap.mapName}/overview`)">
-                <fa-icon icon="arrow-right" />
-                Continue to next map
-                <template v-if="nextMap">
-                  ({{ nextMap.mapName }})
-                </template>
+              <b-btn
+                variant="primary"
+                block
+                :disabled="!nextMap"
+                @click="$router.push(`/dashboard/matches/${match.id}/map/${nextMap.mapName}/overview`)"
+              >
+                <fa-icon icon="arrow-right" />Continue to next map
+                <template v-if="nextMap">({{ nextMap.mapName }})</template>
                 <!-- ToDo: Add next map in text -->
               </b-btn>
             </CustomCard>
             <CustomCard color="secondary" title="Current Map Ban">
               <MapbanLog v-for="mapBan in mapBans" :key="mapBan.id" :map-ban="mapBan" />
               <span v-if="!mapBans || mapBans.length === 0">
-                <i>
-                  None selected yet.
-                </i>
+                <i>None selected yet.</i>
               </span>
             </CustomCard>
           </b-col>
@@ -151,15 +188,16 @@ export default {
   name: 'MapBan',
   layout: 'match-page',
 
-  data () {
+  data() {
     return {
       currentPickTeam: -1,
-      selectedMapPool: null
+      selectedMapPool: null,
+      mapCount: -1
     }
   },
 
   computed: {
-    match () {
+    match() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         return this.$store.getters['matchSocket/getMatch'](matchID)
@@ -167,7 +205,7 @@ export default {
         return null
       }
     },
-    mapBans () {
+    mapBans() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         return this.$store.getters['matchSocket/getMapBansByMatch'](matchID)
@@ -175,7 +213,7 @@ export default {
         return null
       }
     },
-    matchMaps () {
+    matchMaps() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         const matchMaps = this.$store.getters['matchSocket/getMatchMapsByMatch'](matchID)
@@ -188,19 +226,19 @@ export default {
       }
     },
 
-    maps () {
+    maps() {
       return this.$store.state.coreSocket.maps
     },
-    mapPools () {
+    mapPools() {
       return this.$store.state.coreSocket.mapPools
     },
 
-    filteredMaps () {
+    filteredMaps() {
       if (!this.selectedMapPool) { return this.maps }
       return this.maps.filter(m => this.selectedMapPool.maps.includes(m.id))
     },
 
-    mapBansByMap () {
+    mapBansByMap() {
       if (!this.mapBans || this.mapBans.length === 0) { return [] }
       const mapBans = {}
       this.mapBans.forEach((m) => {
@@ -209,17 +247,18 @@ export default {
       return mapBans
     },
 
-    nextMap () {
+    nextMap() {
       if (!this.matchMaps) { return null }
       return this.matchMaps.find(m => m.status !== 'FINISHED')
     }
 
   },
 
-  mounted () {
+  mounted() {
     // Set map pool to competitive by default
     if (this.mapPools && this.mapPools.length > 0) {
-      this.selectedMapPool = this.mapPools.filter(m => m.name === 'Competitive')[0]
+      this.selectedMapPool = this.mapPools.find(m => m.name === 'Competitive')
+      this.mapCount = 9
     }
 
     // Set next ban team if bans are present
@@ -231,9 +270,22 @@ export default {
   },
 
   methods: {
-    async selectMap (map, type) {
+    async selectMap(map, type) {
+      let mapCount = -1
+
+      try {
+        mapCount = parseInt(this.mapCount)
+        if (mapCount < 0 || mapCount > 9) {
+          this.$toast.error("Invalid map count. Must be between 0 and 9!")
+          return
+        }
+      } catch (e) {
+        console.log(e)      
+        return
+      }
+
       const order = this.mapBans.length + 1
-      const isDecider = order === 7
+      const isDecider = order === mapCount
 
       const mapBanData = {
         type,
@@ -250,8 +302,24 @@ export default {
         this.$toast.error('Error')
       }
       this.currentPickTeam = this.currentPickTeam === this.match.teamBlue ? this.match.teamOrange : this.match.teamBlue
+    },
+
+    async removeLastMap() {
+      const lastMapBan = this.mapBans[this.mapBans.length - 1]
+
+      try {
+        await this.$axios.$delete(`/api/v2/match/mapban/${lastMapBan.id}/`)
+      } catch (e) { console.error(e) }
+
+    },
+
+    removeAllMaps() {
+      for (let i = 0; i < this.mapBans.length; i++) {
+        setTimeout(async () => {
+          await this.removeLastMap()
+        }, 100 * i)
+      }
     }
   }
-
 }
 </script>

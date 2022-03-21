@@ -10,6 +10,15 @@ def parse_request(model, query_data):
             "code": 404
         }
 
+    if query_data[0] == []:
+        return {
+            "status": "Empty result",
+            "code": 200,
+            "model": model,
+            "partition": 'full',
+            "data": []
+        }
+
     if not query_data[0]:
         return {
             "status": "Internal Server Error",
@@ -32,6 +41,17 @@ def send_server_data(group, model, serialized_data):
         {
             'type': 'server.data',
             'data': parse_request(model, [serialized_data, "single"])
+        }
+    )
+
+
+def send_mulit_server_data(group, model, serialized_data):
+    channel = get_channel_layer()
+    async_to_sync(channel.group_send)(
+        group,
+        {
+            'type': 'server.data',
+            'data': parse_request(model, [serialized_data, "full"])
         }
     )
 
