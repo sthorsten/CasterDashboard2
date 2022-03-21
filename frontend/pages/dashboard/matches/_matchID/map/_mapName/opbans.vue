@@ -90,8 +90,8 @@
                     <!-- Operator Bans -->
                     <b-col
                       cols="3"
-                      v-for="ban, index in operatorBans"
-                      :key="index"
+                      v-for="ban in operatorBans"
+                      :key="ban.id"
                       class="text-center"
                     >
                       <R6OperatorIcon :operator="ban.operatorIdentifier" height="50" />
@@ -105,7 +105,7 @@
                     <b-col
                       cols="3"
                       v-for="i in 4 - operatorBans.length"
-                      :key="i"
+                      :key="'empty-ban-' + i"
                       class="text-center pt-4"
                     >
                       <i>No ban</i>

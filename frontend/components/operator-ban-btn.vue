@@ -20,24 +20,44 @@ export default {
     operator: {
       type: Object,
       default: '_none'
-    },
-    operatorBans: {
-      type: Array,
-      default: []
     }
   },
 
   computed: {
     isBanned() {
-      return this.operatorBans.filter(o => o.operatorIdentifier === this.operator.identifier).length > 0
+      return this.operatorBans.findIndex(o => o.operatorIdentifier === this.operator.identifier) !== -1
     },
     sideDisabled() {
       if (this.operator.side === 'ATK') {
         return this.operatorBans.length >= 2
       } else if (this.operator.side === 'DEF') {
-        return this.operatorBans.length < 2
+        return this.operatorBans.length < 2 || this.operatorBans.length >= 4
       }
-    }
+    },
+
+    matchMaps() {
+      try {
+        const matchID = parseInt(this.$route.params.matchID)
+        return this.$store.getters["matchSocket/getMatchMapsByMatch"](matchID)
+      }
+      catch {
+        return null
+      }
+    },
+    matchMap() {
+      return this.matchMaps.filter(m => m.mapName === this.$route.params.mapName)[0]
+    },
+    operatorBans() {
+      if (!this.matchMap) {
+        return
+      }
+      try {
+        return this.$store.getters["matchSocket/getOperatorBansByMatchMap"](this.matchMap.id)
+      }
+      catch {
+        return null
+      }
+    },
   },
 
   methods: {
