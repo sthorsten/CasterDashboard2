@@ -69,13 +69,13 @@ class Migration(migrations.Migration):
         # Skyscraper
         skyscraper = Map.objects.get(name='Skyscraper')
         BombSpot.objects.create(map=skyscraper, floor='1F',
-                                name='Ventilation Room / Workshop')
+                                name='Bedroom / Bathroom')
         BombSpot.objects.create(map=skyscraper, floor='1F',
-                                name='Customs Inspection / Supply Room')
-        BombSpot.objects.create(map=skyscraper, floor='1F',
-                                name='Bathroom / Tellers Office')
+                                name='BBQ / Kitchen')
         BombSpot.objects.create(map=skyscraper, floor='2F',
-                                name='Armory Lockers / Archives')
+                                name='Exhibition Room / Office')
+        BombSpot.objects.create(map=skyscraper, floor='2F',
+                                name='Karaoke / Tea Room')
 
     def add_map_images(apps, schema_editor):
         Map = apps.get_model('core', 'Map')
