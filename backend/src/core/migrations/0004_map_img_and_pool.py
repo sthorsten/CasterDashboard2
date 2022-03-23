@@ -58,13 +58,13 @@ class Migration(migrations.Migration):
         # Chalet
         chalet = Map.objects.get(name='Chalet')
         BombSpot.objects.create(map=chalet, floor='B',
-                                name='Lockers / CCTV Room')
-        BombSpot.objects.create(map=chalet, floor='B/1F',
-                                name='Tellers Office / Archives')
+                                name='Wine Cellar / Snowmobile Garage')
         BombSpot.objects.create(map=chalet, floor='1F',
-                                name='Open Area / Staff Room')
+                                name='Kitchen / Dining Room')
+        BombSpot.objects.create(map=chalet, floor='1F',
+                                name='Bar / Gaming Room')
         BombSpot.objects.create(map=chalet, floor='2F',
-                                name='CEO Office / Executive Lounge')
+                                name='Office / Master Bedroom')
 
         # Skyscraper
         skyscraper = Map.objects.get(name='Skyscraper')
