@@ -1,6 +1,10 @@
 <template>
   <div>
-    <ContentHeader icon="plus" title="Create a new match" :breadcrumb-items="['Dashboard', 'Matches', 'New']" />
+    <ContentHeader
+      icon="plus"
+      title="Create a new match"
+      :breadcrumb-items="['Dashboard', 'Matches', 'New']"
+    />
     <ContentContainer>
       <b-container fluid>
         <b-row>
@@ -8,12 +12,9 @@
             <CustomCard title="New Match">
               <!-- League -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="trophy" />
-                    League
+                    <fa-icon icon="trophy" />League
                   </template>
 
                   <v-select
@@ -25,11 +26,11 @@
                     @input="selectedSeason = null"
                   >
                     <template #option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-1">
+                      <img :src="logoSmall" width="20" height="20" class="mr-1" />
                       {{ name }}
                     </template>
                     <template #selected-option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-2">
+                      <img :src="logoSmall" width="20" height="20" class="mr-2" />
                       {{ name }}
                     </template>
                   </v-select>
@@ -38,12 +39,9 @@
 
               <!-- Season -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="calendar-alt" />
-                    Season
+                    <fa-icon icon="calendar-alt" />Season
                   </template>
 
                   <v-select
@@ -61,12 +59,9 @@
 
               <!-- Playday -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="calendar-day" />
-                    Playday
+                    <fa-icon icon="calendar-day" />Playday
                   </template>
 
                   <v-select
@@ -80,16 +75,37 @@
                 </b-form-group>
               </b-container>
 
-              <hr class="border-secondary">
+              <hr class="border-secondary" />
+
+              <!-- Date -->
+              <b-container fluid>
+                <b-form-group label-cols-lg="3">
+                  <template #label>
+                    <fa-icon icon="calendar-check" />Match Date
+                  </template>
+
+                  <b-form-input v-model="matchDate" type="date" />
+                </b-form-group>
+              </b-container>
+
+              <!-- Time -->
+              <b-container fluid>
+                <b-form-group label-cols-lg="3">
+                  <template #label>
+                    <fa-icon icon="clock" />Match Time
+                  </template>
+
+                  <b-form-input v-model="matchTime" type="time" />
+                </b-form-group>
+              </b-container>
+
+              <hr class="border-secondary" />
 
               <!-- Team Blue -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="users" />
-                    Team Blue
+                    <fa-icon icon="users" />Team Blue
                   </template>
 
                   <v-select
@@ -100,11 +116,11 @@
                     placeholder="Select a team"
                   >
                     <template #option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-1">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-1" />
                       {{ option.name }}
                     </template>
                     <template #selected-option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-2">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-2" />
                       {{ option.name }}
                     </template>
                   </v-select>
@@ -113,12 +129,9 @@
 
               <!-- Team Orange -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="users" />
-                    Team Orange
+                    <fa-icon icon="users" />Team Orange
                   </template>
 
                   <v-select
@@ -129,57 +142,45 @@
                     placeholder="Select a team"
                   >
                     <template #option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-1">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-1" />
                       {{ option.name }}
                     </template>
                     <template #selected-option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-2">
+                      <img :src="option.logoSmall" width="20" height="20" class="mr-2" />
                       {{ option.name }}
                     </template>
                   </v-select>
                 </b-form-group>
               </b-container>
 
-              <hr class="border-secondary">
+              <hr class="border-secondary" />
 
               <!-- Best of -->
               <b-container fluid>
                 <b-form-group>
                   <b-row>
                     <b-col lg="3">
-                      <fa-icon icon="list-ol" />
-                      Best Of
+                      <fa-icon icon="list-ol" />Best Of
                     </b-col>
                     <b-col>
                       <b-form-radio-group v-model="bestOf">
-                        <b-form-radio :value="1">
-                          Best Of 1
-                        </b-form-radio>
-                        <b-form-radio :value="2">
-                          Best Of 2
-                        </b-form-radio>
-                        <b-form-radio :value="3">
-                          Best Of 3
-                        </b-form-radio>
-                        <b-form-radio :value="5">
-                          Best Of 5
-                        </b-form-radio>
+                        <b-form-radio :value="1">Best Of 1</b-form-radio>
+                        <b-form-radio :value="2">Best Of 2</b-form-radio>
+                        <b-form-radio :value="3">Best Of 3</b-form-radio>
+                        <b-form-radio :value="5">Best Of 5</b-form-radio>
                       </b-form-radio-group>
                     </b-col>
                   </b-row>
                 </b-form-group>
               </b-container>
 
-              <hr class="border-secondary">
+              <hr class="border-secondary" />
 
               <!-- Match Title -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="heading" />
-                    Match Title
+                    <fa-icon icon="heading" />Match Title
                   </template>
 
                   <b-form-input
@@ -192,12 +193,9 @@
 
               <!-- Match Subtitle -->
               <b-container fluid>
-                <b-form-group
-                  label-cols-lg="3"
-                >
+                <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="heading" />
-                    Match Subtitle
+                    <fa-icon icon="heading" />Match Subtitle
                   </template>
                   <b-form-input
                     v-model="matchSubtitle"
@@ -210,8 +208,7 @@
               <!-- Submit -->
               <b-container fluid class="mt-4">
                 <b-btn block variant="primary" :disabled="!matchDataValid" @click="createMatch">
-                  <fa-icon icon="plus" />
-                  Create match
+                  <fa-icon icon="plus" />Create match
                 </b-btn>
               </b-container>
             </CustomCard>
@@ -220,9 +217,7 @@
           <!-- Right column -->
           <b-col cols="6">
             <CustomCard title="Summary" color="secondary">
-              <b-container fluid>
-                ...
-              </b-container>
+              <b-container fluid>...</b-container>
             </CustomCard>
           </b-col>
         </b-row>
@@ -236,11 +231,13 @@ export default {
   name: 'CreateNewMatch',
   layout: 'main-page',
 
-  data () {
+  data() {
     return {
       selectedLeague: null,
       selectedSeason: null,
       selectedPlayday: null,
+      matchDate: null,
+      matchTime: "18:00",
 
       bestOf: 1,
       teamBlue: null,
@@ -252,34 +249,34 @@ export default {
   },
 
   computed: {
-    leagues () {
+    leagues() {
       return this.$store.state.mainSocket.leagues
     },
-    seasons () {
+    seasons() {
       return this.$store.state.mainSocket.seasons
     },
-    playdays () {
+    playdays() {
       return this.$store.state.mainSocket.playdays
     },
-    tournaments () {
+    tournaments() {
       return this.$store.state.mainSocket.tournaments
     },
-    teams () {
+    teams() {
       return this.$store.state.mainSocket.teams
     },
 
-    filteredSeasons () {
+    filteredSeasons() {
       if (!this.seasons) { return null }
       if (!this.selectedLeague) { return this.seasons }
       return this.seasons.filter(s => s.league === this.selectedLeague.id)
     },
-    filteredPlaydays () {
+    filteredPlaydays() {
       if (!this.playdays) { return null }
       if (!this.selectedSeason) { return this.playdays }
       return this.playdays.filter(p => p.season === this.selectedSeason.id)
     },
 
-    matchDataValid () {
+    matchDataValid() {
       let valid = true
       if (!this.selectedLeague) { valid = false }
       if (!this.selectedSeason) { valid = false }
@@ -287,24 +284,30 @@ export default {
       if (!this.bestOf) { valid = false }
       if (!this.teamBlue) { valid = false }
       if (!this.teamOrange) { valid = false }
+      if (!this.matchDate) { valid = false }
+      if (!this.matchTime) { valid = false }
       return valid
     }
   },
 
   watch: {
-    selectedSeason (newVal) {
+    selectedSeason(newVal) {
       if (newVal === null) { this.selectedPlayday = null }
       if (this.selectedLeague && this.selectedSeason) {
         this.matchTitle = `${this.selectedLeague.name} - ${this.selectedSeason.name}`
       }
     },
-    selectedPlayday (newVal) {
-      if (newVal) { this.matchSubtitle = this.selectedPlayday.name }
+    selectedPlayday(newVal) {
+      if (newVal) {
+        this.matchSubtitle = this.selectedPlayday.name
+        this.matchDate = this.selectedPlayday.date
+      }
     }
   },
 
   methods: {
-    async createMatch () {
+    async createMatch() {
+
       const data = {
         league: this.selectedLeague.id,
         season: this.selectedSeason.id,
@@ -312,7 +315,8 @@ export default {
         bestOf: this.bestOf,
         teamBlue: this.teamBlue.id,
         teamOrange: this.teamOrange.id,
-        creator: this.$auth.user.id
+        creator: this.$auth.user.id,
+        date: `${this.matchDate} ${this.matchTime}:00`
       }
 
       try {

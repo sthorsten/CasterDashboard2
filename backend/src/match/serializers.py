@@ -20,7 +20,7 @@ class MatchSerializer(serializers.ModelSerializer):
     winTeamName = serializers.StringRelatedField(
         source='winTeam', allow_null=True, read_only=True)
     date = serializers.DateTimeField(
-        format="%Y-%m-%d %H:%M:%S", read_only=True)
+        format="%Y-%m-%d %H:%M:%S")
     created = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
     lastModified = serializers.DateTimeField(
