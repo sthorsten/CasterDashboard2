@@ -9,16 +9,16 @@
         </a>
       </li>
 
-      <NavItem text="Home" link="/" icon="home" />
-      <NavItem text="GitHub" link="https://github.com/sthorsten/CasterDashboard2" :icon="['fab', 'github']" target="_blank" />
-      <NavItem text="Changelog" link="https://github.com/sthorsten/CasterDashboard2/blob/develop/CHANGELOG.md" icon="clipboard-list" target="_blank" />
-      <NavItem text="Issues" link="https://github.com/sthorsten/CasterDashboard2/issues" icon="bug" target="_blank" />
+      <NavItem inline text="Home" link="/" icon="home" />
+      <NavItem inline text="GitHub" link="https://github.com/sthorsten/CasterDashboard2" :icon="['fab', 'github']" target="_blank" />
+      <NavItem inline text="Changelog" link="https://github.com/sthorsten/CasterDashboard2/blob/develop/CHANGELOG.md" icon="clipboard-list" target="_blank" />
+      <NavItem inline text="Issues" link="https://github.com/sthorsten/CasterDashboard2/issues" icon="bug" target="_blank" />
     </ul>
 
     <!-- Navbar right-->
     <ul class="navbar-nav ml-auto">
-      <NavItem v-if="$store.state.auth.loggedIn" :text="$store.state.auth.user.username" link="/logout" icon="user-circle" />
-      <NavItem v-else text="UserName" link="#" icon="user-circle" />
+      <NavItem v-if="$store.state.auth.loggedIn" inline :text="$store.state.auth.user.username" link="/logout" icon="user-circle" />
+      <NavItem v-else inline text="UserName" link="#" icon="user-circle" />
     </ul>
   </nav>
 </template>

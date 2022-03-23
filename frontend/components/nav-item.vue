@@ -2,11 +2,13 @@
   <li class="nav-item">
     <NuxtLink v-if="nuxtLink" class="nav-link" :to="link" exact :active="active">
       <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
-      {{ text }}
+      <template v-if="inline">{{ text }}</template>
+      <p v-else>{{ text }}</p>
     </NuxtLink>
     <a v-else :class="active ? 'nav-link active' : 'nav-link'" :href="link" :target="target">
       <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
-      {{ text }}
+      <template v-if="inline">{{ text }}</template>
+      <p v-else>{{ text }}</p>
     </a>
   </li>
 </template>
@@ -35,6 +37,10 @@ export default {
       default: ''
     },
     nuxtLink: {
+      type: Boolean,
+      default: false
+    },
+    inline: {
       type: Boolean,
       default: false
     }
