@@ -2,7 +2,7 @@
   <div>
     <p class="login-box-msg">
       Welcome to the Caster Dashboard!
-      <br>
+      <br />
       Sign in below to get started.
     </p>
 
@@ -24,48 +24,51 @@
       </b-input-group-append>
     </b-input-group>
 
-    <b-btn block variant="primary" class="mt-2" @click="login">
-      Login
-    </b-btn>
+    <b-btn block variant="primary" class="mt-2" @click="login"> Login </b-btn>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'login-page',
+  layout: "login-page",
   auth: false,
 
-  data () {
+  data() {
     return {
-      username: '',
-      password: ''
-    }
+      username: "",
+      password: "",
+    };
   },
 
   methods: {
-    async login () {
+    async login() {
       const data = {
         username: this.username,
-        password: this.password
-      }
+        password: this.password,
+      };
 
       try {
-        await this.$auth.loginWith('local', { data })
+        await this.$auth.loginWith("local", { data });
         if (this.$auth.user.first_name) {
-          this.$toast.success(`Login successful. Welcome ${this.$auth.user.first_name}!`)
+          this.$toast.success(
+            `Login successful. Welcome ${this.$auth.user.first_name}!`
+          );
         } else {
-          this.$toast.success(`Login successful. Welcome ${this.$auth.user.username}!`)
+          this.$toast.success(
+            `Login successful. Welcome ${this.$auth.user.username}!`
+          );
         }
         if (this.$store.state.auth.redirect) {
-          this.$router.push(this.$store.state.auth.redirect)
+          this.$router.push(this.$store.state.auth.redirect);
         } else {
-          this.$router.push('/dashboard/home')
+          this.$router.push("/dashboard/home");
         }
       } catch {
-        this.$toast.error('Login failed. Check your credentials and try again!')
+        this.$toast.error(
+          "Login failed. Check your credentials and try again!"
+        );
       }
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
