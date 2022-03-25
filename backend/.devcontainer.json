@@ -1,0 +1,12 @@
+{
+    "name": "Caster Dashboard 2 Backend",
+    "extensions": [
+        "ms-python.python",
+    ],
+    "dockerComposeFile": "../.devcontainer/docker-compose.yml",
+    "service": "backend",
+    "workspaceFolder": "/repo/backend",
+    "forwardPorts": [
+        8000
+    ]
+}

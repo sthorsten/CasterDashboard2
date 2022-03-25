@@ -1,0 +1,13 @@
+{
+    "name": "Caster Dashboard 2 Frontend",
+    "extensions": [
+        "octref.vetur",
+        "dbaeumer.vscode-eslint",
+    ],
+    "dockerComposeFile": "../.devcontainer/docker-compose.yml",
+    "service": "frontend",
+    "workspaceFolder": "/repo/frontend",
+    "forwardPorts": [
+        3000
+    ]
+}

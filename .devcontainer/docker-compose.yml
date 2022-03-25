@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ''
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ../:/repo
+    tty: true
+    ports:
+      - 8000
+
+  frontend:
+    image: mcr.microsoft.com/vscode/devcontainers/javascript-node:14
+    volumes:
+      - ../:/repo
+    tty: true
+    ports:
+      - 3000
+
+  nginx:
+    build:
+      context: ''
+      dockerfile: nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ../backend/static:/nginx/static
+      - ../backend/media:/nginx/media
+
+  redis:
+    image: redis:alpine
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: caster_dashboard_2
+      POSTGRES_DB: caster_dashboard_2
+      POSTGRES_PASSWORD: caster_dashboard_2
+
+volumes:
+  postgres_data:
