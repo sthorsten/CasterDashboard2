@@ -51,8 +51,6 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 
 ## 🚀 Installation
 
-***This section is outdated and will be updated with the first beta release!***
-
 The dashboard is available via multiple [Docker Images](https://github.com/sthorsten?tab=packages&repo_name=CasterDashboard2).
 
 To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit the required parts marked by comments.
