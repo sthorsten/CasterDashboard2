@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
 
-## :warning: Important Note
+## ⚠️ Important Note
 I am currently in the process of cleaning up some important parts of the code, updating dependencies, removing old code parts and changing the structure around a bit.
 
 **Please be aware that this may break things!**
@@ -13,7 +13,7 @@ I am currently in the process of cleaning up some important parts of the code, u
 Once this process is complete, I will move to the first beta release, which should be more stable overall and easier to install and update (an updated guide on this will follow).
 
 
-## Description
+## 📝 Description
 
 This is the repository for the new Rainbow Six Siege Caster Dashboard.
 The dashboard aims to help Casters with production by providing easy-to-use and modular Overlays and control via a web dashboard.
@@ -49,44 +49,65 @@ The dashboard aims to help Casters with production by providing easy-to-use and 
 - Leagues can easily get custom overlay styles
 
 
-## Installation
+## 🚀 Installation
 
 ***This section is outdated and will be updated with the first beta release!***
 
-The dashboard is available as a [Docker Image](https://hub.docker.com/r/thorshero/caster-dashboard-2).
+The dashboard is available via multiple [Docker Images](https://github.com/sthorsten?tab=packages&repo_name=CasterDashboard2).
 
-To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit it to your needs. The parts that need to be edited are documented by comments.
+To install the complete dashboard on your machine, download the [docker-compose.yml](docker-compose.yml) file and edit the required parts marked by comments.
 
-You **must** set a secret key for your Django instance in the `environment` section of the `dashboard` service. You can for example use the`get_random_secret_key()` function from the python package `django.core.management.utils` to generate one.
+Start the stack by running `docker-compose up -d` in the directory you put the [docker-compose.yml](docker-compose.yml) in.
 
-Additionally, add your the domain on which the dashboard will be accessed to the `ALLOWED_HOSTS` (you can skip that if you only run the dashboard locally). Finally, add your email address and it's server settings which is needed for users to be able to register for the dashboard (*Note: The registration is not implemented yet!*).
+> **Note:** The parameter `-d` is optional and starts the stack in detached mode.
 
-That's it for the installation! You can now access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`. You may want to create users manually from there.**
+Alternatively you can use any docker management software, such as [Portainer](https://www.portainer.io/). 
+
+Once the stack is running, you can  access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`.
+
+> **Note:** I recommend creating users manually from there and disable the default admin user!
 
 
-## Screenshots
+## 🔨 Development setup
+
+This project can be easily setup by using [Visual Studio Code](https://code.visualstudio.com/) as an IDE and utilizing [Docker](https://www.docker.com/) and VSCode's [Remote Containers](https://code.visualstudio.com/docs/remote/containers).
+
+1. Make sure you have [Docker (Desktop)](https://docs.docker.com/engine/install/) and all necessary dependcies (such as WSL2 on Windows) installed.
+
+2. Clone this repo via https `git clone https://github.com/sthorsten/CasterDashboard2.git` or ssh `git clone git@github.com:sthorsten/CasterDashboard2.git`
+
+3. Open the `backend` and `frontend` folders seperately in VSCode. The first startup can take a while!
+
+4. Copy the example environment files `.env.devcontainer` to `.env`
+
+5. Install the required dependencies by running `poetry install` for the `backend` and `yarn install` for the frontend.
+
+6. Make sure the included VSCode extensions are enabled in your workspace.
+
+7. That's it. Happy coding ❤️
+
+
+## 🖼️ Screenshots
 
 *Coming soon...*
 
 
 ## Contributing
 
-- If you want to help me develop the dashboard, create issues, comment, like and share the project. :heart:
-- Ideas for new features, mean comments about what a mess my code is and other things are most welcome :wink:
-- If you know your way around in code, feel free to submit a pull request! :floppy_disk:
-- You can also get in touch with me via one of my social media channels :speech_balloon:
+- If you want to help me develop the dashboard, create issues, comment, like and share the project. ❤️
+- Ideas for new features, mean comments about what a mess my code is and other things are most welcome 😉
+- If you know your way around in code, feel free to submit a pull request! 💾
+- You can also get in touch with me via one of my social media channels 💬
+
 
 ### Translations
 
-![POEditor](https://img.shields.io/poeditor/progress/384975/en?token=3ccd865457316dfc812702f32c533003)
-![POEditor](https://img.shields.io/poeditor/progress/384975/de?token=3ccd865457316dfc812702f32c533003)
-
-If you want to help to translate the Caster Dashboard, feel free to join the [translation project](https://poeditor.com/projects/view?id=384975) over on POEditor.com [here](https://poeditor.com/join/project?hash=6hvn1jzn8o). Feel free to proofread my translation or add your own!
+> **Note:** Translations are on hold for now.
 
 
-## Changelog
+## 🗒️ Changelog
 
-Current Version: 2.0.0-alpha5
+Current Version: 2.1.0-alpha
 
 **Note:** This release is not ready for production yet!
 

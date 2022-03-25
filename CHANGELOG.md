@@ -6,23 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+-
+
+## [2.1.0-alpha] - 2022-03-25
+
 ### Notes
 
 - This release is not ready for production yet!
+- Versioning will now continue according to Semantic versioning (2.1.0-alpha > 2.2.0-alpha, etc.)
 
-### Added
+### Breaking / Added
 
-- Added (better) logging to backend (WIP!)
-
-### Changed
-
-- Moved backend and frontend to seperate sub folders
-- Major code refactoring (WIP!)
-
-#### Backend
-- Reworked backend and updated Django to Version 4.0 (WIP!)
-- Replaced pip with poetry for better python package version management
-
+- First release of the completely reworked version
+- This release includes basic match functionality
+  - Create new matches
+  - Map Ban
+  - Map Overview
+  - Operator Bans
+  - Rounds
+- Most data (except overlays) can be managed via the Django admin dashboard
 
 
 ## [2.0.0-alpha5] - 2021-02-18
@@ -148,7 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.0.0-alpha5...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.1.0-alpha...HEAD
+[2.1.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.1.0-alpha
 [2.0.0-alpha5]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha5
 [2.0.0-alpha4]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha4
 [2.0.0-alpha3]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha3
