@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
--
+### Fixed
+
+- New user creation failed in post_save hook because the profile couldn't be created
 
 ## [2.1.0-alpha] - 2022-03-25
 

@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch.dispatcher import receiver
 from rest_framework.authtoken.models import Token
+from .models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +22,7 @@ def new_user_post_save(sender, instance, created, **kwargs):  # pylint: disable=
             # Do not create any overlay data for the default admin user
             return
 
-        registration_token = secrets.token_hex(64)
-        Profile.objects.create(
-            user=instance, registration_token=registration_token)
+        Profile.objects.create(user=instance)
         Token.objects.get_or_create(user=instance)
 
         # OverlayStyle.objects.create(user=instance)
