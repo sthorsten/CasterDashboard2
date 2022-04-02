@@ -8,78 +8,26 @@ has an ID.
 """
 
 from rest_framework import serializers
-from rest_framework.relations import PrimaryKeyRelatedField, StringRelatedField
 
 from . import models
 
 
-class OverlayStyleSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
+class CustomDesignStyleSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    leagueName = serializers.StringRelatedField(
+        source='league', allow_null=True, read_only=True)
 
     class Meta:
-        model = models.OverlayStyle
+        model = models.CustomDesignStyle
         fields = '__all__'
 
 
-class OverlayStateSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
+class UserOverlaySerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    userName = serializers.StringRelatedField(source='user', read_only=True)
+    overlayLeagueName = serializers.StringRelatedField(
+        source='league', read_only=True)
 
     class Meta:
-        model = models.OverlayState
-        fields = '__all__'
-
-
-# class MatchOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-#     id = PrimaryKeyRelatedField(read_only=True)
-#     user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-#     user_name = StringRelatedField(source='user', read_only=True)
-
-#     class Meta:
-#         model = models.MatchOverlayData
-#         fields = '__all__'
-
-
-class PollOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
-
-    class Meta:
-        model = models.PollOverlayData
-        fields = '__all__'
-
-
-class SocialOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
-    type_name = StringRelatedField(source='get_type_display', read_only=True)
-
-    class Meta:
-        model = models.SocialOverlayData
-        fields = '__all__'
-
-
-class TimerOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
-    mode_name = StringRelatedField(source='get_mode_display', read_only=True)
-
-    class Meta:
-        model = models.TimerOverlayData
-        fields = '__all__'
-
-
-class TickerOverlayDataSerializer(serializers.HyperlinkedModelSerializer):
-    id = PrimaryKeyRelatedField(read_only=True)
-    user_id = PrimaryKeyRelatedField(source='user', read_only=True)
-    user_name = StringRelatedField(source='user', read_only=True)
-
-    class Meta:
-        model = models.TickerOverlayData
+        model = models.UserOverlay
         fields = '__all__'

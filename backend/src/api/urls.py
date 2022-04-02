@@ -38,19 +38,15 @@ router.register(r'match/matchmap', matchViews.MatchMapViewSet)
 router.register(r'match/operatorban', matchViews.OperatorBansViewSet)
 router.register(r'match/round', matchViews.RoundViewSet)
 
-router.register(r'overlay/style', overlayViews.OverlayStyleViewSet)
-router.register(r'overlay/state', overlayViews.OverlayStateViewSet)
-#router.register(r'overlay/match_data', overlayViews.MatchOverlayDataViewSet)
-router.register(r'overlay/poll_data', overlayViews.PollOverlayDataViewSet)
-router.register(r'overlay/social_data', overlayViews.SocialOverlayDataViewSet)
-router.register(r'overlay/timer_data', overlayViews.TimerOverlayDataViewSet)
-router.register(r'overlay/ticker_data', overlayViews.TickerOverlayDataViewSet)
+router.register(r'overlay/user', overlayViews.UserOverlayViewSet)
+router.register(r'overlay/style', overlayViews.CustomDesignStyleViewSet)
 
 urlpatterns = [
     # SimpleJWT
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('user/me/', userViews.LoggedInUserView.as_view(), name='loggedIn_user_view'),
+    path('user/me/', userViews.LoggedInUserView.as_view(),
+         name='loggedIn_user_view'),
 
     # Overlays
     # path('overlay/state/by_user/<int:user_id>/',
