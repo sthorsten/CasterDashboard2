@@ -1,6 +1,10 @@
 <template>
   <div class="wrapper">
-    <div v-if="preloader" class="preloader flex-column justify-content-center align-items-center">
+    <adminlte-header />
+    <div
+      v-if="preloader"
+      class="preloader flex-column justify-content-center align-items-center"
+    >
       <img src="/static/img/ThorsHero_200.webp" width="100" height="100" />
       <span>Caster Dashboard</span>
     </div>

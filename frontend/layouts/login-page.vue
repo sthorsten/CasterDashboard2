@@ -1,5 +1,6 @@
 <template>
   <div class="login-box">
+    <adminlte-header />
     <div class="login-logo">
       <a href="/"><b>Caster Dashboard</b></a>
     </div>
@@ -13,8 +14,9 @@
 </template>
 
 <script>
+
 export default {
-  head () {
+  head() {
     return {
       bodyAttrs: {
         class: 'hold-transition dark-mode login-page'

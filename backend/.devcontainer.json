@@ -2,7 +2,14 @@
     "name": "Caster Dashboard 2 Backend",
     "extensions": [
         "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.pylint",
     ],
+    "settings": {
+        "python.defaultInterpreterPath": ".venv/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true
+    },
     "dockerComposeFile": "../.devcontainer/docker-compose.yml",
     "service": "backend",
     "workspaceFolder": "/repo/backend",

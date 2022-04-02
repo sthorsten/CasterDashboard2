@@ -37,7 +37,7 @@ export default {
     return {
       username: "",
       password: "",
-    };
+    }
   },
 
   methods: {
@@ -45,28 +45,28 @@ export default {
       const data = {
         username: this.username,
         password: this.password,
-      };
+      }
 
       try {
-        await this.$auth.loginWith("local", { data });
+        await this.$auth.loginWith("local", { data })
         if (this.$auth.user.first_name) {
           this.$toast.success(
             `Login successful. Welcome ${this.$auth.user.first_name}!`
-          );
+          )
         } else {
           this.$toast.success(
             `Login successful. Welcome ${this.$auth.user.username}!`
-          );
+          )
         }
         if (this.$store.state.auth.redirect) {
-          this.$router.push(this.$store.state.auth.redirect);
+          this.$router.push(this.$store.state.auth.redirect)
         } else {
-          this.$router.push("/dashboard/home");
+          this.$router.push("/dashboard/home")
         }
       } catch {
         this.$toast.error(
           "Login failed. Check your credentials and try again!"
-        );
+        )
       }
     },
   },
