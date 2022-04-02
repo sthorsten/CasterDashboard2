@@ -1,5 +1,3 @@
-from django.conf.urls.static import static
-from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic.base import RedirectView
@@ -7,9 +5,9 @@ from django.views.generic.base import RedirectView
 from core.channels import CoreConsumer
 from main.channels import MainConsumer
 from match.channels import MatchConsumer
+from overlays.channels import OverlaysConsumer
 
 from dashboard import views
-
 
 urlpatterns = [
     # Errors
@@ -24,17 +22,11 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/admin/', permanent=True), name='index'),
 ]
 
-# if settings.MODE == 'development':
-#     urlpatterns += static(settings.MEDIA_URL,
-#                           document_root=settings.MEDIA_ROOT)
-#     urlpatterns += static(settings.STATIC_URL,
-#                           document_root=settings.STATIC_ROOT)
-
-
 websocket_urlpatterns = [
     re_path(r'ws/core/$', CoreConsumer.as_asgi()),
     re_path(r'ws/main/$', MainConsumer.as_asgi()),
-    re_path(r'ws/match/$', MatchConsumer.as_asgi())
+    re_path(r'ws/match/$', MatchConsumer.as_asgi()),
+    re_path(r'ws/overlays/$', OverlaysConsumer.as_asgi())
 ]
 
 handler404 = views.error_404

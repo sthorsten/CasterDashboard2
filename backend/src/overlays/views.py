@@ -5,11 +5,11 @@ from . import serializers
 # pylint: disable=no-member
 
 
-class CustomDesignStyleViewSet(viewsets.ReadOnlyModelViewSet):
+class UserOverlayViewSet(viewsets.ModelViewSet):
     queryset = models.UserOverlay.objects.all()
     serializer_class = serializers.UserOverlaySerializer
 
 
-class UserOverlayViewSet(viewsets.ReadOnlyModelViewSet):
+class CustomDesignStyleViewSet(viewsets.ModelViewSet):
     queryset = models.CustomDesignStyle.objects.all()
     serializer_class = serializers.CustomDesignStyleSerializer

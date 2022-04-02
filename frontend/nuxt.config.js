@@ -16,6 +16,7 @@ export default {
   },
 
   css: [
+    '~/assets/style/fonts.css'
   ],
 
   plugins: [

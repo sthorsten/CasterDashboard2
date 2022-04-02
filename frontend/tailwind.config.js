@@ -1,9 +1,14 @@
 module.exports = {
   content: [
-    "./pages/overlay/**/*.vue",
+    "./pages/dashboard/overlays/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'scout-regular': 'ScoutCond Regular',
+        'scout-bold': 'ScoutCond Bold'
+      }
+    },
   },
   plugins: [],
 }

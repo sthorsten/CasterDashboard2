@@ -3,7 +3,12 @@
     <ContentHeader
       icon="list-ul"
       title="Match Overview"
-      :breadcrumb-items="['Dashboard', 'Matches', $route.params.matchID, 'Overview']"
+      :breadcrumb-items="[
+        'Dashboard',
+        'Matches',
+        $route.params.matchID,
+        'Overview',
+      ]"
     />
     <ContentContainer v-if="match">
       <b-container fluid>
@@ -43,15 +48,18 @@
                   </b-tr>
 
                   <b-tr>
-                    <b-th colspan="2" class="bg-primary">
-                      Match Details
-                    </b-th>
+                    <b-th colspan="2" class="bg-primary"> Match Details </b-th>
                   </b-tr>
 
                   <b-tr>
                     <b-th>League</b-th>
                     <b-td class="text-right">
-                      <img :src="leagueLogo" width="20" height="20" alt="League Logo">
+                      <img
+                        :src="leagueLogo"
+                        width="20"
+                        height="20"
+                        alt="League Logo"
+                      />
                       {{ match.leagueName }}
                     </b-td>
                   </b-tr>
@@ -59,7 +67,11 @@
                   <b-tr>
                     <b-th>Season</b-th>
                     <b-td class="text-right">
-                      {{ $store.getters['mainSocket/getSeasonByPlaydayID'](match.playday).name }}
+                      {{
+                        $store.getters["mainSocket/getSeasonByPlaydayID"](
+                          match.playday
+                        ).name
+                      }}
                     </b-td>
                   </b-tr>
 
@@ -73,16 +85,25 @@
                   <b-tr>
                     <b-th>Teams</b-th>
                     <b-td class="text-right">
-                      <img :src="teamLogo(match.teamBlue)" width="20" height="20" alt="Team Blue Logo">
-                      {{ match.teamBlueName }} <b>vs.</b> {{ match.teamOrangeName }}
-                      <img :src="teamLogo(match.teamOrange)" width="20" height="20" alt="Team Orange Logo">
+                      <img
+                        :src="teamLogo(match.teamBlue)"
+                        width="20"
+                        height="20"
+                        alt="Team Blue Logo"
+                      />
+                      {{ match.teamBlueName }} <b>vs.</b>
+                      {{ match.teamOrangeName }}
+                      <img
+                        :src="teamLogo(match.teamOrange)"
+                        width="20"
+                        height="20"
+                        alt="Team Orange Logo"
+                      />
                     </b-td>
                   </b-tr>
 
                   <b-tr>
-                    <b-th colspan="2" class="bg-primary">
-                      Match Result
-                    </b-th>
+                    <b-th colspan="2" class="bg-primary"> Match Result </b-th>
                   </b-tr>
 
                   <b-tr>
@@ -95,7 +116,7 @@
                   <b-tr>
                     <b-th>Winner</b-th>
                     <b-td class="text-right">
-                      {{ match.winTeam ? match.winTeamName : '-' }}
+                      {{ match.winTeam ? match.winTeamName : "-" }}
                     </b-td>
                   </b-tr>
 
@@ -114,7 +135,7 @@
           <b-col cols="6">
             <CustomCard title="Match Actions" color="info">
               <b-container fluid>
-                <b-btn variant="primary" block disabled>
+                <b-btn variant="primary" block @click="setMatchToOverlays">
                   <fa-icon icon="arrow-right-to-bracket" />
                   Set Match to overlays
                 </b-btn>
@@ -123,9 +144,13 @@
                   Set Match as <b>next match</b> to overlays
                 </b-btn>
 
-                <hr class="border-secondary">
+                <hr class="border-secondary" />
 
-                <b-btn variant="primary" block @click="$router.push(`/dashboard/matches/${match.id}/mapban`)">
+                <b-btn
+                  variant="primary"
+                  block
+                  @click="$router.push(`/dashboard/matches/${match.id}/mapban`)"
+                >
                   <fa-icon icon="arrow-right" />
                   Continue to Map Pick & Ban
                 </b-btn>
@@ -134,7 +159,7 @@
                   Show match details
                 </b-btn>
 
-                <hr class="border-secondary">
+                <hr class="border-secondary" />
 
                 <b-btn variant="danger" block disabled>
                   <fa-icon icon="pencil-alt" />
@@ -158,15 +183,14 @@ export default {
   name: 'MatchOverview',
   layout: 'match-page',
 
-  data () {
+  data() {
     return {
       edit: false,
-      text: 'test'
     }
   },
 
   computed: {
-    match () {
+    match() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         return this.$store.getters['matchSocket/getMatch'](matchID)
@@ -175,17 +199,25 @@ export default {
       }
     },
 
-    leagueLogo () {
+    leagueLogo() {
       return this.$store.getters['mainSocket/getLeagueLogo'](this.match.league, true)
     }
   },
 
   methods: {
-    test (value) {
-      this.text = value
-    },
-    teamLogo (id) {
+    teamLogo(id) {
       return this.$store.getters['mainSocket/getTeamLogo'](id, true)
+    },
+
+    async setMatchToOverlays() {
+      try {
+        await this.$axios.$patch(`/api/v2/overlay/user/${this.$auth.user.id}/`, {
+          overlayMatch: this.match.id
+        })
+        this.$toast.success("Match set to overlays")
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 

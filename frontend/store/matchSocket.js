@@ -12,33 +12,33 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setSocket (state, socket) {
+  setSocket(state, socket) {
     state.socket = socket
   },
-  setConnected (state, connected) {
+  setConnected(state, connected) {
     state.connected = connected
   },
-  setLastUpdate (state) {
+  setLastUpdate(state) {
     state.lastUpdate = Date.now()
   },
 
-  setMatches (state, matches) {
+  setMatches(state, matches) {
     state.matches = matches
   },
-  setMapBans (state, mapBans) {
+  setMapBans(state, mapBans) {
     state.mapBans = mapBans
   },
-  setMatchMaps (state, matchMaps) {
+  setMatchMaps(state, matchMaps) {
     state.matchMaps = matchMaps
   },
-  setOperatorBans (state, operatorBans) {
+  setOperatorBans(state, operatorBans) {
     state.operatorBans = operatorBans
   },
-  setRounds (state, rounds) {
+  setRounds(state, rounds) {
     state.rounds = rounds
   },
 
-  updateMatch (state, match) {
+  updateMatch(state, match) {
     const listElem = state.matches.findIndex(m => m.id === match.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -49,7 +49,7 @@ export const mutations = {
       state.matches.push(match)
     }
   },
-  updateMapBan (state, mapBan) {
+  updateMapBan(state, mapBan) {
     const listElem = state.mapBans.findIndex(m => m.id === mapBan.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -60,7 +60,7 @@ export const mutations = {
       state.mapBans.push(mapBan)
     }
   },
-  updateMatchMap (state, matchMap) {
+  updateMatchMap(state, matchMap) {
     const listElem = state.matchMaps.findIndex(m => m.id === matchMap.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -71,7 +71,7 @@ export const mutations = {
       state.matchMaps.push(matchMap)
     }
   },
-  updateOperatorBan (state, operatorBan) {
+  updateOperatorBan(state, operatorBan) {
     const listElem = state.operatorBans.findIndex(m => m.id === operatorBan.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -82,7 +82,7 @@ export const mutations = {
       state.operatorBans.push(operatorBan)
     }
   },
-  updateRound (state, round) {
+  updateRound(state, round) {
     const listElem = state.rounds.findIndex(m => m.id === round.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -101,7 +101,7 @@ export const getters = {
     return state.socket.readyState === 1
   },
   getMatch: state => (id) => {
-    return state.matches.filter(m => m.id === id)[0]
+    return state.matches.find(m => m.id === id)
   },
   getMapBansByMatch: state => (id) => {
     return state.mapBans.filter(s => s.match === id)
@@ -118,7 +118,7 @@ export const getters = {
 }
 
 export const actions = {
-  connect ({ commit, dispatch }, matchID) {
+  connect({ commit, dispatch }, matchID) {
     return new Promise((resolve, reject) => {
       const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/match/`)
       socket.onopen = () => {
@@ -141,11 +141,11 @@ export const actions = {
     })
   },
 
-  disconnect ({ state }) {
+  disconnect({ state }) {
     state.socket.close()
   },
 
-  getInitialData ({ state }) {
+  getInitialData({ state }) {
     const matches = {
       method: 'get',
       model: 'Match'
@@ -154,7 +154,7 @@ export const actions = {
     state.socket.send(JSON.stringify(matches))
   },
 
-  getMatchMaps ({ state }, matchID) {
+  getMatchMaps({ state }, matchID) {
     const mapBans = {
       method: 'get',
       model: 'MapBan',

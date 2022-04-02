@@ -26,7 +26,7 @@ class CustomDesignStyle(models.Model):
     hasIngameStyle = models.BooleanField(
         default=False, verbose_name="has ingame style")
     hasMapBanStyle = models.BooleanField(
-        default=False, verbose_name="has rounds style")
+        default=False, verbose_name="has map ban style")
     hasRoundsStyle = models.BooleanField(
         default=False, verbose_name="has rounds style")
     hasFooterStyle = models.BooleanField(

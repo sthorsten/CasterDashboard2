@@ -12,33 +12,33 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setSocket (state, socket) {
+  setSocket(state, socket) {
     state.socket = socket
   },
-  setConnected (state, connected) {
+  setConnected(state, connected) {
     state.connected = connected
   },
 
-  setLeagues (state, leagues) {
+  setLeagues(state, leagues) {
     state.leagues = leagues
   },
-  setSeasons (state, seasons) {
+  setSeasons(state, seasons) {
     state.seasons = seasons
   },
-  setPlaydays (state, playdays) {
+  setPlaydays(state, playdays) {
     state.playdays = playdays
   },
-  setTournaments (state, tournaments) {
+  setTournaments(state, tournaments) {
     state.tournaments = tournaments
   },
-  setSponsors (state, sponsors) {
+  setSponsors(state, sponsors) {
     state.sponsors = sponsors
   },
-  setTeams (state, teams) {
+  setTeams(state, teams) {
     state.teams = teams
   },
 
-  updateLeague (state, league) {
+  updateLeague(state, league) {
     const listElem = state.leagues.findIndex(l => l.id === league.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -49,7 +49,7 @@ export const mutations = {
       state.leagues.push(league)
     }
   },
-  updateSeason (state, season) {
+  updateSeason(state, season) {
     const listElem = state.seasons.findIndex(s => s.id === season.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -60,7 +60,7 @@ export const mutations = {
       state.seasons.push(season)
     }
   },
-  updatePlayday (state, playday) {
+  updatePlayday(state, playday) {
     const listElem = state.playdays.findIndex(p => p.id === playday.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -71,7 +71,7 @@ export const mutations = {
       state.playdays.push(playday)
     }
   },
-  updateTournament (state, tournament) {
+  updateTournament(state, tournament) {
     const listElem = state.tournaments.findIndex(t => t.id === tournament.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -82,7 +82,7 @@ export const mutations = {
       state.tournaments.push(tournament)
     }
   },
-  updateSponsor (state, sponsor) {
+  updateSponsor(state, sponsor) {
     const listElem = state.sponsors.findIndex(s => s.id === sponsor.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -93,7 +93,7 @@ export const mutations = {
       state.sponsors.push(sponsor)
     }
   },
-  updateTeam (state, team) {
+  updateTeam(state, team) {
     const listElem = state.teams.findIndex(t => t.id === team.id)
     if (listElem !== -1) {
       // Copy array for reactivity
@@ -113,7 +113,7 @@ export const getters = {
     return state.socket.readyState === 1
   },
   getLeague: state => (id) => {
-    return state.leagues.filter(l => l.id === id)[0]
+    return state.leagues.find(l => l.id === id)
   },
   getLeagueLogo: (_, getters) => (id, small) => {
     const league = getters.getLeague(id)
@@ -121,24 +121,24 @@ export const getters = {
     return small ? league.logoSmall : league.logo
   },
   getSeason: state => (id) => {
-    return state.seasons.filter(s => s.id === id)[0]
+    return state.seasons.find(s => s.id === id)
   },
   getSeasonByPlaydayID: (state, getters) => (playdayID) => {
     const playday = getters.getPlayday(playdayID)
     if (!playday) { return null }
-    return state.seasons.filter(s => s.id === playday.season)[0]
+    return state.seasons.find(s => s.id === playday.season)
   },
   getPlayday: state => (id) => {
-    return state.playdays.filter(p => p.id === id)[0]
+    return state.playdays.find(p => p.id === id)
   },
   getTournament: state => (id) => {
-    return state.tournaments.filter(t => t.id === id)[0]
+    return state.tournaments.find(t => t.id === id)
   },
   getSponsor: state => (id) => {
-    return state.sponsors.filter(s => s.id === id)[0]
+    return state.sponsors.find(s => s.id === id)
   },
   getTeam: state => (id) => {
-    return state.teams.filter(t => t.id === id)[0]
+    return state.teams.find(t => t.id === id)
   },
   getTeamLogo: (_, getters) => (id, small) => {
     const team = getters.getTeam(id)
@@ -148,7 +148,7 @@ export const getters = {
 }
 
 export const actions = {
-  connect ({ commit, dispatch }) {
+  connect({ commit, dispatch }) {
     return new Promise((resolve, reject) => {
       const socket = new WebSocket(`${this.app.$config.wsBaseURL}/ws/main/`)
       socket.onopen = () => {
@@ -164,11 +164,11 @@ export const actions = {
     })
   },
 
-  disconnect ({ state }) {
+  disconnect({ state }) {
     state.socket.close()
   },
 
-  getInitialData ({ state }) {
+  getInitialData({ state }) {
     const leagues = {
       method: 'get',
       model: 'League'
