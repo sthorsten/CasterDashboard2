@@ -1,12 +1,16 @@
 <template>
   <div>
-    <ContentHeader icon="trophy" title="Leagues" :breadcrumb-items="['Dashboard', 'Main', 'Leagues']" />
+    <ContentHeader
+      icon="trophy"
+      title="Leagues"
+      :breadcrumb-items="['Dashboard', 'Main', 'Leagues']"
+    />
     <ContentContainer>
       <b-container fluid>
         <CustomCard title="Leagues">
           <b-table small dark striped :items="leagues" :fields="leagueFields">
             <template #cell(logoSmall)="data">
-              <img :src="data.item.logoSmall" width="25" height="25">
+              <img :src="data.item.logoSmall" width="25" height="25" />
             </template>
           </b-table>
         </CustomCard>
@@ -17,9 +21,10 @@
 
 <script>
 export default {
+  name: 'Leagues',
   layout: 'main-page',
 
-  data () {
+  data() {
     return {
       leagueFields: [
         {
@@ -33,7 +38,7 @@ export default {
   },
 
   computed: {
-    leagues () {
+    leagues() {
       return this.$store.state.mainSocket.leagues
     }
   }
@@ -41,5 +46,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "~/assets/style/vue-select.scss";
+@import "~/assets/style/vue-select.scss";
 </style>

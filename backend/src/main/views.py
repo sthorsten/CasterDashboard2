@@ -31,7 +31,7 @@ class SponsorViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['league', 'name', 'public']
 
 
-class TeamViewSet(viewsets.ReadOnlyModelViewSet):
+class TeamViewSet(viewsets.ModelViewSet):
     queryset = models.Team.objects.all()
     serializer_class = serializers.TeamSerializer
     filterset_fields = ['name']
