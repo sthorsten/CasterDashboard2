@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'channels',
     'corsheaders',
     'core.apps.CoreConfig',
-    'dashboard.apps.DashboardConfig',
     'main.apps.MainConfig',
     'match.apps.MatchConfig',
     'user.apps.UserConfig',

@@ -4,7 +4,6 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from api import views
 from api.tokens import CustomTokenObtainPairView
-from api.views import UserViewSet
 
 # new
 import core.views as coreViews
@@ -48,21 +47,11 @@ urlpatterns = [
     path('user/me/', userViews.LoggedInUserView.as_view(),
          name='loggedIn_user_view'),
 
-    # Overlays
-    # path('overlay/state/by_user/<int:user_id>/',
-    #     OverlayStateViewSet.as_view({'get': 'get_by_user', 'post': 'post_by_user'})),
-
-    # Match Data
-    # Additional URLs
-    # path('matches/<int:match_id>/maps/',
-    #     MatchMapViewSet.as_view({'get': 'match_maps'})),
-    path('matches/<int:match_id>/share/', views.share_match),
-
     path(r'version/', views.version),
-    path(r'register/', views.register),
-    path(r'register/confirm/', views.register_confirm),
-    path(r'users/change-user-data/', views.change_user_data),
-    path(r'users/change-password/', views.change_password)
+    # path(r'register/', views.register),
+    # path(r'register/confirm/', views.register_confirm),
+    # path(r'users/change-user-data/', views.change_user_data),
+    # path(r'users/change-password/', views.change_password)
 ]
 
 urlpatterns += router.urls

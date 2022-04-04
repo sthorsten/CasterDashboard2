@@ -3,12 +3,10 @@ import os
 from pathlib import Path
 
 from django.conf import settings as django_settings
-from django.contrib.auth import authenticate, get_user_model
-from django.utils.translation import gettext as _
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from user.serializers import UserSerializer
 
@@ -44,168 +42,149 @@ def version(request):
     return Response({'version': current_version})
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register(request):
-    if not django_settings.REGISTRATION_ENABLED:
-        return Response({"status": "Registration disabled"}, status=503)
+# ToDo replace with new code
 
-    if not request.method == 'POST':
-        return Response({'status': "Method Not Allowed"}, status=405)
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# def register(request):
+#     if not django_settings.REGISTRATION_ENABLED:
+#         return Response({"status": "Registration disabled"}, status=503)
 
-    data = request.data
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
+#     if not request.method == 'POST':
+#         return Response({'status': "Method Not Allowed"}, status=405)
 
-    # Validate input
-    if not username or not email or not password or not first_name or not last_name:
-        return Response({"status": "invalid data"}, status=400)
+#     data = request.data
+#     username = data.get('username')
+#     email = data.get('email')
+#     password = data.get('password')
+#     first_name = data.get('first_name')
+#     last_name = data.get('last_name')
 
-    logging.info(f"Creating new user: {username}...")
+#     # Validate input
+#     if not username or not email or not password or not first_name or not last_name:
+#         return Response({"status": "invalid data"}, status=400)
 
-    # Check if user exists
-    try:
-        user = get_user_model().objects.get(username=username)
-        logger.error(f"User '{username}' already exists!")
-        return Response({"status": "duplicate user"}, status=400)
-    except get_user_model().DoesNotExist:
-        # All ok
-        pass
+#     logging.info(f"Creating new user: {username}...")
 
-    # Create user
-    user = get_user_model().objects.create_user(
-        username=username, email=email, password=password,
-        first_name=first_name, last_name=last_name)
+#     # Check if user exists
+#     try:
+#         user = get_user_model().objects.get(username=username)
+#         logger.error(f"User '{username}' already exists!")
+#         return Response({"status": "duplicate user"}, status=400)
+#     except get_user_model().DoesNotExist:
+#         # All ok
+#         pass
 
-    if user is not None:
-        logging.info(f"User '{username}' registered successfully.")
-        profile = Profile.objects.get(user=user)
+#     # Create user
+#     user = get_user_model().objects.create_user(
+#         username=username, email=email, password=password,
+#         first_name=first_name, last_name=last_name)
 
-        return Response({"status": "ok", "registration_token": profile.registration_token})
-    else:
-        logging.error(f"Registration for user '{username}' failed!")
-        return Response({"status": "error", "message": "User could not be created."}, status=500)
+#     if user is not None:
+#         logging.info(f"User '{username}' registered successfully.")
+#         profile = Profile.objects.get(user=user)
 
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register_confirm(request):
-    if not django_settings.REGISTRATION_ENABLED:
-        return Response({"status": "Registration disabled"}, status=503)
-
-    if not request.method == 'POST':
-        return Response({'status': "Method Not Allowed"}, status=405)
-
-    data = request.data
-    username = data.get('username')
-    token = data.get('token')
-
-    if not username or not token:
-        return Response({"status": "invalid data"}, status=400)
-
-    logger.info(f"Validating new user: {username}...")
-
-    try:
-        user = get_user_model().objects.get(username=username)
-    except get_user_model().DoesNotExist:
-        logger.error(f"User '{username}' does not exist!")
-        return Response({"status": "user not found"}, status=400)
-
-    user_profile = Profile.objects.get(user=user)
-    if user_profile.registration_token == token:
-        user_profile.confirmed = True
-
-    user_profile.save()
-
-    logger.info(f"User '{username}' validated successfully.")
-
-    return Response({"status": "ok"})
+#         return Response({"status": "ok", "registration_token": profile.registration_token})
+#     else:
+#         logging.error(f"Registration for user '{username}' failed!")
+#         return Response({"status": "error", "message": "User could not be created."}, status=500)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def change_user_data(request):
-    if not request.method == 'POST':
-        return Response({'status': "Method Not Allowed"}, status=405)
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# def register_confirm(request):
+#     if not django_settings.REGISTRATION_ENABLED:
+#         return Response({"status": "Registration disabled"}, status=503)
 
-    # Check input data
-    data = request.data
-    if not data.get('user') or not data.get('email') or not data.get('first_name') or \
-            not data.get('last_name'):
-        return Response({'status': "Invalid Data"}, status=400)
+#     if not request.method == 'POST':
+#         return Response({'status': "Method Not Allowed"}, status=405)
 
-    logger.info(f"Changing data for user: {data['user']}...")
+#     data = request.data
+#     username = data.get('username')
+#     token = data.get('token')
 
-    try:
-        user = get_user_model().objects.get(id=data['user'])
-    except get_user_model().DoesNotExist:
-        logger.error(f"User '{data['user']}' does not exist!")
-        return Response({'status': "Not Found"}, status=404)
+#     if not username or not token:
+#         return Response({"status": "invalid data"}, status=400)
 
-    user.email = data['email']
-    user.first_name = data['first_name']
-    user.last_name = data['last_name']
+#     logger.info(f"Validating new user: {username}...")
 
-    user.save()
+#     try:
+#         user = get_user_model().objects.get(username=username)
+#     except get_user_model().DoesNotExist:
+#         logger.error(f"User '{username}' does not exist!")
+#         return Response({"status": "user not found"}, status=400)
 
-    logger.info(f"User data for user {data['user']} updated successfully.")
+#     user_profile = Profile.objects.get(user=user)
+#     if user_profile.registration_token == token:
+#         user_profile.confirmed = True
 
-    return Response({'status': "ok"}, status=200)
+#     user_profile.save()
 
+#     logger.info(f"User '{username}' validated successfully.")
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def change_password(request):
-    if not request.method == 'POST':
-        return Response({'status': "Method Not Allowed"}, status=405)
-
-    # Check input data
-    data = request.data
-    if not data.get('username') or not data.get('current_password') or not data.get('new_password'):
-        return Response({'status': "Invalid Data"}, status=400)
-
-    logger.info(f"Changing password for user: {data['username']}...")
-
-    # Check current password
-    user = authenticate(
-        username=data['username'], password=data['current_password'])
-    if not user:
-        logger.error(
-            f"Current password for user '{data['username']}' is invalid!")
-        return Response({'status': "Invalid current password"}, status=400)
-
-    # Set new password
-    user.set_password(data['new_password'])
-    user.save()
-
-    logger.info(
-        f"The password for user '{data['username']}' has been changed successfully.")
-
-    return Response({'status': "ok"}, status=200)
+#     return Response({"status": "ok"})
 
 
-# endregion
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def change_user_data(request):
+#     if not request.method == 'POST':
+#         return Response({'status': "Method Not Allowed"}, status=405)
 
-# region Other views
+#     # Check input data
+#     data = request.data
+#     if not data.get('user') or not data.get('email') or not data.get('first_name') or \
+#             not data.get('last_name'):
+#         return Response({'status': "Invalid Data"}, status=400)
 
-@csrf_exempt
-def share_match(request, match_id):
-    if request.method != 'POST':
-        return Response({"detail": "Method not allowed."}, status=405)
+#     logger.info(f"Changing data for user: {data['user']}...")
 
-    try:
-        match = Match.objects.get(id=match_id)
-    except Match.DoesNotExist:
-        return Response({"detail": "Not found."}, status=404)
+#     try:
+#         user = get_user_model().objects.get(id=data['user'])
+#     except get_user_model().DoesNotExist:
+#         logger.error(f"User '{data['user']}' does not exist!")
+#         return Response({'status': "Not Found"}, status=404)
 
-    data = request.POST.getlist('user')
-    for elem in data:
-        new_match_user = get_user_model().objects.get(id=elem)
-        match.user.add(new_match_user)
+#     user.email = data['email']
+#     user.first_name = data['first_name']
+#     user.last_name = data['last_name']
 
-    return Response({"detail": "ok"}, status=200)
+#     user.save()
+
+#     logger.info(f"User data for user {data['user']} updated successfully.")
+
+#     return Response({'status': "ok"}, status=200)
+
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def change_password(request):
+#     if not request.method == 'POST':
+#         return Response({'status': "Method Not Allowed"}, status=405)
+
+#     # Check input data
+#     data = request.data
+#     if not data.get('username') or not data.get('current_password') or not data.get('new_password'):
+#         return Response({'status': "Invalid Data"}, status=400)
+
+#     logger.info(f"Changing password for user: {data['username']}...")
+
+#     # Check current password
+#     user = authenticate(
+#         username=data['username'], password=data['current_password'])
+#     if not user:
+#         logger.error(
+#             f"Current password for user '{data['username']}' is invalid!")
+#         return Response({'status': "Invalid current password"}, status=400)
+
+#     # Set new password
+#     user.set_password(data['new_password'])
+#     user.save()
+
+#     logger.info(
+#         f"The password for user '{data['username']}' has been changed successfully.")
+
+#     return Response({'status': "ok"}, status=200)
+
 
 # endregion

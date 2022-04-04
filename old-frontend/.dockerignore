@@ -1,9 +1,0 @@
-.idea
-.nuxt
-_old-vue-src
-
-.dockerignore
-.editorconfig
-.env*
-.gitignore
-Dockerfile
