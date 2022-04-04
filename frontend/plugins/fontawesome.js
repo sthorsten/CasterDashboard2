@@ -41,7 +41,8 @@ import {
   faClock,
   faCalendarCheck,
   faQuestionCircle,
-  faImage
+  faImage,
+  faHeart
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -83,6 +84,7 @@ library.add(faClock)
 library.add(faCalendarCheck)
 library.add(faQuestionCircle)
 library.add(faImage)
+library.add(faHeart)
 
 library.add(faGithub)
 
