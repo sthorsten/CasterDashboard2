@@ -8,6 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
+
+## [2.3.0-alpha] - 2022-04-04
+
+### Notes
+
+- This release is not ready for production yet!
+
+### Added 
+
+- Teams page with the ability to view, create and edit teams
+- Placeholder files for pages without content
+- Content for the home page (temporary)
+
+### Removed
+
+- Old source code including the old frontend and old overlay css / scss files
+
+### Fixed
+
+- Version info not showing correctly in the dashboard
+- Version info at the bottom of the README file
+
+
 ## [2.2.0-alpha] - 2022-04-02
 
 ### Notes
@@ -24,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New user creation failed in post_save hook because the profile couldn't be created (see #23)
 - Removed outdated install instruction notice from README 
+
 
 ## [2.1.0-alpha] - 2022-03-25
 
@@ -82,7 +106,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Old Docker Hub images
-
 
 
 ## [2.0.0-alpha4] - 2021-01-27
@@ -167,7 +190,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.2.0-alpha...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.3.0-alpha...HEAD
+[2.2.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.3.0-alpha
 [2.2.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.2.0-alpha
 [2.1.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.1.0-alpha
 [2.0.0-alpha5]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha5

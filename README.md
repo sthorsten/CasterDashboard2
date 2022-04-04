@@ -1,6 +1,6 @@
 # R6 Caster Dashboard
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2?include_prereleases&sort=semver)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2)
 ![Docker](https://github.com/sthorsten/CasterDashboard2/workflows/Docker/badge.svg)
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
@@ -105,7 +105,7 @@ This project can be easily setup by using [Visual Studio Code](https://code.visu
 
 ## 🗒️ Changelog
 
-Current Version: 2.1.0-alpha
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2)
 
 **Note:** This release is not ready for production yet!
 
