@@ -29,7 +29,6 @@
                     size="sm"
                     variant="primary"
                     @click="editTeam(data.item.id)"
-                    disabled
                   >
                     <fa-icon icon="pencil" class="mr-1" />
                     Edit
@@ -84,6 +83,8 @@
                 </div>
               </b-form-group>
 
+              <hr class="border-secondary" />
+
               <!-- Submit -->
               <b-btn block variant="success" @click="createTeam">
                 <fa-icon icon="plus" class="mr-1" />
@@ -94,6 +95,8 @@
         </b-row>
       </b-container>
     </ContentContainer>
+
+    <EditTeamModal :team-id="editTeamID" />
   </div>
 </template>
 
@@ -122,6 +125,8 @@ export default {
 
       newTeamName: '',
       newTeamLogoFile: null,
+
+      editTeamID: 0
     }
   },
 
@@ -137,7 +142,8 @@ export default {
 
   methods: {
     editTeam(id) {
-      // ToDo
+      this.editTeamID = id
+      this.$bvModal.show('edit-team-modal')
     },
     async createTeam() {
       let formData = new FormData()
