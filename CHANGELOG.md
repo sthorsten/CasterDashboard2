@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 
+## [2.4.0-alpha] - 2022-04-09
+
+### Notes
+
+- This release is not ready for production yet!
+
+### Added 
+
+- Playday page with the ability to view, create and edit playdays
+
+### Fixed
+
+- Backend main receiver method names
+- Match map score not updating correctly when score is 5-5 or higher
+- Added pagination to match list page
+- Fixed icon margins in various places
+- Fixed win type badge not showing correctly in match and match map overview pages
+
+
 ## [2.3.0-alpha] - 2022-04-04
 
 ### Notes
@@ -190,8 +209,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.3.0-alpha...HEAD
-[2.2.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.3.0-alpha
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.4.0-alpha...HEAD
+[2.4.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.4.0-alpha
+[2.3.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.3.0-alpha
 [2.2.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.2.0-alpha
 [2.1.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.1.0-alpha
 [2.0.0-alpha5]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.0.0-alpha5
