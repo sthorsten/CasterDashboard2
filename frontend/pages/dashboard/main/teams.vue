@@ -31,7 +31,7 @@
                     @click="editTeam(data.item.id)"
                   >
                     <fa-icon icon="pencil" class="mr-1" />
-                    Edit
+                    <span>Edit</span>
                   </b-btn>
                 </template>
               </b-table>
@@ -51,8 +51,8 @@
               <!-- Team Name -->
               <b-form-group label-cols="4">
                 <template #label>
-                  <fa-icon icon="header" />
-                  Team Name
+                  <fa-icon icon="header" class="mr-1" />
+                  <span>Team Name</span>
                 </template>
 
                 <b-form-input
@@ -65,8 +65,8 @@
               <!-- Team Logo -->
               <b-form-group label-cols="4">
                 <template #label>
-                  <fa-icon icon="image" />
-                  Team Logo
+                  <fa-icon icon="image" class="mr-1" />
+                  <span>Team Logo</span>
                 </template>
 
                 <div class="custom-file">
@@ -88,7 +88,7 @@
               <!-- Submit -->
               <b-btn block variant="success" @click="createTeam">
                 <fa-icon icon="plus" class="mr-1" />
-                Create team
+                <span>Create team</span>
               </b-btn>
             </CustomCard>
           </b-col>

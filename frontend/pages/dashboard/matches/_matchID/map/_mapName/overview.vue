@@ -3,7 +3,13 @@
     <ContentHeader
       icon="map"
       title="Map Overview"
-      :breadcrumb-items="['Dashboard', 'Matches', $route.params.matchID, $route.params.mapName, 'Overview']"
+      :breadcrumb-items="[
+        'Dashboard',
+        'Matches',
+        $route.params.matchID,
+        $route.params.mapName,
+        'Overview',
+      ]"
     />
     <ContentContainer v-if="match != null && matchMap != null">
       <b-container fluid>
@@ -34,15 +40,18 @@
                   </b-tr>
 
                   <b-tr>
-                    <b-th colspan="2" class="bg-primary">
-                      Teams
-                    </b-th>
+                    <b-th colspan="2" class="bg-primary"> Teams </b-th>
                   </b-tr>
 
                   <b-tr>
                     <b-th>Team Blue</b-th>
                     <b-td class="text-right">
-                      <img :src="teamLogo(match.teamBlue)" width="20" height="20" alt="Team Blue Logo">
+                      <img
+                        :src="teamLogo(match.teamBlue)"
+                        width="20"
+                        height="20"
+                        alt="Team Blue Logo"
+                      />
                       {{ match.teamBlueName }}
                     </b-td>
                   </b-tr>
@@ -50,7 +59,12 @@
                   <b-tr>
                     <b-th>Team Orange</b-th>
                     <b-td class="text-right">
-                      <img :src="teamLogo(match.teamOrange)" width="20" height="20" alt="Team Orange Logo">
+                      <img
+                        :src="teamLogo(match.teamOrange)"
+                        width="20"
+                        height="20"
+                        alt="Team Orange Logo"
+                      />
                       {{ match.teamOrangeName }}
                     </b-td>
                   </b-tr>
@@ -59,7 +73,12 @@
                     <b-th>Team starting ATK</b-th>
                     <b-td class="text-right">
                       <template v-if="matchMap.atkTeam">
-                        <img :src="teamLogo(matchMap.atkTeam)" width="20" height="20" alt="Team Orange Logo">
+                        <img
+                          :src="teamLogo(matchMap.atkTeam)"
+                          width="20"
+                          height="20"
+                          alt="Team Orange Logo"
+                        />
                         {{ matchMap.atkTeamName }}
                       </template>
                       <template v-else>
@@ -72,7 +91,12 @@
                     <b-th>Team starting ATK (Overtime)</b-th>
                     <b-td class="text-right">
                       <template v-if="matchMap.otAtkTeam">
-                        <img :src="teamLogo(matchMap.otAtkTeam)" width="20" height="20" alt="Team Orange Logo">
+                        <img
+                          :src="teamLogo(matchMap.otAtkTeam)"
+                          width="20"
+                          height="20"
+                          alt="Team Orange Logo"
+                        />
                         {{ matchMap.otAtkTeamName }}
                       </template>
                       <template v-else>
@@ -82,9 +106,7 @@
                   </b-tr>
 
                   <b-tr>
-                    <b-th colspan="2" class="bg-primary">
-                      Map Result
-                    </b-th>
+                    <b-th colspan="2" class="bg-primary"> Map Result </b-th>
                   </b-tr>
 
                   <b-tr>
@@ -97,7 +119,7 @@
                   <b-tr>
                     <b-th>Winner</b-th>
                     <b-td class="text-right">
-                      {{ matchMap.winTeam ? matchMap.winTeamName : '-' }}
+                      {{ matchMap.winTeam ? matchMap.winTeamName : "-" }}
                     </b-td>
                   </b-tr>
 
@@ -118,38 +140,58 @@
               <b-form-group>
                 <b-row>
                   <b-col lg="6">
-                    <fa-icon icon="users" />
-                    Select Team starting ATK
+                    <fa-icon icon="users" class="mr-1" />
+                    <span>Select Team starting ATK</span>
                   </b-col>
 
                   <b-col lg="3">
                     <b-btn
-                      :variant="currentAtkTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                      :variant="
+                        currentAtkTeam === match.teamBlue
+                          ? 'primary'
+                          : 'outline-primary'
+                      "
                       block
                       @click="setAtkTeam(match.teamBlue)"
                     >
                       <img
-                        :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                        :src="
+                          $store.getters['mainSocket/getTeamLogo'](
+                            match.teamBlue,
+                            true
+                          )
+                        "
                         height="20"
                         width="20"
                         alt="teamBlue logo"
-                      >
+                        class="mr-1"
+                      />
                       {{ match.teamBlueName }}
                     </b-btn>
                   </b-col>
 
                   <b-col lg="3">
                     <b-btn
-                      :variant="currentAtkTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                      :variant="
+                        currentAtkTeam === match.teamOrange
+                          ? 'primary'
+                          : 'outline-primary'
+                      "
                       block
                       @click="setAtkTeam(match.teamOrange)"
                     >
                       <img
-                        :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                        :src="
+                          $store.getters['mainSocket/getTeamLogo'](
+                            match.teamOrange,
+                            true
+                          )
+                        "
                         height="20"
                         width="20"
                         alt="teamOrange logo"
-                      >
+                        class="mr-1"
+                      />
                       {{ match.teamOrangeName }}
                     </b-btn>
                   </b-col>
@@ -165,47 +207,71 @@
 
                   <b-col lg="3">
                     <b-btn
-                      :variant="currentOtAtkTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                      :variant="
+                        currentOtAtkTeam === match.teamBlue
+                          ? 'primary'
+                          : 'outline-primary'
+                      "
                       block
                       @click="setOtAtkTeam(match.teamBlue)"
                     >
                       <img
-                        :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                        :src="
+                          $store.getters['mainSocket/getTeamLogo'](
+                            match.teamBlue,
+                            true
+                          )
+                        "
                         height="20"
                         width="20"
                         alt="teamBlue logo"
-                      >
+                        class="mr-1"
+                      />
                       {{ match.teamBlueName }}
                     </b-btn>
                   </b-col>
 
                   <b-col lg="3">
                     <b-btn
-                      :variant="currentOtAtkTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                      :variant="
+                        currentOtAtkTeam === match.teamOrange
+                          ? 'primary'
+                          : 'outline-primary'
+                      "
                       block
                       @click="setOtAtkTeam(match.teamOrange)"
                     >
                       <img
-                        :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                        :src="
+                          $store.getters['mainSocket/getTeamLogo'](
+                            match.teamOrange,
+                            true
+                          )
+                        "
                         height="20"
                         width="20"
                         alt="teamOrange logo"
-                      >
+                        class="mr-1"
+                      />
                       {{ match.teamOrangeName }}
                     </b-btn>
                   </b-col>
                 </b-row>
               </b-form-group>
 
-              <hr class="border-secondary">
+              <hr class="border-secondary" />
 
               <b-btn
                 variant="primary"
                 block
-                @click="$router.push(`/dashboard/matches/${match.id}/map/${matchMap.mapName}/opbans`)"
+                @click="
+                  $router.push(
+                    `/dashboard/matches/${match.id}/map/${matchMap.mapName}/opbans`
+                  )
+                "
               >
-                <fa-icon icon="arrow-right" />
-                Continue to operator bans
+                <fa-icon icon="arrow-right" class="mr-1" />
+                <span>Continue to operator bans</span>
               </b-btn>
             </CustomCard>
           </b-col>
@@ -220,7 +286,7 @@ export default {
   name: 'MapOverview',
   layout: 'match-page',
 
-  data () {
+  data() {
     return {
       // currentAtkTeam: null,
       // currentOtAtkTeam: null
@@ -228,7 +294,7 @@ export default {
   },
 
   computed: {
-    match () {
+    match() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         return this.$store.getters['matchSocket/getMatch'](matchID)
@@ -236,7 +302,7 @@ export default {
         return null
       }
     },
-    matchMaps () {
+    matchMaps() {
       try {
         const matchID = parseInt(this.$route.params.matchID)
         return this.$store.getters['matchSocket/getMatchMapsByMatch'](matchID)
@@ -245,24 +311,24 @@ export default {
       }
     },
 
-    currentAtkTeam () {
+    currentAtkTeam() {
       return this.matchMap.atkTeam
     },
-    currentOtAtkTeam () {
+    currentOtAtkTeam() {
       return this.matchMap.otAtkTeam
     },
 
-    matchMap () {
+    matchMap() {
       return this.matchMaps.filter(m => m.mapName === this.$route.params.mapName)[0]
     }
   },
 
   methods: {
-    teamLogo (id) {
+    teamLogo(id) {
       return this.$store.getters['mainSocket/getTeamLogo'](id, true)
     },
 
-    async setAtkTeam (team) {
+    async setAtkTeam(team) {
       const data = {
         atkTeam: team
       }
@@ -273,7 +339,7 @@ export default {
         this.$toast.error('Error')
       }
     },
-    async setOtAtkTeam (team) {
+    async setOtAtkTeam(team) {
       const data = {
         otAtkTeam: team
       }

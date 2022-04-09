@@ -8,15 +8,15 @@
     <template #modal-header>
       <h5 class="modal-title">
         <fa-icon icon="pencil" class="mr-1" />
-        Edit team
+        <span>Edit team</span>
       </h5>
     </template>
 
     <!-- Team ID -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="list-ol" />
-        Team ID
+        <fa-icon icon="list-ol" class="mr-1" />
+        <span>Team ID</span>
       </template>
 
       <div class="d-flex align-items-center text-center h-100">
@@ -29,8 +29,8 @@
     <!-- Team Name -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="header" />
-        Team Name
+        <fa-icon icon="header" class="mr-1" />
+        <span>Team Name</span>
       </template>
 
       <b-form-input
@@ -43,8 +43,8 @@
     <!-- Current Team Logo -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="image" />
-        Current Team Logo
+        <fa-icon icon="image" class="mr-1" />
+        <span>Current Team Logo</span>
       </template>
 
       <div class="d-flex align-items-center text-center h-100">
@@ -55,8 +55,8 @@
     <!-- New Team Logo -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="image" />
-        Upload New Team Logo
+        <fa-icon icon="image" class="mr-1" />
+        <span>Upload New Team Logo</span>
       </template>
 
       <div class="custom-file">
@@ -77,7 +77,7 @@
 
     <b-btn block variant="primary" @click="updateTeam">
       <fa-icon icon="check-circle" class="mr-1" />
-      Update team
+      <span>Update team</span>
     </b-btn>
   </b-modal>
 </template>

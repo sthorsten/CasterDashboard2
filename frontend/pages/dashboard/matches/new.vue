@@ -14,7 +14,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="trophy" />League
+                    <fa-icon icon="trophy" class="mr-1" />
+                    <span>League</span>
                   </template>
 
                   <v-select
@@ -26,11 +27,21 @@
                     @input="selectedSeason = null"
                   >
                     <template #option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-1" />
+                      <img
+                        :src="logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-1"
+                      />
                       {{ name }}
                     </template>
                     <template #selected-option="{ name, logoSmall }">
-                      <img :src="logoSmall" width="20" height="20" class="mr-2" />
+                      <img
+                        :src="logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-2"
+                      />
                       {{ name }}
                     </template>
                   </v-select>
@@ -41,7 +52,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="calendar-alt" />Season
+                    <fa-icon icon="calendar-alt" class="mr-1" />
+                    <span>Season</span>
                   </template>
 
                   <v-select
@@ -49,7 +61,11 @@
                     :options="filteredSeasons"
                     label="name"
                     class="mt-1"
-                    :placeholder="!selectedLeague ? 'Select a league first' : 'Select a season'"
+                    :placeholder="
+                      !selectedLeague
+                        ? 'Select a league first'
+                        : 'Select a season'
+                    "
                     :disabled="!selectedLeague"
                     @option:selected="selectedPlayday = null"
                     @option:deselected="selectedPlayday = null"
@@ -61,7 +77,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="calendar-day" />Playday
+                    <fa-icon icon="calendar-day" class="mr-1" />
+                    <span>Playday</span>
                   </template>
 
                   <v-select
@@ -69,7 +86,11 @@
                     :options="filteredPlaydays"
                     label="name"
                     class="mt-1"
-                    :placeholder="!selectedSeason ? 'Select a league / season first' : 'Select a playday'"
+                    :placeholder="
+                      !selectedSeason
+                        ? 'Select a league / season first'
+                        : 'Select a playday'
+                    "
                     :disabled="!selectedSeason"
                   />
                 </b-form-group>
@@ -81,7 +102,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="calendar-check" />Match Date
+                    <fa-icon icon="calendar-check" class="mr-1" />
+                    <span>Match Date</span>
                   </template>
 
                   <b-form-input v-model="matchDate" type="date" />
@@ -92,7 +114,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="clock" />Match Time
+                    <fa-icon icon="clock" class="mr-1" />
+                    <span>Match Time</span>
                   </template>
 
                   <b-form-input v-model="matchTime" type="time" />
@@ -105,7 +128,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="users" />Team Blue
+                    <fa-icon icon="users" class="mr-1" />
+                    <span>Team Blue</span>
                   </template>
 
                   <v-select
@@ -116,11 +140,21 @@
                     placeholder="Select a team"
                   >
                     <template #option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-1" />
+                      <img
+                        :src="option.logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-1"
+                      />
                       {{ option.name }}
                     </template>
                     <template #selected-option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-2" />
+                      <img
+                        :src="option.logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-2"
+                      />
                       {{ option.name }}
                     </template>
                   </v-select>
@@ -131,7 +165,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="users" />Team Orange
+                    <fa-icon icon="users" class="mr-1" />
+                    <span>Team Orange</span>
                   </template>
 
                   <v-select
@@ -142,11 +177,21 @@
                     placeholder="Select a team"
                   >
                     <template #option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-1" />
+                      <img
+                        :src="option.logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-1"
+                      />
                       {{ option.name }}
                     </template>
                     <template #selected-option="option">
-                      <img :src="option.logoSmall" width="20" height="20" class="mr-2" />
+                      <img
+                        :src="option.logoSmall"
+                        width="20"
+                        height="20"
+                        class="mr-2"
+                      />
                       {{ option.name }}
                     </template>
                   </v-select>
@@ -160,7 +205,8 @@
                 <b-form-group>
                   <b-row>
                     <b-col lg="3">
-                      <fa-icon icon="list-ol" />Best Of
+                      <fa-icon icon="list-ol" class="mr-1" />
+                      <span>Best Of</span>
                     </b-col>
                     <b-col>
                       <b-form-radio-group v-model="bestOf">
@@ -180,7 +226,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="heading" />Match Title
+                    <fa-icon icon="heading" class="mr-1" />
+                    <span>Match Title</span>
                   </template>
 
                   <b-form-input
@@ -195,7 +242,8 @@
               <b-container fluid>
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="heading" />Match Subtitle
+                    <fa-icon icon="heading" class="mr-1" />
+                    <span>Match Subtitle</span>
                   </template>
                   <b-form-input
                     v-model="matchSubtitle"
@@ -207,8 +255,14 @@
 
               <!-- Submit -->
               <b-container fluid class="mt-4">
-                <b-btn block variant="primary" :disabled="!matchDataValid" @click="createMatch">
-                  <fa-icon icon="plus" />Create match
+                <b-btn
+                  block
+                  variant="primary"
+                  :disabled="!matchDataValid"
+                  @click="createMatch"
+                >
+                  <fa-icon icon="plus" class="mr-1" />
+                  <span>Create match</span>
                 </b-btn>
               </b-container>
             </CustomCard>

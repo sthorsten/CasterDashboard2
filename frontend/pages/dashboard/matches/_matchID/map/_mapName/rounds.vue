@@ -3,7 +3,13 @@
     <ContentHeader
       icon="play-circle"
       title="Rounds"
-      :breadcrumb-items="['Dashboard', 'Matches', $route.params.matchID, $route.params.mapName, 'Rounds']"
+      :breadcrumb-items="[
+        'Dashboard',
+        'Matches',
+        $route.params.matchID,
+        $route.params.mapName,
+        'Rounds',
+      ]"
     />
     <ContentContainer v-if="match != null && matchMap != null">
       <b-container fluid>
@@ -14,9 +20,10 @@
             <CustomCard title="Add Round">
               <!-- Bomb spot-->
               <label>
-                <b-badge variant="secondary" pill class="mr-2">1</b-badge>Select Bomb Spot:
+                <b-badge variant="secondary" pill class="mr-2">1</b-badge>Select
+                Bomb Spot:
               </label>
-              <b-row style="margin-top: -0.5rem;">
+              <b-row style="margin-top: -0.5rem">
                 <b-col cols="6" v-for="bs in bombSpots" :key="bs.id">
                   <BombspotSelectBtn
                     :bombspot="bs"
@@ -30,35 +37,56 @@
 
               <!-- OF Team -->
               <label>
-                <b-badge variant="secondary" pill class="mr-2">2</b-badge>Select Opening Frag Team:
+                <b-badge variant="secondary" pill class="mr-2">2</b-badge>Select
+                Opening Frag Team:
               </label>
               <b-row>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedOFTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedOFTeam === match.teamBlue
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     block
                     @click="selectedOFTeam = match.teamBlue"
                   >
                     <img
-                      :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                      :src="
+                        $store.getters['mainSocket/getTeamLogo'](
+                          match.teamBlue,
+                          true
+                        )
+                      "
                       height="20"
                       width="20"
                       alt="teamBlue logo"
+                      class="mr-1"
                     />
                     {{ match.teamBlueName }}
                   </b-btn>
                 </b-col>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedOFTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedOFTeam === match.teamOrange
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     block
                     @click="selectedOFTeam = match.teamOrange"
                   >
                     <img
-                      :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                      :src="
+                        $store.getters['mainSocket/getTeamLogo'](
+                          match.teamOrange,
+                          true
+                        )
+                      "
                       height="20"
                       width="20"
                       alt="teamBlue logo"
+                      class="mr-1"
                     />
                     {{ match.teamOrangeName }}
                   </b-btn>
@@ -69,35 +97,56 @@
 
               <!-- Win Team -->
               <label>
-                <b-badge variant="secondary" pill class="mr-2">3</b-badge>Select Win Team:
+                <b-badge variant="secondary" pill class="mr-2">3</b-badge>Select
+                Win Team:
               </label>
               <b-row>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedWinTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinTeam === match.teamBlue
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     block
                     @click="selectedWinTeam = match.teamBlue"
                   >
                     <img
-                      :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                      :src="
+                        $store.getters['mainSocket/getTeamLogo'](
+                          match.teamBlue,
+                          true
+                        )
+                      "
                       height="20"
                       width="20"
                       alt="teamBlue logo"
+                      class="mr-1"
                     />
                     {{ match.teamBlueName }}
                   </b-btn>
                 </b-col>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedWinTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinTeam === match.teamOrange
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     block
                     @click="selectedWinTeam = match.teamOrange"
                   >
                     <img
-                      :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                      :src="
+                        $store.getters['mainSocket/getTeamLogo'](
+                          match.teamOrange,
+                          true
+                        )
+                      "
                       height="20"
                       width="20"
                       alt="teamBlue logo"
+                      class="mr-1"
                     />
                     {{ match.teamOrangeName }}
                   </b-btn>
@@ -108,32 +157,51 @@
 
               <!-- Win Type-->
               <label>
-                <b-badge variant="secondary" pill class="mr-2">4</b-badge>Select Win Type:
+                <b-badge variant="secondary" pill class="mr-2">4</b-badge>Select
+                Win Type:
               </label>
               <b-row>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedWinType === 'KILLS' ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinType === 'KILLS'
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     @click="selectedWinType = 'KILLS'"
                     block
-                  >Kills</b-btn>
+                    >Kills</b-btn
+                  >
                   <b-btn
-                    :variant="selectedWinType === 'DEFUSER_PLANTED' ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinType === 'DEFUSER_PLANTED'
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     @click="selectedWinType = 'DEFUSER_PLANTED'"
                     block
-                  >Defuser Planted</b-btn>
+                    >Defuser Planted</b-btn
+                  >
                 </b-col>
                 <b-col cols="6">
                   <b-btn
-                    :variant="selectedWinType === 'TIME' ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinType === 'TIME' ? 'primary' : 'outline-primary'
+                    "
                     @click="selectedWinType = 'TIME'"
                     block
-                  >Time</b-btn>
+                    >Time</b-btn
+                  >
                   <b-btn
-                    :variant="selectedWinType === 'DEFUSER_DISABLED' ? 'primary' : 'outline-primary'"
+                    :variant="
+                      selectedWinType === 'DEFUSER_DISABLED'
+                        ? 'primary'
+                        : 'outline-primary'
+                    "
                     @click="selectedWinType = 'DEFUSER_DISABLED'"
                     block
-                  >Defuser Disabled</b-btn>
+                    >Defuser Disabled</b-btn
+                  >
                 </b-col>
               </b-row>
 
@@ -155,23 +223,32 @@
           <!-- Round Actions -->
           <b-col cols="6">
             <CustomCard title="Round Actions" color="info">
-              <b-btn variant="primary" block :disabled="!roundDetailsOK" @click="addRound">
-                <fa-icon icon="plus" class="mr-1" />Add round
+              <b-btn
+                variant="primary"
+                block
+                :disabled="!roundDetailsOK"
+                @click="addRound"
+              >
+                <fa-icon icon="plus" class="mr-1" />
+                <span>Add round</span>
               </b-btn>
 
               <hr class="border-secondary" />
 
               <b-btn variant="danger" block disabled>
-                <fa-icon icon="trash-can" class="mr-1" />Remove last round
+                <fa-icon icon="trash-can" class="mr-1" />
+                <span>Remove last round</span>
               </b-btn>
               <b-btn variant="danger" block disabled>
-                <fa-icon icon="trash-can" class="mr-1" />Remove all rounds
+                <fa-icon icon="trash-can" class="mr-1" />
+                <span>Remove all rounds</span>
               </b-btn>
 
               <hr class="border-secondary" />
 
               <b-btn variant="success" block @click="finishMap">
-                <fa-icon icon="circle-check" class="mr-1" />Finish map
+                <fa-icon icon="circle-check" class="mr-1" />
+                <span>Finish map</span>
               </b-btn>
             </CustomCard>
 
@@ -185,7 +262,9 @@
 
                   <b-tr>
                     <b-th>Current match score</b-th>
-                    <b-td class="text-right">{{ match.scoreBlue }} - {{ match.scoreOrange }}</b-td>
+                    <b-td class="text-right"
+                      >{{ match.scoreBlue }} - {{ match.scoreOrange }}</b-td
+                    >
                   </b-tr>
 
                   <b-tr>
@@ -195,7 +274,10 @@
 
                   <b-tr>
                     <b-th>Current map score</b-th>
-                    <b-td class="text-right">{{ matchMap.scoreBlue }} - {{ matchMap.scoreOrange }}</b-td>
+                    <b-td class="text-right"
+                      >{{ matchMap.scoreBlue }} -
+                      {{ matchMap.scoreOrange }}</b-td
+                    >
                   </b-tr>
 
                   <b-tr>

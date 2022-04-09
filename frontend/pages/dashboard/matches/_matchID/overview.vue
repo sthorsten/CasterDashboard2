@@ -136,12 +136,12 @@
             <CustomCard title="Match Actions" color="info">
               <b-container fluid>
                 <b-btn variant="primary" block @click="setMatchToOverlays">
-                  <fa-icon icon="arrow-right-to-bracket" />
-                  Set Match to overlays
+                  <fa-icon icon="arrow-right-to-bracket" class="mr-1" />
+                  <span>Set Match to overlays</span>
                 </b-btn>
                 <b-btn variant="primary" block disabled>
-                  <fa-icon icon="arrow-right-to-bracket" />
-                  Set Match as <b>next match</b> to overlays
+                  <fa-icon icon="arrow-right-to-bracket" class="mr-1" />
+                  <span>Set Match as <b>next match</b> to overlays</span>
                 </b-btn>
 
                 <hr class="border-secondary" />
@@ -151,23 +151,23 @@
                   block
                   @click="$router.push(`/dashboard/matches/${match.id}/mapban`)"
                 >
-                  <fa-icon icon="arrow-right" />
-                  Continue to Map Pick & Ban
+                  <fa-icon icon="arrow-right" class="mr-1" />
+                  <span>Continue to Map Pick & Ban</span>
                 </b-btn>
                 <b-btn variant="primary" block disabled>
-                  <fa-icon icon="circle-info" />
-                  Show match details
+                  <fa-icon icon="circle-info" class="mr-1" />
+                  <span>Show match details</span>
                 </b-btn>
 
                 <hr class="border-secondary" />
 
                 <b-btn variant="danger" block disabled>
-                  <fa-icon icon="pencil-alt" />
-                  Edit match
+                  <fa-icon icon="pencil-alt" class="mr-1" />
+                  <span>Edit match</span>
                 </b-btn>
                 <b-btn variant="danger" block disabled>
-                  <fa-icon icon="trash-can" />
-                  Delete match
+                  <fa-icon icon="trash-can" class="mr-1" />
+                  <span>Delete match</span>
                 </b-btn>
               </b-container>
             </CustomCard>

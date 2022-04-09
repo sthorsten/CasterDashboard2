@@ -76,8 +76,8 @@
                       )
                     "
                   >
-                    <fa-icon icon="arrow-right" />
-                    Go to match
+                    <fa-icon icon="arrow-right" class="mr-1" />
+                    <span>Go to match</span>
                   </b-btn>
                 </template>
               </b-table>

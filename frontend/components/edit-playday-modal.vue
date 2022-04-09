@@ -8,15 +8,15 @@
     <template #modal-header>
       <h5 class="modal-title">
         <fa-icon icon="calendar-day" class="mr-1" />
-        Edit playday
+        <span>Edit playday</span>
       </h5>
     </template>
 
     <!-- Playday ID -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="list-ol" />
-        Playday ID
+        <fa-icon icon="list-ol" class="mr-1" />
+        <span>Playday ID</span>
       </template>
 
       <div class="d-flex align-items-center text-center h-100">
@@ -29,8 +29,8 @@
     <!-- Playday League -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="trophy" />
-        League
+        <fa-icon icon="trophy" class="mr-1" />
+        <span>League</span>
       </template>
 
       <div class="d-flex align-items-center text-center h-100">
@@ -44,8 +44,8 @@
     <!-- Playday Season -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="calendar-alt" />
-        Season
+        <fa-icon icon="calendar-alt" class="mr-1" />
+        <span>Season</span>
       </template>
 
       <div class="d-flex align-items-center text-center h-100">
@@ -58,8 +58,8 @@
     <!-- Playday Date -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="calendar-check" />
-        Playday Date
+        <fa-icon icon="calendar-check" class="mr-1" />
+        <span>Playday Date</span>
       </template>
 
       <b-form-input
@@ -72,8 +72,8 @@
     <!-- Playday Number -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="list-ol" />
-        Playday Number
+        <fa-icon icon="list-ol" class="mr-1" />
+        <span>Playday Number</span>
       </template>
 
       <b-form-input
@@ -86,8 +86,8 @@
     <!-- Playday Name -->
     <b-form-group label-cols="4">
       <template #label>
-        <fa-icon icon="header" />
-        Playday Name
+        <fa-icon icon="header" class="mr-1" />
+        <span>Playday Name</span>
       </template>
 
       <b-form-input
@@ -106,7 +106,7 @@
       @click="updatePlayday"
     >
       <fa-icon icon="check-circle" class="mr-1" />
-      Update playday
+      <span>Update playday</span>
     </b-btn>
   </b-modal>
 </template>

@@ -40,7 +40,7 @@
                     @click="editPlayday(data.item.id)"
                   >
                     <fa-icon icon="pencil" class="mr-1" />
-                    Edit
+                    <span>Edit</span>
                   </b-btn>
                 </template>
               </b-table>
@@ -60,7 +60,8 @@
               <!-- League -->
               <b-form-group label-cols-lg="4">
                 <template #label>
-                  <fa-icon icon="trophy" class="mr-1" />League
+                  <fa-icon icon="trophy" class="mr-1" />
+                  <span>League</span>
                 </template>
 
                 <v-select
@@ -84,7 +85,8 @@
               <!-- Season -->
               <b-form-group label-cols-lg="4">
                 <template #label>
-                  <fa-icon icon="calendar-alt" class="mr-1" />Season
+                  <fa-icon icon="calendar-alt" class="mr-1" />
+                  <span>Season</span>
                 </template>
 
                 <v-select
@@ -104,7 +106,8 @@
               <!-- Playday date -->
               <b-form-group label-cols-lg="4">
                 <template #label>
-                  <fa-icon icon="calendar-check" class="mr-1" />Playday Date
+                  <fa-icon icon="calendar-check" class="mr-1" />
+                  <span>Playday Date</span>
                 </template>
 
                 <b-form-input v-model="newPlaydayDate" type="date" />
@@ -114,7 +117,7 @@
               <b-form-group label-cols="4">
                 <template #label>
                   <fa-icon icon="list-ol" class="mr-1" />
-                  Playday number
+                  <span>Playday number</span>
                 </template>
 
                 <b-form-input
@@ -133,7 +136,7 @@
               <b-form-group label-cols="4">
                 <template #label>
                   <fa-icon icon="heading" class="mr-1" />
-                  Playday name
+                  <span>Playday name</span>
                 </template>
 
                 <b-form-input
@@ -161,7 +164,7 @@
                 "
               >
                 <fa-icon icon="plus" class="mr-1" />
-                Create playday
+                <span>Create playday</span>
               </b-btn>
             </CustomCard>
           </b-col>

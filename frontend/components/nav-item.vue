@@ -1,12 +1,23 @@
 <template>
   <li class="nav-item">
-    <NuxtLink v-if="nuxtLink" class="nav-link" :to="link" exact :active="active">
-      <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
+    <NuxtLink
+      v-if="nuxtLink"
+      class="nav-link"
+      :to="link"
+      exact
+      :active="active"
+    >
+      <fa-icon v-if="icon" :icon="icon" class="nav-icon mr-1" />
       <template v-if="inline">{{ text }}</template>
       <p v-else>{{ text }}</p>
     </NuxtLink>
-    <a v-else :class="active ? 'nav-link active' : 'nav-link'" :href="link" :target="target">
-      <fa-icon v-if="icon" :icon="icon" class="nav-icon" />
+    <a
+      v-else
+      :class="active ? 'nav-link active' : 'nav-link'"
+      :href="link"
+      :target="target"
+    >
+      <fa-icon v-if="icon" :icon="icon" class="nav-icon mr-1" />
       <template v-if="inline">{{ text }}</template>
       <p v-else>{{ text }}</p>
     </a>

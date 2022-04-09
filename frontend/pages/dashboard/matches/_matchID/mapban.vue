@@ -3,7 +3,12 @@
     <ContentHeader
       icon="map"
       title="Map Pick & Ban"
-      :breadcrumb-items="['Dashboard', 'Matches', $route.params.matchID, 'MapBan']"
+      :breadcrumb-items="[
+        'Dashboard',
+        'Matches',
+        $route.params.matchID,
+        'MapBan',
+      ]"
     />
     <ContentContainer v-if="match">
       <b-container fluid>
@@ -15,7 +20,8 @@
                 <!-- Map Pool -->
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="map" />Select Map Pool
+                    <fa-icon icon="map" class="mr-1" />
+                    <span>Select Map Pool</span>
                   </template>
 
                   <v-select
@@ -31,10 +37,16 @@
                 <!-- Map Pool -->
                 <b-form-group label-cols-lg="3">
                   <template #label>
-                    <fa-icon icon="list-ol" />Select Map Count
+                    <fa-icon icon="list-ol" class="mr-1" />
+                    <span>Select Map Count</span>
                   </template>
 
-                  <b-form-input v-model="mapCount" type="number" min="0" max="9" />
+                  <b-form-input
+                    v-model="mapCount"
+                    type="number"
+                    min="0"
+                    max="9"
+                  />
                 </b-form-group>
 
                 <hr class="border-secondary" />
@@ -43,20 +55,31 @@
                 <b-form-group>
                   <b-row>
                     <b-col lg="3" class="d-flex align-items-center">
-                      <fa-icon icon="users" />Select next Team
+                      <fa-icon icon="users" class="mr-1" />
+                      <span>Select next Team</span>
                     </b-col>
 
                     <b-col>
                       <b-btn
-                        :variant="currentPickTeam === match.teamBlue ? 'primary' : 'outline-primary'"
+                        :variant="
+                          currentPickTeam === match.teamBlue
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
                         block
                         @click="currentPickTeam = match.teamBlue"
                       >
                         <img
-                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
+                          :src="
+                            $store.getters['mainSocket/getTeamLogo'](
+                              match.teamBlue,
+                              true
+                            )
+                          "
                           height="20"
                           width="20"
                           alt="teamBlue logo"
+                          class="mr-1"
                         />
                         {{ match.teamBlueName }}
                       </b-btn>
@@ -64,42 +87,29 @@
 
                     <b-col>
                       <b-btn
-                        :variant="currentPickTeam === match.teamOrange ? 'primary' : 'outline-primary'"
+                        :variant="
+                          currentPickTeam === match.teamOrange
+                            ? 'primary'
+                            : 'outline-primary'
+                        "
                         block
                         @click="currentPickTeam = match.teamOrange"
                       >
                         <img
-                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
+                          :src="
+                            $store.getters['mainSocket/getTeamLogo'](
+                              match.teamOrange,
+                              true
+                            )
+                          "
                           height="20"
                           width="20"
                           alt="teamOrange logo"
+                          class="mr-1"
                         />
                         {{ match.teamOrangeName }}
                       </b-btn>
                     </b-col>
-
-                    <!--
-                    <b-form-radio-group v-model="currentPickTeam">
-                      <b-form-radio :value="match.teamBlue">
-                        <img
-                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamBlue, true)"
-                          height="20"
-                          width="20"
-                          alt="teamBlue logo"
-                        >
-                        {{ match.teamBlueName }}
-                      </b-form-radio>
-                      <b-form-radio :value="match.teamOrange">
-                        <img
-                          :src="$store.getters['mainSocket/getTeamLogo'](match.teamOrange, true)"
-                          height="20"
-                          width="20"
-                          alt="teamOrange logo"
-                        >
-                        {{ match.teamOrangeName }}
-                      </b-form-radio>
-                    </b-form-radio-group>
-                    -->
                   </b-row>
                 </b-form-group>
 
@@ -111,7 +121,10 @@
                     <b-row>
                       <!-- Map image -->
                       <b-col lg="3">
-                        <MapbanImage :map-name="map.name" :map-ban="mapBansByMap[map.id]" />
+                        <MapbanImage
+                          :map-name="map.name"
+                          :map-ban="mapBansByMap[map.id]"
+                        />
                       </b-col>
 
                       <!-- Buttons -->
@@ -119,24 +132,33 @@
                         <b-btn
                           variant="danger"
                           block
-                          :disabled="currentPickTeam === -1 || !!mapBansByMap[map.id]"
+                          :disabled="
+                            currentPickTeam === -1 || !!mapBansByMap[map.id]
+                          "
                           @click="selectMap(map, 'BAN')"
                         >
-                          <fa-icon icon="ban" />Ban Map
+                          <fa-icon icon="ban" class="mr-1" />
+                          <span>Ban Map</span>
                         </b-btn>
                         <b-btn
                           variant="success"
                           block
-                          :disabled="currentPickTeam === -1 || !!mapBansByMap[map.id]"
+                          :disabled="
+                            currentPickTeam === -1 || !!mapBansByMap[map.id]
+                          "
                           @click="selectMap(map, 'PICK')"
                         >
-                          <fa-icon icon="hand-point-up" />Pick Map
+                          <fa-icon icon="hand-point-up" class="mr-1" />
+                          <span>Pick Map</span>
                         </b-btn>
                       </b-col>
 
                       <!-- Text -->
                       <b-col>
-                        <MapbanText :map="map" :map-ban="mapBansByMap[map.id]" />
+                        <MapbanText
+                          :map="map"
+                          :map-ban="mapBansByMap[map.id]"
+                        />
                       </b-col>
                     </b-row>
 
@@ -151,10 +173,12 @@
           <b-col cols="6">
             <CustomCard color="info" title="Map Ban Actions">
               <b-btn variant="danger" block @click="removeLastMap">
-                <fa-icon icon="trash-can" />Remove last map
+                <fa-icon icon="trash-can" class="mr-1" />
+                <span>Remove last map</span>
               </b-btn>
               <b-btn variant="danger" block @click="removeAllMaps">
-                <fa-icon icon="trash-can" />Remove all maps
+                <fa-icon icon="trash-can" class="mr-1" />
+                <span>Remove all maps</span>
               </b-btn>
 
               <hr class="border-secondary" />
@@ -163,15 +187,24 @@
                 variant="primary"
                 block
                 :disabled="!nextMap"
-                @click="$router.push(`/dashboard/matches/${match.id}/map/${nextMap.mapName}/overview`)"
+                @click="
+                  $router.push(
+                    `/dashboard/matches/${match.id}/map/${nextMap.mapName}/overview`
+                  )
+                "
               >
-                <fa-icon icon="arrow-right" />Continue to next map
+                <fa-icon icon="arrow-right" class="mr-1" />
+                <span>Continue to next map</span>
                 <template v-if="nextMap">({{ nextMap.mapName }})</template>
                 <!-- ToDo: Add next map in text -->
               </b-btn>
             </CustomCard>
             <CustomCard color="secondary" title="Current Map Ban">
-              <MapbanLog v-for="mapBan in mapBans" :key="mapBan.id" :map-ban="mapBan" />
+              <MapbanLog
+                v-for="mapBan in mapBans"
+                :key="mapBan.id"
+                :map-ban="mapBan"
+              />
               <span v-if="!mapBans || mapBans.length === 0">
                 <i>None selected yet.</i>
               </span>
@@ -280,7 +313,7 @@ export default {
           return
         }
       } catch (e) {
-        console.log(e)      
+        console.log(e)
         return
       }
 

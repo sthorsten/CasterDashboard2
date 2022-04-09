@@ -3,7 +3,13 @@
     <ContentHeader
       icon="users-slash"
       title="Operator Bans"
-      :breadcrumb-items="['Dashboard', 'Matches', $route.params.matchID, $route.params.mapName, 'Operator Bans']"
+      :breadcrumb-items="[
+        'Dashboard',
+        'Matches',
+        $route.params.matchID,
+        $route.params.mapName,
+        'Operator Bans',
+      ]"
     />
     <ContentContainer v-if="match != null && matchMap != null">
       <b-container fluid>
@@ -28,7 +34,11 @@
                 <!-- ATK Operators -->
                 <b-col cols="6">
                   <b-row>
-                    <b-col v-for="operator in atkOperators" :key="operator.id" cols="6">
+                    <b-col
+                      v-for="operator in atkOperators"
+                      :key="operator.id"
+                      cols="6"
+                    >
                       <OperatorBanBtn
                         :operator="operator"
                         :operator-bans="operatorBans"
@@ -42,7 +52,11 @@
                 <!-- DEF Operators -->
                 <b-col cols="6">
                   <b-row>
-                    <b-col v-for="operator in defOperators" :key="operator.id" cols="6">
+                    <b-col
+                      v-for="operator in defOperators"
+                      :key="operator.id"
+                      cols="6"
+                    >
                       <OperatorBanBtn
                         :operator="operator"
                         :operator-bans="operatorBans"
@@ -63,10 +77,12 @@
               <b-col>
                 <CustomCard color="info" title="Operator Ban Actions">
                   <b-btn variant="danger" block disabled>
-                    <fa-icon icon="trash-can" class="mr-1" />Remove last operator ban
+                    <fa-icon icon="trash-can" class="mr-1" />
+                    <span>Remove last operator ban</span>
                   </b-btn>
                   <b-btn variant="danger" block disabled>
-                    <fa-icon icon="trash-can" class="mr-1" />Remove all operator bans
+                    <fa-icon icon="trash-can" class="mr-1" />
+                    <span>Remove all operator bans</span>
                   </b-btn>
 
                   <hr class="border-secondary" />
@@ -74,9 +90,14 @@
                   <b-btn
                     variant="primary"
                     block
-                    @click="$router.push(`/dashboard/matches/${match.id}/map/${matchMap.mapName}/rounds`)"
+                    @click="
+                      $router.push(
+                        `/dashboard/matches/${match.id}/map/${matchMap.mapName}/rounds`
+                      )
+                    "
                   >
-                    <fa-icon icon="arrow-right" class="mr-1" />Continue to rounds
+                    <fa-icon icon="arrow-right" class="mr-1" />
+                    <span>Continue to rounds</span>
                   </b-btn>
                 </CustomCard>
               </b-col>
@@ -94,7 +115,10 @@
                       :key="ban.id"
                       class="text-center"
                     >
-                      <R6OperatorIcon :operator="ban.operatorIdentifier" height="50" />
+                      <R6OperatorIcon
+                        :operator="ban.operatorIdentifier"
+                        height="50"
+                      />
                       <br />
                       <b>{{ ban.operatorName }}</b>
                       <br />
