@@ -126,7 +126,7 @@
                   <b-tr>
                     <b-th>Win type</b-th>
                     <b-td class="text-right">
-                      <WintypeBadge :map-status="matchMap.winType" />
+                      <WintypeBadge :status="matchMap.winType" />
                     </b-td>
                   </b-tr>
                 </b-tbody>
