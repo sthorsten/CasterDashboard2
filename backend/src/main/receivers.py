@@ -53,13 +53,13 @@ def playday_pre_save(instance, **kwargs):
 
 
 @receiver(signals.post_save, sender=models.Playday)
-def season_post_save(instance, **kwargs):
+def playday_post_save(instance, **kwargs):
     serialized_data = serializers.PlaydaySerializer(instance).data
     websocket.send_server_data("main", "Playday", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.Tournament)
-def season_post_save(instance, **kwargs):
+def tournament_post_save(instance, **kwargs):
     serialized_data = serializers.TournamentSerializer(instance).data
     websocket.send_server_data("main", "Tournament", serialized_data)
 
