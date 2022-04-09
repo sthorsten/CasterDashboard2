@@ -186,7 +186,7 @@ def round_post_save(instance, created, **kwargs):
         matchMap.save()
 
     # Set match map score and possibly state to overtime
-    if matchMap.status == 'PLAYING':
+    if matchMap.status == 'PLAYING' or matchMap.status == 'OVERTIME':
         # Set score
         if instance.winTeam == match.teamBlue:
             matchMap.scoreBlue = matchMap.scoreBlue + 1
@@ -194,7 +194,7 @@ def round_post_save(instance, created, **kwargs):
             matchMap.scoreOrange = matchMap.scoreOrange + 1
 
         # Set status to overtime
-        if (matchMap.scoreBlue + 1) >= 6 and (matchMap.scoreOrange + 1) >= 6:
+        if matchMap.status == 'PLAYING' and (matchMap.scoreBlue + 1) >= 6 and (matchMap.scoreOrange + 1) >= 6:
             matchMap.status = 'OVERTIME'
 
         matchMap.save()
