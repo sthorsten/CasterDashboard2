@@ -15,7 +15,7 @@ class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.SeasonSerializer
 
 
-class PlaydayViewSet(viewsets.ReadOnlyModelViewSet):
+class PlaydayViewSet(viewsets.ModelViewSet):
     queryset = models.Playday.objects.all()
     serializer_class = serializers.PlaydaySerializer
 

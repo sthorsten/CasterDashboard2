@@ -36,7 +36,9 @@ class PlaydaySerializer(serializers.ModelSerializer):
         source='season.name', allow_null=True, read_only=True)
     leagueName = serializers.StringRelatedField(
         source='season.league', allow_null=True, read_only=True)
-    date = serializers.DateField(format="%Y-%m-%d", read_only=True)
+    league = serializers.PrimaryKeyRelatedField(
+        source='season.league', allow_null=True, read_only=True,)
+    date = serializers.DateField(format="%Y-%m-%d")
     created = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", read_only=True)
     lastModified = serializers.DateTimeField(
