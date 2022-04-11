@@ -22,6 +22,7 @@ export default {
   plugins: [
     { src: '~/plugins/fontawesome', ssr: false },
     { src: '~/plugins/vue-select', ssr: false },
+    { src: '~/plugins/vue-apexcharts', ssr: false },
     { src: '~/plugins/websocket', ssr: false }
   ],
 

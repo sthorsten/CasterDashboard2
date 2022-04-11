@@ -302,7 +302,24 @@
         <!-- Round stats -->
         <b-row>
           <b-col cols="12">
-            <CustomCard title="Round Statistics" color="secondary"></CustomCard>
+            <CustomCard title="Round Statistics" color="secondary">
+              <b-row>
+                <b-col cols="12" md="6" xl="4">
+                  <RoundBombspotChart :map-id="this.matchMap.map" />
+                </b-col>
+                <b-col cols="12" md="6" xl="4">
+                  <RoundWintypeChart />
+                </b-col>
+                <b-col cols="12" md="6" xl="4">
+                  <RoundSideChart
+                    :team-blue="match.teamBlueName"
+                    :team-orange="match.teamOrangeName"
+                    :atk-team="matchMap.atkTeamName"
+                    :ot-atk-team="matchMap.otAtkTeamName"
+                  />
+                </b-col>
+              </b-row>
+            </CustomCard>
           </b-col>
         </b-row>
       </b-container>
