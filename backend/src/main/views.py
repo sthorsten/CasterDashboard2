@@ -10,7 +10,7 @@ class LeagueViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.LeagueSerializer
 
 
-class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
+class SeasonViewSet(viewsets.ModelViewSet):
     queryset = models.Season.objects.all()
     serializer_class = serializers.SeasonSerializer
 
