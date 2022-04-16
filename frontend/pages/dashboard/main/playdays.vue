@@ -224,8 +224,8 @@ export default {
     },
     filteredSeasons() {
       if (!this.seasons) { return null }
-      if (!this.selectedLeague) { return this.seasons }
-      return this.seasons.filter(s => s.league === this.selectedLeague.id)
+      if (!this.newPlaydayLeague) { return this.seasons }
+      return this.seasons.filter(s => s.league === this.newPlaydayLeague.id)
     },
   },
 
