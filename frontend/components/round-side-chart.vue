@@ -26,14 +26,13 @@ export default {
         chart: {
           type: 'bar',
           stacked: true,
-          stackType: '100%'
+          toolbar: {
+            show: false
+          }
         },
-        xaxis: {
-          categories: ['ATK', 'DEF'],
-          labels: {
-            style: {
-              colors: '#fff'
-            }
+        dataLabels: {
+          formatter: function (val) {
+            return `${val}x`
           }
         },
         legend: {
@@ -54,6 +53,16 @@ export default {
     chartOptions() {
       return {
         ...this.chartOptionsBase,
+        xaxis: {
+          categories: [
+            this.teamBlue, this.teamOrange
+          ],
+          labels: {
+            style: {
+              colors: '#fff'
+            }
+          }
+        }
         //labels: this.winTypes,
       }
     },
@@ -65,15 +74,63 @@ export default {
     series() {
       return [
         {
-          name: this.teamBlue,
-          data: this.teamBlueSeries
+          name: 'ATK',
+          data: this.winSeries[0]
         },
         {
-          name: this.teamOrange,
-          data: this.teamOrangeSeries
+          name: 'DEF',
+          data: this.winSeries[1]
         }
       ]
     },
+
+    winSeries() {
+      const atkWins = [0, 0]
+      const defWins = [0, 0]
+
+      this.rounds.forEach(r => {
+        if (this.teamBlue === this.atkTeam) {
+
+          if (r.roundNo <= 6) {
+            (this.teamBlue === r.winTeamName) ? atkWins[0]++ : defWins[1]++
+          } else if (r.roundNo >= 7 && r.roundNo <= 12) {
+            (this.teamBlue === r.winTeamName) ? defWins[0]++ : atkWins[1]++
+          }
+
+        } else {
+
+          if (r.roundNo <= 6) {
+            (this.teamOrange === r.winTeamName) ? atkWins[1]++ : defWins[0]++
+          } else if (r.roundNo >= 7 && r.roundNo <= 12) {
+            (this.teamOrange === r.winTeamName) ? defWins[1]++ : atkWins[0]++
+          }
+
+        }
+
+        if (this.teamBlue === this.otAtkTeam) {
+
+          if (r.roundNo === 13 || r.roundNo === 15) {
+            (this.teamBlue === r.winTeamName) ? atkWins[0]++ : defWins[1]++
+          }
+          if (r.roundNo === 14) {
+            (this.teamBlue === r.winTeamName) ? defWins[0]++ : atkWins[1]++
+          }
+
+        } else {
+
+          if (r.roundNo === 13 || r.roundNo === 15) {
+            (this.teamOrange === trhis.winTeamName) ? atkWins[1]++ : defWins[0]++
+          }
+          if (r.roundNo === 14) {
+            (this.teamOrange === r.winTeamName) ? defWins[1]++ : atkWins[0]++
+          }
+
+        }
+      })
+
+      return [atkWins, defWins]
+    },
+
 
     teamBlueSeries() {
       const sideWins = {
