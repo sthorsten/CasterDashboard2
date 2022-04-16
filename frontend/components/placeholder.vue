@@ -15,3 +15,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "Placeholder",
+
+  head() {
+    return {
+      title: "Empty page"
+    }
+  },
+}
+</script>

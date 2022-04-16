@@ -31,7 +31,13 @@
 <script>
 export default {
   name: 'HomePage',
-  layout: 'main-page'
+  layout: 'main-page',
+
+  head() {
+    return {
+      title: "Home"
+    }
+  },
 
 }
 </script>

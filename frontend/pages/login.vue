@@ -30,8 +30,15 @@
 
 <script>
 export default {
+  name: "Login",
   layout: "login-page",
   auth: false,
+
+  head() {
+    return {
+      title: "Login"
+    }
+  },
 
   data() {
     return {

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import bsCustomFileInput from 'bs-custom-file-input'
+//import bsCustomFileInput from 'bs-custom-file-input'
 
 export default {
   name: 'EditTeamModal',
@@ -100,7 +100,10 @@ export default {
   },
 
   mounted() {
-    bsCustomFileInput.init()
+    if (process.client) {
+      const bsCustomFileInput = require('bs-custom-file-input')
+      bsCustomFileInput.init()
+    }
   },
 
   watch: {

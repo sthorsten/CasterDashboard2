@@ -149,6 +149,13 @@
 export default {
   name: "OperatorBans",
   layout: "match-page",
+
+  head() {
+    return {
+      title: "Operator Bans"
+    }
+  },
+
   computed: {
     match() {
       try {

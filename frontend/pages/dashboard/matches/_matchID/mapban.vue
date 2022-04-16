@@ -221,6 +221,12 @@ export default {
   name: 'MapBan',
   layout: 'match-page',
 
+  head() {
+    return {
+      title: "Map Ban"
+    }
+  },
+
   data() {
     return {
       currentPickTeam: -1,

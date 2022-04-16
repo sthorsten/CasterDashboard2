@@ -24,6 +24,12 @@ export default {
   name: 'Leagues',
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "Leagues"
+    }
+  },
+
   data() {
     return {
       leagueFields: [

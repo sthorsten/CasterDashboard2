@@ -286,6 +286,12 @@ export default {
   name: 'MapOverview',
   layout: 'match-page',
 
+  head() {
+    return {
+      title: "Map Overview"
+    }
+  },
+
   data() {
     return {
       // currentAtkTeam: null,

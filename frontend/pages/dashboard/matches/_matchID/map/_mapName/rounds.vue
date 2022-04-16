@@ -333,6 +333,12 @@ export default {
   name: "Rounds",
   layout: "match-page",
 
+  head() {
+    return {
+      title: "Rounds"
+    }
+  },
+
   data() {
     return {
       selectedBombspot: -1,

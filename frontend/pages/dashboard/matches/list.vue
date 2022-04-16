@@ -103,6 +103,12 @@ export default {
   name: 'ListMatches',
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "Match List"
+    }
+  },
+
   data() {
     return {
       matchTableFields: [

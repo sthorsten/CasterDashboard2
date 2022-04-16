@@ -1,16 +1,13 @@
 export default {
-
-  ssr: false,
-
   head: {
-    title: 'caster-dashboard-2',
+    titleTemplate: '%s - Caster Dashboard',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Rainbow Six Siege Caster Dashboard by ThorsHero' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
   },
@@ -20,10 +17,10 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/fontawesome', ssr: false },
-    { src: '~/plugins/vue-select', ssr: false },
-    { src: '~/plugins/vue-apexcharts', ssr: false },
-    { src: '~/plugins/websocket', ssr: false }
+    { src: '~/plugins/fontawesome' },
+    { src: '~/plugins/vue-select' },
+    { src: '~/plugins/vue-apexcharts', mode: 'client' },
+    { src: '~/plugins/websocket', mode: 'client' }
   ],
 
   components: [
@@ -110,6 +107,9 @@ export default {
   },
 
   build: {
+    babel: {
+      compact: false
+    },
     postcss: {
       plugins: {
         tailwindcss: {},

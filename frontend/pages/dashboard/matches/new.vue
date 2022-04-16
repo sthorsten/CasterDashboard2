@@ -285,6 +285,12 @@ export default {
   name: 'CreateNewMatch',
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "New Match"
+    }
+  },
+
   data() {
     return {
       selectedLeague: null,

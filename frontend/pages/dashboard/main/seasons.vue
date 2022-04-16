@@ -177,6 +177,12 @@ export default {
   name: 'Seasons',
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "Seasons"
+    }
+  },
+
   data() {
     return {
       seasonPage: 1,

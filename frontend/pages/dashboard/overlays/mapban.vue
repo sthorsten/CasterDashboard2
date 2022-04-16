@@ -47,6 +47,12 @@ export default {
   name: 'MapBanOverlay',
   auth: false,
 
+  head() {
+    return {
+      title: "MapBan Overlay"
+    }
+  },
+
   computed: {
     userOverlay() {
       return this.$store.state.overlaySocket.userOverlay

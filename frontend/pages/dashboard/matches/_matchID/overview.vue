@@ -183,6 +183,12 @@ export default {
   name: 'MatchOverview',
   layout: 'match-page',
 
+  head() {
+    return {
+      title: "Match Overview"
+    }
+  },
+
   data() {
     return {
       edit: false,

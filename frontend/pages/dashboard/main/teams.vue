@@ -107,6 +107,12 @@ export default {
   name: "Teams",
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "Teams"
+    }
+  },
+
   data() {
     return {
       teamPage: 1,

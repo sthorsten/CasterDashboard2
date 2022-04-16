@@ -181,6 +181,12 @@ export default {
   name: 'Playdays',
   layout: 'main-page',
 
+  head() {
+    return {
+      title: "Playdays"
+    }
+  },
+
   data() {
     return {
       playdayPage: 1,
