@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 
+## [2.5.0-alpha] - 2022-04-16
+
+### Notes
+
+- This release is not ready for production yet!
+
+### Added
+
+- Season page with the ability to view, create and edit seasons
+- Added charts / statistics to rounds page
+
+### Fixed
+
+- Season filtering not working correctly when trying to create a new playday
+
+
 ## [2.4.0-alpha] - 2022-04-09
 
 ### Notes
@@ -209,7 +225,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.4.0-alpha...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.5.0-alpha...HEAD
+[2.5.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.5.0-alpha
 [2.4.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.4.0-alpha
 [2.3.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.3.0-alpha
 [2.2.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.2.0-alpha
