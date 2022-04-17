@@ -154,7 +154,13 @@
                   <fa-icon icon="arrow-right" class="mr-1" />
                   <span>Continue to Map Pick & Ban</span>
                 </b-btn>
-                <b-btn variant="primary" block disabled>
+                <b-btn
+                  variant="primary"
+                  block
+                  @click="
+                    $router.push(`/dashboard/matches/${match.id}/details`)
+                  "
+                >
                   <fa-icon icon="circle-info" class="mr-1" />
                   <span>Show match details</span>
                 </b-btn>
