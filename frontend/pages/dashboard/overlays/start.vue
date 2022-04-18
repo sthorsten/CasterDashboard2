@@ -19,7 +19,12 @@
           - VS -
         </template>
         <template v-else>
-          {{ match.scoreBlue }} - {{ match.scoreOrange }}
+          <template v-if="match.bestOf === 1 && matchMap">
+            {{ matchMap.scoreBlue }} - {{ matchMap.scoreOrange }}
+          </template>
+          <template v-else>
+            {{ match.scoreBlue }} - {{ match.scoreOrange }}
+          </template>
         </template>
       </p>
 
@@ -39,7 +44,12 @@
           - VS -
         </template>
         <template v-else>
-          {{ match.scoreBlue }} - {{ match.scoreOrange }}
+          <template v-if="match.bestOf === 1 && matchMap">
+            {{ matchMap.scoreBlue }} - {{ matchMap.scoreOrange }}
+          </template>
+          <template v-else>
+            {{ match.scoreBlue }} - {{ match.scoreOrange }}
+          </template>
         </template>
       </p>
       <img :src="getTeamLogo(match.teamOrange)" class="h-16 w-16" />
@@ -67,6 +77,14 @@ export default {
         return this.$store.getters['matchSocket/getMatch'](this.userOverlay.overlayMatch)
       } catch {
         return null
+      }
+    },
+    matchMap() {
+      if (this.match && this.match.bestOf === 1) {
+        const matchMaps = this.$store.getters['matchSocket/getMatchMapsByMatch'](this.match.id)
+        if (matchMaps && matchMaps.length > 0) {
+          return matchMaps[0]
+        }
       }
     },
     mode() {
