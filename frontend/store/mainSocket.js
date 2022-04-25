@@ -137,6 +137,9 @@ export const getters = {
   getSponsor: state => (id) => {
     return state.sponsors.find(s => s.id === id)
   },
+  getSponsorsByLeague: state => (leagueID) => {
+    return state.sponsors.filter(s => s.league === leagueID)
+  },
   getTeam: state => (id) => {
     return state.teams.find(t => t.id === id)
   },
