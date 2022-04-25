@@ -10,7 +10,7 @@ class MatchAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created', 'lastModified', 'creator')
     fieldsets = (
         ('Base Information', {
-            'fields': ('id', 'name', 'bestOf', 'status', 'date')
+            'fields': ('id', 'name', 'title', 'subTitle', 'bestOf', 'status', 'date')
         }),
         ('League Information', {
             'fields': ('league', 'playday', 'tournament')
@@ -117,7 +117,7 @@ class RoundAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Base Information', {
-            'fields': ('id', 'matchMap', 'roundNo')            
+            'fields': ('id', 'matchMap', 'roundNo')
         }),
         ('Round Information', {
             'fields': ('bombSpot', 'openingFragTeam', 'winTeam', 'winType')

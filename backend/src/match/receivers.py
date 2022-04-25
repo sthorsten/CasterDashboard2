@@ -20,6 +20,10 @@ def match_post_save(instance, created, **kwargs):
     if hasattr(instance, '_dirty'):
         return
 
+    # Set match name if empty
+    if not instance.name or instance.name == '':
+        instance.name = f'{instance.teamBlue.name} vs. {instance.teamOrange.name} (Match {instance.id})'
+
     # Set win team & win type & status
     if instance.bestOf == 1:
         if instance.scoreBlue > instance.scoreOrange:

@@ -371,6 +371,8 @@ export default {
       const data = {
         league: this.selectedLeague.id,
         season: this.selectedSeason.id,
+        title: this.matchTitle,
+        subTitle: this.matchSubtitle,
         playday: this.selectedPlayday.id,
         bestOf: this.bestOf,
         teamBlue: this.teamBlue.id,

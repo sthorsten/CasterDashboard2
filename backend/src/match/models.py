@@ -39,13 +39,18 @@ class Match(models.Model):
     ]
 
     name = models.CharField(
-        max_length=22,
+        max_length=255,
         null=True,
         blank=True,
-        help_text="You can leave this field blank. The match name will then be set automatically, e.g. 'Team A vs. Team B'")
+        help_text="Internal name. You can leave this field blank. The match name will then be set automatically, e.g. 'Team A vs. Team B'")
+    title = models.CharField(max_length=255, null=True, blank=True,
+                             help_text="Match title shown in various overlays.")
+    subTitle = models.CharField(max_length=255, null=True, blank=True,
+                                help_text="Subtitle (line 2) shown in various overlays.")
     creator = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name='matches')
-    additionalUsers = models.ManyToManyField(User, blank=True, verbose_name="additional users")
+    additionalUsers = models.ManyToManyField(
+        User, blank=True, verbose_name="additional users")
     shareMode = models.CharField(
         max_length=255, choices=SHARE_MODE_CHOICES, default="NONE", verbose_name="share mode")
 
@@ -104,7 +109,6 @@ class MapBan(models.Model):
                                 MinValueValidator(1), MaxValueValidator(9)])
     isDecider = models.BooleanField(
         default=False, help_text="Map is Decider Map or Default Ban?", verbose_name='is decider')
-            
 
     def __str__(self) -> str:
         return f'{self.id} ({self.match})'
@@ -172,7 +176,8 @@ class MatchMap(models.Model):
 
 class OperatorBan(models.Model):
 
-    matchMap = models.ForeignKey(MatchMap, on_delete=models.CASCADE, verbose_name="match map")
+    matchMap = models.ForeignKey(
+        MatchMap, on_delete=models.CASCADE, verbose_name="match map")
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     order = models.IntegerField(default=1)
@@ -197,11 +202,14 @@ class Round(models.Model):
         ("TIME", "Time")
     ]
 
-    matchMap = models.ForeignKey(MatchMap, on_delete=models.CASCADE, verbose_name="match map")
+    matchMap = models.ForeignKey(
+        MatchMap, on_delete=models.CASCADE, verbose_name="match map")
 
     roundNo = models.IntegerField(default=1, verbose_name="round no")
-    bombSpot = models.ForeignKey(BombSpot, on_delete=models.CASCADE, verbose_name="bomb spot")
-    winType = models.CharField(max_length=255, choices=WIN_TYPE_CHOICES, default="KILLS", verbose_name="win type")
+    bombSpot = models.ForeignKey(
+        BombSpot, on_delete=models.CASCADE, verbose_name="bomb spot")
+    winType = models.CharField(
+        max_length=255, choices=WIN_TYPE_CHOICES, default="KILLS", verbose_name="win type")
 
     openingFragTeam = models.ForeignKey(
         Team, null=True, blank=True, on_delete=models.CASCADE, related_name="round_of_team", verbose_name="opening frag team")
