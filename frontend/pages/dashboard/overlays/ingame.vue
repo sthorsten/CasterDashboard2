@@ -111,7 +111,19 @@
           </p>
         </div>
         <div class="w-56 flex justify-end items-center">
-          <img class="mr-2 h-[35px]" src="/img/ThorsHero_500_wide.webp" />
+          <div
+            class="absolute"
+            v-for="(sponsor, index) in sponsors"
+            :key="sponsor.id"
+          >
+            <transition name="fade" appear>
+              <img
+                v-if="index === sponsorVisibleIndex"
+                class="mr-2 h-[35px]"
+                :src="sponsor.logo"
+              />
+            </transition>
+          </div>
         </div>
       </div>
     </div>
@@ -127,6 +139,18 @@ export default {
     return {
       title: "InGame Overlay"
     }
+  },
+
+  data() {
+    return {
+      sponsorVisibleIndex: -1,
+      sponsorVisibleInterval: null
+    }
+  },
+
+  mounted() {
+    this.animateSponsor()
+    this.sponsorVisibleInterval = setInterval(this.animateSponsor, 10000)
   },
 
   computed: {
@@ -165,6 +189,20 @@ export default {
     getTeamLogo(id) {
       const team = this.$store.getters['mainSocket/getTeam'](id)
       return team.logo
+    },
+    animateSponsor() {
+      // if (!this.sponsors) return
+      // if (this.sponsors.length <= 1) return
+
+
+      if (this.sponsorVisibleIndex === -1) {
+        this.sponsorVisibleIndex = 0
+      }
+      else if ((this.sponsorVisibleIndex + 1) === this.sponsors.length) {
+        this.sponsorVisibleIndex = 0
+      } else {
+        this.sponsorVisibleIndex++
+      }
     }
   }
 
@@ -203,5 +241,18 @@ export default {
   .bg__score-active {
     @apply bg-yellow-300;
   }
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave {
+  opacity: 1;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
 }
 </style>
