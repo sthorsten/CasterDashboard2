@@ -1,9 +1,9 @@
 import logging
-import secrets
 from django.contrib.auth import get_user_model
 from django.db.models import signals
 from django.dispatch.dispatcher import receiver
 from rest_framework.authtoken.models import Token
+from overlays.models import UserOverlay
 from .models import Profile
 
 logger = logging.getLogger(__name__)
@@ -24,11 +24,4 @@ def new_user_post_save(sender, instance, created, **kwargs):  # pylint: disable=
 
         Profile.objects.create(user=instance)
         Token.objects.get_or_create(user=instance)
-
-        # OverlayStyle.objects.create(user=instance)
-        # OverlayState.objects.create(user=instance)
-        # MatchOverlayData.objects.create(user=instance)
-        # PollOverlayData.objects.create(user=instance)
-        # SocialOverlayData.objects.create(user=instance)
-        # TimerOverlayData.objects.create(user=instance)
-        # TickerOverlayData.objects.create(user=instance)
+        UserOverlay.objects.create(user=instance)
