@@ -9,6 +9,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 
+## [2.6.0-alpha] - 2022-05-04
+
+### Notes
+
+- Most basic features are already implemented. You **can** use this in a production environment,
+but be aware that there are a lot of features still missing or unstable. **Use at your own risk!**
+
+### Added
+
+- Page meta information (title, description)
+- Start Overlay including two variants: Logo mode (default) and full mode (including team names and colors) (#29)
+- InGame Overlay (#29)
+- Match details page (#28)
+- Ability to remove operator bans
+- Ability to remove rounds including confirm dialog
+- Added confirm dialog when finishing a map
+- Added automatic names for matches when not set manually (e.g. via the admin dashboard)
+- News section on the home page to keep users up to date with latest releases.
+
+
+## Changed
+
+- Re-enabled Server Side Rendering (SSR)
+
+## Fixed
+
+- User Overlays were not being created when creating a new user
+- Bug with the new start overlay not showing map score for BO1's
+
+
 ## [2.5.0-alpha] - 2022-04-16
 
 ### Notes
@@ -225,7 +255,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme, Changelog and License added and updated
 
 
-[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.5.0-alpha...HEAD
+[Unreleased]: https://github.com/sthorsten/CasterDashboard2/compare/v2.6.0-alpha...HEAD
+[2.6.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.6.0-alpha
 [2.5.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.5.0-alpha
 [2.4.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.4.0-alpha
 [2.3.0-alpha]: https://github.com/sthorsten/CasterDashboard2/releases/tag/v2.3.0-alpha
