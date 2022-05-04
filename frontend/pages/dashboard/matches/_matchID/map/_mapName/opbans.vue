@@ -76,11 +76,11 @@
             <b-row>
               <b-col>
                 <CustomCard color="info" title="Operator Ban Actions">
-                  <b-btn variant="danger" block disabled>
+                  <b-btn variant="danger" block @click="removeLastOperatorBan">
                     <fa-icon icon="trash-can" class="mr-1" />
                     <span>Remove last operator ban</span>
                   </b-btn>
-                  <b-btn variant="danger" block disabled>
+                  <b-btn variant="danger" block @click="removeAllOperatorBans">
                     <fa-icon icon="trash-can" class="mr-1" />
                     <span>Remove all operator bans</span>
                   </b-btn>
@@ -225,6 +225,22 @@ export default {
         await this.$axios.$post('/api/v2/match/operatorban/', data)
       } catch (e) {
         console.error(e)
+      }
+    },
+
+    async removeLastOperatorBan() {
+      const lastOperatorBan = this.operatorBans[this.operatorBans.length - 1]
+
+      try {
+        await this.$axios.$delete(`/api/v2/match/operatorban/${lastOperatorBan.id}/`)
+      } catch (e) { console.error(e) }
+    },
+
+    removeAllOperatorBans() {
+      for (let i = 0; i < this.operatorBans.length; i++) {
+        setTimeout(async () => {
+          await this.removeLastOperatorBan()
+        }, 200 * i)
       }
     }
   }

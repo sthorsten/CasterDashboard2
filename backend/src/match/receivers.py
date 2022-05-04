@@ -233,4 +233,17 @@ def mapBan_post_delete(sender, instance, **kwargs):
     serialized_data = serializers.MapBanSerializer(mapBans, many=True).data
     websocket.send_mulit_server_data("match", "MapBan", serialized_data)
 
+
+@receiver(signals.post_delete, sender=models.OperatorBan)
+def operatorBan_post_delete(sender, instance, **kwargs):
+    # Send all data via websocket
+    operatorBans = models.OperatorBan.objects.filter(
+        matchMap=instance.matchMap)
+    if operatorBans.count() == 0:
+        websocket.send_mulit_server_data("match", "OperatorBan", [])
+        return
+    serialized_data = serializers.OperatorBanSerializer(
+        operatorBans, many=True).data
+    websocket.send_mulit_server_data("match", "OperatorBan", serialized_data)
+
 # endregion

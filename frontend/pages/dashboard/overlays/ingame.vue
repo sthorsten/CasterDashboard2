@@ -191,10 +191,6 @@ export default {
       return team.logo
     },
     animateSponsor() {
-      // if (!this.sponsors) return
-      // if (this.sponsors.length <= 1) return
-
-
       if (this.sponsorVisibleIndex === -1) {
         this.sponsorVisibleIndex = 0
       }
