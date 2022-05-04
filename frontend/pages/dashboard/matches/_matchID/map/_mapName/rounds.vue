@@ -235,11 +235,11 @@
 
               <hr class="border-secondary" />
 
-              <b-btn variant="danger" block disabled>
+              <b-btn variant="danger" block @click="removeLastRound">
                 <fa-icon icon="trash-can" class="mr-1" />
                 <span>Remove last round</span>
               </b-btn>
-              <b-btn variant="danger" block disabled>
+              <b-btn variant="danger" block @click="removeAllRounds">
                 <fa-icon icon="trash-can" class="mr-1" />
                 <span>Remove all rounds</span>
               </b-btn>
@@ -414,6 +414,16 @@ export default {
     },
 
     async finishMap() {
+      const result = await this.$bvModal.msgBoxConfirm(
+        "Are you sure you want to finish the map?", {
+        title: "Finish map?",
+        centered: true,
+        okVariant: 'success',
+        headerBgVariant: 'success'
+      }
+      )
+      if (!result) return
+
       try {
         await this.$axios.$patch('/api/v2/match/matchmap/' + this.matchMap.id + '/', {
           status: 'FINISHED'
@@ -445,6 +455,32 @@ export default {
       // Go to next map
       else {
         this.$router.push(`/dashboard/matches/${this.match.id}/map/${nextMap.mapName}/overview`)
+      }
+    },
+
+    async removeLastRound() {
+      const lastRound = this.rounds[this.rounds.length - 1]
+
+      try {
+        await this.$axios.$delete(`/api/v2/match/round/${lastRound.id}/`)
+      } catch (e) { console.error(e) }
+    },
+
+    async removeAllRounds() {
+      const result = await this.$bvModal.msgBoxConfirm(
+        "Are you sure you want to delete all rounds?", {
+        title: "Delete all rounds?",
+        centered: true,
+        okVariant: 'danger',
+        headerBgVariant: 'danger'
+      }
+      )
+      if (!result) return
+
+      for (let i = 0; i < this.rounds.length; i++) {
+        setTimeout(async () => {
+          await this.removeLastRound()
+        }, 200 * i)
       }
     }
   }

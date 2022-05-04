@@ -246,4 +246,28 @@ def operatorBan_post_delete(sender, instance, **kwargs):
         operatorBans, many=True).data
     websocket.send_mulit_server_data("match", "OperatorBan", serialized_data)
 
+
+@receiver(signals.post_delete, sender=models.Round)
+def round_post_delete(sender, instance, **kwargs):
+    # Correct map score
+    matchMap = instance.matchMap
+    match = matchMap.match
+
+    if match.teamBlue == instance.winTeam:
+        matchMap.scoreBlue = matchMap.scoreBlue - 1
+    elif match.teamOrange == instance.winTeam:
+        matchMap.scoreOrange = matchMap.scoreOrange - 1
+
+    matchMap.save()
+
+    # Send all data via websocket
+    rounds = models.Round.objects.filter(
+        matchMap=instance.matchMap)
+    if rounds.count() == 0:
+        websocket.send_mulit_server_data("match", "Round", [])
+        return
+    serialized_data = serializers.RoundSerializer(
+        rounds, many=True).data
+    websocket.send_mulit_server_data("match", "Round", serialized_data)
+
 # endregion
