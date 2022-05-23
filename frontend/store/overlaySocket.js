@@ -16,7 +16,14 @@ export const mutations = {
   },
 
   setUserOverlay(state, userOverlay) {
-    state.userOverlay = userOverlay
+    if (state.userOverlay) {
+      if (state.userOverlay.id === userOverlay.id) {
+        state.userOverlay = userOverlay
+      }
+    } else {
+      state.userOverlay = userOverlay
+    }
+
   },
 
   setCustomDesignStyles(state, customDesignStyles) {
