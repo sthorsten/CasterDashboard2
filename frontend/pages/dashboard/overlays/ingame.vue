@@ -6,7 +6,7 @@
     <!-- Overlay container -->
     <div
       id="overlay-container"
-      class="min-w-full h-[50px] flex justify-center items-center"
+      class="min-w-full h-[50px] grid grid-cols-[1fr_11rem_1fr]"
     >
       <!-- Left container -->
       <div class="h-full grow flex bg__team-blue">
