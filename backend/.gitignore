@@ -6,7 +6,6 @@ static
 
 .env
 dumb.rdb
-poetry.lock
 
 __pycache__
 *old*
