@@ -5,7 +5,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:alpine
+    image: postgres:14.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -15,7 +15,7 @@ services:
       
 
   redis:
-    image: redis:alpine
+    image: redis:7.0.0-alpine
     
   
   nginx: # Reverse proxy

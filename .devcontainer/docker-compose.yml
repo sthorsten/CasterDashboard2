@@ -33,7 +33,7 @@ services:
     image: redis:alpine
 
   postgres:
-    image: postgres:latest
+    image: postgres:14.3-alpine
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
