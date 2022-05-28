@@ -36,6 +36,7 @@ jobs:
           $HOME/.poetry/bin/poetry config virtualenvs.in-project true
 
       - name: Install dependencies
+        working-directory: ./backend
         run: $HOME/.poetry/bin/poetry install
 
       - name: Run Django tests
