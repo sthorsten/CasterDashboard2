@@ -1,0 +1,44 @@
+version: 2
+updates:
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+
+  # Maintain dependencies for devcontainers
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer/backend"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer/nginx"
+    schedule:
+      interval: "daily"
+
+
+  # Maintain dependencies for backend
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "daily"
+      
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "daily"
+
+
+  # Maintain dependencies for frontend
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "docker"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
