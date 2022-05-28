@@ -5,7 +5,6 @@ on:
     # Build Docker images on push to develop or master
     branches:
       - develop
-      - master
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -21,7 +20,8 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   build-backend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+
 
     steps:
       - uses: actions/checkout@v3
@@ -51,7 +51,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -83,7 +83,7 @@ jobs:
 
   build-nginx:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
 
     steps:
       - uses: actions/checkout@v3
