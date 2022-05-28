@@ -40,7 +40,7 @@ jobs:
         run: $HOME/.poetry/bin/poetry install
 
       - name: Run Django tests
-        working-directory: ./backend/src
+        working-directory: ./backend
         run: |
           source .venv/bin/activate
           pytest -vv
