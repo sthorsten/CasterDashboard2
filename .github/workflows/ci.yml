@@ -1,4 +1,4 @@
-name: Docker
+name: Test & Build Docker
 
 on:
   push:
@@ -16,12 +16,39 @@ env:
   IMAGE_NAME_NGINX: casterdashboard2-nginx
 
 jobs:
-  # Push image to GitHub Packages.
-  # See also https://docs.docker.com/docker-hub/builds/
+
+  test-backend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup python
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Setup poetry
+        working-directory: ./backend
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+          /root/.poetry/bin/poetry config virtualenvs.in-project true
+
+      - name: Install dependencies
+        run: /root/.poetry/bin/poetry install
+
+      - name: Run Django tests
+        working-directory: ./backend/src
+        run: |
+          source .venv/bin/activate
+          pytest -vv
+
+
   build-backend:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
-
+    needs: test-backend
 
     steps:
       - uses: actions/checkout@v3
@@ -52,6 +79,7 @@ jobs:
   build-frontend:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+    needs: test-backend
 
     steps:
       - uses: actions/checkout@v3
@@ -84,6 +112,7 @@ jobs:
   build-nginx:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+    needs: test-backend
 
     steps:
       - uses: actions/checkout@v3
