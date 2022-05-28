@@ -1,6 +1,6 @@
 {
   "name": "caster-dashboard-2",
-  "version": "1.0.0",
+  "version": "2.6.0-alpha",
   "private": true,
   "scripts": {
     "dev": "nuxt",
