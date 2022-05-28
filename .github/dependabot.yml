@@ -25,6 +25,7 @@ updates:
     directory: "/backend"
     schedule:
       interval: "daily"
+    versioning-strategy: increase-if-necessary      
       
   - package-ecosystem: "docker"
     directory: "/backend"
@@ -37,6 +38,7 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "daily"
+    versioning-strategy: increase-if-necessary   
 
   - package-ecosystem: "docker"
     directory: "/frontend"
