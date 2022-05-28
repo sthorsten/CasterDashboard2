@@ -1,5 +1,6 @@
 .venv
-logs
+logs/*
+!logs/.gitkeep
 media/*
 !media/maps
 static
