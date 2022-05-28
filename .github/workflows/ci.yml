@@ -33,10 +33,10 @@ jobs:
         working-directory: ./backend
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-          /root/.poetry/bin/poetry config virtualenvs.in-project true
+          $HOME/.poetry/bin/poetry config virtualenvs.in-project true
 
       - name: Install dependencies
-        run: /root/.poetry/bin/poetry install
+        run: $HOME/.poetry/bin/poetry install
 
       - name: Run Django tests
         working-directory: ./backend/src
