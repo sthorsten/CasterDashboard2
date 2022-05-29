@@ -1,7 +1,7 @@
 # R6 Caster Dashboard
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2)
-![Docker](https://github.com/sthorsten/CasterDashboard2/workflows/Docker/badge.svg)
+[![Test & Build Docker](https://github.com/sthorsten/CasterDashboard2/actions/workflows/ci.yml/badge.svg)](https://github.com/sthorsten/CasterDashboard2/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
 
 
@@ -57,13 +57,15 @@ To install the complete dashboard on your machine, download the [docker-compose.
 
 Start the stack by running `docker-compose up -d` in the directory you put the [docker-compose.yml](docker-compose.yml) in.
 
-> **Note:** The parameter `-d` is optional and starts the stack in detached mode.
+> **Note**
+> The parameter `-d` is optional and starts the stack in detached mode.
 
 Alternatively you can use any docker management software, such as [Portainer](https://www.portainer.io/). 
 
 Once the stack is running, you can  access the dashboard's admin page via `<yourdomain.example>/admin` and login with the default username `admin` and password `caster_dashboard_2`.
 
-> **Note:** I recommend creating users manually from there and disable the default admin user!
+> **Note**
+> I recommend creating users manually from there and disable the default admin user!
 
 
 ## 🔨 Development setup
@@ -100,13 +102,16 @@ This project can be easily setup by using [Visual Studio Code](https://code.visu
 
 ### Translations
 
-> **Note:** Translations are on hold for now.
+> **Note:**
+> Translations are on hold for now.
 
 
 ## 🗒️ Changelog
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2)
 
-**Note:** This release is not ready for production yet!
+> **Warning**
+> Most basic features are already implemented. You **can** use this in a production environment,
+> but be aware that there are a lot of features still missing or unstable. **Use at your own risk!**
 
 See the full [Changelog](CHANGELOG.md) for further information.
