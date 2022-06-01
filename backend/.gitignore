@@ -10,3 +10,8 @@ dumb.rdb
 
 __pycache__
 *old*
+
+.pytest_cache
+htmlcov
+.coverage
+.docker
