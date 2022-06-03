@@ -8,7 +8,7 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'show', 'showUntil', 'id')
     readonly_fields = ('id', 'created', 'lastModified')
     fieldsets = (
-        ('Base information', {'fields': ('id', 'title', 'type')}),
+        ('Base information', {'fields': ('id', 'title', 'type', 'text')}),
         ('Show notification', {'fields': ('show', 'showUntil')}),
         ('Metadata',
          {

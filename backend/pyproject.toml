@@ -23,7 +23,7 @@ requests = "^2.26.0"
 django-cors-headers = "^3.11.0"
 pylint-django = "^2.5.3"
 pytest-django = "^4.5.2"
-coverage = "^6.4"
+pytest-cov = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 

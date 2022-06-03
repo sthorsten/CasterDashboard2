@@ -1,9 +1,11 @@
 {
     "name": "Caster Dashboard 2 Backend",
+    "onCreateCommand": "poetry install && cp .env.devcontainer .env",
     "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-python.pylint",
+        "ritwickdey.liveserver" // Used for coverage html reports
     ],
     "settings": {
         "python.defaultInterpreterPath": ".venv/bin/python",
