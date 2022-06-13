@@ -570,7 +570,7 @@ tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
 
 [[package]]
 name = "pylint"
-version = "2.13.9"
+version = "2.14.1"
 description = "python code static checker"
 category = "main"
 optional = false
