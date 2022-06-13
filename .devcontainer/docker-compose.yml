@@ -2,9 +2,7 @@ version: '3'
 
 services:
   backend:
-    build:
-      context: ''
-      dockerfile: backend/Dockerfile
+    image: ghcr.io/sthorsten/python-poetry-devcontainer:3.10
     volumes:
       - ../:/repo
     tty: true

@@ -1,15 +1,25 @@
+.docker
+.pytest_cache
 .venv
 .vscode
+docs
+htmlcov
 logs
 media/leagues
 media/teams
 static
 
+.coverage
+.coveragerc
+.devcontainer.json
 .env
+.env.devcontainer
 .env.example
-.pylint
+.env.testing
+.gitignore
+.pylintrc
+pytest.ini
 dumb.rdb
-poetry.lock
 
 __pycache__
 *old*
