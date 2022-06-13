@@ -61,7 +61,7 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
     needs: test-backend
 
     steps:
@@ -92,7 +92,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
     needs: test-backend
 
     steps:
@@ -125,7 +125,7 @@ jobs:
 
   build-nginx:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && ${{ github.actor != 'dependabot[bot]' }}
+    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
     needs: test-backend
 
     steps:

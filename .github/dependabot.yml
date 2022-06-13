@@ -23,11 +23,13 @@ updates:
   # Maintain dependencies for backend
   - package-ecosystem: "pip"
     directory: "/backend"
+    target-branch: "backend-dependencies"
     schedule:
       interval: "daily"
       
   - package-ecosystem: "docker"
     directory: "/backend"
+    target-branch: "backend-dependencies"
     schedule:
       interval: "daily"
 
@@ -35,11 +37,13 @@ updates:
   # Maintain dependencies for frontend
   - package-ecosystem: "npm"
     directory: "/frontend"
+    target-branch: "frontend-dependencies"
     schedule:
       interval: "daily"
     versioning-strategy: increase-if-necessary   
 
   - package-ecosystem: "docker"
     directory: "/frontend"
+    target-branch: "frontend-dependencies"
     schedule:
       interval: "daily"
