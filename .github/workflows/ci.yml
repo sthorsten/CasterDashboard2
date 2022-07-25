@@ -9,7 +9,7 @@ jobs:
 
   test-backend:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
 
     services:
       redis:
