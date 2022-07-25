@@ -1,12 +1,6 @@
-<template>
-  <div>
-    Loading...
-  </div>
-</template>
+<script setup lang="ts">
 
-<script>
-export default {
-  name: 'IndexPage',
-  middleware: ['routeIndex']
-}
+const router = useRouter()
+router.push('/dashboard/home')
+
 </script>

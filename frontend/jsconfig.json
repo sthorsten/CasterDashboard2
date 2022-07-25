@@ -1,6 +1,0 @@
-{
-    "include": [
-        "./pages/**/*",
-        "./components/**/*"
-    ],
-}

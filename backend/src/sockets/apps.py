@@ -1,10 +1,9 @@
 from django.apps import AppConfig
 
 
-class CoreConfig(AppConfig):
+class SocketsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core'
+    name = 'sockets'
 
     def ready(self):
-        import core.receivers
-        import core.socket
+        import sockets.sio_server

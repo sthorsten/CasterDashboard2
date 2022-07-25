@@ -1,8 +1,10 @@
 {
-    "name": "Caster Dashboard 2 Frontend",
+    "name": "Caster Dashboard Frontend",
+    "onCreateCommand": "yarn install",
     "extensions": [
-        "octref.vetur",
+        "vue.volar"
     ],
+    "settings": {},
     "dockerComposeFile": "../.devcontainer/docker-compose.yml",
     "service": "frontend",
     "workspaceFolder": "/repo/frontend",

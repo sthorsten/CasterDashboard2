@@ -9,9 +9,27 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/asgi/
 
 import os
 import django
-
-from channels.routing import get_default_application
+import socketio
+from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'caster_dashboard_2.settings')
 django.setup()
-application = get_default_application()
+
+
+def setup_app():
+    django.setup()
+    from sockets.sio_server import sio
+    return socketio.ASGIApp(sio, get_asgi_application())
+
+
+application = setup_app()
+
+# def get_sio_application():
+#     return socketio.ASGIApp(sio, get_asgi_application())
+
+# def get_app():
+#     from sockets.sio_server import get_sio_application
+#     return get_sio_application()
+
+
+# application = get_app()

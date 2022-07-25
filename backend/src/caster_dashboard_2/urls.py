@@ -1,11 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path, include
 from django.views.generic.base import RedirectView
-
-from core.channels import CoreConsumer
-from main.channels import MainConsumer
-from match.channels import MatchConsumer
-from overlays.channels import OverlaysConsumer
 
 urlpatterns = [
     # Backend urls
@@ -14,11 +11,4 @@ urlpatterns = [
 
     # Admin Home (default route)
     path('', RedirectView.as_view(url='/admin/', permanent=True), name='index'),
-]
-
-websocket_urlpatterns = [
-    re_path(r'ws/core/$', CoreConsumer.as_asgi()),
-    re_path(r'ws/main/$', MainConsumer.as_asgi()),
-    re_path(r'ws/match/$', MatchConsumer.as_asgi()),
-    re_path(r'ws/overlays/$', OverlaysConsumer.as_asgi())
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

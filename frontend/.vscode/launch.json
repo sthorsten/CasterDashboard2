@@ -3,9 +3,9 @@
   "configurations": [
     {
       "command": "yarn dev",
-      "name": "NuxtJS Dev Server",
+      "name": "Dev Server",
       "request": "launch",
       "type": "node-terminal"
-    },
+    }
   ]
 }

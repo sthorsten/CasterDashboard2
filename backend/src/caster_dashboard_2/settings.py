@@ -12,7 +12,8 @@ import environ
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WSGI_APPLICATION = 'caster_dashboard_2.routing.application'
-ASGI_APPLICATION = 'caster_dashboard_2.routing.application'
+#ASGI_APPLICATION = 'caster_dashboard_2.routing.application'
+ASGI_APPLICATION = 'caster_dashboard_2.asgi:application'
 
 # endregion
 
@@ -28,8 +29,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'channels',
     'corsheaders',
+    'sockets.apps.SocketsConfig',
     'core.apps.CoreConfig',
     'main.apps.MainConfig',
     'match.apps.MatchConfig',

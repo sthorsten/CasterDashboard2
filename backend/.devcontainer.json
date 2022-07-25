@@ -1,5 +1,5 @@
 {
-    "name": "Caster Dashboard 2 Backend",
+    "name": "Caster Dashboard Backend",
     "onCreateCommand": "poetry install && cp .env.devcontainer .env",
     "extensions": [
         "ms-python.python",

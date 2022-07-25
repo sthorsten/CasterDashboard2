@@ -1,7 +1,6 @@
 from django.db.models import signals
 from django.dispatch.dispatcher import receiver
 from util.image import convert_square_logo, deleteLogoFiles
-from util import websocket
 
 from . import models
 from . import serializers

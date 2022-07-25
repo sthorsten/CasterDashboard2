@@ -5,10 +5,14 @@
             "name": "Django Backend",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/manage.py",
+            "cwd": "${workspaceFolder}/src",
+            "program": "/repo/backend/.venv/bin/daphne",
             "args": [
-                "runserver",
-                "0.0.0.0:8000"
+                "-b",
+                "0.0.0.0",
+                "-p",
+                "8000",
+                "caster_dashboard_2.asgi:application"
             ],
             "django": true
         }

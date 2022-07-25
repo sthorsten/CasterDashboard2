@@ -10,7 +10,7 @@ services:
       - 8000
 
   frontend:
-    image: mcr.microsoft.com/vscode/devcontainers/javascript-node:14
+    image: mcr.microsoft.com/vscode/devcontainers/javascript-node:16
     volumes:
       - ../:/repo
     tty: true
@@ -36,9 +36,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: caster_dashboard_2
-      POSTGRES_DB: caster_dashboard_2
-      POSTGRES_PASSWORD: caster_dashboard_2
+      POSTGRES_USER: caster_dashboard
+      POSTGRES_DB: caster_dashboard
+      POSTGRES_PASSWORD: caster_dashboard
 
 volumes:
   postgres_data:
