@@ -17,7 +17,8 @@
       "command": "${config:python.defaultInterpreterPath}",
       "args": [
         "${workspaceFolder}/src/manage.py",
-        "collectstatic"
+        "collectstatic",
+        "--noinput"
       ],
       "problemMatcher": []
     }
