@@ -6,4 +6,5 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):
+        import main.socket
         import main.receivers
