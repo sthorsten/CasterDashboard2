@@ -5,6 +5,7 @@
     ],
     "dockerComposeFile": "../.devcontainer/docker-compose.yml",
     "service": "frontend",
+    "onCreateCommand": "yarn install && cp .env.devcontainer .env",
     "workspaceFolder": "/repo/frontend",
     "forwardPorts": [
         3000

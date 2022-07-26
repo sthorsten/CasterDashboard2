@@ -28,13 +28,9 @@
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
     "r6operators": "^2.0.0",
-    "vue": "^2.6.14",
     "vue-apexcharts": "^1.6.2",
     "vue-select": "^3.16.0",
-    "vue-server-renderer": "^2.6.14",
-    "vue-template-compiler": "^2.6.14",
-    "vue-toastification": "^1.7.14",
-    "webpack": "^4.46.0"
+    "vue-toastification": "^1.7.14"
   },
   "devDependencies": {
     "@nuxt/postcss8": "^1.1.3",
