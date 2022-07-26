@@ -7939,9 +7939,9 @@ quote-stream@^1.0.1:
     through2 "^2.0.0"
 
 r6operators@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/r6operators/-/r6operators-2.1.0.tgz#8e8213f080628e2028d694d4093f631f54cfe4ce"
-  integrity sha512-MdtlM13IDPM4+GPrXf4ZKgGWRmwLsw/vThxPYShVDocXdaku6QcNJyaVRG4MbCviv8r7H0C/CZfNTFnbDGA0lw==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/r6operators/-/r6operators-2.2.0.tgz#d644a3428c31cf8847ad633f2b8a571ecd629947"
+  integrity sha512-QkEHS1uHVrYqtXMq0Q25PZoE6y7SfAaapn0QXNQnGA4RR1dZ+1R/4HeFdMjc+sLxr+4FwAMssAXWYbMJ/B60GA==
   dependencies:
     clsx "^1.1.1"
 
