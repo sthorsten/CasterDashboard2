@@ -1,9 +1,7 @@
 from django.urls import path
 from rest_framework import routers
-from rest_framework_simplejwt.views import TokenRefreshView
 
 from api import views
-from api.tokens import CustomTokenObtainPairView
 
 # new
 import core.views as coreViews
@@ -41,17 +39,8 @@ router.register(r'overlay/user', overlayViews.UserOverlayViewSet)
 router.register(r'overlay/style', overlayViews.CustomDesignStyleViewSet)
 
 urlpatterns = [
-    # SimpleJWT
-    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('user/me/', userViews.LoggedInUserView.as_view(),
-         name='loggedIn_user_view'),
-
+    path(r'token/', views.token_auth),
     path(r'version/', views.version),
-    # path(r'register/', views.register),
-    # path(r'register/confirm/', views.register_confirm),
-    # path(r'users/change-user-data/', views.change_user_data),
-    # path(r'users/change-password/', views.change_password)
 ]
 
 urlpatterns += router.urls

@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { useCoreDataStore } from '~~/store/coreData';
+import { useAuthStore } from '@/store/auth';
 import MainPage from '~~/components/MainPage.vue';
 
-const coreData = useCoreDataStore()
+const authStore = useAuthStore();
+
+onMounted(async () => {
+
+
+});
 
 
 </script>
@@ -11,8 +16,7 @@ const coreData = useCoreDataStore()
 
   <MainPage title="Home" icon="fa-solid fa-house-chimney">
 
-    Map Data:
-    <br><br>
+
 
   </MainPage>
 

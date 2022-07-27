@@ -10,6 +10,10 @@ import {
   faUser,
   faClockRotateLeft,
   faPlus,
+  faLock,
+  faRightFromBracket,
+  faRightToBracket,
+  faBars,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -21,6 +25,10 @@ library.add(
   faUser,
   faClockRotateLeft,
   faPlus,
+  faLock,
+  faRightFromBracket,
+  faRightToBracket,
+  faBars,
 
   faGithub
 )

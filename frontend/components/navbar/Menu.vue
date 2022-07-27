@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from '@coreui/vue';
+import { useAuthStore } from '~~/store/auth';
 
+const authStore = useAuthStore();
 
 </script>
 
@@ -11,12 +13,15 @@ import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from '@coreu
       <CDropdown>
         <CDropdownToggle color="dark">
           <FaIcon icon="fa-solid fa-user" class="navbar-menu-icon" />
-          UserName
+          {{ authStore.user.username ?? 'Not logged in' }}
         </CDropdownToggle>
         <CDropdownMenu>
-          <CDropdownItem href="#">Action</CDropdownItem>
-          <CDropdownItem href="#">Another action</CDropdownItem>
-          <CDropdownItem href="#">Something else here</CDropdownItem>
+          <CDropdownItem>
+            <nuxt-link to="/logout" class="text-white">
+              <FaIcon icon="fa-solid fa-right-from-bracket" class="navbar-menu-icon" />
+              Logout
+            </nuxt-link>
+          </CDropdownItem>
         </CDropdownMenu>
       </CDropdown>
     </li>

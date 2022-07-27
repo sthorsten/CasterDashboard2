@@ -4,6 +4,7 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   css: [
     'admin-lte/dist/css/adminlte.css',
+    'vue-toastification/dist/index.css',
     '@/css/main.scss'
   ],
 
@@ -16,4 +17,11 @@ export default defineNuxtConfig({
       '@fortawesome/free-brands-svg-icons',
     ]
   },
+
+  runtimeConfig: {
+    dockerBackendHost: '',
+    public: {
+      baseURL: ''
+    }
+  }
 })
