@@ -1,15 +1,15 @@
 import { defineStore } from "pinia";
 import { io, Socket } from 'socket.io-client'
-import { Map } from "~~/types/core/Map";
 import { useRuntimeConfig } from "#app";
 import { useAuthStore } from "./auth";
+import { Match } from "~~/types/match/Match";
 
-export const useCoreDataStore = defineStore('coreData', {
+export const useMatchDataStore = defineStore('matchData', {
   state: () => {
     return {
       socketIO: null as Socket,
       socketError: false,
-      maps: [] as Map[],
+      matches: [] as Match[],
     }
   },
 
@@ -18,7 +18,7 @@ export const useCoreDataStore = defineStore('coreData', {
       const authStore = useAuthStore()
       if (!authStore.loggedIn) return
 
-      this.socketIO = io(useRuntimeConfig().public.baseURL + "/core", {
+      this.socketIO = io(useRuntimeConfig().public.baseURL + "/match", {
         auth: {
           token: authStore.token
         }
@@ -27,17 +27,11 @@ export const useCoreDataStore = defineStore('coreData', {
       this.socketIO.on("connect_error", () => {
         this.socketError = true
       });
-      this.socketIO.on("map:update", this.handleMapUpdate);
     },
     getInitialData() {
-      this.socketIO.emit("map:list", {}, (response: Map[]) => {
-        this.maps = response;
+      this.socketIO.emit("match:list", {}, (response: Match[]) => {
+        this.matches = response;
       })
-    },
-    handleMapUpdate(data) {
-      let oldMap = this.maps.find(map => map.id === data.id);
-      if (oldMap) Object.assign(oldMap, data);
-      else this.maps.push(data);
     }
   }
 

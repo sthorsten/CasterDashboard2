@@ -3,6 +3,10 @@ import { SidebarItem } from "~~/types/SidebarItem";
 export const mainSidebarItems: SidebarItem[] = [
   {
     name: "Home",
+    isHeader: true,
+  },
+  {
+    name: "Home",
     icon: "fa-solid fa-house-chimney",
     url: "/dashboard/home",
   },
@@ -11,9 +15,9 @@ export const mainSidebarItems: SidebarItem[] = [
     isHeader: true,
   },
   {
-    name: "Match History",
-    icon: "fa-solid fa-clock-rotate-left",
-    url: "/dashboard/matches/history",
+    name: "Match List",
+    icon: "fa-solid fa-list-ol",
+    url: "/dashboard/matches/list",
   },
   {
     name: "Create a new match",

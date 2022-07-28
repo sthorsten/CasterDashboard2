@@ -1,19 +1,21 @@
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   title: string;
   icon: string;
-}>()
+  breadcrumbs: string[]
+}
+const { title, icon, breadcrumbs } = defineProps<Props>()
 </script>
 
 <template>
 
   <div class="content-wrapper">
-    <SectionHeader :title="props.title" :icon="props.icon" />
-    <section class="content">
+    <SectionHeader :title="title" :icon="icon" :breadcrumbs="breadcrumbs" />
+    <div class="content">
       <div class="container-fluid">
         <slot />
       </div>
-    </section>
+    </div>
 
   </div>
 

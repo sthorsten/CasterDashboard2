@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import MainPage from '~~/components/MainPage.vue';
 </script>
 
 <template>
 
-  <MainPage title="Create a new match" icon="fa-solid fa-plus">
-    Test
+  <NuxtLayout name="main">
+    <MainPage title="Create a new match" icon="fa-solid fa-plus" :breadcrumbs="['Dashboard', 'Matches', 'Create']">
+      Test
 
-  </MainPage>
+    </MainPage>
+  </NuxtLayout>
 
 </template>

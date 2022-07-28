@@ -8,12 +8,15 @@ config.autoAddCss = false
 import {
   faHouseChimney,
   faUser,
-  faClockRotateLeft,
   faPlus,
   faLock,
   faRightFromBracket,
   faRightToBracket,
   faBars,
+  faListOl,
+  faArrowRightLong,
+  faCompass,
+  faAnglesLeft,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -23,12 +26,15 @@ import {
 library.add(
   faHouseChimney,
   faUser,
-  faClockRotateLeft,
   faPlus,
   faLock,
   faRightFromBracket,
   faRightToBracket,
   faBars,
+  faListOl,
+  faArrowRightLong,
+  faCompass,
+  faAnglesLeft,
 
   faGithub
 )

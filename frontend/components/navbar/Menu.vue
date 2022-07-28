@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownItem } from '@coreui/vue';
-import { useAuthStore } from '~~/store/auth';
+import { useAuthStore } from '@/store/auth';
 
 const authStore = useAuthStore();
 
 </script>
 
 <template>
-  <ul class="navbar-nav ml-auto">
+  <ul class="navbar-nav ms-auto">
 
-    <li class="nav-item">
-      <CDropdown>
-        <CDropdownToggle color="dark">
-          <FaIcon icon="fa-solid fa-user" class="navbar-menu-icon" />
-          {{ authStore.user.username ?? 'Not logged in' }}
-        </CDropdownToggle>
-        <CDropdownMenu>
-          <CDropdownItem>
-            <nuxt-link to="/logout" class="text-white">
-              <FaIcon icon="fa-solid fa-right-from-bracket" class="navbar-menu-icon" />
-              Logout
-            </nuxt-link>
-          </CDropdownItem>
-        </CDropdownMenu>
-      </CDropdown>
+    <li class="nav-item dropdown">
+      <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
+        <FaIcon icon="fa-solid fa-user" class="navbar-menu-icon" />
+        {{ authStore.user?.username ?? 'Not logged in' }}
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+        <nuxt-link to="/logout" class="dropdown-item">
+          <FaIcon icon="fa-solid fa-right-from-bracket" class="navbar-menu-icon" />
+          Logout
+        </nuxt-link>
+      </div>
     </li>
   </ul>
 </template>

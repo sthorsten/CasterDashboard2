@@ -7,6 +7,7 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "bootstrap": "^5.2.0",
     "nuxt": "3.0.0-rc.6"
   },
   "dependencies": {
@@ -17,8 +18,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/vue-fontawesome": "^3.0.1",
-    "admin-lte": "^3.2",
-    "pinia": "^2.0.16",
+    "pinia": "^2.0.17",
     "pinia-plugin-persistedstate": "^1.6.3",
     "sass": "^1.53.0",
     "socket.io-client": "^4.5.1",
