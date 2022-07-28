@@ -66,7 +66,7 @@ def match_post_save(instance, created, **kwargs):
 
     # Send data via websocket
     serialized_data = serializers.MatchSerializer(instance).data
-    websocket.send_server_data("match", "Match", serialized_data)
+    #websocket.send_server_data("match", "Match", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.MapBan)
@@ -91,7 +91,7 @@ def mapBan_post_save(instance, created, **kwargs):
 
     # Send data via websocket
     serialized_data = serializers.MapBanSerializer(instance).data
-    websocket.send_server_data("match", "MapBan", serialized_data)
+    #websocket.send_server_data("match", "MapBan", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.MatchMap)
@@ -159,7 +159,7 @@ def matchMap_post_save(instance, created, **kwargs):
 
     # Send data via websocket
     serialized_data = serializers.MatchMapSerializer(instance).data
-    websocket.send_server_data("match", "MatchMap", serialized_data)
+    #websocket.send_server_data("match", "MatchMap", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.OperatorBan)
@@ -172,7 +172,7 @@ def operatorBan_post_save(instance, created, **kwargs):
 
     # Send data via websocket
     serialized_data = serializers.OperatorBanSerializer(instance).data
-    websocket.send_server_data("match", "OperatorBan", serialized_data)
+    #websocket.send_server_data("match", "OperatorBan", serialized_data)
 
 
 @receiver(signals.post_save, sender=models.Round)
@@ -215,7 +215,7 @@ def round_post_save(instance, created, **kwargs):
 
     # Send data via websocket
     serialized_data = serializers.RoundSerializer(instance).data
-    websocket.send_server_data("match", "Round", serialized_data)
+    #websocket.send_server_data("match", "Round", serialized_data)
 
 
 # endregion
@@ -227,10 +227,10 @@ def mapBan_post_delete(sender, instance, **kwargs):
     # Send all data via websocket
     mapBans = models.MapBan.objects.filter(match=instance.match)
     if mapBans.count() == 0:
-        websocket.send_mulit_server_data("match", "MapBan", [])
+        #websocket.send_mulit_server_data("match", "MapBan", [])
         return
     serialized_data = serializers.MapBanSerializer(mapBans, many=True).data
-    websocket.send_mulit_server_data("match", "MapBan", serialized_data)
+    #websocket.send_mulit_server_data("match", "MapBan", serialized_data)
 
 
 @receiver(signals.post_delete, sender=models.OperatorBan)
@@ -239,11 +239,11 @@ def operatorBan_post_delete(sender, instance, **kwargs):
     operatorBans = models.OperatorBan.objects.filter(
         matchMap=instance.matchMap)
     if operatorBans.count() == 0:
-        websocket.send_mulit_server_data("match", "OperatorBan", [])
+        #websocket.send_mulit_server_data("match", "OperatorBan", [])
         return
     serialized_data = serializers.OperatorBanSerializer(
         operatorBans, many=True).data
-    websocket.send_mulit_server_data("match", "OperatorBan", serialized_data)
+    #websocket.send_mulit_server_data("match", "OperatorBan", serialized_data)
 
 
 @receiver(signals.post_delete, sender=models.Round)
@@ -263,10 +263,10 @@ def round_post_delete(sender, instance, **kwargs):
     rounds = models.Round.objects.filter(
         matchMap=instance.matchMap)
     if rounds.count() == 0:
-        websocket.send_mulit_server_data("match", "Round", [])
+        #websocket.send_mulit_server_data("match", "Round", [])
         return
     serialized_data = serializers.RoundSerializer(
         rounds, many=True).data
-    websocket.send_mulit_server_data("match", "Round", serialized_data)
+    #websocket.send_mulit_server_data("match", "Round", serialized_data)
 
 # endregion

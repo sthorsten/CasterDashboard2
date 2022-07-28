@@ -6,4 +6,5 @@ class MatchConfig(AppConfig):
     name = 'match'
 
     def ready(self):
+        import match.socket
         import match.receivers
