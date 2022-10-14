@@ -1,4 +1,4 @@
-FROM python:3.10.5
+FROM python:3.11.0rc2
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.1.13 \
