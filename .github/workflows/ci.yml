@@ -80,7 +80,7 @@ jobs:
           password: ${{ secrets.GHCR_ACCESS_TOKEN }}
 
       - name: Build and push image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./backend
           push: true
@@ -118,7 +118,7 @@ jobs:
           password: ${{ secrets.GHCR_ACCESS_TOKEN }}
 
       - name: Build and push image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./frontend
           push: true
@@ -155,7 +155,7 @@ jobs:
           password: ${{ secrets.GHCR_ACCESS_TOKEN }}
 
       - name: Build and push image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./docker-nginx
           push: true
