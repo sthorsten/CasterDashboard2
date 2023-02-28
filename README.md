@@ -1,16 +1,17 @@
 # R6 Caster Dashboard
 
+# ⚠️ Project Discontinued
+
+I will no longer continue to support this project. \
+You are still able to use existing versions as you like, but do so **at your own risk**.
+
+
+
+## *Original README*
+
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/sthorsten/CasterDashboard2)
 [![Test & Build Docker](https://github.com/sthorsten/CasterDashboard2/actions/workflows/ci.yml/badge.svg)](https://github.com/sthorsten/CasterDashboard2/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/sthorsten/CasterDashboard2)](LICENSE.md)
-
-
-## ⚠️ Important Note
-I am currently in the process of cleaning up some important parts of the code, updating dependencies, removing old code parts and changing the structure around a bit.
-
-**Please be aware that this may break things!**
-
-Once this process is complete, I will move to the first beta release, which should be more stable overall and easier to install and update (an updated guide on this will follow).
 
 
 ## 📝 Description
